@@ -17,11 +17,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("countByExample", example.getClass());
             Object result = method.invoke(mapper, example);
             return Long.parseLong(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return 0L;
@@ -33,11 +29,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("deleteByExample", example.getClass());
             Object result = method.invoke(mapper, example);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return 0;
@@ -49,11 +41,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("deleteByPrimaryKey", id.getClass());
             Object result = method.invoke(mapper, id);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return 0;
@@ -65,11 +53,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("insert", record.getClass());
             Object result = method.invoke(mapper, record);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return 0;
@@ -81,11 +65,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("insertSelective", record.getClass());
             Object result = method.invoke(mapper, record);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return 0;
@@ -97,11 +77,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("selectByExampleWithBLOBS", example.getClass());
             Object result = method.invoke(mapper, example);
             return (List<Record>)result;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
@@ -113,11 +89,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("selectByExample", example.getClass());
             Object result = method.invoke(mapper, example);
             return (List<Record>)result;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
@@ -131,11 +103,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("selectByPrimaryKey", Integer.class);
             Object result = method.invoke(mapper, id);
             return (Record)result;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
@@ -147,11 +115,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("updateByExampleSelective", example.getClass());
             Object result = method.invoke(mapper, example);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return 0;
@@ -163,11 +127,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("updateByExampleWithBLOBs", example.getClass());
             Object result = method.invoke(mapper, example);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return 0;
@@ -179,11 +139,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("updateByExample", record.getClass());
             Object result = method.invoke(mapper, record);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return 0;
@@ -195,11 +151,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("updateByPrimaryKeySelective", record.getClass());
             Object result = method.invoke(mapper, record);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return 0;
@@ -211,11 +163,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("updateByPrimaryKeyWithBLOBs", record.getClass());
             Object result = method.invoke(mapper, record);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return 0;
@@ -227,11 +175,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
             Method method = mapper.getClass().getDeclaredMethod("updateByPrimaryKey", record.getClass());
             Object result = method.invoke(mapper, record);
             return Integer.parseInt(String.valueOf(result));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return 0;

@@ -92,4 +92,19 @@ public class Site {
     public void setSitePic(String sitePic) {
         this.sitePic = sitePic == null ? null : sitePic.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Site{" +
+                "siteId=" + siteId +
+                ", siteName='" + siteName + '\'' +
+                ", siteUrl='" + siteUrl + '\'' +
+                ", siteDesc='" + siteDesc + '\'' +
+                ", siteCopyright='" + siteCopyright + '\'' +
+                ", siteSkin=" + siteSkin +
+                ", siteCreateTime=" + siteCreateTime +
+                ", siteStatus=" + siteStatus +
+                ", sitePic='" + sitePic + '\'' +
+                '}';
+    }
 }

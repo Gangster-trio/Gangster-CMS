@@ -7,6 +7,11 @@ public class Permission {
 
     private String permissionDesc;
 
+    public Permission(String permissionName, String permissionDesc) {
+        this.permissionName = permissionName;
+        this.permissionDesc = permissionDesc;
+    }
+
     public Integer getPermissionId() {
         return permissionId;
     }
@@ -29,5 +34,14 @@ public class Permission {
 
     public void setPermissionDesc(String permissionDesc) {
         this.permissionDesc = permissionDesc == null ? null : permissionDesc.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "Permission{" +
+                "permissionId=" + permissionId +
+                ", permissionName='" + permissionName + '\'' +
+                ", permissionDesc='" + permissionDesc + '\'' +
+                '}';
     }
 }

@@ -9,6 +9,11 @@ public class Tag {
 
     private Date tagCreateTime;
 
+    public Tag(String tagName, Date tagCreateTime) {
+        this.tagName = tagName;
+        this.tagCreateTime = tagCreateTime;
+    }
+
     public Integer getTagId() {
         return tagId;
     }
@@ -31,5 +36,14 @@ public class Tag {
 
     public void setTagCreateTime(Date tagCreateTime) {
         this.tagCreateTime = tagCreateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "tagId=" + tagId +
+                ", tagName='" + tagName + '\'' +
+                ", tagCreateTime=" + tagCreateTime +
+                '}';
     }
 }

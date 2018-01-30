@@ -4,7 +4,9 @@ import com.ganster.cms.core.dao.pojo.Permission;
 import com.ganster.cms.core.dao.pojo.PermissionExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PermissionMapper {
     long countByExample(PermissionExample example);
 

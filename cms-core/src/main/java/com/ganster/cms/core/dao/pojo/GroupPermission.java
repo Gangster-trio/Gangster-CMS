@@ -5,6 +5,11 @@ public class GroupPermission {
 
     private Integer permissionId;
 
+    public GroupPermission(Integer groupId, Integer permissionId) {
+        this.groupId = groupId;
+        this.permissionId = permissionId;
+    }
+
     public Integer getGroupId() {
         return groupId;
     }
@@ -19,5 +24,13 @@ public class GroupPermission {
 
     public void setPermissionId(Integer permissionId) {
         this.permissionId = permissionId;
+    }
+
+    @Override
+    public String toString() {
+        return "GroupPermission{" +
+                "groupId=" + groupId +
+                ", permissionId=" + permissionId +
+                '}';
     }
 }

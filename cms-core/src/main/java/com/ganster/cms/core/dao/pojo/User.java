@@ -92,4 +92,19 @@ public class User {
     public void setUserOrg(String userOrg) {
         this.userOrg = userOrg == null ? null : userOrg.trim();
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userPhone='" + userPhone + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userStatus=" + userStatus +
+                ", userCreateTime=" + userCreateTime +
+                ", userLastLogin=" + userLastLogin +
+                ", userOrg='" + userOrg + '\'' +
+                '}';
+    }
 }

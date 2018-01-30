@@ -4,7 +4,9 @@ import com.ganster.cms.core.dao.pojo.Article;
 import com.ganster.cms.core.dao.pojo.ArticleExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ArticleMapper {
     long countByExample(ArticleExample example);
 

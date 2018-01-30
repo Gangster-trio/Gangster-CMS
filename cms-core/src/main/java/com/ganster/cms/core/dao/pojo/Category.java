@@ -102,4 +102,20 @@ public class Category {
     public void setCategoryOrder(Integer categoryOrder) {
         this.categoryOrder = categoryOrder;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "categoryId=" + categoryId +
+                ", categoryTitle='" + categoryTitle + '\'' +
+                ", categoryCreateTime=" + categoryCreateTime +
+                ", categoryUpdateTime=" + categoryUpdateTime +
+                ", categoryParentId=" + categoryParentId +
+                ", categoryLevel=" + categoryLevel +
+                ", categorySiteId=" + categorySiteId +
+                ", categoryStatus=" + categoryStatus +
+                ", categoryDesc='" + categoryDesc + '\'' +
+                ", categoryOrder=" + categoryOrder +
+                '}';
+    }
 }

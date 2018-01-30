@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--数据库驱动-->
+    <context id="db_cms_mbg" defaultModelType="flat" targetRuntime="Mybatis3">
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306?useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=UTC"
+                        userId="root" password="000000">
+            <property name="useInformationSchema" value="true"/>
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <javaModelGenerator targetPackage="com.ganster.cms.core.dao.pojo" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.ganster.cms.core.dao.mapper" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        <table schema="db_cms"
+               tableName="cms_article"
+               domainObjectName="Article"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="article_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="cms_category"
+               schema="db_cms"
+               domainObjectName="Category"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="category_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="cms_group"
+               schema="db_cms"
+               domainObjectName="Group"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="group_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="cms_module"
+               schema="db_cms"
+               domainObjectName="Module"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="module_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="cms_permission"
+               schema="db_cms"
+               domainObjectName="Permission"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="permission_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="cms_site"
+               schema="db_cms"
+               domainObjectName="Site"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="site_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="cms_tag"
+               schema="db_cms"
+               domainObjectName="Tag"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="tag_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="cms_user"
+               schema="db_cms"
+               domainObjectName="User"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="user_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="group_permission"
+               schema="db_cms"
+               domainObjectName="GroupPermission"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+        </table>
+        <table tableName="tag_article"
+               schema="db_cms"
+               domainObjectName="TagArticle"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+        </table>
+        <table tableName="user_group"
+               schema="db_cms"
+               domainObjectName="UserGroup"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               selectByExampleQueryId="true">
+        </table>
+    </context>
+</generatorConfiguration>
