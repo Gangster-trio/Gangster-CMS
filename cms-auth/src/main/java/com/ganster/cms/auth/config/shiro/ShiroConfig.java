@@ -46,7 +46,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setLoginUrl("/login/index.html");
 
         // 登录成功后要跳转的链接
-        shiroFilterFactoryBean.setSuccessUrl("/admin");
+        shiroFilterFactoryBean.setSuccessUrl("/main");
         //未授权界面;
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 
@@ -67,7 +67,7 @@ public class ShiroConfig {
     @Bean
     public UserShiroRealm shiroRealm() {
         UserShiroRealm shiroRealm = new UserShiroRealm();
-        shiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+//        shiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return shiroRealm;
     }
 

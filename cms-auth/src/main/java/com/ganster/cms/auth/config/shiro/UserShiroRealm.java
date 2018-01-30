@@ -1,14 +1,13 @@
 package com.ganster.cms.auth.config.shiro;
 
+import com.ganster.cms.core.pojo.Group;
 import com.ganster.cms.core.pojo.User;
 import com.ganster.cms.core.pojo.UserExample;
 import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.UserService;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.ganster.cms.core.util.StringUtil;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -17,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
-import java.util.Objects;
+import java.util.*;
 
 
 public class UserShiroRealm extends AuthorizingRealm {
@@ -29,7 +28,8 @@ public class UserShiroRealm extends AuthorizingRealm {
     private PermissionService permissionService;
     @Resource
     private GroupService groupService;
-
+    private Integer j=0;
+    private Integer userId;
     /**
      * 认证信息.(身份验证)
      * :
@@ -37,17 +37,24 @@ public class UserShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-
         String username = (String) token.getPrincipal();
 
         String password = new String((char[]) token.getCredentials());
-
+        logger.info("-----------------------------"+password+"--------------------------------------");
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserNameEqualTo(username);
-        User user = (User) userService.selectByExample(userExample);
+        List<User> users=userService.selectByExample(userExample);
+        for (User i:users){
+            userId=i.getUserId();
+            j++;
+        }
+        if (j>=2){
+            return null;
+        }
+        User user=userService.selectByPrimaryKey(userId);
         logger.info("用户" + user.getUserName() + "进行认证");
         if (!Objects.equals(password, user.getUserPassword())) {
-            return null;
+            throw new IncorrectCredentialsException();
         }
         return new SimpleAuthenticationInfo(username, password, getName());
     }
@@ -71,18 +78,27 @@ public class UserShiroRealm extends AuthorizingRealm {
         logger.info("进入权限配置");
 
         User user = (User) principals.getPrimaryPrincipal();
-//
-//        Set<Group> groupSet = roleService.findRoleByUserId(user.getId());
-//        Set<Permission> permissionSet = permissionService.findPermissionByUserId(user.getId());
-//
-//        for (Role role : roleSet) {
-//            authorizationInfo.addRole(role.getRoleName());
-//            for (Permission p : permissionSet) {
-//                authorizationInfo.addStringPermission(p.getPermissionName());
-//
-//            }
-//        }
-        SimpleAuthorizationInfo authorizationInfo=new SimpleAuthorizationInfo();
-        return authorizationInfo;
+
+        List<Group> groupList = groupService.selectByUserId(user.getUserId());
+
+        Set<String> groupSet = new HashSet<>();
+
+        for (Group i : groupList) {
+            if (!StringUtil.isNullOrEmpty(user.getUserName())) {
+            groupSet.add(i.getGroupName());
+           }
+        }
+        Set<String> permissionList = new HashSet<>();
+        for (Group i : groupList) {
+            if (!StringUtil.isNullOrEmpty(i.getGroupName())){
+                permissionList.add(i.getGroupName());
+            }
+        }
+
+
+        SimpleAuthorizationInfo simpleAuthorizationInfo=new SimpleAuthorizationInfo();
+        simpleAuthorizationInfo.setStringPermissions(permissionList);
+        simpleAuthorizationInfo.setRoles(groupSet);
+        return simpleAuthorizationInfo;
     }
 }
