@@ -4,7 +4,9 @@ import com.ganster.cms.core.dao.pojo.Module;
 import com.ganster.cms.core.dao.pojo.ModuleExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ModuleMapper {
     long countByExample(ModuleExample example);
 

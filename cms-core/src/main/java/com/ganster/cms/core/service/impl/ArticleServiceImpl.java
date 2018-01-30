@@ -8,5 +8,5 @@ import com.ganster.cms.core.service.ArticleService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper,Article,ArticleExample> implements ArticleService {
+public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, ArticleExample> implements ArticleService {
 }
