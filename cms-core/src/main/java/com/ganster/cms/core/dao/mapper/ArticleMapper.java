@@ -2,8 +2,9 @@ package com.ganster.cms.core.dao.mapper;
 
 import com.ganster.cms.core.pojo.Article;
 import com.ganster.cms.core.pojo.ArticleExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ArticleMapper {
     long countByExample(ArticleExample example);
