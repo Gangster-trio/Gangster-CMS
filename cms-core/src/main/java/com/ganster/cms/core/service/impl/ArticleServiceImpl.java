@@ -3,7 +3,7 @@ package com.ganster.cms.core.service.impl;
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
 import com.ganster.cms.core.dao.mapper.ArticleMapper;
 import com.ganster.cms.core.dao.mapper.TagArticleMapper;
-import com.ganster.cms.core.dao.pojo.*;
+import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,13 +79,17 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper,Article,Ar
         if (tags.size() != 0) {
             //tag already exist
             tagExample.clear();
-            TagArticle tagArticle = new TagArticle(tags.get(0).getTagId(), article.getArticleId());
+            TagArticle tagArticle = new TagArticle();
+            tagArticle.setArticleId(article.getArticleId());
+            tagArticle.setTagId(tags.get(0).getTagId());
             tagArticleMapper.insert(tagArticle);
         } else {
             //tag not exist
-            Tag newTag = new Tag(tag, new Date());
+            Tag newTag = new Tag();
+            newTag.setTagCreateTime(new Date());
+            newTag.setTagName(tag);
             tagService.insert(newTag);
-            TagArticle tagArticle = new TagArticle(newTag.getTagId(), article.getArticleId());
+            TagArticle tagArticle = new TagArticle(newTag.getTagId(),article.getArticleId());
             tagArticleMapper.insert(tagArticle);
         }
     }

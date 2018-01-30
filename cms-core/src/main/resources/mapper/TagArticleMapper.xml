@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ganster.cms.core.dao.mapper.TagArticleMapper">
-  <resultMap id="BaseResultMap" type="com.ganster.cms.core.dao.pojo.TagArticle">
-    <result column="tag_id" jdbcType="INTEGER" property="tagId" />
-    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.TagArticle">
+    <constructor>
+      <arg column="tag_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +68,7 @@
   <sql id="Base_Column_List">
     tag_id, article_id
   </sql>
-  <select id="selectByExample" parameterType="com.ganster.cms.core.dao.pojo.TagArticleExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.TagArticleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -81,17 +83,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.ganster.cms.core.dao.pojo.TagArticleExample">
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.TagArticleExample">
     delete from tag_article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ganster.cms.core.dao.pojo.TagArticle">
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.TagArticle">
     insert into tag_article (tag_id, article_id)
     values (#{tagId,jdbcType=INTEGER}, #{articleId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.ganster.cms.core.dao.pojo.TagArticle">
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.TagArticle">
     insert into tag_article
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="tagId != null">
@@ -110,7 +112,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ganster.cms.core.dao.pojo.TagArticleExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.TagArticleExample" resultType="java.lang.Long">
     select count(*) from tag_article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

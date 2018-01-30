@@ -1,4 +1,4 @@
-package com.ganster.cms.core.dao.pojo;
+package com.ganster.cms.core.pojo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -872,6 +872,76 @@ public class ArticleExample {
 
         public Criteria andArticleHitNotBetween(Integer value1, Integer value2) {
             addCriterion("article_hit not between", value1, value2, "articleHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescIsNull() {
+            addCriterion("article_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescIsNotNull() {
+            addCriterion("article_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescEqualTo(String value) {
+            addCriterion("article_desc =", value, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescNotEqualTo(String value) {
+            addCriterion("article_desc <>", value, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescGreaterThan(String value) {
+            addCriterion("article_desc >", value, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescGreaterThanOrEqualTo(String value) {
+            addCriterion("article_desc >=", value, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescLessThan(String value) {
+            addCriterion("article_desc <", value, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescLessThanOrEqualTo(String value) {
+            addCriterion("article_desc <=", value, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescLike(String value) {
+            addCriterion("article_desc like", value, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescNotLike(String value) {
+            addCriterion("article_desc not like", value, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescIn(List<String> values) {
+            addCriterion("article_desc in", values, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescNotIn(List<String> values) {
+            addCriterion("article_desc not in", values, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescBetween(String value1, String value2) {
+            addCriterion("article_desc between", value1, value2, "articleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleDescNotBetween(String value1, String value2) {
+            addCriterion("article_desc not between", value1, value2, "articleDesc");
             return (Criteria) this;
         }
 

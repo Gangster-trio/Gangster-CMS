@@ -1,10 +1,9 @@
 package com.ganster.cms.core.service.impl;
 
 import com.ganster.cms.core.CoreApplication;
-import com.ganster.cms.core.dao.pojo.Article;
-import com.ganster.cms.core.dao.pojo.ArticleExample;
+import com.ganster.cms.core.pojo.Article;
+import com.ganster.cms.core.pojo.ArticleExample;
 import com.ganster.cms.core.service.ArticleService;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.junit.Assert;

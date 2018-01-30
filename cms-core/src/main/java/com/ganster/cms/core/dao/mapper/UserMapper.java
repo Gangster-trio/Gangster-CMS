@@ -1,12 +1,10 @@
 package com.ganster.cms.core.dao.mapper;
 
-import com.ganster.cms.core.dao.pojo.User;
-import com.ganster.cms.core.dao.pojo.UserExample;
+import com.ganster.cms.core.pojo.User;
+import com.ganster.cms.core.pojo.UserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface UserMapper {
     long countByExample(UserExample example);
 

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ganster.cms.core.dao.mapper.UserGroupMapper">
-  <resultMap id="BaseResultMap" type="com.ganster.cms.core.dao.pojo.UserGroup">
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.UserGroup">
+    <constructor>
+      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="group_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +68,7 @@
   <sql id="Base_Column_List">
     user_id, group_id
   </sql>
-  <select id="selectByExample" parameterType="com.ganster.cms.core.dao.pojo.UserGroupExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.UserGroupExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -81,17 +83,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.ganster.cms.core.dao.pojo.UserGroupExample">
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.UserGroupExample">
     delete from user_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ganster.cms.core.dao.pojo.UserGroup">
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.UserGroup">
     insert into user_group (user_id, group_id)
     values (#{userId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.ganster.cms.core.dao.pojo.UserGroup">
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.UserGroup">
     insert into user_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -110,7 +112,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ganster.cms.core.dao.pojo.UserGroupExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.UserGroupExample" resultType="java.lang.Long">
     select count(*) from user_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

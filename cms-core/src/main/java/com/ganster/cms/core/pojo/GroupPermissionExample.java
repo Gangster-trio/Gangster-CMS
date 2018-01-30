@@ -1,4 +1,4 @@
-package com.ganster.cms.core.dao.pojo;
+package com.ganster.cms.core.pojo;
 
 import java.util.ArrayList;
 import java.util.List;

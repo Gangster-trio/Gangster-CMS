@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ganster.cms.core.dao.mapper.TagMapper">
-  <resultMap id="BaseResultMap" type="com.ganster.cms.core.dao.pojo.Tag">
-    <id column="tag_id" jdbcType="INTEGER" property="tagId" />
-    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
-    <result column="tag_create_time" jdbcType="TIMESTAMP" property="tagCreateTime" />
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.Tag">
+    <constructor>
+      <idArg column="tag_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="tag_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tag_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +69,7 @@
   <sql id="Base_Column_List">
     tag_id, tag_name, tag_create_time
   </sql>
-  <select id="selectByExample" parameterType="com.ganster.cms.core.dao.pojo.TagExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.TagExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -92,20 +94,20 @@
     delete from cms_tag
     where tag_id = #{tagId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ganster.cms.core.dao.pojo.TagExample">
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.TagExample">
     delete from cms_tag
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ganster.cms.core.dao.pojo.Tag">
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.Tag">
     <selectKey keyProperty="tagId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into cms_tag (tag_name, tag_create_time)
     values (#{tagName,jdbcType=VARCHAR}, #{tagCreateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ganster.cms.core.dao.pojo.Tag">
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Tag">
     <selectKey keyProperty="tagId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -127,7 +129,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ganster.cms.core.dao.pojo.TagExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.TagExample" resultType="java.lang.Long">
     select count(*) from cms_tag
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -159,7 +161,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.dao.pojo.Tag">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.pojo.Tag">
     update cms_tag
     <set>
       <if test="tagName != null">
@@ -171,7 +173,7 @@
     </set>
     where tag_id = #{tagId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.dao.pojo.Tag">
+  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.pojo.Tag">
     update cms_tag
     set tag_name = #{tagName,jdbcType=VARCHAR},
       tag_create_time = #{tagCreateTime,jdbcType=TIMESTAMP}

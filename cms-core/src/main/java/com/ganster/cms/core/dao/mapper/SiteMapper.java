@@ -1,12 +1,10 @@
 package com.ganster.cms.core.dao.mapper;
 
-import com.ganster.cms.core.dao.pojo.Site;
-import com.ganster.cms.core.dao.pojo.SiteExample;
+import com.ganster.cms.core.pojo.Site;
+import com.ganster.cms.core.pojo.SiteExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface SiteMapper {
     long countByExample(SiteExample example);
 

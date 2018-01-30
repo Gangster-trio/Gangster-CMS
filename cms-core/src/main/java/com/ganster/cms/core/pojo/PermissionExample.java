@@ -1,16 +1,16 @@
-package com.ganster.cms.core.dao.pojo;
+package com.ganster.cms.core.pojo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupExample {
+public class PermissionExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public GroupExample() {
+    public PermissionExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,203 +104,203 @@ public class GroupExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andGroupIdIsNull() {
-            addCriterion("group_id is null");
+        public Criteria andPermissionIdIsNull() {
+            addCriterion("permission_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdIsNotNull() {
-            addCriterion("group_id is not null");
+        public Criteria andPermissionIdIsNotNull() {
+            addCriterion("permission_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdEqualTo(Integer value) {
-            addCriterion("group_id =", value, "groupId");
+        public Criteria andPermissionIdEqualTo(Integer value) {
+            addCriterion("permission_id =", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdNotEqualTo(Integer value) {
-            addCriterion("group_id <>", value, "groupId");
+        public Criteria andPermissionIdNotEqualTo(Integer value) {
+            addCriterion("permission_id <>", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdGreaterThan(Integer value) {
-            addCriterion("group_id >", value, "groupId");
+        public Criteria andPermissionIdGreaterThan(Integer value) {
+            addCriterion("permission_id >", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("group_id >=", value, "groupId");
+        public Criteria andPermissionIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("permission_id >=", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdLessThan(Integer value) {
-            addCriterion("group_id <", value, "groupId");
+        public Criteria andPermissionIdLessThan(Integer value) {
+            addCriterion("permission_id <", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdLessThanOrEqualTo(Integer value) {
-            addCriterion("group_id <=", value, "groupId");
+        public Criteria andPermissionIdLessThanOrEqualTo(Integer value) {
+            addCriterion("permission_id <=", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdIn(List<Integer> values) {
-            addCriterion("group_id in", values, "groupId");
+        public Criteria andPermissionIdIn(List<Integer> values) {
+            addCriterion("permission_id in", values, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdNotIn(List<Integer> values) {
-            addCriterion("group_id not in", values, "groupId");
+        public Criteria andPermissionIdNotIn(List<Integer> values) {
+            addCriterion("permission_id not in", values, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdBetween(Integer value1, Integer value2) {
-            addCriterion("group_id between", value1, value2, "groupId");
+        public Criteria andPermissionIdBetween(Integer value1, Integer value2) {
+            addCriterion("permission_id between", value1, value2, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("group_id not between", value1, value2, "groupId");
+        public Criteria andPermissionIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("permission_id not between", value1, value2, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameIsNull() {
-            addCriterion("group_name is null");
+        public Criteria andPermissionNameIsNull() {
+            addCriterion("permission_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameIsNotNull() {
-            addCriterion("group_name is not null");
+        public Criteria andPermissionNameIsNotNull() {
+            addCriterion("permission_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameEqualTo(String value) {
-            addCriterion("group_name =", value, "groupName");
+        public Criteria andPermissionNameEqualTo(String value) {
+            addCriterion("permission_name =", value, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameNotEqualTo(String value) {
-            addCriterion("group_name <>", value, "groupName");
+        public Criteria andPermissionNameNotEqualTo(String value) {
+            addCriterion("permission_name <>", value, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameGreaterThan(String value) {
-            addCriterion("group_name >", value, "groupName");
+        public Criteria andPermissionNameGreaterThan(String value) {
+            addCriterion("permission_name >", value, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameGreaterThanOrEqualTo(String value) {
-            addCriterion("group_name >=", value, "groupName");
+        public Criteria andPermissionNameGreaterThanOrEqualTo(String value) {
+            addCriterion("permission_name >=", value, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameLessThan(String value) {
-            addCriterion("group_name <", value, "groupName");
+        public Criteria andPermissionNameLessThan(String value) {
+            addCriterion("permission_name <", value, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameLessThanOrEqualTo(String value) {
-            addCriterion("group_name <=", value, "groupName");
+        public Criteria andPermissionNameLessThanOrEqualTo(String value) {
+            addCriterion("permission_name <=", value, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameLike(String value) {
-            addCriterion("group_name like", value, "groupName");
+        public Criteria andPermissionNameLike(String value) {
+            addCriterion("permission_name like", value, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameNotLike(String value) {
-            addCriterion("group_name not like", value, "groupName");
+        public Criteria andPermissionNameNotLike(String value) {
+            addCriterion("permission_name not like", value, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameIn(List<String> values) {
-            addCriterion("group_name in", values, "groupName");
+        public Criteria andPermissionNameIn(List<String> values) {
+            addCriterion("permission_name in", values, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameNotIn(List<String> values) {
-            addCriterion("group_name not in", values, "groupName");
+        public Criteria andPermissionNameNotIn(List<String> values) {
+            addCriterion("permission_name not in", values, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameBetween(String value1, String value2) {
-            addCriterion("group_name between", value1, value2, "groupName");
+        public Criteria andPermissionNameBetween(String value1, String value2) {
+            addCriterion("permission_name between", value1, value2, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNameNotBetween(String value1, String value2) {
-            addCriterion("group_name not between", value1, value2, "groupName");
+        public Criteria andPermissionNameNotBetween(String value1, String value2) {
+            addCriterion("permission_name not between", value1, value2, "permissionName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescIsNull() {
-            addCriterion("group_desc is null");
+        public Criteria andPermissionDescIsNull() {
+            addCriterion("permission_desc is null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescIsNotNull() {
-            addCriterion("group_desc is not null");
+        public Criteria andPermissionDescIsNotNull() {
+            addCriterion("permission_desc is not null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescEqualTo(String value) {
-            addCriterion("group_desc =", value, "groupDesc");
+        public Criteria andPermissionDescEqualTo(String value) {
+            addCriterion("permission_desc =", value, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescNotEqualTo(String value) {
-            addCriterion("group_desc <>", value, "groupDesc");
+        public Criteria andPermissionDescNotEqualTo(String value) {
+            addCriterion("permission_desc <>", value, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescGreaterThan(String value) {
-            addCriterion("group_desc >", value, "groupDesc");
+        public Criteria andPermissionDescGreaterThan(String value) {
+            addCriterion("permission_desc >", value, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescGreaterThanOrEqualTo(String value) {
-            addCriterion("group_desc >=", value, "groupDesc");
+        public Criteria andPermissionDescGreaterThanOrEqualTo(String value) {
+            addCriterion("permission_desc >=", value, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescLessThan(String value) {
-            addCriterion("group_desc <", value, "groupDesc");
+        public Criteria andPermissionDescLessThan(String value) {
+            addCriterion("permission_desc <", value, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescLessThanOrEqualTo(String value) {
-            addCriterion("group_desc <=", value, "groupDesc");
+        public Criteria andPermissionDescLessThanOrEqualTo(String value) {
+            addCriterion("permission_desc <=", value, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescLike(String value) {
-            addCriterion("group_desc like", value, "groupDesc");
+        public Criteria andPermissionDescLike(String value) {
+            addCriterion("permission_desc like", value, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescNotLike(String value) {
-            addCriterion("group_desc not like", value, "groupDesc");
+        public Criteria andPermissionDescNotLike(String value) {
+            addCriterion("permission_desc not like", value, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescIn(List<String> values) {
-            addCriterion("group_desc in", values, "groupDesc");
+        public Criteria andPermissionDescIn(List<String> values) {
+            addCriterion("permission_desc in", values, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescNotIn(List<String> values) {
-            addCriterion("group_desc not in", values, "groupDesc");
+        public Criteria andPermissionDescNotIn(List<String> values) {
+            addCriterion("permission_desc not in", values, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescBetween(String value1, String value2) {
-            addCriterion("group_desc between", value1, value2, "groupDesc");
+        public Criteria andPermissionDescBetween(String value1, String value2) {
+            addCriterion("permission_desc between", value1, value2, "permissionDesc");
             return (Criteria) this;
         }
 
-        public Criteria andGroupDescNotBetween(String value1, String value2) {
-            addCriterion("group_desc not between", value1, value2, "groupDesc");
+        public Criteria andPermissionDescNotBetween(String value1, String value2) {
+            addCriterion("permission_desc not between", value1, value2, "permissionDesc");
             return (Criteria) this;
         }
     }

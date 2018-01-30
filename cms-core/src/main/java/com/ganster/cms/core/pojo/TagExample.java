@@ -1,16 +1,17 @@
-package com.ganster.cms.core.dao.pojo;
+package com.ganster.cms.core.pojo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class UserGroupExample {
+public class TagExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public UserGroupExample() {
+    public TagExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,123 +105,193 @@ public class UserGroupExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andUserIdIsNull() {
-            addCriterion("user_id is null");
+        public Criteria andTagIdIsNull() {
+            addCriterion("tag_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIsNotNull() {
-            addCriterion("user_id is not null");
+        public Criteria andTagIdIsNotNull() {
+            addCriterion("tag_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdEqualTo(Integer value) {
-            addCriterion("user_id =", value, "userId");
+        public Criteria andTagIdEqualTo(Integer value) {
+            addCriterion("tag_id =", value, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotEqualTo(Integer value) {
-            addCriterion("user_id <>", value, "userId");
+        public Criteria andTagIdNotEqualTo(Integer value) {
+            addCriterion("tag_id <>", value, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThan(Integer value) {
-            addCriterion("user_id >", value, "userId");
+        public Criteria andTagIdGreaterThan(Integer value) {
+            addCriterion("tag_id >", value, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("user_id >=", value, "userId");
+        public Criteria andTagIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("tag_id >=", value, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThan(Integer value) {
-            addCriterion("user_id <", value, "userId");
+        public Criteria andTagIdLessThan(Integer value) {
+            addCriterion("tag_id <", value, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThanOrEqualTo(Integer value) {
-            addCriterion("user_id <=", value, "userId");
+        public Criteria andTagIdLessThanOrEqualTo(Integer value) {
+            addCriterion("tag_id <=", value, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIn(List<Integer> values) {
-            addCriterion("user_id in", values, "userId");
+        public Criteria andTagIdIn(List<Integer> values) {
+            addCriterion("tag_id in", values, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotIn(List<Integer> values) {
-            addCriterion("user_id not in", values, "userId");
+        public Criteria andTagIdNotIn(List<Integer> values) {
+            addCriterion("tag_id not in", values, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBetween(Integer value1, Integer value2) {
-            addCriterion("user_id between", value1, value2, "userId");
+        public Criteria andTagIdBetween(Integer value1, Integer value2) {
+            addCriterion("tag_id between", value1, value2, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("user_id not between", value1, value2, "userId");
+        public Criteria andTagIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("tag_id not between", value1, value2, "tagId");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdIsNull() {
-            addCriterion("group_id is null");
+        public Criteria andTagNameIsNull() {
+            addCriterion("tag_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdIsNotNull() {
-            addCriterion("group_id is not null");
+        public Criteria andTagNameIsNotNull() {
+            addCriterion("tag_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdEqualTo(Integer value) {
-            addCriterion("group_id =", value, "groupId");
+        public Criteria andTagNameEqualTo(String value) {
+            addCriterion("tag_name =", value, "tagName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdNotEqualTo(Integer value) {
-            addCriterion("group_id <>", value, "groupId");
+        public Criteria andTagNameNotEqualTo(String value) {
+            addCriterion("tag_name <>", value, "tagName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdGreaterThan(Integer value) {
-            addCriterion("group_id >", value, "groupId");
+        public Criteria andTagNameGreaterThan(String value) {
+            addCriterion("tag_name >", value, "tagName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("group_id >=", value, "groupId");
+        public Criteria andTagNameGreaterThanOrEqualTo(String value) {
+            addCriterion("tag_name >=", value, "tagName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdLessThan(Integer value) {
-            addCriterion("group_id <", value, "groupId");
+        public Criteria andTagNameLessThan(String value) {
+            addCriterion("tag_name <", value, "tagName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdLessThanOrEqualTo(Integer value) {
-            addCriterion("group_id <=", value, "groupId");
+        public Criteria andTagNameLessThanOrEqualTo(String value) {
+            addCriterion("tag_name <=", value, "tagName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdIn(List<Integer> values) {
-            addCriterion("group_id in", values, "groupId");
+        public Criteria andTagNameLike(String value) {
+            addCriterion("tag_name like", value, "tagName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdNotIn(List<Integer> values) {
-            addCriterion("group_id not in", values, "groupId");
+        public Criteria andTagNameNotLike(String value) {
+            addCriterion("tag_name not like", value, "tagName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdBetween(Integer value1, Integer value2) {
-            addCriterion("group_id between", value1, value2, "groupId");
+        public Criteria andTagNameIn(List<String> values) {
+            addCriterion("tag_name in", values, "tagName");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("group_id not between", value1, value2, "groupId");
+        public Criteria andTagNameNotIn(List<String> values) {
+            addCriterion("tag_name not in", values, "tagName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagNameBetween(String value1, String value2) {
+            addCriterion("tag_name between", value1, value2, "tagName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagNameNotBetween(String value1, String value2) {
+            addCriterion("tag_name not between", value1, value2, "tagName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeIsNull() {
+            addCriterion("tag_create_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeIsNotNull() {
+            addCriterion("tag_create_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeEqualTo(Date value) {
+            addCriterion("tag_create_time =", value, "tagCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeNotEqualTo(Date value) {
+            addCriterion("tag_create_time <>", value, "tagCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeGreaterThan(Date value) {
+            addCriterion("tag_create_time >", value, "tagCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("tag_create_time >=", value, "tagCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeLessThan(Date value) {
+            addCriterion("tag_create_time <", value, "tagCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("tag_create_time <=", value, "tagCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeIn(List<Date> values) {
+            addCriterion("tag_create_time in", values, "tagCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeNotIn(List<Date> values) {
+            addCriterion("tag_create_time not in", values, "tagCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("tag_create_time between", value1, value2, "tagCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTagCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("tag_create_time not between", value1, value2, "tagCreateTime");
             return (Criteria) this;
         }
     }
