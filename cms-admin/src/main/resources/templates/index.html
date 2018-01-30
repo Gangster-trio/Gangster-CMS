@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"><html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -47,11 +47,13 @@
     <ul class="layui-nav layui-nav-tree" lay-filter="test">
         <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
         <li class="layui-nav-item layui-nav-itemed">
+            <a th:each="tree,treeSat:${treelist}" th:text="${tree.model.moduleName}"></a>
             <a href="javascript:;">常用操作</a>
             <dl class="layui-nav-child">
-                <dd><a onclick="showAtRight('/fragment/columnlist.html')">栏目管理</a></dd>
-                <dd><a onclick="showAtRight('/fragment/articlelist.html')">文章管理</a></dd>
+                <!--<dd><a onclick="showAtRight('/fragment/columnlist.html')">栏目管理</a></dd>-->
+                <!--<dd><a onclick="showAtRight('/fragment/articlelist.html')">文章管理</a></dd>-->
                 <!--<dd><a href="">跳转</a></dd>-->
+                <!--<dd></dd>-->
             </dl>
         </li>
         <li class="layui-nav-item">

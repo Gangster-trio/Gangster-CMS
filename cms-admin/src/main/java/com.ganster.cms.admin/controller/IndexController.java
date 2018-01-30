@@ -1,14 +1,18 @@
 package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.common.ModuleTree;
+import com.ganster.cms.core.dao.pojo.Article;
+import com.ganster.cms.core.dao.pojo.ArticleExample;
 import com.ganster.cms.core.dao.pojo.Module;
 import com.ganster.cms.core.dao.pojo.ModuleExample;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -24,8 +28,13 @@ public class IndexController {
     @Autowired
     private ModuleService moduleService;
 
-    @GetMapping("")
-    public ModelAndView index(ModelAndView modelAndView) {
+    @Autowired
+    private ArticleService articleService;
+
+    @GetMapping("index")
+    @ResponseBody
+    public List<ModuleTree> index() {
+        ModelAndView modelAndView = new ModelAndView();
         List<ModuleTree> treeList = new ArrayList<ModuleTree>();
         ModuleExample moduleExample = new ModuleExample();
         moduleExample.or().andModuleParentIdEqualTo(0);
@@ -34,10 +43,13 @@ public class IndexController {
             ModuleExample moduleExample1 = new ModuleExample();
             moduleExample1.or().andModuleParentIdEqualTo(module.getModuleId());
             List<Module> childs = moduleService.selectByExample(moduleExample1);
-            ModuleTree moduleTree = new ModuleTree(module, childs);
+            ModuleTree moduleTree = new ModuleTree();
+            moduleTree.setModule(module);
+            moduleTree.setList(childs);
             treeList.add(moduleTree);
         }
         modelAndView.addObject("treelist", treeList);
-        return modelAndView;
+        return treeList;
+//        return modelAndView;
     }
 }
