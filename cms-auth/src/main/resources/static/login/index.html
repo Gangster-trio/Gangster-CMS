@@ -27,7 +27,7 @@
     <div class='login_title'>
         <span>System Management Center </span>
     </div>
-    <form action="/log" method="post" id="login" class='login_fields'>
+    <form action="/login" method="post" id="login" class='login_fields'>
         <div class='login_fields__user'>
             <div class='icon'>
                 <i class="layui-icon">&#xe612;</i>
@@ -64,7 +64,7 @@
     $(function(){
         var options = {
             type: 'POST',
-            url: '/log',
+            url: '/login',
             success:function (data) {
                 if (data.code === 100) {
                     window.location.href = "/";

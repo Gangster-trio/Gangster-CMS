@@ -1,4 +1,4 @@
-package config.shiro;
+package com.ganster.cms.auth.config.shiro;
 
 import com.ganster.cms.core.pojo.User;
 import com.ganster.cms.core.pojo.UserExample;
@@ -13,14 +13,15 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
-import java.util.logging.Logger;
+import java.util.Objects;
 
 
 public class UserShiroRealm extends AuthorizingRealm {
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(UserShiroRealm.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserShiroRealm.class);
 
     @Resource
     private UserService userService;
@@ -45,13 +46,14 @@ public class UserShiroRealm extends AuthorizingRealm {
         userExample.createCriteria().andUserNameEqualTo(username);
         User user = (User) userService.selectByExample(userExample);
         logger.info("用户" + user.getUserName() + "进行认证");
-        if (password != user.getUserPassword()) {
+        if (!Objects.equals(password, user.getUserPassword())) {
             return null;
         }
         return new SimpleAuthenticationInfo(username, password, getName());
     }
 
     /**
+     *
      * 此方法调用  hasRole,hasPermission的时候才会进行回调.
      * <p>
      * 权限信息.(授权):

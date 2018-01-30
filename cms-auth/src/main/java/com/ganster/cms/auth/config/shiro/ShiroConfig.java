@@ -1,4 +1,4 @@
-package config.shiro;
+package com.ganster.cms.auth.config.shiro;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
@@ -38,7 +38,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login/**", "anon");
         filterChainDefinitionMap.put("/", "authc");
         filterChainDefinitionMap.put("/login", "anon");
-        filterChainDefinitionMap.put("/log", "anon");
+//        filterChainDefinitionMap.put("/log", "anon");
         filterChainDefinitionMap.put("/**", "authc");
 
 

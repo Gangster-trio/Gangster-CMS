@@ -1,14 +1,11 @@
 spring:
-    ##Druid##
-  profiles:
-    active: dev
 
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/sitegroup?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://localhost:3306/db_cms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
       username: root
       password: "000000"
-      driver-class-name: com.mysql.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
      mode: LEGACYHTML5
   http:
@@ -19,4 +16,4 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     use-generated-keys: true
-  type-aliases-package: com.github.cms.common.obj
+  type-aliases-package: com.ganster.cms.core.pojo
