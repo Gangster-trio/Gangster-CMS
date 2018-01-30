@@ -7,6 +7,14 @@ public class Group {
 
     private String groupDesc;
 
+    public Group(String groupName, String groupDesc) {
+        this.groupName = groupName;
+        this.groupDesc = groupDesc;
+    }
+
+    public Group() {
+    }
+
     public Integer getGroupId() {
         return groupId;
     }
@@ -29,5 +37,14 @@ public class Group {
 
     public void setGroupDesc(String groupDesc) {
         this.groupDesc = groupDesc == null ? null : groupDesc.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "groupId=" + groupId +
+                ", groupName='" + groupName + '\'' +
+                ", groupDesc='" + groupDesc + '\'' +
+                '}';
     }
 }

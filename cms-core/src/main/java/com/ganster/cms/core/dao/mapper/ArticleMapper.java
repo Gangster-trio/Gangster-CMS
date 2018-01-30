@@ -3,9 +3,11 @@ package com.ganster.cms.core.dao.mapper;
 import com.ganster.cms.core.dao.pojo.Article;
 import com.ganster.cms.core.dao.pojo.ArticleExample;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ArticleMapper {
     long countByExample(ArticleExample example);
 

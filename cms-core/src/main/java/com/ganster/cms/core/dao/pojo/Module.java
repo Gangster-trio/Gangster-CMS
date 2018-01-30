@@ -62,4 +62,16 @@ public class Module {
     public void setModuleCreateTime(Date moduleCreateTime) {
         this.moduleCreateTime = moduleCreateTime;
     }
+
+    @Override
+    public String toString() {
+        return "Module{" +
+                "moduleId=" + moduleId +
+                ", moduleName='" + moduleName + '\'' +
+                ", moduleUrl='" + moduleUrl + '\'' +
+                ", moduleParentId=" + moduleParentId +
+                ", moduleSort=" + moduleSort +
+                ", moduleCreateTime=" + moduleCreateTime +
+                '}';
+    }
 }

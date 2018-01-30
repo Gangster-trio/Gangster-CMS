@@ -11,3 +11,5 @@ mybatis:
     map-underscore-to-camel-case: true
     use-generated-keys: true
   type-aliases-package: com.ganster.cms.core.dao.pojo
+pagehelper:
+  reasonable: true

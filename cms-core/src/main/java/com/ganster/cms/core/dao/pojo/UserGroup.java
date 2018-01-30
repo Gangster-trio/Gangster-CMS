@@ -5,6 +5,11 @@ public class UserGroup {
 
     private Integer groupId;
 
+    public UserGroup(Integer userId, Integer groupId) {
+        this.userId = userId;
+        this.groupId = groupId;
+    }
+
     public Integer getUserId() {
         return userId;
     }
@@ -19,5 +24,13 @@ public class UserGroup {
 
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
+    }
+
+    @Override
+    public String toString() {
+        return "UserGroup{" +
+                "userId=" + userId +
+                ", groupId=" + groupId +
+                '}';
     }
 }

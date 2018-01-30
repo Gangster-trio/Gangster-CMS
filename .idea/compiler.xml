@@ -12,10 +12,10 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="cms" target="1.6" />
-      <module name="cms-admin" target="1.6" />
-      <module name="cms-core" target="1.6" />
-      <module name="cms-web" target="1.6" />
+      <module name="cms" target="1.8" />
+      <module name="cms-admin" target="1.8" />
+      <module name="cms-core" target="1.8" />
+      <module name="cms-web" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

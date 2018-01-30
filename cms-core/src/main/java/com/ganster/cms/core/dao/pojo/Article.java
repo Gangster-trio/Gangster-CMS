@@ -152,4 +152,25 @@ public class Article {
     public void setArticleContent(String articleContent) {
         this.articleContent = articleContent == null ? null : articleContent.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "articleId=" + articleId +
+                ", articleTitle='" + articleTitle + '\'' +
+                ", articleType='" + articleType + '\'' +
+                ", articleAuthor='" + articleAuthor + '\'' +
+                ", articleUrl='" + articleUrl + '\'' +
+                ", articleOrder=" + articleOrder +
+                ", articleSiteId=" + articleSiteId +
+                ", articleCategoryId=" + articleCategoryId +
+                ", articleCreateTime=" + articleCreateTime +
+                ", articleUpdateTime=" + articleUpdateTime +
+                ", articleThumb='" + articleThumb + '\'' +
+                ", articleHit=" + articleHit +
+                ", articleStatus=" + articleStatus +
+                ", articleDesc='" + articleDesc + '\'' +
+                ", articleContent='" + articleContent + '\'' +
+                '}';
+    }
 }

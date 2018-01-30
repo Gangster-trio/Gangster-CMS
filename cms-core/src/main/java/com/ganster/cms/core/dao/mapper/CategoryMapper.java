@@ -4,7 +4,9 @@ import com.ganster.cms.core.dao.pojo.Category;
 import com.ganster.cms.core.dao.pojo.CategoryExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface CategoryMapper {
     long countByExample(CategoryExample example);
 
