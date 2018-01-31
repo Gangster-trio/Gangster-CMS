@@ -1,8 +1,8 @@
 package com.ganster.cms.admin.controller;
 
-import com.ganster.cms.admin.common.AjaxData;
-import com.ganster.cms.admin.common.CategoryTree;
-import com.ganster.cms.admin.common.Message;
+import com.ganster.cms.admin.dto.AjaxData;
+import com.ganster.cms.admin.dto.CategoryTree;
+import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.pojo.Category;
 import com.ganster.cms.core.pojo.CategoryExample;
 import com.ganster.cms.core.service.CategoryService;
@@ -31,13 +31,17 @@ public class CategoryController extends BaseController {
         CategoryExample categoryExample = new CategoryExample();
         PageInfo<Category> pageInfo;
         List<Category> list = categoryService.selectByExample(categoryExample);
-        System.out.println(list.get(0));
-        if (page != null && limit != null) {
-            pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
-            return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) list);
+//        System.out.println(list.get(0));
+        if (!list.isEmpty()) {
+            if (page != null && limit != null) {
+                pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
+                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) list);
+            } else {
+                pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
+                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) list);
+            }
         } else {
-            pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
-            return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) list);
+            return super.buildAjaxData(1, "no data", 0, null);
         }
     }
 

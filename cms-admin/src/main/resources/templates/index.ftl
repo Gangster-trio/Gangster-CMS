@@ -101,7 +101,6 @@
 
 
     var current_column_id = -1;
-
     function showAtRight(url) {
         $.ajax({
             url: url,

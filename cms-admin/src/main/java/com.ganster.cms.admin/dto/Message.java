@@ -1,4 +1,4 @@
-package com.ganster.cms.admin.common;
+package com.ganster.cms.admin.dto;
 
 /**
  * 统一消息传送包

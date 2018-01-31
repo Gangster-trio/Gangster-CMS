@@ -1,13 +1,12 @@
 package com.ganster.cms.admin.controller;
 
-import com.ganster.cms.admin.common.ModuleTree;
+import com.ganster.cms.admin.dto.ModuleTree;
 import com.ganster.cms.core.pojo.Module;
 import com.ganster.cms.core.pojo.ModuleExample;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

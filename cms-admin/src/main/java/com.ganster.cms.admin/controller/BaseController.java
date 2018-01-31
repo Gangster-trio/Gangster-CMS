@@ -1,7 +1,7 @@
 package com.ganster.cms.admin.controller;
 
-import com.ganster.cms.admin.common.AjaxData;
-import com.ganster.cms.admin.common.Message;
+import com.ganster.cms.admin.dto.AjaxData;
+import com.ganster.cms.admin.dto.Message;
 
 import java.util.ArrayList;
 

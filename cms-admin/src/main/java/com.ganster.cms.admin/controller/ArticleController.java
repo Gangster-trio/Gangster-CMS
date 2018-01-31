@@ -1,12 +1,10 @@
 package com.ganster.cms.admin.controller;
 
-import com.ganster.cms.admin.common.AjaxData;
-import com.ganster.cms.admin.common.Message;
+import com.ganster.cms.admin.dto.AjaxData;
+import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.pojo.Article;
 import com.ganster.cms.core.pojo.ArticleExample;
 import com.ganster.cms.core.service.ArticleService;
-import com.github.pagehelper.ISelect;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +29,7 @@ public class ArticleController extends BaseController {
         ArticleExample articleExample = new ArticleExample();
         List<Article> list = articleService.selectByExample(articleExample);
         System.out.println(list.get(0));
-        if (page != null && limit != null) {
-            PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
-            return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) articleService.selectByExample(articleExample));
-        } else {
-            PageInfo<Article> pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
-            return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) articleService.selectByExample(articleExample));
-        }
+        return getAjaxData(page, limit, articleExample);
     }
 
     @PostMapping("/save")
@@ -58,13 +50,17 @@ public class ArticleController extends BaseController {
             ArticleExample articleExample = new ArticleExample();
             articleExample.or().andArticleCategoryIdEqualTo(id);
             List<Article> list = articleService.selectByExample(articleExample);
-            if (page != null && limit != null) {
-                PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
-                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) articleService.selectByExample(articleExample));
-            } else {
-                PageInfo<Article> pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
-                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) articleService.selectByExample(articleExample));
-            }
+            return getAjaxData(page, limit, articleExample);
         } else return super.buildAjaxData(1, "false", 0, null);
+    }
+
+    private AjaxData getAjaxData(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit, ArticleExample articleExample) {
+        if (page != null && limit != null) {
+            PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+            return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) articleService.selectByExample(articleExample));
+        } else {
+            PageInfo<Article> pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+            return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) articleService.selectByExample(articleExample));
+        }
     }
 }
