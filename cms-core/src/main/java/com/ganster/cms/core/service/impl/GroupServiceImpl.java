@@ -125,6 +125,18 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper,Group,GroupExa
 
         removePermissionFromGroup(permissionExample,groupExample);
     }
+
+    @Override
+    public Boolean hasGroup(Integer userId, String gName) {
+        List<Group> groupList = selectByUserId(userId);
+        for (Group g:groupList){
+            if (g.getGroupName().equals(gName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void removePermissionFromGroup(PermissionExample pExample, GroupExample gExample) throws PermissionNotFoundException, GroupNotFountException {
         List<Permission> pList = permissionService.selectByExample(pExample);
         if (pList == null || pList.isEmpty()) {

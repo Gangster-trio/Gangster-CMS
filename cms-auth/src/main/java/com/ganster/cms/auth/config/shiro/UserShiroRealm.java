@@ -1,6 +1,8 @@
 package com.ganster.cms.auth.config.shiro;
 
+import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.Group;
+import com.ganster.cms.core.pojo.Permission;
 import com.ganster.cms.core.pojo.User;
 import com.ganster.cms.core.pojo.UserExample;
 import com.ganster.cms.core.service.GroupService;
@@ -16,10 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 public class UserShiroRealm extends AuthorizingRealm {
@@ -72,7 +71,7 @@ public class UserShiroRealm extends AuthorizingRealm {
         List<User> users = userService.selectByExample(userExample);
         for (User i : users) {
             userId = i.getUserId();
-            j++;
+            j=0;j++;
         }
         if (j >= 2) {
             return null;
@@ -88,16 +87,22 @@ public class UserShiroRealm extends AuthorizingRealm {
                 groupSet.add(i.getGroupName());
             }
         }
-        Set<String> permissionList = new HashSet<>();
+
+        Set<String> permissionSet = new HashSet<>();
         for (Group i : groupList) {
             if (!StringUtil.isNullOrEmpty(i.getGroupName())) {
-                permissionList.add(i.getGroupName());
+                try {
+                    List<Permission> permissions = permissionService.selectByGroupId(i.getGroupId());
+                    for (Permission permission : permissions) {
+                        permissionSet.add(permission.getPermissionName());
+                    }
+                } catch (GroupNotFountException e) {
+                    logger.info("角色未找到");
+                }
             }
         }
-
-
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        simpleAuthorizationInfo.setStringPermissions(permissionList);
+        simpleAuthorizationInfo.setStringPermissions(permissionSet);
         simpleAuthorizationInfo.setRoles(groupSet);
         return simpleAuthorizationInfo;
 

@@ -32,4 +32,6 @@ public interface GroupService extends BaseService<Group,GroupExample> {
     void removePermissionFromGroup(Integer pid,Integer gid) throws PermissionNotFoundException, GroupNotFountException;
 
     void removePermissionFromGroup(String pName,String gName) throws PermissionNotFoundException, GroupNotFountException;
+
+    Boolean hasGroup(Integer userId,String gName);
 }

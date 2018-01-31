@@ -14,4 +14,6 @@ public interface PermissionService extends BaseService<Permission,PermissionExam
     List<Permission> selectByGroupId(Integer id) throws GroupNotFountException;
 
     List<Permission> selectByGroupName(String name) throws GroupNotFountException;
+
+    Boolean hasPermission(Integer userId,String pName) throws GroupNotFountException;
 }

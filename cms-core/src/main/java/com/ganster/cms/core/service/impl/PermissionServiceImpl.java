@@ -67,4 +67,14 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
         example.or().andGroupNameEqualTo(name);
         return selectByGroupExample(example);
     }
+
+    @Override
+    public Boolean hasPermission(Integer userId, String pName) throws GroupNotFountException {
+        List<Permission> permissionList = selectByUserId(userId);
+        for (Permission p:permissionList){
+            if (p.getPermissionName().equals(pName))
+                return true;
+        }
+        return false;
+    }
 }

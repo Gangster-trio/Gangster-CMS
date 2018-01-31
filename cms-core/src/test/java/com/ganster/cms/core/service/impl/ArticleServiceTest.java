@@ -30,12 +30,12 @@ public class ArticleServiceTest {
     @Test
     @Transactional
     public void PageHelperTest() {
-        final String TESTAUTHOR = "PageHelperTest.-@#$%^&*&^%";
+        final String TEST_AUTHOR = "PageHelperTest.-@#$%^&*&^%";
         //insert Data
-        List<Article> articles = new ArrayList<Article>();
+        List<Article> articles = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Article article = new Article();
-            article.setArticleAuthor(TESTAUTHOR);
+            article.setArticleAuthor(TEST_AUTHOR);
             articles.add(article);
         }
         for (Article article : articles) {
@@ -43,12 +43,12 @@ public class ArticleServiceTest {
         }
 
         ArticleExample articleExample = new ArticleExample();
-        articleExample.or().andArticleAuthorEqualTo(TESTAUTHOR);
+        articleExample.or().andArticleAuthorEqualTo(TEST_AUTHOR);
         PageHelper.startPage(1,2);
         articles = articleService.selectByExample(articleExample);
-        PageInfo<Article> pageInfo= new PageInfo<Article>(articles);
+        PageInfo<Article> pageInfo= new PageInfo<>(articles);
 
-//        Page page = PageHelper.startPage(1,5).doSelectPage(() -> articleService.selectByExample(articleExample));
+//        PageInfo page = PageHelper.startPage(1,5).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
 
         LOGGER.info(pageInfo.toString());
         for (Article article:articles){
@@ -59,6 +59,7 @@ public class ArticleServiceTest {
     }
 
     @Test
+    @Transactional
     public void generatorAutoGetKeyTest(){
         Article article = new Article();
         article.setArticleAuthor("generatorAutoGetKeyTest");
