@@ -16,6 +16,6 @@ public class IndexController {
     }
     @GetMapping("/403")
     public String error(){
-        return "/login/403.html";
+        return "redirect:"+"/login/403.html";
     }
 }
