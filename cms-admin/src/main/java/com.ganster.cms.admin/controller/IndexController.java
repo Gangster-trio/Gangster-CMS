@@ -28,6 +28,7 @@ public class IndexController {
     @Autowired
     private ArticleService articleService;
 
+    //    @RequiresPermissions("super")
     @GetMapping("index")
     @ResponseBody
     public ModelAndView index() {
@@ -46,7 +47,7 @@ public class IndexController {
             treeList.add(moduleTree);
         }
         modelAndView.addObject("treelist", treeList);
-        modelAndView.addObject("test","test");
+        modelAndView.addObject("test", "test");
         return modelAndView;
 //        return treeList;
     }
