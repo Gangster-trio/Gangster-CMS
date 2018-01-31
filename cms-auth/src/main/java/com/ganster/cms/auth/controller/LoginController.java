@@ -1,23 +1,21 @@
 package com.ganster.cms.auth.controller;
 
-import com.ganster.cms.auth.config.shiro.UserShiroRealm;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.ganster.cms.auth.dto.Message;
+
 import javax.servlet.http.HttpServletRequest;
 
 
-
-@Controller
+@RestController
 public class LoginController {
-    private static final Logger logger = LoggerFactory.getLogger(UserShiroRealm.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @RequestMapping("/login")
     public com.ganster.cms.auth.dto.Message login(Model model, HttpServletRequest request){
         String username=request.getParameter("userName");
@@ -29,20 +27,15 @@ public class LoginController {
         Subject subject= SecurityUtils.getSubject();
         try {
             subject.login(token);
+            message.setCode(100);
+            message.setMsg("ok");
         }catch (Exception e) {
+            message.setCode(120);
+            message.setMsg("抱歉，信息错误");
             return message;
         }
-        message.setCode(110);
-        message.setData("121");
         return message;
     }
-    @RequestMapping("/main")
-    public String index(){
-        return   "admin";
-    }
-    @RequestMapping("/404")
-    public String error(){
-        return "404";
-    }
+
 
 }
