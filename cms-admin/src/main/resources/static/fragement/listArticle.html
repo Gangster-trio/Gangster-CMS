@@ -3,6 +3,7 @@
 <head>
 </head>
 <body>
+<script src="/util/util.js"></script>
 <table id="article_table" lay-filter="articleListFilter"></table>
 
 <script type="text/html" id="articleToolBar">
@@ -29,7 +30,7 @@
 
         table.render({
             elem: '#article_table'
-            , url: '/article/list'
+            , url: current_column_id === -1 ? 'article/list' : '/article/list/columnlist?id=' + current_column_id
             , page: true //开启分页
             , cols: [[ //表头
                 {field: 'articleId', title: 'ID', width: 60, sort: true, fixed: 'left'}

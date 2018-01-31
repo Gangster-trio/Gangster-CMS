@@ -37,8 +37,7 @@
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             var id = data.id;
             if (layEvent === 'detail') { //查看
-                current_column_id = id;
-                showAtRight("/fragment/listArticle.html");
+                showAtRight("/fragement/listArticle.html?param=" + id);
             } else if (layEvent === 'del') { //删除
                 layer.confirm('真的删除行么', function (index) {
                         deleteColumn(id);

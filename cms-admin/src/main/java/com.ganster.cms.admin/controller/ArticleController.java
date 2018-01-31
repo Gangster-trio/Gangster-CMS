@@ -50,4 +50,21 @@ public class ArticleController extends BaseController {
             return super.buildMessage(1, "false", 0);
         }
     }
+
+    @GetMapping("/list/columnlist")
+    @ResponseBody
+    public AjaxData listArticleByColumnId(@RequestParam("id") Integer id, @RequestParam("page") Integer page, @RequestParam("limit") Integer limit) {
+        if (id != null) {
+            ArticleExample articleExample = new ArticleExample();
+            articleExample.or().andArticleCategoryIdEqualTo(id);
+            List<Article> list = articleService.selectByExample(articleExample);
+            if (page != null && limit != null) {
+                PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) articleService.selectByExample(articleExample));
+            } else {
+                PageInfo<Article> pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) articleService.selectByExample(articleExample));
+            }
+        } else return super.buildAjaxData(1, "false", 0, null);
+    }
 }
