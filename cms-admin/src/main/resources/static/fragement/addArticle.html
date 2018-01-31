@@ -11,40 +11,68 @@
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
     <script src="/layui/layui.js"></script>
+    <script src="/util/jquery.form.js"></script>
 </head>
 <body style="background-color:#eee;">
-<div class="layui-form-item">
-    <label class="layui-form-label">选择栏目</label>
-    <div class="layui-input-block">
-        <button class="layui-btn" name="addColumn" id="addColumn" lay-submit
-                lay-filter="formDemo">栏目选择
-        </button>
-    </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">选择的栏目是</label>
-    <div class="layui-input-block">
-        <input type="text" id="column" name="column" readonly="readonly" required lay-verify="required"
-               autocomplete="off"
-               class="layui-input">
-
-    </div>
-</div>
+<br/>
 <div class="layui-form-item">
     <label class="layui-form-label">文章标题</label>
-    <div class="layui-input-block">
+    <div class="layui-input-inline">
+        <input type="text" id="categoryTitle" name="categoryTitle" required lay-verify="required" placeholder="栏目名称"
+               autocomplete="off"
+               class="layui-input">
+    </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">自定义顺序</label>
+    <div class="layui-input-inline">
         <input type="text" id="title" name="title" required lay-verify="required" placeholder="标题" autocomplete="off"
                class="layui-input">
     </div>
 </div>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章属性</label>
+        <div class="layui-input-block">
+            <!--<input type="radio" name="sex" value="女" title="女" checked>-->
+            <!--单选框name 为控件名，value是提交到服务器的值-->
+            <input type="radio" name="choose" value="幻灯" title="幻灯">
+            <input type="radio" name="choose" value="推荐" title="推荐">
+            <input type="radio" name="choose" value="图片" title="图片">
+            <input type="radio" name="choose" value="头条" title="头条" checked>
+        </div>
+    </div>
+</form>
+<div class="layui-form-item layui-form-text">
+    <!--  <label class="layui-form-label">上传缩略图</label>
+      <div class="layui-input-block">
+          &lt;!&ndash;class="layui-textarea"&ndash;&gt;
+          &lt;!&ndash;<textarea class="layui-textarea" name="upload" placeholder="添加缩略图" readonly="readonly"></textarea><br/>&ndash;&gt;
+          <img width="100" height="100" id="image"/>
+          添加缩略图 <input type="file" />
+          <button id="thumb" class="layui-btn layui-btn-lg layui-btn-normal">上传图片</button>
+      </div>-->
+    <form id="img" action="/article/img" method="post" enctype="multipart/form-data">
+        <img width="100" height="100" id="image"/>
+        <!-- 在选择图片的时候添加事件，触发Ajax异步上传 -->
+        <input name="file" type="file" onchange="uploadImg()"/>
+    </form>
+</div>
 <div class="layui-form-item">
-    <label class="layui-form-label">作者</label>
-    <div class="layui-input-block">
-        <input type="text" id="author" name="author" required lay-verify="required" placeholder="作者"
+    <label class="layui-form-label">文章作者</label>
+    <div class="layui-input-inline">
+        <input type="text" id="author" name="author" required lay-verify="required" placeholder="文章作者"
                autocomplete="off"
                class="layui-input">
     </div>
 </div>
+<div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">描述</label>
+    <div class="layui-input-block">
+        <textarea name="description" class="layui-textarea" placeholder="添加描述" rows="50" cols="40"></textarea>
+    </div>
+</div>
+文章内容
 <div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
     <textarea name="txt" id="txt" style="display:none;"></textarea>
 </div>
@@ -53,16 +81,6 @@
 </html>
 <script type="text/javascript">
     window.onload = function () {
-        $.ajax({
-            type: "GET",
-            url: "/column/list",
-            success: function (data) {
-
-                for (var i in data) {
-                    $("#select").append("<option value=" + data[i].id + ">Select" + data[i].name + "</option>");
-                }
-            }
-        });
         layui.use('layedit', function () {
             var layedit = layui.layedit;
 
@@ -125,5 +143,17 @@
                 console.log(layero, index);
             }
         });
-    })
+    });
+
+    function uploadImg() {
+        var options = {
+            url: "/article/img",
+            type: 'post',
+            dataType: "json",
+            success: function (data, status, xhr) {
+                $("#image").attr("src", data.src);
+            }
+        };
+        $("#img").ajaxSubmit(options);
+    }
 </script>

@@ -1,5 +1,6 @@
 package com.ganster.cms.admin.controller;
 
+import com.ganster.cms.admin.config.ImgConfig;
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.pojo.Article;
@@ -7,12 +8,18 @@ import com.ganster.cms.core.pojo.ArticleExample;
 import com.ganster.cms.core.service.ArticleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Create by Yoke on 2018/1/30
@@ -20,8 +27,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/article")
 public class ArticleController extends BaseController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleController.class);
+
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private ImgConfig imgConfig;
 
     @GetMapping("/list")
     @ResponseBody
@@ -62,5 +75,37 @@ public class ArticleController extends BaseController {
             PageInfo<Article> pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
             return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) articleService.selectByExample(articleExample));
         }
+    }
+
+    @PostMapping("/img")
+    @ResponseBody
+    public Map<String, Object> uploadImg(HttpServletRequest request, @Param("file") MultipartFile file) throws IOException {
+        String originalFileName = file.getOriginalFilename();   // 得到文件最初的名字
+        LOGGER.info(originalFileName);
+        String uuid = UUID.randomUUID().toString();
+        String newName = uuid + originalFileName.substring(originalFileName.lastIndexOf("."));
+        Calendar date = Calendar.getInstance();
+        File dateDirs = new File(date.get(Calendar.YEAR)
+                + File.separator + (date.get(Calendar.MONTH) + 1));
+        File newFile = new File(imgConfig.getSaveLocation() + File.separator + newName);
+        if (!newFile.getParentFile().exists()) {
+            newFile.getParentFile().mkdirs();
+        }
+        LOGGER.info("文件上传" + newFile.toString());
+        try {
+            file.transferTo(newFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String fileUrl = "/upload/" + newName;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("src",fileUrl);
+//        Map<String, Object> map2 = new HashMap<String, Object>();
+//        map.put("code", 0);//0表示成功，1失败
+//        map.put("msg", "上传成功");//提示消息
+//        map.put("data", map2);
+//        map2.put("src", fileUrl);//图片url
+//        map2.put("title", newName);//图片名称，这个会显示在输入框里
+        return map;
     }
 }

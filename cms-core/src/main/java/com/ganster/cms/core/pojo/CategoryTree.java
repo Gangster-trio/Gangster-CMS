@@ -1,4 +1,4 @@
-package com.ganster.cms.admin.dto;
+package com.ganster.cms.core.pojo;
 
 import java.util.List;
 
