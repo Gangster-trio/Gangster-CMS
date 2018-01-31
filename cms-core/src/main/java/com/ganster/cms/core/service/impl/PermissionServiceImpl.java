@@ -40,7 +40,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
         }
         for (Group group : groupList) {
             GroupPermissionExample gpExample = new GroupPermissionExample();
-            example.or().andGroupIdEqualTo(group.getGroupId());
+            gpExample.or().andGroupIdEqualTo(group.getGroupId());
             List<GroupPermission> groupPermissionList = groupPermissionMapper.selectByExample(gpExample);
             if (groupPermissionList == null) {
                 return new ArrayList<>();
