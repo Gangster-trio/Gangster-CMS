@@ -724,6 +724,76 @@ public class CategoryExample {
             addCriterion("category_order not between", value1, value2, "categoryOrder");
             return (Criteria) this;
         }
+
+        public Criteria andCategorySkinIsNull() {
+            addCriterion("category_skin is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinIsNotNull() {
+            addCriterion("category_skin is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinEqualTo(String value) {
+            addCriterion("category_skin =", value, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinNotEqualTo(String value) {
+            addCriterion("category_skin <>", value, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinGreaterThan(String value) {
+            addCriterion("category_skin >", value, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinGreaterThanOrEqualTo(String value) {
+            addCriterion("category_skin >=", value, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinLessThan(String value) {
+            addCriterion("category_skin <", value, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinLessThanOrEqualTo(String value) {
+            addCriterion("category_skin <=", value, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinLike(String value) {
+            addCriterion("category_skin like", value, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinNotLike(String value) {
+            addCriterion("category_skin not like", value, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinIn(List<String> values) {
+            addCriterion("category_skin in", values, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinNotIn(List<String> values) {
+            addCriterion("category_skin not in", values, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinBetween(String value1, String value2) {
+            addCriterion("category_skin between", value1, value2, "categorySkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategorySkinNotBetween(String value1, String value2) {
+            addCriterion("category_skin not between", value1, value2, "categorySkin");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

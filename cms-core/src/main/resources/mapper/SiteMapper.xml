@@ -8,7 +8,7 @@
       <arg column="site_url" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="site_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="site_copyright" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="site_skin" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="site_skin" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="site_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="site_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="site_pic" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -115,7 +115,7 @@
       site_copyright, site_skin, site_create_time, 
       site_status, site_pic)
     values (#{siteName,jdbcType=VARCHAR}, #{siteUrl,jdbcType=VARCHAR}, #{siteDesc,jdbcType=VARCHAR}, 
-      #{siteCopyright,jdbcType=VARCHAR}, #{siteSkin,jdbcType=INTEGER}, #{siteCreateTime,jdbcType=TIMESTAMP}, 
+      #{siteCopyright,jdbcType=VARCHAR}, #{siteSkin,jdbcType=VARCHAR}, #{siteCreateTime,jdbcType=TIMESTAMP}, 
       #{siteStatus,jdbcType=INTEGER}, #{sitePic,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Site">
@@ -163,7 +163,7 @@
         #{siteCopyright,jdbcType=VARCHAR},
       </if>
       <if test="siteSkin != null">
-        #{siteSkin,jdbcType=INTEGER},
+        #{siteSkin,jdbcType=VARCHAR},
       </if>
       <if test="siteCreateTime != null">
         #{siteCreateTime,jdbcType=TIMESTAMP},
@@ -201,7 +201,7 @@
         site_copyright = #{record.siteCopyright,jdbcType=VARCHAR},
       </if>
       <if test="record.siteSkin != null">
-        site_skin = #{record.siteSkin,jdbcType=INTEGER},
+        site_skin = #{record.siteSkin,jdbcType=VARCHAR},
       </if>
       <if test="record.siteCreateTime != null">
         site_create_time = #{record.siteCreateTime,jdbcType=TIMESTAMP},
@@ -224,7 +224,7 @@
       site_url = #{record.siteUrl,jdbcType=VARCHAR},
       site_desc = #{record.siteDesc,jdbcType=VARCHAR},
       site_copyright = #{record.siteCopyright,jdbcType=VARCHAR},
-      site_skin = #{record.siteSkin,jdbcType=INTEGER},
+      site_skin = #{record.siteSkin,jdbcType=VARCHAR},
       site_create_time = #{record.siteCreateTime,jdbcType=TIMESTAMP},
       site_status = #{record.siteStatus,jdbcType=INTEGER},
       site_pic = #{record.sitePic,jdbcType=VARCHAR}
@@ -248,7 +248,7 @@
         site_copyright = #{siteCopyright,jdbcType=VARCHAR},
       </if>
       <if test="siteSkin != null">
-        site_skin = #{siteSkin,jdbcType=INTEGER},
+        site_skin = #{siteSkin,jdbcType=VARCHAR},
       </if>
       <if test="siteCreateTime != null">
         site_create_time = #{siteCreateTime,jdbcType=TIMESTAMP},
@@ -268,7 +268,7 @@
       site_url = #{siteUrl,jdbcType=VARCHAR},
       site_desc = #{siteDesc,jdbcType=VARCHAR},
       site_copyright = #{siteCopyright,jdbcType=VARCHAR},
-      site_skin = #{siteSkin,jdbcType=INTEGER},
+      site_skin = #{siteSkin,jdbcType=VARCHAR},
       site_create_time = #{siteCreateTime,jdbcType=TIMESTAMP},
       site_status = #{siteStatus,jdbcType=INTEGER},
       site_pic = #{sitePic,jdbcType=VARCHAR}

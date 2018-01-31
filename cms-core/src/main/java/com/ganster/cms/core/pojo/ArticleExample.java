@@ -1004,6 +1004,76 @@ public class ArticleExample {
             addCriterion("article_status not between", value1, value2, "articleStatus");
             return (Criteria) this;
         }
+
+        public Criteria andArticleSkinIsNull() {
+            addCriterion("article_skin is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinIsNotNull() {
+            addCriterion("article_skin is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinEqualTo(String value) {
+            addCriterion("article_skin =", value, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinNotEqualTo(String value) {
+            addCriterion("article_skin <>", value, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinGreaterThan(String value) {
+            addCriterion("article_skin >", value, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinGreaterThanOrEqualTo(String value) {
+            addCriterion("article_skin >=", value, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinLessThan(String value) {
+            addCriterion("article_skin <", value, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinLessThanOrEqualTo(String value) {
+            addCriterion("article_skin <=", value, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinLike(String value) {
+            addCriterion("article_skin like", value, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinNotLike(String value) {
+            addCriterion("article_skin not like", value, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinIn(List<String> values) {
+            addCriterion("article_skin in", values, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinNotIn(List<String> values) {
+            addCriterion("article_skin not in", values, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinBetween(String value1, String value2) {
+            addCriterion("article_skin between", value1, value2, "articleSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleSkinNotBetween(String value1, String value2) {
+            addCriterion("article_skin not between", value1, value2, "articleSkin");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

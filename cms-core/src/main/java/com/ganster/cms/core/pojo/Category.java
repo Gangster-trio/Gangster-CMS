@@ -24,9 +24,11 @@ public class Category implements Serializable {
 
     private Integer categoryOrder;
 
+    private String categorySkin;
+
     private static final long serialVersionUID = 1L;
 
-    public Category(Integer categoryId, String categoryTitle, Date categoryCreateTime, Date categoryUpdateTime, Integer categoryParentId, Integer categoryLevel, Integer categorySiteId, Integer categoryStatus, String categoryDesc, Integer categoryOrder) {
+    public Category(Integer categoryId, String categoryTitle, Date categoryCreateTime, Date categoryUpdateTime, Integer categoryParentId, Integer categoryLevel, Integer categorySiteId, Integer categoryStatus, String categoryDesc, Integer categoryOrder, String categorySkin) {
         this.categoryId = categoryId;
         this.categoryTitle = categoryTitle;
         this.categoryCreateTime = categoryCreateTime;
@@ -37,6 +39,7 @@ public class Category implements Serializable {
         this.categoryStatus = categoryStatus;
         this.categoryDesc = categoryDesc;
         this.categoryOrder = categoryOrder;
+        this.categorySkin = categorySkin;
     }
 
     public Category() {
@@ -123,6 +126,14 @@ public class Category implements Serializable {
         this.categoryOrder = categoryOrder;
     }
 
+    public String getCategorySkin() {
+        return categorySkin;
+    }
+
+    public void setCategorySkin(String categorySkin) {
+        this.categorySkin = categorySkin == null ? null : categorySkin.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -144,7 +155,8 @@ public class Category implements Serializable {
             && (this.getCategorySiteId() == null ? other.getCategorySiteId() == null : this.getCategorySiteId().equals(other.getCategorySiteId()))
             && (this.getCategoryStatus() == null ? other.getCategoryStatus() == null : this.getCategoryStatus().equals(other.getCategoryStatus()))
             && (this.getCategoryDesc() == null ? other.getCategoryDesc() == null : this.getCategoryDesc().equals(other.getCategoryDesc()))
-            && (this.getCategoryOrder() == null ? other.getCategoryOrder() == null : this.getCategoryOrder().equals(other.getCategoryOrder()));
+            && (this.getCategoryOrder() == null ? other.getCategoryOrder() == null : this.getCategoryOrder().equals(other.getCategoryOrder()))
+            && (this.getCategorySkin() == null ? other.getCategorySkin() == null : this.getCategorySkin().equals(other.getCategorySkin()));
     }
 
     @Override
@@ -161,6 +173,7 @@ public class Category implements Serializable {
         result = prime * result + ((getCategoryStatus() == null) ? 0 : getCategoryStatus().hashCode());
         result = prime * result + ((getCategoryDesc() == null) ? 0 : getCategoryDesc().hashCode());
         result = prime * result + ((getCategoryOrder() == null) ? 0 : getCategoryOrder().hashCode());
+        result = prime * result + ((getCategorySkin() == null) ? 0 : getCategorySkin().hashCode());
         return result;
     }
 
@@ -180,6 +193,7 @@ public class Category implements Serializable {
         sb.append(", categoryStatus=").append(categoryStatus);
         sb.append(", categoryDesc=").append(categoryDesc);
         sb.append(", categoryOrder=").append(categoryOrder);
+        sb.append(", categorySkin=").append(categorySkin);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

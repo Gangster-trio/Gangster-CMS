@@ -14,7 +14,7 @@ public class Site implements Serializable {
 
     private String siteCopyright;
 
-    private Integer siteSkin;
+    private String siteSkin;
 
     private Date siteCreateTime;
 
@@ -24,7 +24,7 @@ public class Site implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Site(Integer siteId, String siteName, String siteUrl, String siteDesc, String siteCopyright, Integer siteSkin, Date siteCreateTime, Integer siteStatus, String sitePic) {
+    public Site(Integer siteId, String siteName, String siteUrl, String siteDesc, String siteCopyright, String siteSkin, Date siteCreateTime, Integer siteStatus, String sitePic) {
         this.siteId = siteId;
         this.siteName = siteName;
         this.siteUrl = siteUrl;
@@ -80,12 +80,12 @@ public class Site implements Serializable {
         this.siteCopyright = siteCopyright == null ? null : siteCopyright.trim();
     }
 
-    public Integer getSiteSkin() {
+    public String getSiteSkin() {
         return siteSkin;
     }
 
-    public void setSiteSkin(Integer siteSkin) {
-        this.siteSkin = siteSkin;
+    public void setSiteSkin(String siteSkin) {
+        this.siteSkin = siteSkin == null ? null : siteSkin.trim();
     }
 
     public Date getSiteCreateTime() {

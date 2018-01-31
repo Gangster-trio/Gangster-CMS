@@ -32,11 +32,13 @@ public class Article implements Serializable {
 
     private Integer articleStatus;
 
+    private String articleSkin;
+
     private String articleContent;
 
     private static final long serialVersionUID = 1L;
 
-    public Article(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus) {
+    public Article(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin) {
         this.articleId = articleId;
         this.articleTitle = articleTitle;
         this.articleType = articleType;
@@ -51,9 +53,10 @@ public class Article implements Serializable {
         this.articleHit = articleHit;
         this.articleDesc = articleDesc;
         this.articleStatus = articleStatus;
+        this.articleSkin = articleSkin;
     }
 
-    public Article(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleContent) {
+    public Article(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, String articleContent) {
         this.articleId = articleId;
         this.articleTitle = articleTitle;
         this.articleType = articleType;
@@ -68,6 +71,7 @@ public class Article implements Serializable {
         this.articleHit = articleHit;
         this.articleDesc = articleDesc;
         this.articleStatus = articleStatus;
+        this.articleSkin = articleSkin;
         this.articleContent = articleContent;
     }
 
@@ -187,6 +191,14 @@ public class Article implements Serializable {
         this.articleStatus = articleStatus;
     }
 
+    public String getArticleSkin() {
+        return articleSkin;
+    }
+
+    public void setArticleSkin(String articleSkin) {
+        this.articleSkin = articleSkin == null ? null : articleSkin.trim();
+    }
+
     public String getArticleContent() {
         return articleContent;
     }
@@ -221,6 +233,7 @@ public class Article implements Serializable {
             && (this.getArticleHit() == null ? other.getArticleHit() == null : this.getArticleHit().equals(other.getArticleHit()))
             && (this.getArticleDesc() == null ? other.getArticleDesc() == null : this.getArticleDesc().equals(other.getArticleDesc()))
             && (this.getArticleStatus() == null ? other.getArticleStatus() == null : this.getArticleStatus().equals(other.getArticleStatus()))
+            && (this.getArticleSkin() == null ? other.getArticleSkin() == null : this.getArticleSkin().equals(other.getArticleSkin()))
             && (this.getArticleContent() == null ? other.getArticleContent() == null : this.getArticleContent().equals(other.getArticleContent()));
     }
 
@@ -242,6 +255,7 @@ public class Article implements Serializable {
         result = prime * result + ((getArticleHit() == null) ? 0 : getArticleHit().hashCode());
         result = prime * result + ((getArticleDesc() == null) ? 0 : getArticleDesc().hashCode());
         result = prime * result + ((getArticleStatus() == null) ? 0 : getArticleStatus().hashCode());
+        result = prime * result + ((getArticleSkin() == null) ? 0 : getArticleSkin().hashCode());
         result = prime * result + ((getArticleContent() == null) ? 0 : getArticleContent().hashCode());
         return result;
     }
@@ -266,6 +280,7 @@ public class Article implements Serializable {
         sb.append(", articleHit=").append(articleHit);
         sb.append(", articleDesc=").append(articleDesc);
         sb.append(", articleStatus=").append(articleStatus);
+        sb.append(", articleSkin=").append(articleSkin);
         sb.append(", articleContent=").append(articleContent);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

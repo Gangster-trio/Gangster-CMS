@@ -455,52 +455,62 @@ public class SiteExample {
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinEqualTo(Integer value) {
+        public Criteria andSiteSkinEqualTo(String value) {
             addCriterion("site_skin =", value, "siteSkin");
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinNotEqualTo(Integer value) {
+        public Criteria andSiteSkinNotEqualTo(String value) {
             addCriterion("site_skin <>", value, "siteSkin");
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinGreaterThan(Integer value) {
+        public Criteria andSiteSkinGreaterThan(String value) {
             addCriterion("site_skin >", value, "siteSkin");
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinGreaterThanOrEqualTo(Integer value) {
+        public Criteria andSiteSkinGreaterThanOrEqualTo(String value) {
             addCriterion("site_skin >=", value, "siteSkin");
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinLessThan(Integer value) {
+        public Criteria andSiteSkinLessThan(String value) {
             addCriterion("site_skin <", value, "siteSkin");
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinLessThanOrEqualTo(Integer value) {
+        public Criteria andSiteSkinLessThanOrEqualTo(String value) {
             addCriterion("site_skin <=", value, "siteSkin");
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinIn(List<Integer> values) {
+        public Criteria andSiteSkinLike(String value) {
+            addCriterion("site_skin like", value, "siteSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteSkinNotLike(String value) {
+            addCriterion("site_skin not like", value, "siteSkin");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteSkinIn(List<String> values) {
             addCriterion("site_skin in", values, "siteSkin");
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinNotIn(List<Integer> values) {
+        public Criteria andSiteSkinNotIn(List<String> values) {
             addCriterion("site_skin not in", values, "siteSkin");
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinBetween(Integer value1, Integer value2) {
+        public Criteria andSiteSkinBetween(String value1, String value2) {
             addCriterion("site_skin between", value1, value2, "siteSkin");
             return (Criteria) this;
         }
 
-        public Criteria andSiteSkinNotBetween(Integer value1, Integer value2) {
+        public Criteria andSiteSkinNotBetween(String value1, String value2) {
             addCriterion("site_skin not between", value1, value2, "siteSkin");
             return (Criteria) this;
         }
