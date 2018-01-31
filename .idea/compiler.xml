@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="cms-admin" />
+        <module name="cms-auth" />
         <module name="cms-core" />
         <module name="cms-web" />
       </profile>
@@ -14,6 +15,7 @@
     <bytecodeTargetLevel>
       <module name="cms" target="1.8" />
       <module name="cms-admin" target="1.8" />
+      <module name="cms-auth" target="1.8" />
       <module name="cms-core" target="1.8" />
       <module name="cms-web" target="1.8" />
     </bytecodeTargetLevel>
