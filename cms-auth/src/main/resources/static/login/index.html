@@ -67,11 +67,13 @@
             url: '/login',
             success:function (data) {
                 if (data.code === 100) {
-                    window.location.href = "/";
+                    window.location.href = "/index";
                 } else if (data.code === 120) {
                     alert(data.msg);
+                   window.location.href="/403";
                 } else {
                     alert(data.msg);
+                    window.location.href="/403";
                 }
             },
             dataType: "json",
