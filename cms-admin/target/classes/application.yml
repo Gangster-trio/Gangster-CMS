@@ -20,8 +20,10 @@ spring:
       max-pool-prepared-statement-per-connection-size: 50
       remove-abandoned: true
       filters: stat
-  thymeleaf:
-     mode: LEGACYHTML5
+  jackson:
+    date-format: yyyy-MM-DD
+#  thymeleaf:
+#     mode: LEGACYHTML5
 #  http:
 #    multipart:
 #      max-file-size: 3MB

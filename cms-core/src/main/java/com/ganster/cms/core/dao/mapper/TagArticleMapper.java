@@ -1,12 +1,10 @@
 package com.ganster.cms.core.dao.mapper;
 
-import com.ganster.cms.core.dao.pojo.TagArticle;
-import com.ganster.cms.core.dao.pojo.TagArticleExample;
+import com.ganster.cms.core.pojo.TagArticle;
+import com.ganster.cms.core.pojo.TagArticleExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface TagArticleMapper {
     long countByExample(TagArticleExample example);
 

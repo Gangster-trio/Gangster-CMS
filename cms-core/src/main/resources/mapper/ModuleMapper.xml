@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ganster.cms.core.dao.mapper.ModuleMapper">
-  <resultMap id="BaseResultMap" type="com.ganster.cms.core.dao.pojo.Module">
-    <id column="module_id" jdbcType="INTEGER" property="moduleId" />
-    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
-    <result column="module_url" jdbcType="VARCHAR" property="moduleUrl" />
-    <result column="module_parent_id" jdbcType="INTEGER" property="moduleParentId" />
-    <result column="module_sort" jdbcType="INTEGER" property="moduleSort" />
-    <result column="module_create_time" jdbcType="TIMESTAMP" property="moduleCreateTime" />
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.Module">
+    <constructor>
+      <idArg column="module_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="module_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="module_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="module_parent_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="module_sort" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="module_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +72,7 @@
   <sql id="Base_Column_List">
     module_id, module_name, module_url, module_parent_id, module_sort, module_create_time
   </sql>
-  <select id="selectByExample" parameterType="com.ganster.cms.core.dao.pojo.ModuleExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.ModuleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -95,13 +97,13 @@
     delete from cms_module
     where module_id = #{moduleId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ganster.cms.core.dao.pojo.ModuleExample">
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.ModuleExample">
     delete from cms_module
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ganster.cms.core.dao.pojo.Module">
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.Module">
     <selectKey keyProperty="moduleId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -110,7 +112,7 @@
     values (#{moduleName,jdbcType=VARCHAR}, #{moduleUrl,jdbcType=VARCHAR}, #{moduleParentId,jdbcType=INTEGER}, 
       #{moduleSort,jdbcType=INTEGER}, #{moduleCreateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ganster.cms.core.dao.pojo.Module">
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Module">
     <selectKey keyProperty="moduleId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -150,7 +152,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ganster.cms.core.dao.pojo.ModuleExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.ModuleExample" resultType="java.lang.Long">
     select count(*) from cms_module
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -194,7 +196,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.dao.pojo.Module">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.pojo.Module">
     update cms_module
     <set>
       <if test="moduleName != null">
@@ -215,7 +217,7 @@
     </set>
     where module_id = #{moduleId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.dao.pojo.Module">
+  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.pojo.Module">
     update cms_module
     set module_name = #{moduleName,jdbcType=VARCHAR},
       module_url = #{moduleUrl,jdbcType=VARCHAR},

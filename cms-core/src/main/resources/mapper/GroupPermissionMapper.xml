@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ganster.cms.core.dao.mapper.GroupPermissionMapper">
-  <resultMap id="BaseResultMap" type="com.ganster.cms.core.dao.pojo.GroupPermission">
-    <result column="group_id" jdbcType="INTEGER" property="groupId" />
-    <result column="permission_id" jdbcType="INTEGER" property="permissionId" />
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.GroupPermission">
+    <constructor>
+      <arg column="group_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="permission_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +68,7 @@
   <sql id="Base_Column_List">
     group_id, permission_id
   </sql>
-  <select id="selectByExample" parameterType="com.ganster.cms.core.dao.pojo.GroupPermissionExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.GroupPermissionExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -81,17 +83,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.ganster.cms.core.dao.pojo.GroupPermissionExample">
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.GroupPermissionExample">
     delete from group_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ganster.cms.core.dao.pojo.GroupPermission">
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.GroupPermission">
     insert into group_permission (group_id, permission_id)
     values (#{groupId,jdbcType=INTEGER}, #{permissionId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.ganster.cms.core.dao.pojo.GroupPermission">
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.GroupPermission">
     insert into group_permission
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="groupId != null">
@@ -110,7 +112,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ganster.cms.core.dao.pojo.GroupPermissionExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.GroupPermissionExample" resultType="java.lang.Long">
     select count(*) from group_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 
 public class BaseController {
+
     protected Message buildMessage(int code, String msg, Object data) {
         Message message = new Message();
         message.setCode(code);
@@ -18,7 +19,7 @@ public class BaseController {
         return message;
     }
 
-    protected AjaxData buidMessage(int code, String msg, long count, ArrayList data) {
+    protected AjaxData buildAjaxData(int code, String msg, long count, ArrayList data) {
         AjaxData ajaxData = new AjaxData();
         ajaxData.setCode(code);
         ajaxData.setMsg(msg);

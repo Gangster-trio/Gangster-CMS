@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ganster.cms.core.dao.mapper.GroupMapper">
-  <resultMap id="BaseResultMap" type="com.ganster.cms.core.dao.pojo.Group">
-    <id column="group_id" jdbcType="INTEGER" property="groupId" />
-    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
-    <result column="group_desc" jdbcType="VARCHAR" property="groupDesc" />
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.Group">
+    <constructor>
+      <idArg column="group_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="group_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="group_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +69,7 @@
   <sql id="Base_Column_List">
     group_id, group_name, group_desc
   </sql>
-  <select id="selectByExample" parameterType="com.ganster.cms.core.dao.pojo.GroupExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.GroupExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -92,20 +94,20 @@
     delete from cms_group
     where group_id = #{groupId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ganster.cms.core.dao.pojo.GroupExample">
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.GroupExample">
     delete from cms_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ganster.cms.core.dao.pojo.Group">
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.Group">
     <selectKey keyProperty="groupId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into cms_group (group_name, group_desc)
     values (#{groupName,jdbcType=VARCHAR}, #{groupDesc,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ganster.cms.core.dao.pojo.Group">
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Group">
     <selectKey keyProperty="groupId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -127,7 +129,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ganster.cms.core.dao.pojo.GroupExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.GroupExample" resultType="java.lang.Long">
     select count(*) from cms_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -159,7 +161,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.dao.pojo.Group">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.pojo.Group">
     update cms_group
     <set>
       <if test="groupName != null">
@@ -171,7 +173,7 @@
     </set>
     where group_id = #{groupId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.dao.pojo.Group">
+  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.pojo.Group">
     update cms_group
     set group_name = #{groupName,jdbcType=VARCHAR},
       group_desc = #{groupDesc,jdbcType=VARCHAR}

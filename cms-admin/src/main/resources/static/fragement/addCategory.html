@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link href="/layui/css/layui.css" rel="stylesheet"/>
+    <script src="/layui/layui.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <script src="/layui/layui.js"></script>
+    <script src="/layui/tree.js"></script>
+</head>
+<body style="background-color:#eee;">
+
+<br/>
+<br/>
+<div class="layui-form-item">
+    <label class="layui-form-label">栏目名称</label>
+    <div class="layui-input-inline">
+        <input type="text" id="categoryTitle" name="categoryTitle" required lay-verify="required" placeholder="自定义顺序"
+               autocomplete="off"
+               class="layui-input">
+    </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">自定义顺序</label>
+    <div class="layui-input-inline">
+        <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序"
+               autocomplete="off"
+               class="layui-input">
+    </div>
+</div>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属栏目</label>
+        <div class="layui-input-inline">
+            <input type="text" id="addCategory" name="addCategory" required lay-verify="required" placeholder="顶级栏目管理"
+                   autocomplete="off"
+                   class="layui-input" readonly="readonly"/>
+        </div>
+    </div>
+</form>
+<div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">栏目描述</label>
+    <div class="layui-input-block">
+        <textarea id="desc" name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+    </div>
+</div>
+<div>
+    <input id="parentId" name="parentId" type="text" hidden="hidden"/>
+</div>
+<input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
+</body>
+</html>
+<script type="text/javascript">
+    document.getElementById('btn1').onclick = function () {
+        var categoryTitle = document.getElementById("categoryTitle").value;
+        var parentId = document.getElementById("parentId").value;
+        var order = document.getElementById("order").value;
+        var desc = document.getElementById("desc").value;
+        alert(parentId);
+        $.ajax({
+            url: "/category/add",
+            type: 'post',
+            dataType: 'json',
+            contentType: "application/json",
+            data: JSON.stringify({
+                "categoryTitle": categoryTitle,
+                "categoryParentId": parentId,
+                "categoryDesc": desc,
+                "categoryOrder": order
+            }),
+            success: function (data) {
+                console.log(data);
+                if (data.code === 0) {
+                    //关闭弹框
+                    layer.msg("添加成功", {icon: 6});
+                } else {
+                    layer.msg("添加失败", {icon: 5});
+                }
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    var index = $("#addCategory").on('click', function () {
+        layer.open({
+            id: 1,
+            type: 2,
+            skin: 'layui-layer-rim',
+            closeBtn: 1,
+            anim: 2,
+            content: '/fragement/selectCategory.html',
+            success: function (layero, index) {
+                console.log(layero, index);
+                // $("#addColumn")
+            }
+        });
+    })
+</script>

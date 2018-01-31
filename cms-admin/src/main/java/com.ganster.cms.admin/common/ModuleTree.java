@@ -1,6 +1,7 @@
 package com.ganster.cms.admin.common;
 
-import com.ganster.cms.core.dao.pojo.Module;
+
+import com.ganster.cms.core.pojo.Module;
 
 import java.util.List;
 

@@ -1,12 +1,10 @@
 package com.ganster.cms.core.dao.mapper;
 
-import com.ganster.cms.core.dao.pojo.GroupPermission;
-import com.ganster.cms.core.dao.pojo.GroupPermissionExample;
+import com.ganster.cms.core.pojo.GroupPermission;
+import com.ganster.cms.core.pojo.GroupPermissionExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface GroupPermissionMapper {
     long countByExample(GroupPermissionExample example);
 

@@ -10,6 +10,6 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     use-generated-keys: true
-  type-aliases-package: com.ganster.cms.core.dao.pojo
+  type-aliases-package: com.ganster.cms.core.pojo
 pagehelper:
   reasonable: true

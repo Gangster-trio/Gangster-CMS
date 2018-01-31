@@ -1,10 +1,8 @@
 package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.common.ModuleTree;
-import com.ganster.cms.core.dao.pojo.Article;
-import com.ganster.cms.core.dao.pojo.ArticleExample;
-import com.ganster.cms.core.dao.pojo.Module;
-import com.ganster.cms.core.dao.pojo.ModuleExample;
+import com.ganster.cms.core.pojo.Module;
+import com.ganster.cms.core.pojo.ModuleExample;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,7 @@ public class IndexController {
 
     @GetMapping("index")
     @ResponseBody
-    public List<ModuleTree> index() {
+    public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         List<ModuleTree> treeList = new ArrayList<ModuleTree>();
         ModuleExample moduleExample = new ModuleExample();
@@ -49,7 +47,8 @@ public class IndexController {
             treeList.add(moduleTree);
         }
         modelAndView.addObject("treelist", treeList);
-        return treeList;
-//        return modelAndView;
+        modelAndView.addObject("test","test");
+        return modelAndView;
+//        return treeList;
     }
 }

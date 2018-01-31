@@ -5,6 +5,9 @@
 <generatorConfiguration>
     <!--数据库驱动-->
     <context id="db_cms_mbg" defaultModelType="flat" targetRuntime="Mybatis3">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
         <commentGenerator>
             <property name="suppressAllComments" value="true"/>
             <property name="suppressDate" value="true"/>
@@ -17,8 +20,9 @@
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
-        <javaModelGenerator targetPackage="com.ganster.cms.core.dao.pojo" targetProject="src/main/java">
-            <property name="enableSubPackages" value="true"/>
+        <javaModelGenerator targetPackage="com.ganster.cms.core.pojo" targetProject="src/main/java">
+            <property name="constructorBased" value="true"/>
+            <!--<property name="enableSubPackages" value="true"/>-->
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">

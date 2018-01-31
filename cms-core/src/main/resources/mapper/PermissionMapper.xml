@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ganster.cms.core.dao.mapper.PermissionMapper">
-  <resultMap id="BaseResultMap" type="com.ganster.cms.core.dao.pojo.Permission">
-    <id column="permission_id" jdbcType="INTEGER" property="permissionId" />
-    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
-    <result column="permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.Permission">
+    <constructor>
+      <idArg column="permission_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="permission_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="permission_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +69,7 @@
   <sql id="Base_Column_List">
     permission_id, permission_name, permission_desc
   </sql>
-  <select id="selectByExample" parameterType="com.ganster.cms.core.dao.pojo.PermissionExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.PermissionExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -92,20 +94,20 @@
     delete from cms_permission
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ganster.cms.core.dao.pojo.PermissionExample">
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.PermissionExample">
     delete from cms_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ganster.cms.core.dao.pojo.Permission">
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.Permission">
     <selectKey keyProperty="permissionId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into cms_permission (permission_name, permission_desc)
     values (#{permissionName,jdbcType=VARCHAR}, #{permissionDesc,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ganster.cms.core.dao.pojo.Permission">
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Permission">
     <selectKey keyProperty="permissionId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -127,7 +129,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ganster.cms.core.dao.pojo.PermissionExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.PermissionExample" resultType="java.lang.Long">
     select count(*) from cms_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -159,7 +161,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.dao.pojo.Permission">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.pojo.Permission">
     update cms_permission
     <set>
       <if test="permissionName != null">
@@ -171,7 +173,7 @@
     </set>
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.dao.pojo.Permission">
+  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.pojo.Permission">
     update cms_permission
     set permission_name = #{permissionName,jdbcType=VARCHAR},
       permission_desc = #{permissionDesc,jdbcType=VARCHAR}

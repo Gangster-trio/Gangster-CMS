@@ -1,12 +1,10 @@
 package com.ganster.cms.core.dao.mapper;
 
-import com.ganster.cms.core.dao.pojo.UserGroup;
-import com.ganster.cms.core.dao.pojo.UserGroupExample;
+import com.ganster.cms.core.pojo.UserGroup;
+import com.ganster.cms.core.pojo.UserGroupExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface UserGroupMapper {
     long countByExample(UserGroupExample example);
 

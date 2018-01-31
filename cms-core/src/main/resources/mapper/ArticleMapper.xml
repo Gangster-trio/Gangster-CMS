@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ganster.cms.core.dao.mapper.ArticleMapper">
-  <resultMap id="BaseResultMap" type="com.ganster.cms.core.dao.pojo.Article">
-    <id column="article_id" jdbcType="INTEGER" property="articleId" />
-    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
-    <result column="article_type" jdbcType="VARCHAR" property="articleType" />
-    <result column="article_author" jdbcType="VARCHAR" property="articleAuthor" />
-    <result column="article_url" jdbcType="VARCHAR" property="articleUrl" />
-    <result column="article_order" jdbcType="INTEGER" property="articleOrder" />
-    <result column="article_site_id" jdbcType="INTEGER" property="articleSiteId" />
-    <result column="article_category_id" jdbcType="INTEGER" property="articleCategoryId" />
-    <result column="article_create_time" jdbcType="TIMESTAMP" property="articleCreateTime" />
-    <result column="article_update_time" jdbcType="TIMESTAMP" property="articleUpdateTime" />
-    <result column="article_thumb" jdbcType="VARCHAR" property="articleThumb" />
-    <result column="article_hit" jdbcType="INTEGER" property="articleHit" />
-    <result column="article_status" jdbcType="INTEGER" property="articleStatus" />
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.Article">
+    <constructor>
+      <idArg column="article_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_author" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_order" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_site_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_category_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="article_update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="article_thumb" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_hit" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ganster.cms.core.dao.pojo.Article">
-    <result column="article_desc" jdbcType="LONGVARCHAR" property="articleDesc" />
-    <result column="article_content" jdbcType="LONGVARCHAR" property="articleContent" />
+  <resultMap id="ResultMapWithBLOBs" type="com.ganster.cms.core.pojo.Article">
+    <constructor>
+      <idArg column="article_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_author" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_order" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_site_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_category_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="article_update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="article_thumb" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_hit" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="article_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -81,12 +99,12 @@
   <sql id="Base_Column_List">
     article_id, article_title, article_type, article_author, article_url, article_order, 
     article_site_id, article_category_id, article_create_time, article_update_time, article_thumb, 
-    article_hit, article_status
+    article_hit, article_desc, article_status
   </sql>
   <sql id="Blob_Column_List">
-    article_desc, article_content
+    article_content
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.ganster.cms.core.dao.pojo.ArticleExample" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.ganster.cms.core.pojo.ArticleExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -103,7 +121,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.ganster.cms.core.dao.pojo.ArticleExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.ArticleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -130,13 +148,13 @@
     delete from cms_article
     where article_id = #{articleId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ganster.cms.core.dao.pojo.ArticleExample">
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.ArticleExample">
     delete from cms_article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ganster.cms.core.dao.pojo.Article">
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.Article">
     <selectKey keyProperty="articleId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -144,16 +162,16 @@
       article_url, article_order, article_site_id, 
       article_category_id, article_create_time, 
       article_update_time, article_thumb, article_hit, 
-      article_status, article_desc, article_content
+      article_desc, article_status, article_content
       )
     values (#{articleTitle,jdbcType=VARCHAR}, #{articleType,jdbcType=VARCHAR}, #{articleAuthor,jdbcType=VARCHAR}, 
       #{articleUrl,jdbcType=VARCHAR}, #{articleOrder,jdbcType=INTEGER}, #{articleSiteId,jdbcType=INTEGER}, 
       #{articleCategoryId,jdbcType=INTEGER}, #{articleCreateTime,jdbcType=TIMESTAMP}, 
       #{articleUpdateTime,jdbcType=TIMESTAMP}, #{articleThumb,jdbcType=VARCHAR}, #{articleHit,jdbcType=INTEGER}, 
-      #{articleStatus,jdbcType=INTEGER}, #{articleDesc,jdbcType=LONGVARCHAR}, #{articleContent,jdbcType=LONGVARCHAR}
+      #{articleDesc,jdbcType=VARCHAR}, #{articleStatus,jdbcType=INTEGER}, #{articleContent,jdbcType=LONGVARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ganster.cms.core.dao.pojo.Article">
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Article">
     <selectKey keyProperty="articleId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -192,11 +210,11 @@
       <if test="articleHit != null">
         article_hit,
       </if>
-      <if test="articleStatus != null">
-        article_status,
-      </if>
       <if test="articleDesc != null">
         article_desc,
+      </if>
+      <if test="articleStatus != null">
+        article_status,
       </if>
       <if test="articleContent != null">
         article_content,
@@ -236,18 +254,18 @@
       <if test="articleHit != null">
         #{articleHit,jdbcType=INTEGER},
       </if>
+      <if test="articleDesc != null">
+        #{articleDesc,jdbcType=VARCHAR},
+      </if>
       <if test="articleStatus != null">
         #{articleStatus,jdbcType=INTEGER},
-      </if>
-      <if test="articleDesc != null">
-        #{articleDesc,jdbcType=LONGVARCHAR},
       </if>
       <if test="articleContent != null">
         #{articleContent,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ganster.cms.core.dao.pojo.ArticleExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.ArticleExample" resultType="java.lang.Long">
     select count(*) from cms_article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -292,11 +310,11 @@
       <if test="record.articleHit != null">
         article_hit = #{record.articleHit,jdbcType=INTEGER},
       </if>
+      <if test="record.articleDesc != null">
+        article_desc = #{record.articleDesc,jdbcType=VARCHAR},
+      </if>
       <if test="record.articleStatus != null">
         article_status = #{record.articleStatus,jdbcType=INTEGER},
-      </if>
-      <if test="record.articleDesc != null">
-        article_desc = #{record.articleDesc,jdbcType=LONGVARCHAR},
       </if>
       <if test="record.articleContent != null">
         article_content = #{record.articleContent,jdbcType=LONGVARCHAR},
@@ -320,8 +338,8 @@
       article_update_time = #{record.articleUpdateTime,jdbcType=TIMESTAMP},
       article_thumb = #{record.articleThumb,jdbcType=VARCHAR},
       article_hit = #{record.articleHit,jdbcType=INTEGER},
+      article_desc = #{record.articleDesc,jdbcType=VARCHAR},
       article_status = #{record.articleStatus,jdbcType=INTEGER},
-      article_desc = #{record.articleDesc,jdbcType=LONGVARCHAR},
       article_content = #{record.articleContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -341,12 +359,13 @@
       article_update_time = #{record.articleUpdateTime,jdbcType=TIMESTAMP},
       article_thumb = #{record.articleThumb,jdbcType=VARCHAR},
       article_hit = #{record.articleHit,jdbcType=INTEGER},
+      article_desc = #{record.articleDesc,jdbcType=VARCHAR},
       article_status = #{record.articleStatus,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.dao.pojo.Article">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.pojo.Article">
     update cms_article
     <set>
       <if test="articleTitle != null">
@@ -382,11 +401,11 @@
       <if test="articleHit != null">
         article_hit = #{articleHit,jdbcType=INTEGER},
       </if>
+      <if test="articleDesc != null">
+        article_desc = #{articleDesc,jdbcType=VARCHAR},
+      </if>
       <if test="articleStatus != null">
         article_status = #{articleStatus,jdbcType=INTEGER},
-      </if>
-      <if test="articleDesc != null">
-        article_desc = #{articleDesc,jdbcType=LONGVARCHAR},
       </if>
       <if test="articleContent != null">
         article_content = #{articleContent,jdbcType=LONGVARCHAR},
@@ -394,7 +413,7 @@
     </set>
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ganster.cms.core.dao.pojo.Article">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ganster.cms.core.pojo.Article">
     update cms_article
     set article_title = #{articleTitle,jdbcType=VARCHAR},
       article_type = #{articleType,jdbcType=VARCHAR},
@@ -407,12 +426,12 @@
       article_update_time = #{articleUpdateTime,jdbcType=TIMESTAMP},
       article_thumb = #{articleThumb,jdbcType=VARCHAR},
       article_hit = #{articleHit,jdbcType=INTEGER},
+      article_desc = #{articleDesc,jdbcType=VARCHAR},
       article_status = #{articleStatus,jdbcType=INTEGER},
-      article_desc = #{articleDesc,jdbcType=LONGVARCHAR},
       article_content = #{articleContent,jdbcType=LONGVARCHAR}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.dao.pojo.Article">
+  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.pojo.Article">
     update cms_article
     set article_title = #{articleTitle,jdbcType=VARCHAR},
       article_type = #{articleType,jdbcType=VARCHAR},
@@ -425,6 +444,7 @@
       article_update_time = #{articleUpdateTime,jdbcType=TIMESTAMP},
       article_thumb = #{articleThumb,jdbcType=VARCHAR},
       article_hit = #{articleHit,jdbcType=INTEGER},
+      article_desc = #{articleDesc,jdbcType=VARCHAR},
       article_status = #{articleStatus,jdbcType=INTEGER}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>

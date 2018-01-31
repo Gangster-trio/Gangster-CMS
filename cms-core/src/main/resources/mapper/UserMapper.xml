@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ganster.cms.core.dao.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="com.ganster.cms.core.dao.pojo.User">
-    <id column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
-    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
-    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
-    <result column="user_status" jdbcType="INTEGER" property="userStatus" />
-    <result column="user_create_time" jdbcType="TIMESTAMP" property="userCreateTime" />
-    <result column="user_last_login" jdbcType="TIMESTAMP" property="userLastLogin" />
-    <result column="user_org" jdbcType="VARCHAR" property="userOrg" />
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.User">
+    <constructor>
+      <idArg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="user_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="user_password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="user_email" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="user_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="user_last_login" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="user_org" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,7 +76,7 @@
     user_id, user_name, user_phone, user_password, user_email, user_status, user_create_time, 
     user_last_login, user_org
   </sql>
-  <select id="selectByExample" parameterType="com.ganster.cms.core.dao.pojo.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -99,13 +101,13 @@
     delete from cms_user
     where user_id = #{userId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ganster.cms.core.dao.pojo.UserExample">
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.UserExample">
     delete from cms_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ganster.cms.core.dao.pojo.User">
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.User">
     <selectKey keyProperty="userId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -116,7 +118,7 @@
       #{userEmail,jdbcType=VARCHAR}, #{userStatus,jdbcType=INTEGER}, #{userCreateTime,jdbcType=TIMESTAMP}, 
       #{userLastLogin,jdbcType=TIMESTAMP}, #{userOrg,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ganster.cms.core.dao.pojo.User">
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.User">
     <selectKey keyProperty="userId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -174,7 +176,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ganster.cms.core.dao.pojo.UserExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.UserExample" resultType="java.lang.Long">
     select count(*) from cms_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -230,7 +232,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.dao.pojo.User">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.pojo.User">
     update cms_user
     <set>
       <if test="userName != null">
@@ -260,7 +262,7 @@
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.dao.pojo.User">
+  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.pojo.User">
     update cms_user
     set user_name = #{userName,jdbcType=VARCHAR},
       user_phone = #{userPhone,jdbcType=VARCHAR},
