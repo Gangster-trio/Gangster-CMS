@@ -76,7 +76,7 @@
             &lt;!&ndash;<dd><a href="">超链接</a></dd>&ndash;&gt;
             &lt;!&ndash;</dl>&ndash;&gt;
             &lt;!&ndash;</li>&ndash;&gt;
-            <li class="layui-nav-item"><a onclick="showAtRight('/fragment/listColumn.html')">column list</a></li>
+            <li class="layui-nav-item"><a onclick="showAtRight('/fragment/listCategory.html')">column list</a></li>
             <li class="layui-nav-item"><a onclick="showAtRight('/fragment/articlelist.html')">article list</a></li>
         </ul>
     </div>

@@ -5,6 +5,7 @@ import com.ganster.cms.core.pojo.Module;
 import com.ganster.cms.core.pojo.ModuleExample;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.ModuleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +50,5 @@ public class IndexController {
         modelAndView.addObject("treelist", treeList);
         modelAndView.addObject("test", "test");
         return modelAndView;
-//        return treeList;
     }
 }

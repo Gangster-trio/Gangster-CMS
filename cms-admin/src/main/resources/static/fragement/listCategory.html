@@ -1,7 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <table id="column_table" class="layui-table" lay-filter="columnlist"></table>
-
 <script>
     layui.use('table', function () {
         var first = true;
@@ -49,7 +48,23 @@
             } else if (layEvent === 'edit') { //编辑
                 editColumn(id, obj);
             } else if (layEvent === 'add') {
-                showAtRight("/fragement/addCategory.html");
+                // showAtRight("/fragement/addCategory.html");
+                layer.open({
+                    id: 1,
+                    type: 2,
+                    skin: 'layui-layer-rim',
+                    area: ['700px', '600px'],
+                    closeBtn: 1,
+                    anim: 0,
+                    maxmin: true,
+                    content: '/fragement/addCategory.html',
+                    success: function (layero, index) {
+                        console.log(layero, index);
+                    },
+                    end: function flush() {
+                        showAtRight("/fragement/listCategory.html");
+                    }
+                });
             }
 
         });
