@@ -1,0 +1,11 @@
+htmlConfig:
+  templatePrefix: mould/
+  templateSuffix: html
+  storageLocation: staticHTML
+ImgConfig:
+#  downloadPrefixAddress: /img/download
+#  downloadSuffixAddress: html
+  saveLocation: /home/smy/upload
+  maxUploadSizePerFile: 100000000
+
+

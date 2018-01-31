@@ -16,7 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 
 public class UserShiroRealm extends AuthorizingRealm {
@@ -49,14 +52,55 @@ public class UserShiroRealm extends AuthorizingRealm {
             j++;
         }
         if (j>=2){
-            return null;
+            throw new AuthenticationException();
         }
         User user=userService.selectByPrimaryKey(userId);
+        if (user==null) throw  new AuthenticationException();
         logger.info("用户" + user.getUserName() + "进行认证");
         if (!Objects.equals(password, user.getUserPassword())) {
             throw new IncorrectCredentialsException();
         }
         return new SimpleAuthenticationInfo(username, password, getName());
+    }
+
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        logger.info("进入权限配置");
+        String username = (String) principals.getPrimaryPrincipal();
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUserNameEqualTo(username);
+        List<User> users = userService.selectByExample(userExample);
+        for (User i : users) {
+            userId = i.getUserId();
+            j++;
+        }
+        if (j >= 2) {
+            return null;
+        }
+        User user = userService.selectByPrimaryKey(userId);
+
+        List<Group> groupList = groupService.selectByUserId(user.getUserId());
+
+        Set<String> groupSet = new HashSet<>();
+
+        for (Group i : groupList) {
+            if (!StringUtil.isNullOrEmpty(user.getUserName())) {
+                groupSet.add(i.getGroupName());
+            }
+        }
+        Set<String> permissionList = new HashSet<>();
+        for (Group i : groupList) {
+            if (!StringUtil.isNullOrEmpty(i.getGroupName())) {
+                permissionList.add(i.getGroupName());
+            }
+        }
+
+
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        simpleAuthorizationInfo.setStringPermissions(permissionList);
+        simpleAuthorizationInfo.setRoles(groupSet);
+        return simpleAuthorizationInfo;
+
     }
 
     /**
@@ -72,33 +116,5 @@ public class UserShiroRealm extends AuthorizingRealm {
      * 调用clearCached方法；
      * :Authorization 是授权访问控制，用于对用户进行的操作授权，证明该用户是否允许进行当前操作，如访问某个链接，某个资源文件等。
      */
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 
-        logger.info("进入权限配置");
-
-        User user = (User) principals.getPrimaryPrincipal();
-
-        List<Group> groupList = groupService.selectByUserId(user.getUserId());
-
-        Set<String> groupSet = new HashSet<>();
-
-        for (Group i : groupList) {
-            if (!StringUtil.isNullOrEmpty(user.getUserName())) {
-            groupSet.add(i.getGroupName());
-           }
-        }
-        Set<String> permissionList = new HashSet<>();
-        for (Group i : groupList) {
-            if (!StringUtil.isNullOrEmpty(i.getGroupName())){
-                permissionList.add(i.getGroupName());
-            }
-        }
-
-
-        SimpleAuthorizationInfo simpleAuthorizationInfo=new SimpleAuthorizationInfo();
-        simpleAuthorizationInfo.setStringPermissions(permissionList);
-        simpleAuthorizationInfo.setRoles(groupSet);
-        return simpleAuthorizationInfo;
-    }
 }
