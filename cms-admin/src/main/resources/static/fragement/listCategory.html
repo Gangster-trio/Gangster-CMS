@@ -1,6 +1,10 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<table id="column_table" class="layui-table" lay-filter="columnlist"></table>
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="column">添加栏目</button>
+<div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
+    <p>栏目管理</p>
+</div>
+<table id="column_table" class="layui-table" style="margin: 0px" lay-filter="columnlist"></table>
 <script>
     layui.use('table', function () {
         var first = true;
@@ -57,7 +61,7 @@
                     closeBtn: 1,
                     anim: 0,
                     maxmin: true,
-                    content: '/fragement/addCategory.html',
+                    content: '/fragement/addArticle.html',
                     success: function (layero, index) {
                         console.log(layero, index);
                     },
@@ -68,8 +72,6 @@
             }
 
         });
-
-
     });
 </script>
 
@@ -88,7 +90,21 @@
             <i class="layui-icon">&#xe640;</i>
         </button>
     </div>
-
+</script>
+<script>
+    var index = $("#column").on('click', function () {
+        layer.open({
+            id: 2,
+            type: 2,
+            skin: 'layui-layer-rim',
+            closeBtn: 1,
+            anim: 2,
+            content: '/fragement/addCategory.html',
+            success: function (layero, index) {
+                console.log(layero, index);
+            }
+        });
+    })
 </script>
 
 </html>

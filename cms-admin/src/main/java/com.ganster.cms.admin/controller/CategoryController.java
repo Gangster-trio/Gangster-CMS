@@ -1,10 +1,10 @@
 package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.dto.AjaxData;
-import com.ganster.cms.admin.dto.CategoryTree;
 import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.pojo.Category;
 import com.ganster.cms.core.pojo.CategoryExample;
+import com.ganster.cms.core.pojo.CategoryTree;
 import com.ganster.cms.core.service.CategoryService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -51,13 +51,13 @@ public class CategoryController extends BaseController {
         List<CategoryTree> treeList = new ArrayList<>();
         if (id != -1) {
             Category category = categoryService.selectByPrimaryKey(id);
-            CategoryTree tree = this.toTree(category);
+            CategoryTree tree = categoryService.toTree(category);
             CategoryExample categoryExample = new CategoryExample();
             categoryExample.or().andCategoryParentIdEqualTo(id);
             List<Category> list = categoryService.selectByExample(categoryExample);
             if (list.size() > 0) {
                 for (Category c : list) {
-                    treeList.add(toTree(c));
+                    treeList.add(categoryService.toTree(c));
                 }
                 tree.setChildren(treeList);
             }
@@ -67,7 +67,7 @@ public class CategoryController extends BaseController {
             categoryExample.or().andCategoryLevelEqualTo(1);
             List<Category> list = categoryService.selectByExample(categoryExample);
             for (Category category : list) {
-                treeList.add(toTree(category));
+                treeList.add(categoryService.toTree(category));
             }
             return treeList;
         }
@@ -80,26 +80,5 @@ public class CategoryController extends BaseController {
         int count = categoryService.insert(category);
         if (count == 1) return new Message(0, "success", count);
         else return new Message(1, "false", count);
-    }
-
-
-    private CategoryTree toTree(Category category) {
-        CategoryTree tree = new CategoryTree();
-        int columnId = category.getCategoryId();
-        tree.setId(columnId);
-        tree.setName(category.getCategoryTitle());
-        tree.setSpread(false);
-        CategoryExample categoryExample = new CategoryExample();
-        categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId());
-        List<Category> list = categoryService.selectByExample(categoryExample);  //子栏目
-        List<CategoryTree> categoryTrees = new ArrayList<>();
-        if (list.size() > 0) {
-            for (Category c : list) {
-                CategoryTree categoryTree = toTree(c);
-                categoryTrees.add(categoryTree);
-            }
-            tree.setChildren(categoryTrees);
-        }
-        return tree;
     }
 }

@@ -13,7 +13,3 @@ mybatis:
   type-aliases-package: com.ganster.cms.core.pojo
 pagehelper:
   reasonable: true
-logging:
-  level:
-    root:
-      debug
