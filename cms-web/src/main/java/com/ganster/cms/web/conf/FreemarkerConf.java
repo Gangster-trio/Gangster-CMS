@@ -1,0 +1,34 @@
+package com.ganster.cms.web.conf;
+
+import com.ganster.cms.core.CmsConst;
+import com.ganster.cms.core.service.SettingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+
+@Configuration
+public class FreemarkerConf extends WebMvcConfigurerAdapter {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(FreemarkerConf.class);
+
+    @Autowired
+    SettingService settingService;
+
+    @Bean
+    public FreeMarkerConfigurer loadPathConfig() {
+        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+        String path = settingService.get(CmsConst.SKIN_PATH_SETTING);
+        if (!path.isEmpty()) {
+            configurer.setTemplateLoaderPath(path);
+            LOGGER.info("Gangster CMS : template path = {}", path);
+        } else {
+            configurer.setTemplateLoaderPath("classpath:templates");
+        }
+        configurer.setDefaultEncoding("UTF-8");
+        return configurer;
+    }
+}
