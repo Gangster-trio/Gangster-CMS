@@ -15,5 +15,6 @@ pagehelper:
   reasonable: true
 server:
   port: 8090
-cms:
-  defaultTemplatesPath: classpath:templates
+logging:
+  level:
+    root: info

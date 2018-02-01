@@ -11,9 +11,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 @Configuration
-public class FreemarkerConf extends WebMvcConfigurerAdapter {
+public class FreemarkerConfig extends WebMvcConfigurerAdapter {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(FreemarkerConf.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(FreemarkerConfig.class);
 
     @Autowired
     SettingService settingService;
