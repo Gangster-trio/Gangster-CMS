@@ -149,5 +149,14 @@
                enableSelectByPrimaryKey="true"
                selectByExampleQueryId="true">
         </table>
+        <table tableName="cms_sys"
+               schema="db_cms"
+               domainObjectName="SettingEntry"
+               enableCountByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableInsert="true"
+               enableDeleteByPrimaryKey="true"
+               enableSelectByPrimaryKey="true">
+        </table>
     </context>
 </generatorConfiguration>

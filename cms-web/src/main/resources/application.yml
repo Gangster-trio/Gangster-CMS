@@ -13,3 +13,7 @@ mybatis:
   type-aliases-package: com.ganster.cms.core.pojo
 pagehelper:
   reasonable: true
+server:
+  port: 8090
+cms:
+  defaultTemplatesPath: classpath:templates

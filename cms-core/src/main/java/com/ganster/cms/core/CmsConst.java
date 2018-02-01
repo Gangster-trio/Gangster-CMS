@@ -24,4 +24,8 @@ public class CmsConst {
     public static final String SITE_SKIN_SUFFIX = "-site";
 
     public static final String DEFAULT_SKIN = "default";
+
+    public static final String SKIN_PATH_SETTING = "skin_path";
+
+    public static final String PIC_PATH_SETTING = "pic_path";
 }
