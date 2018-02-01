@@ -68,7 +68,7 @@ public class ArticleController extends BaseController {
         if (id != null) {
             ArticleExample articleExample = new ArticleExample();
             articleExample.or().andArticleCategoryIdEqualTo(id);
-            List<Article> list = articleService.selectByExample(articleExample);
+//            List<Article> list = articleService.selectByExample(articleExample);
             return getAjaxData(page, limit, articleExample);
         } else return super.buildAjaxData(1, "false", 0, null);
     }

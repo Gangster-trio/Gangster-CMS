@@ -61,7 +61,7 @@
             console.log(data);
             layEvent = obj.event; //获得 lay-event 对应的值
             if (layEvent === 'detail') {
-
+                showAtRight("/fragement/listCategory.html");
             } else if (layEvent === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     console.log(data);
@@ -82,7 +82,9 @@
                             }
 
                         },
-                        end: showAtRight("/fragement/listArticle.html")
+                        end: function () {
+                            showAtRight("/fragement/listArticle.html");
+                        }
                     })
                     ;
                 });
@@ -100,7 +102,9 @@
                     success: function (layero, index) {
                         console.log(layero, index);
                     },
-                    end: showAtRight("/fragement/listArticle.html")
+                    end: function () {
+                        showAtRight("/fragement/listArticle.html");
+                    }
                 });
             }
         });
@@ -120,7 +124,9 @@
             success: function (layero, index) {
                 console.log(layero, index);
             },
-            end: showAtRight("fragement/listArticle.html")
+            end: function () {
+                showAtRight("fragement/listArticle.html");
+            }
         });
     });
 </script>

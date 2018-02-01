@@ -37,7 +37,7 @@
             <!--<input type="radio" name="sex" value="女" title="女" checked>-->
             <!--单选框name 为控件名，value是提交到服务器的值-->
             <input type="radio" name="choose" value="CAROUSEL_ARTICLE_TYPE" title="轮播图">
-            <input type="radio" name="choose" value="INDEX_CATEGORY_TYPE" title="主页文章">
+            <input type="radio" name="choose" value="INDEX_ARTICLE_TYPE" title="主页文章">
             <input type="radio" name="choose" value="NORMAL_ARTICLE_TYPE" title="普通文章" checked="checked">
         </div>
     </div>
@@ -53,9 +53,9 @@
 </div>
 <div class="layui-form-item layui-form-text">
     <form id="img" action="/article/img" method="post" enctype="multipart/form-data">
-        <img width="100" height="100" id="image"/>
+        <img width="100" height="100" style="margin-left: 40px" id="image"/><br/>
         <!-- 在选择图片的时候添加事件，触发Ajax异步上传 -->
-        <input name="file" type="file" onchange="uploadImg()"/>
+        <input name="file" style="margin-left: 40px" type="file" onchange="uploadImg()"/>
     </form>
 </div>
 <div class="layui-form-item">
@@ -69,16 +69,15 @@
 <div class="layui-form-item layui-form-text">
     <label class="layui-form-label">描述</label>
     <div class="layui-input-block">
-        <textarea id="description" name="description" required class="layui-textarea" placeholder="添加描述" rows="50"
-                  cols="40"></textarea>
+        <textarea id="description" name="description" required class="layui-textarea" placeholder="添加描述"></textarea>
     </div>
 </div>
-文章内容
+<p style="margin-left: 50px"> 文章内容</p>
 <div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
     <textarea name="txt" id="txt" required style="display:none;"></textarea>
 </div>
 <input id="parentId" name="parentId" type="text" hidden="hidden"/>
-<input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
+<input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
 </body>
 </html>
 <script type="text/javascript">
