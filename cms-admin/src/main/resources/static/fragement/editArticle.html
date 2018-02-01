@@ -12,6 +12,7 @@
             crossorigin="anonymous"></script>
     <script src="/layui/layui.js"></script>
     <script src="/util/jquery.form.js"></script>
+    <script src="/util/util.js"></script>
 </head>
 <body style="background-color:#eee;">
 <br/>
@@ -58,21 +59,52 @@
                class="layui-input">
     </div>
 </div>
+<div class="layui-form-item">
+    <label class="layui-form-label">所属栏目</label>
+    <div class="layui-input-inline">
+        <input type="text" id="categoryName" name="categoryName" required lay-verify="required" placeholder="所属栏目"
+               autocomplete="off"
+               class="layui-input" readonly="readonly">
+    </div>
+</div>
 <div class="layui-form-item layui-form-text">
     <label class="layui-form-label">描述</label>
     <div class="layui-input-block">
-        <textarea id="description" name="description" required class="layui-textarea" placeholder="添加描述" rows="50" cols="40"></textarea>
+        <textarea id="description" name="description" class="layui-textarea" placeholder="添加描述" rows="50"
+                  cols="40"></textarea>
     </div>
 </div>
 文章内容
 <div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
-    <textarea name="txt" id="txt" required style="display:none;"></textarea>
+    <textarea name="txt" id="txt" style="display:none;"></textarea>
+</div>
+<div>
+    <!--这里是文章选择栏目id 的隐藏区域-->
+    <input id="parentId" name="parentId" type="text" hidden="hidden"/>
 </div>
 <input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
 </body>
 </html>
 <script type="text/javascript">
+    var initCategoryId;   //初始加载的文章表的栏目id
     window.onload = function () {
+        console.log(getUrlVar("id"));
+        $.ajax({
+            type: "get",
+            url: "/article/details/" + getUrlVar("id"),  //得到需要更新文章的id
+            success: function (data) {
+                console.log(data);
+                initCategoryId = data.articleCategoryId;
+                $("#articleTitle").val(data.articleTitle);
+                $("#choose").val(data.articleType);
+                $("#order").val(data.articleOrder);
+                $("#author").val(data.articleAuthor);
+                $("#description").val(data.articleDesc);
+                $("#txt").val(data.articleContent);
+                $("#categoryName").val(data.categoryName);
+            }
+        });
+
         layui.use('layedit', function () {
             var layedit = layui.layedit;
 
@@ -90,25 +122,26 @@
 
             document.getElementById('btn1').onclick = function () {
                 var articleTitle = document.getElementById("articleTitle").value;
-                var order = document.getElementById("order").value;
-                var choose = document.getElementsByName("choose").value;
-                var authorName = document.getElementById("author").value;
-                var description = document.getElementById("description").value;
-                var categoryId = categoryId;
-                var content = layedit.getContent(editIndex);
+                var articleOrder = document.getElementById("order").value;
+                var articleType = chooseValue("choose");
+                console.log(articleType);
+                var articleAuthor = document.getElementById("author").value;
+                var articleDesc = document.getElementById("description").value;
+                var categoryId = document.getElementById("parentId").value;
+                if (categoryId.length === 0) categoryId = initCategoryId;
+                var articleContent = layedit.getContent(editIndex);     //得到layui编辑器里边的文章
                 $.ajax({
-                    url: "/article/save",
+                    url: "/article/update/" + getUrlVar("id"),
                     type: 'post',
                     dataType: 'json',
                     contentType: "application/json",
                     data: JSON.stringify({
                         "articleTitle": articleTitle,
-                        "articleType": choose,
-                        "articleAuthor": authorName,
-                        "articleOrder": order,
+                        "articleType": articleType,
+                        "articleAuthor": articleAuthor,
+                        "articleOrder": articleOrder,
                         "articleCategoryId": categoryId,
-                        "articleDesc": description,
-                        "articleContent": content
+                        "articleDesc": articleDesc
                     }),
                     success: function (data) {
                         console.log(data);
@@ -120,6 +153,7 @@
                         }
                         var index = parent.layer.getFrameIndex(window.name);
                         parent.layer.close(index);
+                        showAtRight("/fragement/listArticle.html");
                     }
                 });
             }
@@ -127,20 +161,21 @@
     }
 </script>
 <script type="text/javascript">
-    var index = $("#addColumn").on('click', function () {
+    var index = $("#categoryName").on('click', function () {
         layer.open({
             id: 1,
             type: 2,
             skin: 'layui-layer-rim',
             closeBtn: 1,
             anim: 5,
-            content: '/fragment/selectColumn.html',
+            content: '/fragement/selectColumn.html',
             success: function (layero, index) {
                 console.log(layero, index);
             }
         });
     });
 
+    //  上传缩略图
     function uploadImg() {
         var options = {
             url: "/article/img",
@@ -151,5 +186,33 @@
             }
         };
         $("#img").ajaxSubmit(options);
+    }
+
+    //  用于得到单选框的值
+    function chooseValue(name) {
+        var radio = document.getElementsByName(name);
+        var selectValue = null;
+        for (var i = 0; i < radio.length; i++) {
+            if (radio[i].checked === true) {
+                selectValue = radio[i].value;
+                break;
+            }
+        }
+        return selectValue;
+    }
+
+    function showAtRight(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'html',
+            timeout: '5000',
+            error: function () {
+                alert('can\'t get data from ' + url);
+            },
+            success: function (data) {
+                $("#content").html(data);
+            }
+        });
     }
 </script>

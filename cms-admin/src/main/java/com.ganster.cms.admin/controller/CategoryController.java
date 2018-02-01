@@ -2,9 +2,8 @@ package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
-import com.ganster.cms.core.pojo.Category;
-import com.ganster.cms.core.pojo.CategoryExample;
-import com.ganster.cms.core.pojo.CategoryTree;
+import com.ganster.cms.core.pojo.*;
+import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -24,6 +23,8 @@ import java.util.List;
 public class CategoryController extends BaseController {
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ArticleService articleService;
 
     @GetMapping("/list")
     @ResponseBody
@@ -80,5 +81,36 @@ public class CategoryController extends BaseController {
         int count = categoryService.insert(category);
         if (count == 1) return new Message(0, "success", count);
         else return new Message(1, "false", count);
+    }
+
+    @GetMapping("/delete/{id}")
+    @ResponseBody
+    public Message delete(@PathVariable("id") Integer id) {
+        List<Article> list = articleService.selectArticleByCategoryId(id);
+        if (!list.isEmpty()) {
+            for (Article article : list) {
+                articleService.deleteByPrimaryKey(article.getArticleId());
+            }
+        }
+        if (categoryService.deleteByPrimaryKey(id) == 1) return super.buildMessage(0, "success", 1);
+        else return super.buildMessage(1, "false", 0);
+    }
+
+    @PostMapping("/update/{id}")
+    @ResponseBody
+    public Message update(@PathVariable("id") Integer id, @RequestBody Category category) {
+        category.setCategoryId(id);
+        category.setCategoryUpdateTime(new Date());
+        int count = categoryService.updateByPrimaryKeyWithBLOBs(category);
+        if (count == 1) return super.buildMessage(0, "success", 1);
+        else return super.buildMessage(1, "false", 0);
+    }
+
+    @GetMapping("/details/{id}")
+    @ResponseBody
+    public CategoryWithParent details(@PathVariable("id") Integer id) {
+        Category category = categoryService.selectByPrimaryKey(id);
+        if (category != null) return new CategoryWithParent(category.getCategoryTitle(), category);
+        else return null;
     }
 }

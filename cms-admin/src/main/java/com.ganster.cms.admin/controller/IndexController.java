@@ -20,7 +20,6 @@ import java.util.List;
  * Create by Yoke on 2018/1/30
  */
 @Controller
-@RequestMapping("/")
 public class IndexController {
 
     @Autowired
@@ -30,7 +29,7 @@ public class IndexController {
     private ArticleService articleService;
 
     //    @RequiresPermissions("super")
-    @GetMapping("index")
+    @GetMapping("/index")
     @ResponseBody
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();

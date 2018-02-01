@@ -9,6 +9,7 @@ import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.UserService;
 import com.ganster.cms.core.util.StringUtil;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -33,7 +34,6 @@ public class UserShiroRealm extends AuthorizingRealm {
     private PermissionService permissionService;
     @Resource
     private GroupService groupService;
-    private Integer j=0;
     private Integer userId;
     /**
      * 认证信息.(身份验证)
@@ -43,12 +43,12 @@ public class UserShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String username = (String) token.getPrincipal();
-
         String password = new String((char[]) token.getCredentials());
         logger.info("-----------------------------"+password+"--------------------------------------");
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserNameEqualTo(username);
         List<User> users=userService.selectByExample(userExample);
+        Integer j=0;
         for (User i:users){
             userId=i.getUserId();
             j++;
@@ -57,7 +57,13 @@ public class UserShiroRealm extends AuthorizingRealm {
             throw new AuthenticationException();
         }
         User user=userService.selectByPrimaryKey(userId);
-        if (user==null) throw  new AuthenticationException();
+        if (!user.getUserName().equals(username)) {
+            SecurityUtils.getSubject().logout();
+            throw new AuthenticationException();
+        }
+        if (user==null) {
+            throw new AuthenticationException();
+        }
         logger.info("用户" + user.getUserName() + "进行认证");
         if (!Objects.equals(password, user.getUserPassword())) {
             throw new IncorrectCredentialsException();
@@ -72,9 +78,10 @@ public class UserShiroRealm extends AuthorizingRealm {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserNameEqualTo(username);
         List<User> users = userService.selectByExample(userExample);
+        Integer j=0;
         for (User i : users) {
             userId = i.getUserId();
-            j=0;j++;
+            j++;
         }
         if (j >= 2) {
             return null;

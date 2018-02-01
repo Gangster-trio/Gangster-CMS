@@ -11,54 +11,74 @@
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
     <script src="/layui/tree.js"></script>
+    <script src="/util/util.js"></script>
 </head>
 <body style="background-color:#eee;">
 
 <br/>
 <br/>
-<div class="layui-form-item">
-    <label class="layui-form-label">栏目名称</label>
-    <div class="layui-input-inline">
-        <input type="text" id="categoryTitle" name="categoryTitle" required lay-verify="required" placeholder="栏目名称"
-               autocomplete="off"
-               class="layui-input">
-    </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">自定义顺序</label>
-    <div class="layui-input-inline">
-        <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序"
-               autocomplete="off"
-               class="layui-input">
-    </div>
-</div>
 <form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">栏目名称</label>
+        <div class="layui-input-inline">
+            <input type="text" id="categoryTitle" name="categoryTitle" required="required" lay-verify="required"
+                   placeholder="栏目名称"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">自定义顺序</label>
+        <div class="layui-input-inline">
+            <input type="text" id="order" name="order" required="required" lay-verify="required" placeholder="自定义顺序"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所属栏目</label>
         <div class="layui-input-inline">
-            <input type="text" id="addCategory" name="addCategory" required lay-verify="required" placeholder="顶级栏目管理"
+            <input type="text" id="addCategory" name="addCategory" required="required" lay-verify="required"
+                   placeholder="顶级栏目管理"
                    autocomplete="off"
                    class="layui-input" readonly="readonly"/>
         </div>
     </div>
-</form>
-<div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">栏目描述</label>
-    <div class="layui-input-block">
-        <textarea id="desc" name="desc" required placeholder="请输入内容" class="layui-textarea"></textarea>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">栏目描述</label>
+        <div class="layui-input-block">
+            <textarea id="desc" name="desc" required="required" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
     </div>
-</div>
-<!--隐藏 parentid-->
-<div>
-    <input id="parentId" name="parentId" type="text" hidden="hidden"/>
-</div>
-<input type="button" value="提交" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
+    <!--隐藏 parentid-->
+    <div>
+        <input id="parentId" name="parentId" type="text" hidden="hidden"/>
+    </div>
+    <input type="button" value="提交" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
+</form>
 </body>
 </html>
-<script type="text/javascript">
+<script>
+    var initCategoryId;
+    window.onload = function () {
+
+        $.ajax({
+            type: "get",
+            url: "/category/details/" + getUrlVar("id"),
+            success: function (data) {
+                initCategoryId = data.categoryParentId;
+                console.log(data);
+                $("#categoryTitle").val(data.categoryTitle);
+                $("#order").val(data.categoryOrder);
+                $("#desc").val(data.categoryDesc);
+                $("#addCategory").val(data.parentName);
+            }
+        });
+    };
     document.getElementById('btn1').onclick = function () {
         var categoryTitle = document.getElementById("categoryTitle").value;
         var parentId = document.getElementById("parentId").value;
+        if (parentId.length === 0) parentId = initCategoryId;
         var order = document.getElementById("order").value;
         var desc = document.getElementById("desc").value;
         $.ajax({

@@ -6,12 +6,14 @@ import com.ganster.cms.core.pojo.ArticleExample;
 
 import java.util.List;
 
-public interface ArticleService extends BaseService<Article,ArticleExample> {
+public interface ArticleService extends BaseService<Article, ArticleExample> {
     List<Article> selectByTagName(String tag);
 
     List<Article> selectByTagNameWithBLOBs(String tag);
 
-    int insertWithTag(Article article,String tag);
+    List<Article> selectArticleByCategoryId(Integer id);
 
-    int insertSelectiveWithTag(Article article,String tag);
+    int insertWithTag(Article article, String tag);
+
+    int insertSelectiveWithTag(Article article, String tag);
 }
