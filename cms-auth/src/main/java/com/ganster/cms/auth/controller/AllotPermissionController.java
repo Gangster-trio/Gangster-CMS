@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
-@RequestMapping("/allot")
+@RequestMapping("/permission")
 public class AllotPermissionController {
     private static final Logger logger= LoggerFactory.getLogger(AllotPermissionController.class);
 
@@ -27,8 +27,8 @@ public class AllotPermissionController {
     @Autowired
     private GroupService groupService;
 
-    @RequestMapping("/permission")
-    @RequiresPermissions("supper")
+    @RequestMapping("/add")
+    @RequiresPermissions("add")
     public void addPermission(@RequestParam("GroupName") String groupName,@RequestParam("PermissionName") String permissionName) throws PermissionNotFoundException, GroupNotFountException {
         PermissionExample permissionExample=new PermissionExample();
         permissionExample.createCriteria().andPermissionNameEqualTo(permissionName);
@@ -37,6 +37,11 @@ public class AllotPermissionController {
         for (Permission i:permissions){
             groupService.addPermissionToGroup(i.getPermissionName(),groupName);
         }
+    }
 
+    @RequestMapping("/delect")
+    @RequiresPermissions("delect")
+    public int delectPermission(@RequestParam("PermissionId") Integer permissionId){
+      return  permissionService.deleteByPrimaryKey(permissionId);
     }
 }
