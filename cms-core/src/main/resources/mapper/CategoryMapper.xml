@@ -14,6 +14,7 @@
       <arg column="category_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="category_order" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="category_skin" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="category_type" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -77,7 +78,7 @@
   <sql id="Base_Column_List">
     category_id, category_title, category_create_time, category_update_time, category_parent_id, 
     category_level, category_site_id, category_status, category_desc, category_order, 
-    category_skin
+    category_skin, category_type
   </sql>
   <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.CategoryExample" resultMap="BaseResultMap">
     select
@@ -117,13 +118,13 @@
     insert into cms_category (category_title, category_create_time, 
       category_update_time, category_parent_id, 
       category_level, category_site_id, category_status, 
-      category_desc, category_order, category_skin
-      )
+      category_desc, category_order, category_skin, 
+      category_type)
     values (#{categoryTitle,jdbcType=VARCHAR}, #{categoryCreateTime,jdbcType=TIMESTAMP}, 
       #{categoryUpdateTime,jdbcType=TIMESTAMP}, #{categoryParentId,jdbcType=INTEGER}, 
       #{categoryLevel,jdbcType=INTEGER}, #{categorySiteId,jdbcType=INTEGER}, #{categoryStatus,jdbcType=INTEGER}, 
-      #{categoryDesc,jdbcType=VARCHAR}, #{categoryOrder,jdbcType=INTEGER}, #{categorySkin,jdbcType=VARCHAR}
-      )
+      #{categoryDesc,jdbcType=VARCHAR}, #{categoryOrder,jdbcType=INTEGER}, #{categorySkin,jdbcType=VARCHAR}, 
+      #{categoryType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Category">
     <selectKey keyProperty="categoryId" order="AFTER" resultType="java.lang.Integer">
@@ -161,6 +162,9 @@
       <if test="categorySkin != null">
         category_skin,
       </if>
+      <if test="categoryType != null">
+        category_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="categoryTitle != null">
@@ -192,6 +196,9 @@
       </if>
       <if test="categorySkin != null">
         #{categorySkin,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryType != null">
+        #{categoryType,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -237,6 +244,9 @@
       <if test="record.categorySkin != null">
         category_skin = #{record.categorySkin,jdbcType=VARCHAR},
       </if>
+      <if test="record.categoryType != null">
+        category_type = #{record.categoryType,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -254,7 +264,8 @@
       category_status = #{record.categoryStatus,jdbcType=INTEGER},
       category_desc = #{record.categoryDesc,jdbcType=VARCHAR},
       category_order = #{record.categoryOrder,jdbcType=INTEGER},
-      category_skin = #{record.categorySkin,jdbcType=VARCHAR}
+      category_skin = #{record.categorySkin,jdbcType=VARCHAR},
+      category_type = #{record.categoryType,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -292,6 +303,9 @@
       <if test="categorySkin != null">
         category_skin = #{categorySkin,jdbcType=VARCHAR},
       </if>
+      <if test="categoryType != null">
+        category_type = #{categoryType,jdbcType=VARCHAR},
+      </if>
     </set>
     where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
@@ -306,7 +320,8 @@
       category_status = #{categoryStatus,jdbcType=INTEGER},
       category_desc = #{categoryDesc,jdbcType=VARCHAR},
       category_order = #{categoryOrder,jdbcType=INTEGER},
-      category_skin = #{categorySkin,jdbcType=VARCHAR}
+      category_skin = #{categorySkin,jdbcType=VARCHAR},
+      category_type = #{categoryType,jdbcType=VARCHAR}
     where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
 </mapper>

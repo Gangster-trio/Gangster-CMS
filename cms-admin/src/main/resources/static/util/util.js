@@ -1,9 +1,8 @@
 //得到参数数组
-function getUrlVars(){
+function getUrlVars() {
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
+    for (var i = 0; i < hashes.length; i++) {
         hash = hashes[i].split('=');
         vars.push(hash[0]);
         vars[hash[0]] = hash[1];
@@ -12,7 +11,7 @@ function getUrlVars(){
 }
 
 //得到指定参数的value
-function getUrlVar(name){
+function getUrlVar(name) {
     return getUrlVars()[name];
 }
 
@@ -48,4 +47,32 @@ function getCookie(name) {
         return unescape(arr[2]);
     else
         return null;
+}
+
+//显示右边的信息
+function showAtRight(url) {
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'html',
+        timeout: '5000',
+        error: function () {
+            alert('can\'t get data from ' + url);
+        },
+        success: function (data) {
+            $("#content").html(data);
+        }
+    });
+}
+
+function chooseValue(name) {
+    var radio = document.getElementsByName(name);
+    var selectValue = null;
+    for (var i = 0; i < radio.length; i++) {
+        if (radio[i].checked === true) {
+            selectValue = radio[i].value;
+            break;
+        }
+    }
+    return selectValue;
 }

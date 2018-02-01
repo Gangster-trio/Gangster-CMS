@@ -21,7 +21,9 @@ public class CategoryWithArticle extends Category {
                 , category.getCategoryStatus()
                 , category.getCategoryDesc()
                 , category.getCategoryOrder()
-                , category.getCategorySkin());
+                , category.getCategorySkin()
+                , category.getCategoryType()
+        );
         this.articleList = articleList;
     }
 

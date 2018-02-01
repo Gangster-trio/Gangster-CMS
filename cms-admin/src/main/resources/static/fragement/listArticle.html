@@ -4,14 +4,17 @@
 </head>
 <body>
 <script src="/util/util.js"></script>
+<!--head part-->
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="article">添加文章</button>
+<div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
+    <p>文章管理</p>
+</div>
+<!--body part-->
 <table id="article_table" lay-filter="articleListFilter"></table>
 
 <script type="text/html" id="articleToolBar">
     <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
     <div class="layui-btn-group">
-        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
-            <i class="layui-icon">&#xe654;</i>
-        </button>
         <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">
             <i class="layui-icon">&#xe705;</i>
         </button>
@@ -54,15 +57,16 @@
             }
         });
         table.on('tool(articleListFilter)', function (obj) { //注：tool是工具条事件名，articleListFilter是table原始容器的属性 lay-filter="对应的值"
-            var data = obj.data //获得当前行数据
-                , layEvent = obj.event; //获得 lay-event 对应的值
+            var data = obj.data; //获得当前行数据
+            console.log(data);
+            layEvent = obj.event; //获得 lay-event 对应的值
             if (layEvent === 'detail') {
-                window.open("/article/single?id=" + data.id);
+
             } else if (layEvent === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     console.log(data);
                     $.ajax({
-                        url: "/article/delete/" + data.id,
+                        url: "/article/delete/" + data.articleId,
                         type: 'get',
                         dataType: 'json',
                         success: function (data) {
@@ -76,44 +80,47 @@
                             } else {
                                 layer.msg("删除失败", {icon: 5});
                             }
-                        }
-                    });
+
+                        },
+                        end: showAtRight("/fragement/listArticle.html")
+                    })
+                    ;
                 });
 
             } else if (layEvent === 'edit') {
+                console.log(data);
                 layer.open({
                     id: 1,
                     type: 2,
-                    skin: 'layui-layer-rim',
-                    area: ['1000px', '700px'],
+                    area: ['700px', '600px'],
                     closeBtn: 1,
-                    anim: 5,
-                    content: '/fragement/Test.html',
-                    success: function (layero, index) {
-                        console.log(layero, index);
-                    },
-                    end: function flush() {
-                        showAtRight("/fragment/articlelist.html");
-                    }
-                });
-            } else if (layEvent === 'add') {
-                layer.open({
-                    id: 1,
-                    type: 2,
-                    skin: 'layui-layer-rim',
-                    area: ['800px', '400px'],
-                    closeBtn: 1,
-                    anim: 1,
+                    anim: 0,
                     maxmin: true,
-                    content: '/fragement/addArticle.html',
+                    content: '/fragement/editArticle.html?id=' + data.articleId,
                     success: function (layero, index) {
                         console.log(layero, index);
                     },
-                    end: function flush() {
-                        showAtRight("/");
-                    }
+                    end: showAtRight("/fragement/listArticle.html")
                 });
             }
+        });
+    });
+</script>
+<script>
+    var article = $("#article").on('click', function () {
+        layer.open({
+            id: 2,
+            type: 2,
+            skin: 'layui-layer-rim',
+            area: ['700px', '600px'],
+            closeBtn: 1,
+            anim: 0,
+            maxmin: true,
+            content: '/fragement/addArticle.html',
+            success: function (layero, index) {
+                console.log(layero, index);
+            },
+            end: showAtRight("fragement/listArticle.html")
         });
     });
 </script>

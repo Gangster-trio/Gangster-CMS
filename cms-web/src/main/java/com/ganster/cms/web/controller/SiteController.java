@@ -17,17 +17,24 @@ import java.util.List;
 
 @Controller
 public class SiteController {
-    @Autowired
+    private final
     SiteService siteService;
 
-    @Autowired
+    private final
     ArticleService articleService;
 
-    @Autowired
+    private final
     CategoryService categoryService;
 
+    @Autowired
+    public SiteController(SiteService siteService, ArticleService articleService, CategoryService categoryService) {
+        this.siteService = siteService;
+        this.articleService = articleService;
+        this.categoryService = categoryService;
+    }
 
-    @RequestMapping("{siteUrl}")
+
+    @RequestMapping("/{siteUrl}")
     public String show(@PathVariable("siteUrl") String siteUrl, Model model) {
         SiteExample siteExample = new SiteExample();
         siteExample.or().andSiteUrlEqualTo(siteUrl);
@@ -47,7 +54,7 @@ public class SiteController {
         }
 
         categoryExample.clear();
-        categoryExample.or().andCategoryLevelEqualTo(CmsConst.INDEX_CATEGORY_LEVEL);
+        categoryExample.or().andCategoryTypeEqualTo(CmsConst.INDEX_CATEGORY_TYPE);
         List<Category> indexCategoryList = categoryService.selectByExample(categoryExample);
         List<CategoryWithArticle> categoryWithArticleList = new ArrayList<>();
         for (Category category : indexCategoryList) {
@@ -60,10 +67,15 @@ public class SiteController {
         articleExample.or().andArticleTypeEqualTo(CmsConst.INDEX_ARTICLE_TYPE);
         List<Article> articleList = articleService.selectByExample(articleExample);
 
+        articleExample.clear();
+        articleExample.or().andArticleTypeEqualTo(CmsConst.CAROUSEL_ARTICLE_TYPE);
+        List<Article> carouselList = articleService.selectByExample(articleExample);
+
         model.addAttribute("site", site);
         model.addAttribute("categoryTreeList", categoryTreeList);
-        model.addAttribute("CategoryWithArticleList", categoryWithArticleList);
+        model.addAttribute("categoryWithArticleList", categoryWithArticleList);
         model.addAttribute("articleList", articleList);
+        model.addAttribute("carouselList",carouselList);
 
         return site.getSiteSkin() + CmsConst.SITE_SKIN_SUFFIX;
     }

@@ -5,7 +5,10 @@ import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.pojo.Article;
 import com.ganster.cms.core.pojo.ArticleExample;
+import com.ganster.cms.core.pojo.Category;
+import com.ganster.cms.core.pojo.CategoryWithArticel;
 import com.ganster.cms.core.service.ArticleService;
+import com.ganster.cms.core.service.CategoryService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -31,6 +34,9 @@ public class ArticleController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleController.class);
 
     @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
     private ArticleService articleService;
 
     @Autowired
@@ -41,7 +47,6 @@ public class ArticleController extends BaseController {
     public AjaxData list(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
         ArticleExample articleExample = new ArticleExample();
         List<Article> list = articleService.selectByExample(articleExample);
-        System.out.println(list.get(0));
         return getAjaxData(page, limit, articleExample);
     }
 
@@ -49,6 +54,7 @@ public class ArticleController extends BaseController {
     @ResponseBody
     public Message save(@RequestBody Article article) {
         if (article != null) {
+            article.setArticleCreateTime(new Date());
             int count = articleService.insert(article);
             return super.buildMessage(0, "success", count);
         } else {
@@ -99,13 +105,38 @@ public class ArticleController extends BaseController {
         }
         String fileUrl = "/upload/" + newName;
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("src",fileUrl);
-//        Map<String, Object> map2 = new HashMap<String, Object>();
-//        map.put("code", 0);//0表示成功，1失败
-//        map.put("msg", "上传成功");//提示消息
-//        map.put("data", map2);
-//        map2.put("src", fileUrl);//图片url
-//        map2.put("title", newName);//图片名称，这个会显示在输入框里
+        map.put("src", fileUrl);
         return map;
+    }
+
+    @GetMapping("/delete/{id}")
+    @ResponseBody
+    public Message delete(@PathVariable("id") Integer id) {
+        Article article = articleService.selectByPrimaryKey(id);
+        if (article != null) {
+            int count = articleService.deleteByPrimaryKey(id);
+            return super.buildMessage(0, "success", count);
+        } else return super.buildMessage(1, "false", 1);
+    }
+
+    @GetMapping("/details/{id}")
+    @ResponseBody
+    public CategoryWithArticel details(@PathVariable("id") Integer articleId) {
+        LOGGER.info("通过了方法");
+        Article article = articleService.selectByPrimaryKey(articleId);
+        if (article != null) {
+            Category category = categoryService.selectByPrimaryKey(article.getArticleCategoryId());
+            return new CategoryWithArticel(category.getCategoryTitle(), article);
+        } else return null;
+    }
+
+    @PostMapping("/update/{id}")
+    @ResponseBody
+    public Message update(@PathVariable("id") Integer id, @RequestBody Article article) {
+        article.setArticleId(id);
+        article.setArticleUpdateTime(new Date());
+        int count = articleService.updateByPrimaryKeyWithBLOBs(article);
+        if (count == 1) return super.buildMessage(0, "succcess", count);
+        else return super.buildMessage(1, "false", 1);
     }
 }

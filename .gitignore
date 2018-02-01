@@ -9,10 +9,7 @@
 .idea/**/dataSources.ids
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
 .idea/
-.idea/*
-
 # Gradle:
 .idea/**/gradle.xml
 # CMake
@@ -72,3 +69,4 @@ fabric.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 */target/
+cms-admin/src/test/

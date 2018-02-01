@@ -19,7 +19,7 @@
 </body>
 </html>
 <script type="text/javascript">
-    function getData() {
+    window.onload = function getData() {
         $.ajax({
             type: "get",
             url: "/category/select?id=-1",
@@ -41,9 +41,4 @@
         });
     }
 
-</script>
-<script type="text/javascript">
-    window.onload = function () {
-        getData();
-    }
 </script>

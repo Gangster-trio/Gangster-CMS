@@ -4,8 +4,11 @@
 <div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
     <p>栏目管理</p>
 </div>
+<script src="/util/util.js"></script>
 <table id="column_table" class="layui-table" style="margin: 0px" lay-filter="columnlist"></table>
+
 <script>
+    var categoryId;
     layui.use('table', function () {
         var first = true;
         var table = layui.table;
@@ -38,21 +41,20 @@
         table.on('tool(columnlist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-            var id = data.categoryId;
+            var id = data.categoryId;   //得到当前点击的栏目id
+            categoryId = id;
             if (layEvent === 'detail') { //查看
                 current_column_id = id;
                 showAtRight("/fragement/listArticle.html");
             } else if (layEvent === 'del') { //删除
                 layer.confirm('真的删除行么', function (index) {
-                        deleteColumn(id);
+                        deleteCategory(id);
                         obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                         layer.close(index);
+                        showAtRight("/fragement/listCategory.html");
                     }
                 )
-            } else if (layEvent === 'edit') { //编辑
-                editColumn(id, obj);
-            } else if (layEvent === 'add') {
-                // showAtRight("/fragement/addCategory.html");
+            } else if (layEvent === 'edit') { //  跳转到文章编辑界面
                 layer.open({
                     id: 1,
                     type: 2,
@@ -61,13 +63,27 @@
                     closeBtn: 1,
                     anim: 0,
                     maxmin: true,
-                    content: '/fragement/addArticle.html',
+                    content: '/fragement/editCategory.html?id=' + id,
+                    success: function (layero, index) {
+                        console.log(layero, index);
+                        // showAtRight("/fragement/listCategory.html");
+                    },
+                    end: showAtRight("/fragement/listCategory.html")
+                });
+            } else if (layEvent === 'add') {   //跳转到添加文章界面
+                layer.open({
+                    id: 1,
+                    type: 2,
+                    skin: 'layui-layer-rim',
+                    area: ['700px', '600px'],
+                    closeBtn: 1,
+                    anim: 0,
+                    maxmin: true,
+                    content: '/fragement/addArticle.html?categoryId=' + categoryId,
                     success: function (layero, index) {
                         console.log(layero, index);
                     },
-                    end: function flush() {
-                        showAtRight("/fragement/listCategory.html");
-                    }
+                    end: showAtRight("/fragement/listCategory.html")
                 });
             }
 
@@ -92,19 +108,44 @@
     </div>
 </script>
 <script>
+    var str = "/fragement/listCategory.html";  // 添加和删除之后刷新的html界面
     var index = $("#column").on('click', function () {
         layer.open({
             id: 2,
             type: 2,
             skin: 'layui-layer-rim',
+            area: ['700px', '600px'],
             closeBtn: 1,
-            anim: 2,
+            anim: 0,
+            maxmin: true,
             content: '/fragement/addCategory.html',
             success: function (layero, index) {
                 console.log(layero, index);
+                showAtRight(str);
             }
         });
-    })
+    });
+
+    function deleteCategory(id) {
+        $.ajax({
+                url: "/category/delete/" + id,
+                dataType: "json",
+                type: "get",
+                timeout: "3000",
+                error: function () {
+                    layer.msg("server no response : " + url);
+                },
+                success: function (data) {
+                    if (data !== 1) {
+                        layer.msg("delete failed.")
+                    } else {
+                        layer.msg("delete succeed.")
+                    }
+                    showAtRight(str);
+                }
+            }
+        )
+    }
 </script>
 
 </html>
