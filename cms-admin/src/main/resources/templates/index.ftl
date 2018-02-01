@@ -8,6 +8,8 @@
             src="https://code.jquery.com/jquery-3.2.1.min.js"
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
+    <script src="/layui/layui.all.js" type="text/javascript"></script>
+    <script src="/util/util.js"></script>
 </head>
 <body class="layui-layout-body">
 
@@ -69,47 +71,11 @@
     </div>
 </div>
 <!--<script src="/layui/"></script>-->
-<script src="/layui/layui.all.js" type="text/javascript"></script>
 </body>
 </html>
 
 <script type="text/javascript">
-
-
-    function showAtRight(url) {
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'html',
-            timeout: '5000',
-            error: function () {
-                alert('can\'t get data from ' + url);
-            },
-            success: function (data) {
-                $("#content").html(data);
-            }
-        });
-    }
-
     var current_column_id = -1;
-</script>
-<script>
-    function flush(url) {
-        showAtRight(url);
-    }
-
-    //用于的到单选框的值
-    function chooseValue(name) {
-        var radio = document.getElementsByTagName(name);
-        var selectValue = null;
-        for (var i = 0; i < radio.length; i++) {
-            if (radio[i].checked === true) {
-                selectvalue = radio[i].value;
-                break;
-            }
-        }
-        return selectValue;
-    }
 </script>
 
 

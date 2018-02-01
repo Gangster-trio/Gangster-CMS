@@ -5,6 +5,9 @@ public class CmsConst {
     //放置在主页上的目录
     public static final String INDEX_CATEGORY_TYPE = "index";
 
+    // 普通栏目
+    public static final String NORMAL_CATEGORY_TYPE = "normal";
+
     //轮播图
     public static final String CAROUSEL_ARTICLE_TYPE = "carousel";
 

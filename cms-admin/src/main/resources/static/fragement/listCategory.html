@@ -4,7 +4,9 @@
 <div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
     <p>栏目管理</p>
 </div>
+<script src="/util/util.js"></script>
 <table id="column_table" class="layui-table" style="margin: 0px" lay-filter="columnlist"></table>
+
 <script>
     var categoryId;
     layui.use('table', function () {
@@ -49,6 +51,7 @@
                         deleteCategory(id);
                         obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                         layer.close(index);
+                        showAtRight("/fragement/listCategory.html");
                     }
                 )
             } else if (layEvent === 'edit') { //  跳转到文章编辑界面
@@ -63,10 +66,9 @@
                     content: '/fragement/editCategory.html?id=' + id,
                     success: function (layero, index) {
                         console.log(layero, index);
+                        // showAtRight("/fragement/listCategory.html");
                     },
-                    end: function flush() {
-                        showAtRight("/fragement/listCategory.html");
-                    }
+                    end: showAtRight("/fragement/listCategory.html")
                 });
             } else if (layEvent === 'add') {   //跳转到添加文章界面
                 layer.open({
@@ -77,13 +79,11 @@
                     closeBtn: 1,
                     anim: 0,
                     maxmin: true,
-                    content: '/fragement/addArticle.html',
+                    content: '/fragement/addArticle.html?categoryId=' + categoryId,
                     success: function (layero, index) {
                         console.log(layero, index);
                     },
-                    end: function flush() {
-                        showAtRight("/fragement/listCategory.html");
-                    }
+                    end: showAtRight("/fragement/listCategory.html")
                 });
             }
 
@@ -108,6 +108,7 @@
     </div>
 </script>
 <script>
+    var str = "/fragement/listCategory.html";  // 添加和删除之后刷新的html界面
     var index = $("#column").on('click', function () {
         layer.open({
             id: 2,
@@ -115,11 +116,12 @@
             skin: 'layui-layer-rim',
             area: ['700px', '600px'],
             closeBtn: 1,
-            anim: 2,
+            anim: 0,
+            maxmin: true,
             content: '/fragement/addCategory.html',
             success: function (layero, index) {
                 console.log(layero, index);
-                flush("/fragement/listCategory.html");
+                showAtRight(str);
             }
         });
     });
@@ -139,6 +141,7 @@
                     } else {
                         layer.msg("delete succeed.")
                     }
+                    showAtRight(str);
                 }
             }
         )

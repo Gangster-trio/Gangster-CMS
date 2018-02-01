@@ -47,7 +47,6 @@ public class ArticleController extends BaseController {
     public AjaxData list(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
         ArticleExample articleExample = new ArticleExample();
         List<Article> list = articleService.selectByExample(articleExample);
-        System.out.println(list.get(0));
         return getAjaxData(page, limit, articleExample);
     }
 

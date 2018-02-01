@@ -72,6 +72,7 @@
                 $("#order").val(data.categoryOrder);
                 $("#desc").val(data.categoryDesc);
                 $("#addCategory").val(data.parentName);
+                $("#choose").val(data.categoryType);
             }
         });
     };
@@ -81,8 +82,9 @@
         if (parentId.length === 0) parentId = initCategoryId;
         var order = document.getElementById("order").value;
         var desc = document.getElementById("desc").value;
+        var categoryType = chooseValue("choose");
         $.ajax({
-            url: "/category/add",
+            url: "/category/update/" + initCategoryId,
             type: 'post',
             dataType: 'json',
             contentType: "application/json",
@@ -90,7 +92,8 @@
                 "categoryTitle": categoryTitle,
                 "categoryParentId": parentId,
                 "categoryDesc": desc,
-                "categoryOrder": order
+                "categoryOrder": order,
+                "categoryType": categoryType
             }),
             success: function (data) {
                 console.log(data);
@@ -98,7 +101,6 @@
                 else layer.msg("添加失败", {icon: 5});
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
-                showAtRight("/fragement/listCategory.html");
             }
         });
     }
@@ -116,5 +118,5 @@
                 console.log(layero, index);
             }
         });
-    })
+    });
 </script>

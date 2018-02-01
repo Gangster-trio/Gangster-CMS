@@ -80,9 +80,11 @@
                             } else {
                                 layer.msg("删除失败", {icon: 5});
                             }
-                            flush("/fragement/Article.html");
-                        }
-                    });
+
+                        },
+                        end: showAtRight("/fragement/listArticle.html")
+                    })
+                    ;
                 });
 
             } else if (layEvent === 'edit') {
@@ -92,12 +94,13 @@
                     type: 2,
                     area: ['700px', '600px'],
                     closeBtn: 1,
-                    anim: 2,
+                    anim: 0,
+                    maxmin: true,
                     content: '/fragement/editArticle.html?id=' + data.articleId,
                     success: function (layero, index) {
                         console.log(layero, index);
-                        flush("/fragement/listArticle.html");
-                    }
+                    },
+                    end: showAtRight("/fragement/listArticle.html")
                 });
             }
         });
@@ -111,12 +114,13 @@
             skin: 'layui-layer-rim',
             area: ['700px', '600px'],
             closeBtn: 1,
-            anim: 2,
+            anim: 0,
+            maxmin: true,
             content: '/fragement/addArticle.html',
             success: function (layero, index) {
                 console.log(layero, index);
-                flush("/fragement/listArticle.html");
-            }
+            },
+            end: showAtRight("fragement/listArticle.html")
         });
     });
 </script>

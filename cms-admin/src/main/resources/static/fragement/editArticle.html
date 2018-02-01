@@ -153,7 +153,6 @@
                         }
                         var index = parent.layer.getFrameIndex(window.name);
                         parent.layer.close(index);
-                        showAtRight("/fragement/listArticle.html");
                     }
                 });
             }
@@ -168,7 +167,7 @@
             skin: 'layui-layer-rim',
             closeBtn: 1,
             anim: 5,
-            content: '/fragement/selectColumn.html',
+            content: '/fragement/selectCategory.html',
             success: function (layero, index) {
                 console.log(layero, index);
             }
@@ -186,33 +185,5 @@
             }
         };
         $("#img").ajaxSubmit(options);
-    }
-
-    //  用于得到单选框的值
-    function chooseValue(name) {
-        var radio = document.getElementsByName(name);
-        var selectValue = null;
-        for (var i = 0; i < radio.length; i++) {
-            if (radio[i].checked === true) {
-                selectValue = radio[i].value;
-                break;
-            }
-        }
-        return selectValue;
-    }
-
-    function showAtRight(url) {
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'html',
-            timeout: '5000',
-            error: function () {
-                alert('can\'t get data from ' + url);
-            },
-            success: function (data) {
-                $("#content").html(data);
-            }
-        });
     }
 </script>

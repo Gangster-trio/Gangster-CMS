@@ -11,6 +11,7 @@
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
     <script src="/layui/tree.js"></script>
+    <script src="/util/util.js"></script>
 </head>
 <body style="background-color:#eee;">
 
@@ -32,6 +33,17 @@
                class="layui-input">
     </div>
 </div>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">栏目属性</label>
+        <div class="layui-input-block">
+            <!--<input type="radio" name="sex" value="女" title="女" checked>-->
+            <!--单选框name 为控件名，value是提交到服务器的值-->
+            <input type="radio" name="choose" value="CAROUSEL_ARTICLE_TYPE" title="主页栏目">
+            <input type="radio" name="choose" value="NORMAL_CATEGORY_TYPE" title="普通栏目">
+        </div>
+    </div>
+</form>
 <form class="layui-form" action="">
     <div class="layui-form-item">
         <label class="layui-form-label">所属栏目</label>
@@ -61,6 +73,7 @@
         var parentId = document.getElementById("parentId").value;
         var order = document.getElementById("order").value;
         var desc = document.getElementById("desc").value;
+        var categoryType = chooseValue("choose");
         $.ajax({
             url: "/category/add",
             type: 'post',
@@ -70,7 +83,8 @@
                 "categoryTitle": categoryTitle,
                 "categoryParentId": parentId,
                 "categoryDesc": desc,
-                "categoryOrder": order
+                "categoryOrder": order,
+                "categoryType": categoryType
             }),
             success: function (data) {
                 console.log(data);
@@ -96,5 +110,5 @@
                 console.log(layero, index);
             }
         });
-    })
+    });
 </script>
