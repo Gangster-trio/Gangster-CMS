@@ -67,10 +67,15 @@ public class SiteController {
         articleExample.or().andArticleTypeEqualTo(CmsConst.INDEX_ARTICLE_TYPE);
         List<Article> articleList = articleService.selectByExample(articleExample);
 
+        articleExample.clear();
+        articleExample.or().andArticleTypeEqualTo(CmsConst.CAROUSEL_ARTICLE_TYPE);
+        List<Article> carouselList = articleService.selectByExample(articleExample);
+
         model.addAttribute("site", site);
         model.addAttribute("categoryTreeList", categoryTreeList);
         model.addAttribute("categoryWithArticleList", categoryWithArticleList);
         model.addAttribute("articleList", articleList);
+        model.addAttribute("carouselList",carouselList);
 
         return site.getSiteSkin() + CmsConst.SITE_SKIN_SUFFIX;
     }

@@ -8,7 +8,6 @@
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
-
 </head>
 
 <body data-gr-c-s-loaded="true">
@@ -54,6 +53,34 @@
 </nav>
 
 <div class="container">
+    <div id="myCarousel" class="carousel slide">
+        <!-- 轮播（Carousel）指标 -->
+        <ol class="carousel-indicators">
+            <#list carouselList as carousel>
+                <li data-target="myCarousel" <#if carousel_index == 1>class="active"</#if>
+                    data-slide-to="${carousel_index}"></li>
+            </#list>
+        </ol>
+    <#--<ol class="carousel-indicators">-->
+    <#--<li data-target="#myCarousel" data-slide-to="0" class="active"></li>-->
+    <#--<li data-target="#myCarousel" data-slide-to="1"></li>-->
+    <#--<li data-target="#myCarousel" data-slide-to="2"></li>-->
+    <#--</ol>-->
+        <!-- 轮播（Carousel）项目 -->
+        <div class="carousel-inner">
+                <#list carouselList as carousel>
+                        <div <#if carousel_index == 0>class="item active" <#else>class="item"</#if>>
+                            <img src="${carousel.articleThumb}" alt="${carousel.articleTitle}">
+                            <div class="carousel-caption">${carousel.articleTitle}</div>
+                        </div>
+                </#list>
+            <!-- 轮播（Carousel）导航 -->
+            <a class="carousel-control left" href="#myCarousel"
+               data-slide="prev">&lsaquo;</a>
+            <a class="carousel-control right" href="#myCarousel"
+               data-slide="next">&rsaquo;</a>
+        </div>
+    </div>
 
     <div class="page-header">
     <#--<h1>Non-responsive Bootstrap</h1>-->
