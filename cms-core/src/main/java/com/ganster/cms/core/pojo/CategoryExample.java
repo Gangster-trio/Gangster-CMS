@@ -794,6 +794,76 @@ public class CategoryExample {
             addCriterion("category_skin not between", value1, value2, "categorySkin");
             return (Criteria) this;
         }
+
+        public Criteria andCategoryTypeIsNull() {
+            addCriterion("category_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeIsNotNull() {
+            addCriterion("category_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeEqualTo(String value) {
+            addCriterion("category_type =", value, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeNotEqualTo(String value) {
+            addCriterion("category_type <>", value, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeGreaterThan(String value) {
+            addCriterion("category_type >", value, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("category_type >=", value, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeLessThan(String value) {
+            addCriterion("category_type <", value, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeLessThanOrEqualTo(String value) {
+            addCriterion("category_type <=", value, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeLike(String value) {
+            addCriterion("category_type like", value, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeNotLike(String value) {
+            addCriterion("category_type not like", value, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeIn(List<String> values) {
+            addCriterion("category_type in", values, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeNotIn(List<String> values) {
+            addCriterion("category_type not in", values, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeBetween(String value1, String value2) {
+            addCriterion("category_type between", value1, value2, "categoryType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryTypeNotBetween(String value1, String value2) {
+            addCriterion("category_type not between", value1, value2, "categoryType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

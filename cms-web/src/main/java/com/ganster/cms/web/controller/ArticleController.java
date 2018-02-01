@@ -16,22 +16,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/view/article")
+@RequestMapping("/view/article/")
 public class ArticleController {
 
-    @Autowired
-    ArticleService articleService;
+    private final ArticleService articleService;
+
+    private final CategoryService categoryService;
+
+    private final TagService tagService;
 
     @Autowired
-    CategoryService categoryService;
-
-    @Autowired
-    TagService tagService;
+    public ArticleController(ArticleService articleService, CategoryService categoryService, TagService tagService) {
+        this.articleService = articleService;
+        this.categoryService = categoryService;
+        this.tagService = tagService;
+    }
 
     @RequestMapping("{id}")
     public String show(@PathVariable("id") Integer id, Model model) {
 
         Article article = articleService.selectByPrimaryKey(id);
+
+        if (article == null){
+            return "404";
+        }
+
         Category category = categoryService.selectByPrimaryKey(article.getArticleCategoryId());
         List<Tag> tagList = tagService.selectByArticleId(id);
 
