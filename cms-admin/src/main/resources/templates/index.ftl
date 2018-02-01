@@ -58,30 +58,6 @@
             </ul>
         </div>
     </div>
-<#--<div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-        &lt;!&ndash; 左侧导航区域（可配合layui已有的垂直导航） &ndash;&gt;
-        <ul class="layui-nav layui-nav-tree" lay-filter="test">
-            &lt;!&ndash;<li class="layui-nav-item layui-nav-itemed">&ndash;&gt;
-            &lt;!&ndash;<a class="" href="javascript:;">column manage</a>&ndash;&gt;
-            &lt;!&ndash;<dl class="layui-nav-child">&ndash;&gt;
-            &lt;!&ndash;<dd><a href="javascript:;">column list</a></dd>&ndash;&gt;
-            &lt;!&ndash;</dl>&ndash;&gt;
-            &lt;!&ndash;</li>&ndash;&gt;
-            &lt;!&ndash;<li class="layui-nav-item">&ndash;&gt;
-            &lt;!&ndash;<a href="javascript:;">解决方案</a>&ndash;&gt;
-            &lt;!&ndash;<dl class="layui-nav-child">&ndash;&gt;
-            &lt;!&ndash;<dd><a href="javascript:;">列表一</a></dd>&ndash;&gt;
-            &lt;!&ndash;<dd><a href="javascript:;">列表二</a></dd>&ndash;&gt;
-            &lt;!&ndash;<dd><a href="">超链接</a></dd>&ndash;&gt;
-            &lt;!&ndash;</dl>&ndash;&gt;
-            &lt;!&ndash;</li>&ndash;&gt;
-            <li class="layui-nav-item"><a onclick="showAtRight('/fragment/listCategory.html')">column list</a></li>
-            <li class="layui-nav-item"><a onclick="showAtRight('/fragment/articlelist.html')">article list</a></li>
-        </ul>
-    </div>
-</div>-->
-
     <div class="layui-body" id="content">
         <!-- 内容主体区域 -->
         <div style="padding: 15px;text-align: center;">欢迎使用Ganster-CMS后台管理</div>
@@ -100,7 +76,6 @@
 <script type="text/javascript">
 
 
-    var current_column_id = -1;
     function showAtRight(url) {
         $.ajax({
             url: url,
@@ -111,10 +86,29 @@
                 alert('can\'t get data from ' + url);
             },
             success: function (data) {
-//                document.getElementById("content").innerHTML = data;
                 $("#content").html(data);
             }
         });
+    }
+
+    var current_column_id = -1;
+</script>
+<script>
+    function flush(url) {
+        showAtRight(url);
+    }
+
+    //用于的到单选框的值
+    function chooseValue(name) {
+        var radio = document.getElementsByTagName(name);
+        var selectValue = null;
+        for (var i = 0; i < radio.length; i++) {
+            if (radio[i].checked === true) {
+                selectvalue = radio[i].value;
+                break;
+            }
+        }
+        return selectValue;
     }
 </script>
 

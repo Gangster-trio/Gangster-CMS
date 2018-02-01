@@ -15,8 +15,10 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper,Article,ArticleExample> implements ArticleService {
+public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, ArticleExample> implements ArticleService {
 
+    @Autowired
+    private ArticleMapper articleMapper;
     @Autowired
     TagService tagService;
     @Autowired
@@ -60,7 +62,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper,Article,Ar
     @Transactional
     public int insertWithTag(Article article, String tag) {
         int ret = insert(article);
-        insertTagArticle(article,tag);
+        insertTagArticle(article, tag);
         return ret;
     }
 
@@ -68,11 +70,11 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper,Article,Ar
     @Transactional
     public int insertSelectiveWithTag(Article article, String tag) {
         int ret = insertSelective(article);
-        insertTagArticle(article,tag);
+        insertTagArticle(article, tag);
         return ret;
     }
 
-    private void insertTagArticle(Article article,String tag){
+    private void insertTagArticle(Article article, String tag) {
         TagExample tagExample = new TagExample();
         tagExample.or().andTagNameEqualTo(tag);
         List<Tag> tags = tagService.selectByExample(tagExample);
@@ -89,8 +91,14 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper,Article,Ar
             newTag.setTagCreateTime(new Date());
             newTag.setTagName(tag);
             tagService.insert(newTag);
-            TagArticle tagArticle = new TagArticle(newTag.getTagId(),article.getArticleId());
+            TagArticle tagArticle = new TagArticle(newTag.getTagId(), article.getArticleId());
             tagArticleMapper.insert(tagArticle);
         }
+    }
+
+     public List<Article> selectArticleByCategoryId(Integer id) {
+        ArticleExample articleExample = new ArticleExample();
+        articleExample.or().andArticleCategoryIdEqualTo(id);
+        return articleMapper.selectByExample(articleExample);
     }
 }
