@@ -79,10 +79,7 @@
 <script src="layui/layui.all.js" type="text/javascript"></script>
 </body>
 </html>
-
-<script type="text/javascript">
-    var current_column_id = -1;
-</script>
+<script></script>
 <script>
     var siteId;
 

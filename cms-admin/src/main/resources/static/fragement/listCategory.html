@@ -42,7 +42,6 @@
                 var id = data.categoryId;   //得到当前点击的栏目id
                 categoryId = id;
                 if (layEvent === 'detail') { //查看
-                    current_column_id = id;
                     showAtRight("/fragement/listArticle.html");
                 } else if (layEvent === 'del') { //删除
                     layer.confirm('真的删除行么', function (index) {
@@ -61,10 +60,9 @@
                         closeBtn: 1,
                         anim: 0,
                         maxmin: true,
-                        content: '/fragement/editCategory.html?id=' + id,
+                        content: '/fragement/editCategory.html?id=' + categoryId,
                         success: function (layero, index) {
                             console.log(layero, index);
-                            alert("jaja")
                         },
                         end: function () {
                             showAtRight("/fragement/listCategory.html");
