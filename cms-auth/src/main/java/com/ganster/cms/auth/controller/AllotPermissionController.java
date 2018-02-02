@@ -35,7 +35,7 @@ public class AllotPermissionController {
         List<Permission> permissions=permissionService.selectByExample(permissionExample);
         if (permissions==null) throw new PermissionNotFoundException();
         for (Permission i:permissions){
-            groupService.addPermissionToGroup(i.getPermissionName(),groupName);
+//            groupService.addPermissionToGroup(i.getPermissionName(),groupName);
         }
     }
 
