@@ -48,27 +48,33 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/select")
     @ResponseBody
-    public List<CategoryTree> select(@RequestParam("id") Integer id) {
+    public List<CategoryTree> select() {
         List<CategoryTree> treeList = new ArrayList<>();
-        if (id != -1) {
-            Category category = categoryService.selectByPrimaryKey(id);
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.or().andCategoryLevelEqualTo(-1);
+        List<Category> list = categoryService.selectByExample(categoryExample);
+        if (list == null || list.isEmpty()) {
+            Category category = new Category();
+            category.setCategoryLevel(-1);
+            category.setCategoryTitle("root");
+            categoryService.insert(category);
+            CategoryTree tree = new CategoryTree();
+            tree.setId(1);
+            tree.setName("root");
+            tree.setChildren(null);
+            treeList.add(tree);
+            return treeList;
+        } else {
+            Category category = categoryService.selectByPrimaryKey(1);
             CategoryTree tree = categoryService.toTree(category);
-            CategoryExample categoryExample = new CategoryExample();
-            categoryExample.or().andCategoryParentIdEqualTo(id);
-            List<Category> list = categoryService.selectByExample(categoryExample);
-            if (list.size() > 0) {
+            CategoryExample categoryExample1 = new CategoryExample();
+            categoryExample.or().andCategoryParentIdEqualTo(1);
+            List<Category> list1 = categoryService.selectByExample(categoryExample);
+            if (list1.size() > 0) {
                 for (Category c : list) {
                     treeList.add(categoryService.toTree(c));
                 }
                 tree.setChildren(treeList);
-            }
-            return treeList;
-        } else {
-            CategoryExample categoryExample = new CategoryExample();
-            categoryExample.or().andCategoryLevelEqualTo(1);
-            List<Category> list = categoryService.selectByExample(categoryExample);
-            for (Category category : list) {
-                treeList.add(categoryService.toTree(category));
             }
             return treeList;
         }

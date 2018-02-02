@@ -22,14 +22,14 @@
     window.onload = function getData() {
         $.ajax({
             type: "get",
-            url: "/category/select?id=-1",
+            url: "/category/select",
             dataType: 'json',
             success: function (d) {
                 layui.tree({
                     elem: '#tree',
                     nodes: d,
                     click: function (node) {
-                        parent.$("#addCategory").val(
+                        parent.$("#belongCategory").val(
                             node.name
                         );
                         parent.$("#parentId").val(node.id);

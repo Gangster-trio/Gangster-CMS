@@ -5,72 +5,67 @@
     <meta charset="utf-8"/>
     <title></title>
     <link href="/layui/css/layui.css" rel="stylesheet"/>
-    <script src="/layui/layui.js"></script>
+    <script src="/layui/layui.all.js"></script>
     <script
             src="https://code.jquery.com/jquery-3.2.1.min.js"
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
+    <script src="/layui/tree.js"></script>
     <script src="/util/jquery.form.js"></script>
     <script src="/util/util.js"></script>
 </head>
 <body style="background-color:#eee;">
-<br/>
-<form class="layui-form" action="/category/add" method="post">
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">栏目名称</label>
-        <div class="layui-input-inline">
-            <input type="text" id="categoryTitle" name="categoryTitle" required lay-verify="required" placeholder="栏目名称"
-                   autocomplete="off"
-                   class="layui-input">
-        </div>
+<br/>
+<br/>
+<div class="layui-form-item">
+    <label class="layui-form-label">栏目名称</label>
+    <div class="layui-input-inline">
+        <input type="text" id="categoryTitle" name="categoryTitle" required lay-verify="required" placeholder="栏目名称"
+               autocomplete="off"
+               class="layui-input">
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">自定义顺序</label>
-        <div class="layui-input-inline">
-            <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序"
-                   autocomplete="off"
-                   class="layui-input">
-        </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">自定义顺序</label>
+    <div class="layui-input-inline">
+        <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序"
+               autocomplete="off"
+               class="layui-input">
     </div>
+</div>
+<!--<form class="layui-form" action="">-->
     <div class="layui-form-item">
         <label class="layui-form-label">栏目属性</label>
         <div class="layui-input-block">
             <!--<input type="radio" name="sex" value="女" title="女" checked>-->
             <!--单选框name 为控件名，value是提交到服务器的值-->
-            <input type="radio" name="choose" value="CAROUSEL_CATEGORY_TYPE" title="主页栏目">
-            <input type="radio" name="choose" value="NORMAL_CATEGORY_TYPE" title="普通栏目" checked="checked">
+            <input type="radio" name="choose1" value="CAROUSEL_CATEGORY_TYPE" title="主页栏目">
+            <input type="radio" name="choose1" value="NORMAL_CATEGORY_TYPE" title="普通栏目" checked="checked">
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">所属栏目</label>
-        <div class="layui-input-inline">
-            <input type="text" id="belongCategory" name="belongCategory" required lay-verify="required"
-                   placeholder="所属栏目" autocomplete="off"
-                   class="layui-input">
-        </div>
+<!--</form>-->
+<div class="layui-form-item">
+    <label class="layui-form-label">所属栏目</label>
+    <div class="layui-input-inline">
+        <input type="text" id="addCategory" name="addCategory" required lay-verify="required" placeholder="顶级栏目管理"
+               autocomplete="off"
+               class="layui-input" readonly="readonly"/>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label layui-form-text">栏目描述</label>
-        <div class="layui-input-inline">
-            <input type="text" id="desc" name="desc" required="required" lay-verify="required" placeholder="请输入内容"
-                   autocomplete="off"
-                   class="layui-input">
-        </div>
+</div>
+<div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">栏目描述</label>
+    <div class="layui-input-block">
+        <textarea id="desc" name="desc" required placeholder="请输入内容" class="layui-textarea"></textarea>
     </div>
-    <!--隐藏 parentid-->
+</div>
+<!--隐藏 parentid-->
+<div>
     <input id="parentId" name="parentId" type="text" hidden="hidden"/>
-    <input type="button" value="提交" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
-</form>
+</div>
+<input type="button" value="提交" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
 </body>
 </html>
-<script type="text/javascript">
-    window.onload = function () {
-        layui.use("form", function () {
-            var form = layui.form;
-        });
-    }
-</script>
 <script type="text/javascript">
     document.getElementById('btn1').onclick = function () {
         var categoryTitle = document.getElementById("categoryTitle").value;
@@ -102,7 +97,7 @@
     }
 </script>
 <script type="text/javascript">
-    var index = $("#belongCategory").on('click', function () {
+    var index = $("#addCategory").on('click', function () {
         layer.open({
             id: 2,
             type: 2,
