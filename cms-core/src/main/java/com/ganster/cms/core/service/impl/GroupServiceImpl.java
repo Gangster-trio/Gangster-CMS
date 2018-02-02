@@ -59,6 +59,33 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper,Group,GroupExa
     }
 
     @Override
+    public Group findUserOwnGroup(Integer userId) throws UserNotFoundException, GroupNotFountException {
+        User user = userService.selectByPrimaryKey(userId);
+        if (user == null) {
+            throw new UserNotFoundException(userId.toString());
+        }
+
+        UserGroupExample userGroupExample = new UserGroupExample();
+        userGroupExample.or().andUserIdEqualTo(userId);
+        List<UserGroup> userGroupList = userGroupMapper.selectByExample(userGroupExample);
+        if (userGroupList == null || userGroupList.isEmpty()) {
+            throw new GroupNotFountException();
+        }
+        //user's group
+        for (UserGroup userGroup : userGroupList) {
+            Group group = selectByPrimaryKey(userGroup.getGroupId());
+            if (group == null) {
+                throw new GroupNotFountException(userGroup.getGroupId().toString());
+            }
+            if (group.getGroupName().equals(user.getUserName())) {
+                return group;
+            }
+        }
+        //user's group not found
+        throw new GroupNotFountException(user.getUserName());
+    }
+
+    @Override
     public void addUserToGroup(Integer Uid, Integer Gid) throws UserNotFoundException, GroupNotFountException {
         GroupExample example = new GroupExample();
         example.or().andGroupIdEqualTo(Gid);

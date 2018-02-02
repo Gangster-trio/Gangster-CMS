@@ -158,5 +158,14 @@
                enableDeleteByPrimaryKey="true"
                enableSelectByPrimaryKey="true">
         </table>
+        <table tableName="cms_skin"
+               schema="db_cms"
+               domainObjectName="Skin"
+               enableCountByExample="true"
+               enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableUpdateByPrimaryKey="true"
+               enableInsert="true">
+        </table>
     </context>
 </generatorConfiguration>

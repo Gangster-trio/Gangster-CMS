@@ -28,4 +28,12 @@ public class CmsConst {
     public static final String SKIN_PATH_SETTING = "skin_path";
 
     public static final String PIC_PATH_SETTING = "pic_path";
+
+    public static final String PERMISSION_VIEW = "view";
+
+    public static final String PERMISSION_DEL = "del";
+
+    public static final String PERMISSION_ADD = "add";
+
+    public static final String PERMISSION_UPDATE = "update";
 }

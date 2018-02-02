@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ganster.cms.core.dao.mapper.SkinMapper">
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.Skin">
+    <constructor>
+      <idArg column="skin_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="skin_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="skin_update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    skin_name, skin_create_time, skin_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.SkinExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cms_skin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cms_skin
+    where skin_name = #{skinName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cms_skin
+    where skin_name = #{skinName,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.SkinExample">
+    delete from cms_skin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.Skin">
+    insert into cms_skin (skin_name, skin_create_time, skin_update_time
+      )
+    values (#{skinName,jdbcType=VARCHAR}, #{skinCreateTime,jdbcType=TIMESTAMP}, #{skinUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Skin">
+    insert into cms_skin
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="skinName != null">
+        skin_name,
+      </if>
+      <if test="skinCreateTime != null">
+        skin_create_time,
+      </if>
+      <if test="skinUpdateTime != null">
+        skin_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="skinName != null">
+        #{skinName,jdbcType=VARCHAR},
+      </if>
+      <if test="skinCreateTime != null">
+        #{skinCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="skinUpdateTime != null">
+        #{skinUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.SkinExample" resultType="java.lang.Long">
+    select count(*) from cms_skin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cms_skin
+    <set>
+      <if test="record.skinName != null">
+        skin_name = #{record.skinName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skinCreateTime != null">
+        skin_create_time = #{record.skinCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.skinUpdateTime != null">
+        skin_update_time = #{record.skinUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cms_skin
+    set skin_name = #{record.skinName,jdbcType=VARCHAR},
+      skin_create_time = #{record.skinCreateTime,jdbcType=TIMESTAMP},
+      skin_update_time = #{record.skinUpdateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.pojo.Skin">
+    update cms_skin
+    <set>
+      <if test="skinCreateTime != null">
+        skin_create_time = #{skinCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="skinUpdateTime != null">
+        skin_update_time = #{skinUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where skin_name = #{skinName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.pojo.Skin">
+    update cms_skin
+    set skin_create_time = #{skinCreateTime,jdbcType=TIMESTAMP},
+      skin_update_time = #{skinUpdateTime,jdbcType=TIMESTAMP}
+    where skin_name = #{skinName,jdbcType=VARCHAR}
+  </update>
+</mapper>
