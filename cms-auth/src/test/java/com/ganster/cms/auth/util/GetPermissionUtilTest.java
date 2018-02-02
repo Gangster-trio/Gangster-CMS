@@ -25,10 +25,9 @@ public class GetPermissionUtilTest {
     @Test
     public void test() {
         GroupExample groupExample = new GroupExample();
-        String string="group";
-        groupExample.createCriteria().andGroupNameEqualTo(string);
-        List<Group> groupList = groupService.selectByExample(groupExample);
-        logger.info("groupList+++++++++++++++++++++"+groupList.toString());
+        String string="find";
+         List<String> strings= getPermissionUtil.getPermissionName(string);
+        logger.info("groupList+++++++++++++++++++++"+strings.toString());
     }
 
 }

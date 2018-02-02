@@ -35,7 +35,7 @@ public class RInformationUtil {
         this.rolename = rolename;
     }
 
-    public void dealInfromation(String roleInformation) throws InformationException {
+    public void dealInfromation(String roleInformation) throws Exception {
         RInformationUtil rInformationUtil = new RInformationUtil();
         String[] dealResult = roleInformation.split(":");
         if (dealResult.length <= 2) {
@@ -43,6 +43,6 @@ public class RInformationUtil {
             id = dealResult[1];
             rInformationUtil.setId(id);
             rInformationUtil.setRolename(rolename);
-        } else throw new InformationException();
+        } else throw new Exception();
     }
 }

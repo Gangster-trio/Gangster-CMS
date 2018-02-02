@@ -9,27 +9,30 @@ import com.ganster.cms.core.service.PermissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 public class GetPermissionUtil {
     private static final Logger logger= LoggerFactory.getLogger(GetPermissionUtil.class);
-    @Autowired
+
+    @Resource
     private GroupService groupService;
 
-    @Autowired
+    @Resource
     private PermissionService permissionService;
 
-    public List<String> getPermissionName(String string) {
+    public List<String> getPermissionName(String groupName) {
         List<String> permissionName = new ArrayList<>();
         PInformationUtil pInformationUtil = new PInformationUtil();
         GroupExample groupExample = new GroupExample();
         logger.info("++++++++++++++++"+groupService);
-        logger.info("+++++++++++++++++++"+string);
-        groupExample.createCriteria().andGroupNameEqualTo(string);
+        logger.info("+++++++++++++++++++"+groupName);
+        groupExample.createCriteria().andGroupNameEqualTo(groupName);
         logger.info("++++++++++++++++++++++"+groupExample.toString());
         List<Group> groupList = groupService.selectByExample(groupExample);
         for (Group group : groupList) {

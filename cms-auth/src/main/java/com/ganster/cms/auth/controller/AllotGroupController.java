@@ -1,7 +1,6 @@
 package com.ganster.cms.auth.controller;
 
 import com.ganster.cms.auth.Exception.InformationException;
-import com.ganster.cms.auth.util.GetPermissionUtil;
 import com.ganster.cms.auth.util.PInformationUtil;
 import com.ganster.cms.auth.util.RInformationUtil;
 import com.ganster.cms.core.exception.GroupNotFountException;
@@ -9,13 +8,11 @@ import com.ganster.cms.core.exception.PermissionNotFoundException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.Group;
 import com.ganster.cms.core.pojo.GroupExample;
-import com.ganster.cms.core.pojo.User;
+import com.ganster.cms.core.pojo.Permission;
 import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.UserService;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +38,61 @@ public class AllotGroupController {
     @Autowired
     private UserService userService;
 
-    @RequiresPermissions("group")
+    public List<String> getPermissionName(String groupName, String permission) {
+        List<String> permissionName = new ArrayList<>();
+        PInformationUtil pInformationUtil = new PInformationUtil();
+        Subject subject = SecurityUtils.getSubject();
+        Integer id = (Integer) subject.getSession().getAttribute("id");
+        GroupExample groupExample = new GroupExample();
+        groupExample.createCriteria().andGroupNameEqualTo(groupName+":"+id);
+        List<Group> groupList = groupService.selectByExample(groupExample);
+        for (Group group : groupList) {
+            try {
+                List<Permission> permissionList = permissionService.selectByGroupId(group.getGroupId());
+                for (Permission i : permissionList) {
+                    int j = 0;
+                    try {
+                        pInformationUtil.dealInfromation(i.getPermissionName());
+                        String name = permission + ":" + pInformationUtil.getId();
+                        permissionName.add(name);
+                        j++;
+                    } catch (Exception e) {
+                        break;
+                    }
+                }
+            } catch (GroupNotFountException e) {
+                e.printStackTrace();
+            }
+        }
+        return permissionName;
+    }
+
+    public String index() {
+        RInformationUtil rInformationUtil = new RInformationUtil();
+        Subject subject = SecurityUtils.getSubject();
+        Integer id = (Integer) subject.getSession().getAttribute("id");
+        List<Group> group = groupService.selectByUserId(id);
+        List<String> groupName = new ArrayList<>();
+        for (Group i : group) {
+            try {
+                rInformationUtil.dealInfromation(i.getGroupName());
+                groupName.add(rInformationUtil.getRolename());
+            } catch (Exception e) {
+                logger.info("++++++++++++++++++++ index        错误++++++++++++++++++++");
+                return "/403.html";
+            }
+        }
+        for (String i : groupName) {
+            if (groupName.equals("group"))
+                return "ok";
+        }
+         return "/login/403.html";
+    }
+
+
     @RequestMapping("/add")
     public void addGroup(@RequestParam(value = "UserId") Integer userId, @RequestParam(value = "GroupName") String groupName) {
+        this.index();
         GroupExample groupExample = new GroupExample();
         groupExample.createCriteria().andGroupNameEqualTo(groupName);
         List<Group> groupList = groupService.selectByExample(groupExample);
@@ -72,16 +121,18 @@ public class AllotGroupController {
                 logger.info("用户组信息不正确");
             } catch (PermissionNotFoundException e) {
                 logger.info("用户组未找到");
+            }catch (Exception e){
+                logger.info("信息错误");
             }
         }
     }
 
-    @RequiresPermissions("group")
+
     @RequestMapping("/delect")
     public int delectGroup(@RequestParam(value = "GroupId") Integer groupId) {
+        this.index();
         Subject subject = SecurityUtils.getSubject();
-        GetPermissionUtil getPermissionUtil = new GetPermissionUtil();
-        List<String> permissionName = getPermissionUtil.getPermissionName("delect");
+        List<String> permissionName = this.getPermissionName("group", "delectgroup");
         for (String i : permissionName) {
             if (subject.isPermitted(i)) {
                 PInformationUtil pInformationUtil = new PInformationUtil();
@@ -99,11 +150,11 @@ public class AllotGroupController {
         return 0;
     }
 
-    @RequiresRoles("group")
+
     @RequestMapping("/update")
     public int updateGroup(@RequestParam(value = "Group") Group group) {
-        GetPermissionUtil getPermissionUtil = new GetPermissionUtil();
-        List<String> permissionName = getPermissionUtil.getPermissionName("update");
+        this.index();
+        List<String> permissionName = this.getPermissionName("group", "updategroup");
         Subject subject = SecurityUtils.getSubject();
         for (String i : permissionName) {
             if (subject.isPermitted(i)) {
@@ -114,7 +165,6 @@ public class AllotGroupController {
                     if (needUpdateGroup.getGroupId().equals(group.getGroupId())) {
                         return groupService.updateByPrimaryKey(group);
                     } else continue;
-//                    if (group == null) break;
                 } catch (InformationException e) {
                     logger.info("权限信息异常");
                 }
@@ -123,13 +173,13 @@ public class AllotGroupController {
         return 0;
     }
 
-    @RequiresRoles("group")
+
     @RequestMapping("/find")
     public List<Group> findGroups() {
+        this.index();
         List<Group> groupList = new ArrayList<>();
         Subject subject = SecurityUtils.getSubject();
-        GetPermissionUtil getPermissionUtil = new GetPermissionUtil();
-        List<String> permissionName = getPermissionUtil.getPermissionName("group");
+        List<String> permissionName = this.getPermissionName("group", "findgroup");
         for (String i : permissionName) {
             if (subject.isPermitted(i)) {
                 PInformationUtil pInformationUtil = new PInformationUtil();
