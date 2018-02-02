@@ -23,10 +23,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
     UserGroupMapper userGroupMapper;
 
     @Override
-    public void deleteUser(Integer userId) throws UserNotFoundException, GroupNotFountException {
+    public void deleteUser(Integer userId) throws UserNotFoundException {
         //delete user's own group
-        Group group = groupService.findUserOwnGroup(userId);
-        groupService.deleteGroup(group.getGroupId());
+        try {
+            Group group = groupService.findUserOwnGroup(userId);
+            groupService.deleteGroup(group.getGroupId());
+        } catch (GroupNotFountException e) {
+            e.printStackTrace();
+        }
 
         UserGroupExample userGroupExample = new UserGroupExample();
         userGroupExample.or().andUserIdEqualTo(userId);

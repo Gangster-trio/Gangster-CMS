@@ -70,8 +70,10 @@
         <div class="carousel-inner">
                 <#list carouselList as carousel>
                         <div <#if carousel_index == 0>class="item active" <#else>class="item"</#if>>
-                            <img src="${carousel.articleThumb}" alt="${carousel.articleTitle}">
-                            <div class="carousel-caption">${carousel.articleTitle}</div>
+                            <a href="/view/article/${carousel.articleId}">
+                                <img src="${carousel.articleThumb!}" alt="${carousel.articleTitle!"have no title!"}">
+                            </a>
+                                <div class="carousel-caption">${carousel.articleTitle!"have no title"}</div>
                         </div>
                 </#list>
             <!-- 轮播（Carousel）导航 -->

@@ -3,12 +3,10 @@ package com.ganster.cms.admin.controller;
 import com.ganster.cms.admin.config.ImgConfig;
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
-import com.ganster.cms.core.pojo.Article;
-import com.ganster.cms.core.pojo.ArticleExample;
-import com.ganster.cms.core.pojo.Category;
-import com.ganster.cms.core.pojo.CategoryWithArticel;
+import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
+import com.ganster.cms.core.service.SkinService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -42,12 +40,27 @@ public class ArticleController extends BaseController {
     @Autowired
     private ImgConfig imgConfig;
 
+    private Integer siteid;
+
     @GetMapping("/list")
     @ResponseBody
-    public AjaxData list(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+    public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+        siteid = siteId;
         ArticleExample articleExample = new ArticleExample();
+        articleExample.or().andArticleSiteIdEqualTo(siteId);
+        PageInfo pageInfo;
         List<Article> list = articleService.selectByExample(articleExample);
-        return getAjaxData(page, limit, articleExample);
+        if (list == null || list.isEmpty()) {
+            return super.buildAjaxData(1, "no data", 0, null);
+        } else {
+            if (page != null && limit != null) {
+                pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) list);
+            } else {
+                pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) list);
+            }
+        }
     }
 
     @PostMapping("/save")
@@ -55,6 +68,7 @@ public class ArticleController extends BaseController {
     public Message save(@RequestBody Article article) {
         if (article != null) {
             article.setArticleCreateTime(new Date());
+            article.setArticleSiteId(siteid);
             int count = articleService.insert(article);
             return super.buildMessage(0, "success", count);
         } else {

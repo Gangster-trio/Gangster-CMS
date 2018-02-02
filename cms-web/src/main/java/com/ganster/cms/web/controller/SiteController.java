@@ -33,7 +33,6 @@ public class SiteController {
         this.categoryService = categoryService;
     }
 
-
     @RequestMapping("/{siteUrl}")
     public String show(@PathVariable("siteUrl") String siteUrl, Model model) {
         SiteExample siteExample = new SiteExample();
@@ -54,8 +53,11 @@ public class SiteController {
         }
 
         categoryExample.clear();
-        categoryExample.or().andCategoryTypeEqualTo(CmsConst.INDEX_CATEGORY_TYPE);
+        categoryExample.or().andCategoryTypeEqualTo(CmsConst.INDEX_CATEGORY_TYPE).andCategorySiteIdEqualTo(site.getSiteId());
         List<Category> indexCategoryList = categoryService.selectByExample(categoryExample);
+        if (indexCategoryList == null) {
+            indexCategoryList = new ArrayList<>();
+        }
         List<CategoryWithArticle> categoryWithArticleList = new ArrayList<>();
         for (Category category : indexCategoryList) {
             ArticleExample example = new ArticleExample();
@@ -66,10 +68,16 @@ public class SiteController {
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleTypeEqualTo(CmsConst.INDEX_ARTICLE_TYPE);
         List<Article> articleList = articleService.selectByExample(articleExample);
+        if (articleList == null) {
+            articleList = new ArrayList<>();
+        }
 
         articleExample.clear();
         articleExample.or().andArticleTypeEqualTo(CmsConst.CAROUSEL_ARTICLE_TYPE);
         List<Article> carouselList = articleService.selectByExample(articleExample);
+        if (carouselList == null) {
+            carouselList = new ArrayList<>();
+        }
 
         model.addAttribute("site", site);
         model.addAttribute("categoryTreeList", categoryTreeList);
