@@ -13,6 +13,7 @@ import com.ganster.cms.core.service.SiteService;
 import com.ganster.cms.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,13 +84,15 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     }
 
     @Override
+    @Transactional
     public void deleteUserPermission(Integer userId, Integer sid, Integer cid, String pName) throws UserNotFoundException, GroupNotFountException {
-        deleteUserPermission(userId, getPermissionName(sid, cid, pName));
+        deleteUserPermission(userId, formatPermissionName(sid, cid, pName));
     }
 
     @Override
+    @Transactional
     public void deleteGroupPermission(Integer groupId, Integer sid, Integer cid, String pName) throws GroupNotFountException {
-        deleteGroupPermission(groupId, getPermissionName(sid, cid, pName));
+        deleteGroupPermission(groupId, formatPermissionName(sid, cid, pName));
     }
 
     private Boolean hasPermission(Integer userId, String pName) throws GroupNotFountException {
@@ -126,7 +129,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
 
     @Override
     public Boolean hasPermission(Integer uid, Integer sid, Integer cid, String pName) {
-        String permissionName = getPermissionName(sid, cid, pName);
+        String permissionName = formatPermissionName(sid, cid, pName);
         try {
             return hasPermission(uid, permissionName);
         } catch (GroupNotFountException e) {
@@ -135,17 +138,18 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     }
 
     @Override
+    @Transactional
     public void addPermissionToUser(Integer uid, Integer sid, Integer cid, String pName) throws GroupNotFountException, UserNotFoundException {
         Group group = groupService.findUserOwnGroup(uid);
-
         addPermissionToGroup(group.getGroupId(), sid, cid, pName);
     }
 
     @Override
+    @Transactional
     public void addPermissionToGroup(Integer gid, Integer sid, Integer cid, String pName) {
 
         Permission permission = new Permission();
-        permission.setPermissionName(getPermissionName(sid, cid, pName));
+        permission.setPermissionName(formatPermissionName(sid, cid, pName));
         insert(permission);
 
         GroupPermission groupPermission = new GroupPermission();
@@ -155,6 +159,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     }
 
     @Override
+    @Transactional
     public void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException, GroupNotFountException {
         Group group = groupService.findUserOwnGroup(uid);
         Permission permission = new Permission();
@@ -189,12 +194,22 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     }
 
     @Override
+    @Transactional
     public void deleteUserFromSite(Integer uid, Integer sid) throws GroupNotFountException, UserNotFoundException {
-        PermissionExample permissionExample = new PermissionExample();
         deleteUserPermission(uid, sid.toString());
     }
 
-    private String getPermissionName(Integer sid, Integer cid, String pName) {
+    @Override
+    @Transactional
+    public void deletePermission(Integer pid) {
+        GroupPermissionExample groupPermissionExample = new GroupPermissionExample();
+        groupPermissionExample.or().andPermissionIdEqualTo(pid);
+        groupPermissionMapper.deleteByExample(groupPermissionExample);
+
+        deleteByPrimaryKey(pid);
+    }
+
+    private String formatPermissionName(Integer sid, Integer cid, String pName) {
         return sid + ":" + cid + ":" + pName;
     }
 }

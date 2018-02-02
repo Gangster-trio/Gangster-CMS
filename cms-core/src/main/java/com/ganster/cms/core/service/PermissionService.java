@@ -35,4 +35,6 @@ public interface PermissionService extends BaseService<Permission,PermissionExam
     List<Site> findAllUserSite(Integer uid) throws GroupNotFountException;
 
     void deleteUserFromSite(Integer uid, Integer sid) throws GroupNotFountException, UserNotFoundException;
+
+    void deletePermission(Integer pid);
 }
