@@ -36,9 +36,17 @@
         <div class="layui-input-block">
             <!--<input type="radio" name="sex" value="女" title="女" checked>-->
             <!--单选框name 为控件名，value是提交到服务器的值-->
-            <input type="radio" name="choose" value="CAROUSEL_ARTICLE_TYPE" title="轮播图">
-            <input type="radio" name="choose" value="INDEX_ARTICLE_TYPE" title="主页文章">
-            <input type="radio" name="choose" value="NORMAL_ARTICLE_TYPE" title="普通文章" checked="checked">
+            <input type="radio" name="choose" value="carousel" title="轮播图">
+            <input type="radio" name="choose" value="index" title="主页文章">
+            <input type="radio" name="choose" value="normal" title="普通文章" checked="checked">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择皮肤</label>
+        <div class="layui-input-block">
+            <!--<input type="radio" name="sex" value="女" title="女" checked>-->
+            <!--单选框name 为控件名，value是提交到服务器的值-->
+            <input type="radio" name="skin" value="default" title="默认" checked="checked">
         </div>
     </div>
 </form>
@@ -109,12 +117,13 @@
                     dataType: 'json',
                     contentType: "application/json",
                     data: JSON.stringify({
-                        "articleTitle": $("#articleTitle"),
+                        "articleTitle": $("#articleTitle").val(),
                         "articleType": chooseValue("choose"),
-                        "articleAuthor": $("#author"),
-                        "articleOrder": $("#order"),
+                        "articleAuthor": $("#author").val(),
+                        "articleOrder": $("#order").val(),
                         "articleCategoryId": categoryId,
-                        "articleDesc": $("#desc"),
+                        "articleDesc": $("#desc").val(),
+                        "articleSkin": chooseValue("skin"),
                         "articleContent": content
                     }),
                     success: function (data) {
@@ -128,7 +137,8 @@
                         var index = parent.layer.getFrameIndex(window.name);
                         parent.layer.close(index);
                     }
-                });
+                })
+                ;
             }
         });
     }

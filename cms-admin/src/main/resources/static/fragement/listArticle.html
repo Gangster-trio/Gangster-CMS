@@ -33,7 +33,8 @@
         if (siteId) {
             table.render({
                 elem: '#article_table'
-                , url: current_column_id === -1 ? 'article/list' : '/article/list/columnlist?id=' + current_column_id
+                , url: 'article/list?siteId='+siteId
+
                 , page: true //开启分页
                 , cols: [[ //表头
                     {field: 'articleId', title: 'ID', width: 60, sort: true, fixed: 'left'}
