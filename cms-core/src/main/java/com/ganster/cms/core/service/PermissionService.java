@@ -6,6 +6,7 @@ import com.ganster.cms.core.exception.PermissionNotFoundException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.Permission;
 import com.ganster.cms.core.pojo.PermissionExample;
+import com.ganster.cms.core.pojo.Site;
 
 import java.util.List;
 
@@ -26,4 +27,12 @@ public interface PermissionService extends BaseService<Permission,PermissionExam
     void addPermissionToUser(Integer uid, Integer sid, Integer cid, String pName) throws GroupNotFountException, UserNotFoundException;
 
     void addPermissionToGroup(Integer gid, Integer sid, Integer cid, String pName);
+
+    void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException, GroupNotFountException;
+
+    Boolean hasPermissionToSite(Integer uid, Integer sid) throws GroupNotFountException;
+
+    List<Site> findAllUserSite(Integer uid) throws GroupNotFountException;
+
+    void deleteUserFromSite(Integer uid, Integer sid) throws GroupNotFountException, UserNotFoundException;
 }

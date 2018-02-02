@@ -5,11 +5,11 @@ import com.ganster.cms.core.dao.mapper.GroupPermissionMapper;
 import com.ganster.cms.core.dao.mapper.PermissionMapper;
 import com.ganster.cms.core.dao.mapper.UserGroupMapper;
 import com.ganster.cms.core.exception.GroupNotFountException;
-import com.ganster.cms.core.exception.PermissionNotFoundException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
+import com.ganster.cms.core.service.SiteService;
 import com.ganster.cms.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,9 @@ import java.util.List;
 public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Permission,PermissionExample> implements PermissionService {
     @Autowired
     GroupPermissionMapper groupPermissionMapper;
+
+    @Autowired
+    SiteService siteService;
 
     @Autowired
     UserGroupMapper userGroupMapper;
@@ -149,6 +152,46 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
         groupPermission.setGroupId(gid);
         groupPermission.setPermissionId(permission.getPermissionId());
         groupPermissionMapper.insert(groupPermission);
+    }
+
+    @Override
+    public void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException, GroupNotFountException {
+        Group group = groupService.findUserOwnGroup(uid);
+        Permission permission = new Permission();
+        permission.setPermissionName(sid.toString());
+        insert(permission);
+
+        GroupPermission groupPermission = new GroupPermission();
+        groupPermission.setPermissionId(permission.getPermissionId());
+        groupPermission.setGroupId(group.getGroupId());
+        groupPermissionMapper.insert(groupPermission);
+    }
+
+    @Override
+    public Boolean hasPermissionToSite(Integer uid, Integer sid) throws GroupNotFountException {
+        return hasPermission(uid, sid.toString());
+    }
+
+    @Override
+    public List<Site> findAllUserSite(Integer uid) throws GroupNotFountException {
+        SiteExample siteExample = new SiteExample();
+        List<Site> allSite = siteService.selectByExample(siteExample);
+        if (allSite == null || allSite.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Site> userSite = new ArrayList<>();
+        for (Site site : allSite) {
+            if (hasPermissionToSite(uid, site.getSiteId())) {
+                userSite.add(site);
+            }
+        }
+        return userSite;
+    }
+
+    @Override
+    public void deleteUserFromSite(Integer uid, Integer sid) throws GroupNotFountException, UserNotFoundException {
+        PermissionExample permissionExample = new PermissionExample();
+        deleteUserPermission(uid, sid.toString());
     }
 
     private String getPermissionName(Integer sid, Integer cid, String pName) {
