@@ -52,7 +52,7 @@ CREATE TABLE `cms_article` (
   KEY `cms_article_cms_site_site_id_fk` (`article_site_id`),
   CONSTRAINT `cms_article_cms_category_category_id_fk` FOREIGN KEY (`article_category_id`) REFERENCES `cms_category` (`category_id`),
   CONSTRAINT `cms_article_cms_site_site_id_fk` FOREIGN KEY (`article_site_id`) REFERENCES `cms_site` (`site_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,7 +61,7 @@ CREATE TABLE `cms_article` (
 
 LOCK TABLES `cms_article` WRITE;
 /*!40000 ALTER TABLE `cms_article` DISABLE KEYS */;
-INSERT INTO `cms_article` VALUES (1,'Article one',NULL,'Authoe anon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `cms_article` VALUES (84,'Spring 教程','normal','me',NULL,NULL,NULL,12,'2018-02-02 10:59:13',NULL,NULL,NULL,NULL,NULL,'<pre><div><div class=\"article\"><div data-note-content=\"\" class=\"show-content\"><div class=\"show-content-free\"><div class=\"image-package\"></div>\n<p>Spring 框架是一个开源的 Java 平台，它为容易而快速的开发出耐用的 Java 应用程序提供了全面的基础设施。</p>\n<p>Spring 框架最初是由 Rod Johnson 编写的，并且 2003 年 6 月首次在 Apache 2.0 许可下发布。</p>\n<p>本教程是基于在 2015 年 3 月发布的 Spring 框架 4.1.6 版本编写的。</p>\n<h2>适用人群</h2>\n<p>本教程是为需要详细了解 Spring 框架的体系结构和实际应用的 Java 程序员设计的。本教程将带你达到中级的专业知识水平，而你可以将自己提升至更高层次的专业知识水平。</p>\n<h2>学习前提</h2>\n<p>在进行本教程之前，你应该对 Java 编程语言有一个很好的了解。对 Eclipse IDE 的基本了解也是必须的，因为所有的示例都是使用 Eclipse IDE 进行编译的。</p>\n<table class=\"layui-table\">\n<thead>\n<tr>\n<th>更新日期</th>\n<th>更新内容</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>2015-06-18</td>\n<td>Spring 教程</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/overview.html\" target=\"_blank\" rel=\"nofollow\">概述</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/architecture.html\" target=\"_blank\" rel=\"nofollow\">体系结构</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/environment-setup.html\" target=\"_blank\" rel=\"nofollow\">环境配置</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/hello-world-example.html\" target=\"_blank\" rel=\"nofollow\">Hello World 实例</a></li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/ioc-containers.html\" target=\"_blank\" rel=\"nofollow\">IoC 容器</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/ioc-container/spring-bean-fatory-container.html\" target=\"_blank\" rel=\"nofollow\">Spring BeanFactory 容器</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/ioc-container/spring-application-context-container.html\" target=\"_blank\" rel=\"nofollow\">Spring ApplicationContext 容器</a></li>\n</ul>\n</li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-definition.html\" target=\"_blank\" rel=\"nofollow\">Bean 定义</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-scopes.html\" target=\"_blank\" rel=\"nofollow\">Bean 作用域</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-life-cycle.html\" target=\"_blank\" rel=\"nofollow\">Bean 生命周期</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-post-processors.html\" target=\"_blank\" rel=\"nofollow\">Bean 后置处理器</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-definition-inheritance.html\" target=\"_blank\" rel=\"nofollow\">Bean 定义继承</a></li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/dependency-injection.html\" target=\"_blank\" rel=\"nofollow\">依赖注入</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/dependency-injection/spring-constructor-based-dependency-injection.html\" target=\"_blank\" rel=\"nofollow\">Spring 基于构造函数的依赖注入</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/dependency-injection/spring-setter-based-dependency-injection.html\" target=\"_blank\" rel=\"nofollow\">Spring 基于设值函数的依赖注入</a></li>\n</ul>\n</li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/injecting-inner-beans.html\" target=\"_blank\" rel=\"nofollow\">注入内部 Beans</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/injecting-collection.html\" target=\"_blank\" rel=\"nofollow\">注入集合</a></li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/beans-autowiring.html\" target=\"_blank\" rel=\"nofollow\">Beans 自动装配</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/beans-auto-wiring/spring-autowiring-byname.html\" target=\"_blank\" rel=\"nofollow\">Spring 自动装配 ‘byName’</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/beans-auto-wiring/spring-autowiring-byType.html\" target=\"_blank\" rel=\"nofollow\">Spring 自动装配 ‘byType’</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/beans-auto-wiring/spring-autowiring-by-Constructor.html\" target=\"_blank\" rel=\"nofollow\">Spring 由构造函数自动装配</a></li>\n</ul>\n</li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration.html\" target=\"_blank\" rel=\"nofollow\">基于注解的配置</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration/spring-required-annotation.html\" target=\"_blank\" rel=\"nofollow\">Spring @Required 注释</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration/spring-autowired-annotation.html\" target=\"_blank\" rel=\"nofollow\">Spring @Autowired 注释</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration/spring-qualifier-annotation.html\" target=\"_blank\" rel=\"nofollow\">Spring @Qualifier 注释</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration/spring-jsr250-annotation.html\" target=\"_blank\" rel=\"nofollow\">Spring JSR-250 注释</a></li>\n</ul>\n</li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/java-based-configuration.html\" target=\"_blank\" rel=\"nofollow\">基于 Java 的配置</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/event-handling-in-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中的事件处理</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/custom-events-in-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中的自定义事件</a></li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/aop-with-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 框架的 AOP</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/aop-with-spring-framenwork/xml-schema-based-aop-with-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中基于 AOP 的 XML架构</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/aop-with-spring-framenwork/aspectj-based-aop-with-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中基于 AOP 的 @AspectJ</a></li>\n</ul>\n</li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/jdbc-framework.html\" target=\"_blank\" rel=\"nofollow\">JDBC 框架</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/jdbc-framework-overview/spring-jdbc-example.html\" target=\"_blank\" rel=\"nofollow\">Spring JDBC 示例</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/jdbc-framework-overview/sql-stored-procedure-in-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中 SQL 的存储过程</a></li>\n</ul>\n</li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/transaction-management.html\" target=\"_blank\" rel=\"nofollow\">事务管理</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/transaction-management/spring-programmatic-transaction-management.html\" target=\"_blank\" rel=\"nofollow\">Spring 编程式事务管理</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/transaction-management/spring-declarative-transaction-management.html\" target=\"_blank\" rel=\"nofollow\">Spring 声明式事务管理</a></li>\n</ul>\n</li>\n<li>\n<a href=\"https://link.jianshu.com?t=web-mvc-framework.html\" target=\"_blank\" rel=\"nofollow\">Web MVC 框架</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-mvc-hello-world-example.html\" target=\"_blank\" rel=\"nofollow\">Spring MVC Hello World 例子</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-mvc-form-handling-example.html\" target=\"_blank\" rel=\"nofollow\">Spring MVC 表单处理例子</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-page-redirection-example.html\" target=\"_blank\" rel=\"nofollow\">Spring 页面重定向例子</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-static-pages-example.html\" target=\"_blank\" rel=\"nofollow\">Spring 静态页面例子</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-exception-handling-example.html\" target=\"_blank\" rel=\"nofollow\">Spring 异常处理例子</a></li>\n</ul>\n</li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/logging-with-log4j.html\" target=\"_blank\" rel=\"nofollow\">使用 Log4J 记录日志</a></li>\n</ul>\n\n          </div>\n        </div>\n    </div>\n\n    <!-- 连载目录项 -->\n\n    <!-- 打赏文章、购买文章、购买连载 -->\n        <div id=\"free-reward-panel\" class=\"support-author\"><p></p></div></div><br><br>作者：极客学院Wiki<br>链接：https://www.jianshu.com/p/bd87d5507f5e<br>來源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</pre>','default'),(85,'这是一篇主页文章^_^','index','me',NULL,NULL,NULL,NULL,'2018-02-02 11:23:06',NULL,NULL,NULL,NULL,NULL,'<pre><div><li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/overview.html\" target=\"_blank\" rel=\"nofollow\">概述</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/architecture.html\" target=\"_blank\" rel=\"nofollow\">体系结构</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/environment-setup.html\" target=\"_blank\" rel=\"nofollow\">环境配置</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/hello-world-example.html\" target=\"_blank\" rel=\"nofollow\">Hello World 实例</a></li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/ioc-containers.html\" target=\"_blank\" rel=\"nofollow\">IoC 容器</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/ioc-container/spring-bean-fatory-container.html\" target=\"_blank\" rel=\"nofollow\">Spring BeanFactory 容器</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/ioc-container/spring-application-context-container.html\" target=\"_blank\" rel=\"nofollow\">Spring ApplicationContext 容器</a></li>\n</ul>\n</li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-definition.html\" target=\"_blank\" rel=\"nofollow\">Bean 定义</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-scopes.html\" target=\"_blank\" rel=\"nofollow\">Bean 作用域</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-life-cycle.html\" target=\"_blank\" rel=\"nofollow\">Bean 生命周期</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-post-processors.html\" target=\"_blank\" rel=\"nofollow\">Bean 后置处理器</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/bean-definition-inheritance.html\" target=\"_blank\" rel=\"nofollow\">Bean 定义继承</a></li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/dependency-injection.html\" target=\"_blank\" rel=\"nofollow\">依赖注入</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/dependency-injection/spring-constructor-based-dependency-injection.html\" target=\"_blank\" rel=\"nofollow\">Spring 基于构造函数的依赖注入</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/dependency-injection/spring-setter-based-dependency-injection.html\" target=\"_blank\" rel=\"nofollow\">Spring 基于设值函数的依赖注入</a></li>\n</ul>\n</li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/injecting-inner-beans.html\" target=\"_blank\" rel=\"nofollow\">注入内部 Beans</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/injecting-collection.html\" target=\"_blank\" rel=\"nofollow\">注入集合</a></li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/beans-autowiring.html\" target=\"_blank\" rel=\"nofollow\">Beans 自动装配</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/beans-auto-wiring/spring-autowiring-byname.html\" target=\"_blank\" rel=\"nofollow\">Spring 自动装配 ‘byName’</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/beans-auto-wiring/spring-autowiring-byType.html\" target=\"_blank\" rel=\"nofollow\">Spring 自动装配 ‘byType’</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/beans-auto-wiring/spring-autowiring-by-Constructor.html\" target=\"_blank\" rel=\"nofollow\">Spring 由构造函数自动装配</a></li>\n</ul>\n</li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration.html\" target=\"_blank\" rel=\"nofollow\">基于注解的配置</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration/spring-required-annotation.html\" target=\"_blank\" rel=\"nofollow\">Spring @Required 注释</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration/spring-autowired-annotation.html\" target=\"_blank\" rel=\"nofollow\">Spring @Autowired 注释</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration/spring-qualifier-annotation.html\" target=\"_blank\" rel=\"nofollow\">Spring @Qualifier 注释</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/annotation-based-configuration/spring-jsr250-annotation.html\" target=\"_blank\" rel=\"nofollow\">Spring JSR-250 注释</a></li>\n</ul>\n</li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/java-based-configuration.html\" target=\"_blank\" rel=\"nofollow\">基于 Java 的配置</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/event-handling-in-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中的事件处理</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/custom-events-in-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中的自定义事件</a></li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/aop-with-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 框架的 AOP</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/aop-with-spring-framenwork/xml-schema-based-aop-with-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中基于 AOP 的 XML架构</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/aop-with-spring-framenwork/aspectj-based-aop-with-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中基于 AOP 的 @AspectJ</a></li>\n</ul>\n</li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/jdbc-framework.html\" target=\"_blank\" rel=\"nofollow\">JDBC 框架</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/jdbc-framework-overview/spring-jdbc-example.html\" target=\"_blank\" rel=\"nofollow\">Spring JDBC 示例</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/jdbc-framework-overview/sql-stored-procedure-in-spring.html\" target=\"_blank\" rel=\"nofollow\">Spring 中 SQL 的存储过程</a></li>\n</ul>\n</li>\n<li>\n<a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/transaction-management.html\" target=\"_blank\" rel=\"nofollow\">事务管理</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/transaction-management/spring-programmatic-transaction-management.html\" target=\"_blank\" rel=\"nofollow\">Spring 编程式事务管理</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/transaction-management/spring-declarative-transaction-management.html\" target=\"_blank\" rel=\"nofollow\">Spring 声明式事务管理</a></li>\n</ul>\n</li>\n<li>\n<a href=\"https://link.jianshu.com?t=web-mvc-framework.html\" target=\"_blank\" rel=\"nofollow\">Web MVC 框架</a>\n<ul>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-mvc-hello-world-example.html\" target=\"_blank\" rel=\"nofollow\">Spring MVC Hello World 例子</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-mvc-form-handling-example.html\" target=\"_blank\" rel=\"nofollow\">Spring MVC 表单处理例子</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-page-redirection-example.html\" target=\"_blank\" rel=\"nofollow\">Spring 页面重定向例子</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-static-pages-example.html\" target=\"_blank\" rel=\"nofollow\">Spring 静态页面例子</a></li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/mvc-framework/spring-exception-handling-example.html\" target=\"_blank\" rel=\"nofollow\">Spring 异常处理例子</a></li>\n</ul>\n</li>\n<li><a href=\"https://link.jianshu.com?t=http://wiki.jikexueyuan.com/project/spring/logging-with-log4j.html\" target=\"_blank\" rel=\"nofollow\">使用 Log4J 记录日志</a></li></div><br><br>作者：极客学院Wiki<br>链接：https://www.jianshu.com/p/bd87d5507f5e<br>來源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</pre>','default');
 /*!40000 ALTER TABLE `cms_article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,12 +84,13 @@ CREATE TABLE `cms_category` (
   `category_desc` varchar(255) DEFAULT NULL,
   `category_order` int(11) DEFAULT NULL,
   `category_skin` varchar(255) DEFAULT NULL,
+  `category_type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`category_id`),
   KEY `cms_category_cms_category_category_id_fk` (`category_parent_id`),
   KEY `cms_category_cms_site_site_id_fk` (`category_site_id`),
   CONSTRAINT `cms_category_cms_category_category_id_fk` FOREIGN KEY (`category_parent_id`) REFERENCES `cms_category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `cms_category_cms_site_site_id_fk` FOREIGN KEY (`category_site_id`) REFERENCES `cms_site` (`site_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +99,7 @@ CREATE TABLE `cms_category` (
 
 LOCK TABLES `cms_category` WRITE;
 /*!40000 ALTER TABLE `cms_category` DISABLE KEYS */;
-INSERT INTO `cms_category` VALUES (1,'category one','2018-01-31 01:49:42',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `cms_category` VALUES (1,'root','2018-02-02 00:48:46','2018-02-02 00:48:49',NULL,-1,1,NULL,'root category',NULL,'default','normal'),(11,'programe','2018-02-02 10:40:05',NULL,1,0,1,NULL,'coding',NULL,'default','normal'),(12,'java','2018-02-02 10:40:29',NULL,11,1,1,NULL,'love',NULL,'default','normal'),(13,'python','2018-02-02 10:40:46',NULL,11,1,1,NULL,'simple',NULL,'default','normal'),(14,'life','2018-02-02 10:41:15',NULL,1,0,1,NULL,'..',NULL,'default','normal');
 /*!40000 ALTER TABLE `cms_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,7 +116,7 @@ CREATE TABLE `cms_group` (
   `group_desc` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`group_id`),
   UNIQUE KEY `cms_group_group_name_uindex` (`group_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,6 +125,7 @@ CREATE TABLE `cms_group` (
 
 LOCK TABLES `cms_group` WRITE;
 /*!40000 ALTER TABLE `cms_group` DISABLE KEYS */;
+INSERT INTO `cms_group` VALUES (8,'admin',NULL);
 /*!40000 ALTER TABLE `cms_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -166,9 +168,8 @@ CREATE TABLE `cms_permission` (
   `permission_id` int(11) NOT NULL AUTO_INCREMENT,
   `permission_name` varchar(255) DEFAULT NULL,
   `permission_desc` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`permission_id`),
-  UNIQUE KEY `cms_permission_permission_name_uindex` (`permission_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`permission_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,6 +178,7 @@ CREATE TABLE `cms_permission` (
 
 LOCK TABLES `cms_permission` WRITE;
 /*!40000 ALTER TABLE `cms_permission` DISABLE KEYS */;
+INSERT INTO `cms_permission` VALUES (1,'1',NULL);
 /*!40000 ALTER TABLE `cms_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,7 +200,7 @@ CREATE TABLE `cms_site` (
   `site_status` int(11) DEFAULT NULL,
   `site_pic` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`site_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,7 +209,58 @@ CREATE TABLE `cms_site` (
 
 LOCK TABLES `cms_site` WRITE;
 /*!40000 ALTER TABLE `cms_site` DISABLE KEYS */;
+INSERT INTO `cms_site` VALUES (1,'first site','index',NULL,NULL,'default',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `cms_site` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cms_skin`
+--
+
+DROP TABLE IF EXISTS `cms_skin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cms_skin` (
+  `skin_name` varchar(100) NOT NULL,
+  `skin_create_time` datetime DEFAULT NULL,
+  `skin_update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`skin_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cms_skin`
+--
+
+LOCK TABLES `cms_skin` WRITE;
+/*!40000 ALTER TABLE `cms_skin` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cms_skin` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cms_sys`
+--
+
+DROP TABLE IF EXISTS `cms_sys`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cms_sys` (
+  `sys_key` varchar(255) NOT NULL,
+  `sys_value` varchar(255) DEFAULT NULL,
+  `sys_create_time` datetime DEFAULT NULL,
+  `sys_update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`sys_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cms_sys`
+--
+
+LOCK TABLES `cms_sys` WRITE;
+/*!40000 ALTER TABLE `cms_sys` DISABLE KEYS */;
+INSERT INTO `cms_sys` VALUES ('pic_path','/home/bigmeng/Pictures/',NULL,NULL);
+/*!40000 ALTER TABLE `cms_sys` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -253,7 +306,7 @@ CREATE TABLE `cms_user` (
   `user_last_login` datetime DEFAULT NULL,
   `user_org` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,6 +342,7 @@ CREATE TABLE `group_permission` (
 
 LOCK TABLES `group_permission` WRITE;
 /*!40000 ALTER TABLE `group_permission` DISABLE KEYS */;
+INSERT INTO `group_permission` VALUES (8,1);
 /*!40000 ALTER TABLE `group_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -341,6 +395,7 @@ CREATE TABLE `user_group` (
 
 LOCK TABLES `user_group` WRITE;
 /*!40000 ALTER TABLE `user_group` DISABLE KEYS */;
+INSERT INTO `user_group` VALUES (1,8);
 /*!40000 ALTER TABLE `user_group` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -353,4 +408,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-31 15:38:44
+-- Dump completed on 2018-02-02 19:24:59
