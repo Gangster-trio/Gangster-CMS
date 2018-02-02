@@ -15,7 +15,7 @@
 </head>
 <body style="background-color:#eee;">
 <br/>
-<form class="layui-form" action="/category/add" method="post">
+<form class="layui-form" action="">
 
     <div class="layui-form-item">
         <label class="layui-form-label">栏目名称</label>
@@ -65,16 +65,16 @@
 </body>
 </html>
 <script>
-    var initCategoryId;
+    var initCategoryId = getUrlVar("id"); //要更新的categoryId
+    // 初始化界面
     window.onload = function () {
         layui.use("form", function () {
             var form = layui.form;
         });
         $.ajax({
             type: "get",
-            url: "/category/details/" + getUrlVar("id"),
+            url: "/category/details/" + initCategoryId,
             success: function (data) {
-                initCategoryId = data.categoryParentId;
                 console.log(data);
                 $("#categoryTitle").val(data.categoryTitle);
                 $("#order").val(data.categoryOrder);
@@ -85,23 +85,17 @@
         });
     };
     document.getElementById('btn1').onclick = function () {
-        var categoryTitle = document.getElementById("categoryTitle").value;
-        var parentId = document.getElementById("parentId").value;
-        if (parentId.length === 0) parentId = initCategoryId;
-        var order = document.getElementById("order").value;
-        var desc = document.getElementById("desc").value;
-        var categoryType = chooseValue("choose");
         $.ajax({
             url: "/category/update/" + initCategoryId,
             type: 'post',
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify({
-                "categoryTitle": categoryTitle,
-                "categoryParentId": parentId,
-                "categoryDesc": desc,
-                "categoryOrder": order,
-                "categoryType": categoryType
+                "categoryTitle": $("#categoryTitle").val(),
+                "categoryParentId": $("#parentId").val(),
+                "categoryDesc": $("#desc").val(),
+                "categoryOrder": $("#order").val(),
+                "categoryType": chooseValue("choose")
             }),
             success: function (data) {
                 console.log(data);
@@ -110,7 +104,8 @@
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
             }
-        });
+        })
+        ;
     }
 </script>
 <script type="text/javascript">

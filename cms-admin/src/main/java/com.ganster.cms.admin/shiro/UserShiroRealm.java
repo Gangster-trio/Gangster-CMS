@@ -64,6 +64,7 @@ public class UserShiroRealm extends AuthorizingRealm {
         if (user==null) {
             throw new AuthenticationException();
         }
+        SecurityUtils.getSubject().getSession().setAttribute("id",user.getUserId());
         logger.info("用户" + user.getUserName() + "进行认证");
         if (!Objects.equals(password, user.getUserPassword())) {
             throw new IncorrectCredentialsException();

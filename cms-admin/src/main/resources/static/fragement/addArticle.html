@@ -45,7 +45,7 @@
 <div id="show" class="layui-form-item">
     <label class="layui-form-label">所属栏目</label>
     <div class="layui-input-inline">
-        <input type="text" id="addCategory" name="addCategory" required="required" lay-verify="required"
+        <input type="text" id="belongCategory" name="belongCategory" required="required" lay-verify="required"
                placeholder="顶级栏目管理"
                autocomplete="off"
                class="layui-input" readonly="readonly"/>
@@ -100,11 +100,6 @@
             if (!categoryId) $("#show").show();  //categoryId未定义就是false
             else $("#show").hide();
             document.getElementById('btn1').onclick = function () {
-                var articleTitle = document.getElementById("articleTitle").value;
-                var order = document.getElementById("order").value;
-                var articleType = chooseValue("choose");
-                var authorName = document.getElementById("author").value;
-                var description = document.getElementById("description").value;
                 var categoryId;
                 if (!categoryId) categoryId = document.getElementById("parentId").value;
                 var content = layedit.getContent(editIndex);
@@ -114,12 +109,12 @@
                     dataType: 'json',
                     contentType: "application/json",
                     data: JSON.stringify({
-                        "articleTitle": articleTitle,
-                        "articleType": articleType,
-                        "articleAuthor": authorName,
-                        "articleOrder": order,
+                        "articleTitle": $("#articleTitle"),
+                        "articleType": chooseValue("choose"),
+                        "articleAuthor": $("#author"),
+                        "articleOrder": $("#order"),
                         "articleCategoryId": categoryId,
-                        "articleDesc": description,
+                        "articleDesc": $("#desc"),
                         "articleContent": content
                     }),
                     success: function (data) {
@@ -139,7 +134,7 @@
     }
 </script>
 <script type="text/javascript">
-    var index = $("#addCategory").on('click', function () {
+    var index = $("#belongCategory").on('click', function () {
         layer.open({
             id: 1,
             type: 2,

@@ -38,8 +38,8 @@
         <div class="layui-input-block">
             <!--<input type="radio" name="sex" value="女" title="女" checked>-->
             <!--单选框name 为控件名，value是提交到服务器的值-->
-            <input type="radio" name="choose" value="CAROUSEL_CATEGORY_TYPE" title="主页栏目">
-            <input type="radio" name="choose" value="NORMAL_CATEGORY_TYPE" title="普通栏目" checked="checked">
+            <input type="radio" name="choose" value="index" title="主页栏目">
+            <input type="radio" name="choose" value="normal" title="普通栏目" checked="checked">
         </div>
     </div>
     <div class="layui-form-item">
@@ -69,26 +69,23 @@
         layui.use("form", function () {
             var form = layui.form;
         });
+        alert(getUrlVar("siteid"));
     }
 </script>
 <script type="text/javascript">
     document.getElementById('btn1').onclick = function () {
-        var categoryTitle = document.getElementById("categoryTitle").value;
-        var parentId = document.getElementById("parentId").value;
-        var order = document.getElementById("order").value;
-        var desc = document.getElementById("desc").value;
-        var categoryType = chooseValue("choose");
         $.ajax({
             url: "/category/add",
             type: 'post',
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify({
-                "categoryTitle": categoryTitle,
-                "categoryParentId": parentId,
-                "categoryDesc": desc,
-                "categoryOrder": order,
-                "categoryType": categoryType
+                "categoryTitle": $("#categoryTitle").val(),
+                "categoryParentId": $("#parentId").val(),
+                "categorySiteId": getUrlVar("siteid"),
+                "categoryDesc": $("#desc").val(),
+                "categoryOrder": $("#order").val(),
+                "categoryType": chooseValue("choose")
             }),
             success: function (data) {
                 console.log(data);

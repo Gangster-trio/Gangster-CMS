@@ -16,79 +16,82 @@
 </head>
 <body style="background-color:#eee;">
 <br/>
-<div class="layui-form-item">
-    <label class="layui-form-label">文章标题</label>
-    <div class="layui-input-inline">
-        <input type="text" id="articleTitle" name="articleTitle" required lay-verify="required" placeholder="文章名称"
-               autocomplete="off"
-               class="layui-input">
-    </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">自定义顺序</label>
-    <div class="layui-input-inline">
-        <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序" autocomplete="off"
-               class="layui-input">
-    </div>
-</div>
-<form class="layui-form" action="">
+<form>
     <div class="layui-form-item">
-        <label class="layui-form-label">文章属性</label>
-        <div class="layui-input-block">
-            <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-            <!--单选框name 为控件名，value是提交到服务器的值-->
-            <input type="radio" name="choose" value="幻灯" title="幻灯">
-            <input type="radio" name="choose" value="推荐" title="推荐">
-            <input type="radio" name="choose" value="图片" title="图片">
-            <input type="radio" name="choose" value="头条" title="头条" checked>
+        <label class="layui-form-label">文章标题</label>
+        <div class="layui-input-inline">
+            <input type="text" id="articleTitle" name="articleTitle" required lay-verify="required" placeholder="文章名称"
+                   autocomplete="off"
+                   class="layui-input">
         </div>
     </div>
-</form>
-<div class="layui-form-item layui-form-text">
-    <form id="img" action="/article/img" method="post" enctype="multipart/form-data">
-        <img width="100" height="100" id="image"/>
-        <!-- 在选择图片的时候添加事件，触发Ajax异步上传 -->
-        <input name="file" type="file" onchange="uploadImg()"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">自定义顺序</label>
+        <div class="layui-input-inline">
+            <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">文章属性</label>
+            <div class="layui-input-block">
+                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
+                <!--单选框name 为控件名，value是提交到服务器的值-->
+                <input type="radio" name="choose" value="幻灯" title="幻灯">
+                <input type="radio" name="choose" value="推荐" title="推荐">
+                <input type="radio" name="choose" value="图片" title="图片">
+                <input type="radio" name="choose" value="头条" title="头条" checked>
+            </div>
+        </div>
     </form>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">文章作者</label>
-    <div class="layui-input-inline">
-        <input type="text" id="author" name="author" required lay-verify="required" placeholder="文章作者"
-               autocomplete="off"
-               class="layui-input">
+    <div class="layui-form-item layui-form-text">
+        <form id="img" action="/article/img" method="post" enctype="multipart/form-data">
+            <img width="100" height="100" id="image"/>
+            <!-- 在选择图片的时候添加事件，触发Ajax异步上传 -->
+            <input name="file" type="file" onchange="uploadImg()"/>
+        </form>
     </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">所属栏目</label>
-    <div class="layui-input-inline">
-        <input type="text" id="categoryName" name="categoryName" required lay-verify="required" placeholder="所属栏目"
-               autocomplete="off"
-               class="layui-input" readonly="readonly">
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章作者</label>
+        <div class="layui-input-inline">
+            <input type="text" id="author" name="author" required lay-verify="required" placeholder="文章作者"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
     </div>
-</div>
-<div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">描述</label>
-    <div class="layui-input-block">
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属栏目</label>
+        <div class="layui-input-inline">
+            <input type="text" id="belongCategory" name="belongCategory" required lay-verify="required"
+                   placeholder="所属栏目"
+                   autocomplete="off"
+                   class="layui-input" readonly="readonly">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
         <textarea id="description" name="description" class="layui-textarea" placeholder="添加描述" rows="50"
                   cols="40"></textarea>
+        </div>
     </div>
-</div>
-文章内容
-<div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
-    <textarea name="txt" id="txt" style="display:none;"></textarea>
-</div>
-<div>
-    <!--这里是文章选择栏目id 的隐藏区域-->
-    <input id="parentId" name="parentId" type="text" hidden="hidden"/>
-</div>
-<input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
+    文章内容
+    <div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
+        <textarea name="txt" id="txt" style="display:none;"></textarea>
+    </div>
+    <div>
+        <!--这里是文章选择栏目id 的隐藏区域-->
+        <input id="parentId" name="parentId" type="text" hidden="hidden"/>
+    </div>
+    <input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
+</form>
 </body>
 </html>
 <script type="text/javascript">
     var initCategoryId;   //初始加载的文章表的栏目id
     window.onload = function () {
-        console.log(getUrlVar("id"));
         $.ajax({
             type: "get",
             url: "/article/details/" + getUrlVar("id"),  //得到需要更新文章的id
@@ -101,7 +104,7 @@
                 $("#author").val(data.articleAuthor);
                 $("#description").val(data.articleDesc);
                 $("#txt").val(data.articleContent);
-                $("#categoryName").val(data.categoryName);
+                $("#belongCategory").val(data.categoryName);
             }
         });
 
@@ -121,12 +124,6 @@
             });
 
             document.getElementById('btn1').onclick = function () {
-                var articleTitle = document.getElementById("articleTitle").value;
-                var articleOrder = document.getElementById("order").value;
-                var articleType = chooseValue("choose");
-                console.log(articleType);
-                var articleAuthor = document.getElementById("author").value;
-                var articleDesc = document.getElementById("description").value;
                 var categoryId = document.getElementById("parentId").value;
                 if (categoryId.length === 0) categoryId = initCategoryId;
                 var articleContent = layedit.getContent(editIndex);     //得到layui编辑器里边的文章
@@ -136,12 +133,13 @@
                     dataType: 'json',
                     contentType: "application/json",
                     data: JSON.stringify({
-                        "articleTitle": articleTitle,
-                        "articleType": articleType,
-                        "articleAuthor": articleAuthor,
-                        "articleOrder": articleOrder,
+                        "articleTitle": $("#articleTitle"),
+                        "articleType": chooseValue("choose"),
+                        "articleAuthor": $("#author"),
+                        "articleOrder": $("#order"),
                         "articleCategoryId": categoryId,
-                        "articleDesc": articleDesc
+                        "articleDesc": $("#desc"),
+                        "articleContent": articleContent
                     }),
                     success: function (data) {
                         console.log(data);
@@ -160,7 +158,7 @@
     }
 </script>
 <script type="text/javascript">
-    var index = $("#categoryName").on('click', function () {
+    var index = $("#belongCategory").on('click', function () {
         layer.open({
             id: 1,
             type: 2,

@@ -5,6 +5,7 @@ import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
+import com.ganster.cms.core.service.SiteService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * Create by Yoke on 2018/1/30
  */
-@Controller
+@RestController
 @RequestMapping("/category")
 public class CategoryController extends BaseController {
     @Autowired
@@ -26,13 +27,18 @@ public class CategoryController extends BaseController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private SiteService siteService;
+    private Integer siteid;
+
     @GetMapping("/list")
-    @ResponseBody
-    public AjaxData list(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+    public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+        siteid = siteId;
         CategoryExample categoryExample = new CategoryExample();
+        categoryExample.or().andCategorySiteIdEqualTo(siteId);
+//        List<Category> categories = categoryService.selectByExample(categoryExample);
         PageInfo<Category> pageInfo;
         List<Category> list = categoryService.selectByExample(categoryExample);
-//        System.out.println(list.get(0));
         if (!list.isEmpty()) {
             if (page != null && limit != null) {
                 pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
@@ -47,7 +53,6 @@ public class CategoryController extends BaseController {
     }
 
     @GetMapping("/select")
-    @ResponseBody
     public List<CategoryTree> select() {
         List<CategoryTree> treeList = new ArrayList<>();
         CategoryExample categoryExample = new CategoryExample();
@@ -65,12 +70,14 @@ public class CategoryController extends BaseController {
             treeList.add(tree);
             return treeList;
         } else {
-            Category category = categoryService.selectByPrimaryKey(1);
-            CategoryTree tree = categoryService.toTree(category);
             CategoryExample categoryExample1 = new CategoryExample();
+            categoryExample1.or().andCategoryLevelEqualTo(-1);
+            List<Category> list1 = categoryService.selectByExample(categoryExample1);
+            Category category = list1.get(0);
+            CategoryTree tree = categoryService.toTree(category);
             categoryExample.or().andCategoryParentIdEqualTo(1);
-            List<Category> list1 = categoryService.selectByExample(categoryExample);
-            if (list1.size() > 0) {
+            List<Category> list2 = categoryService.selectByExample(categoryExample);
+            if (list2.size() > 0) {
                 for (Category c : list) {
                     treeList.add(categoryService.toTree(c));
                 }
@@ -80,17 +87,7 @@ public class CategoryController extends BaseController {
         }
     }
 
-    @PostMapping("/add")
-    @ResponseBody
-    public Message add(@RequestBody Category category) {
-        category.setCategoryCreateTime(new Date());
-        int count = categoryService.insert(category);
-        if (count == 1) return new Message(0, "success", count);
-        else return new Message(1, "false", count);
-    }
-
     @GetMapping("/delete/{id}")
-    @ResponseBody
     public Message delete(@PathVariable("id") Integer id) {
         List<Article> list = articleService.selectArticleByCategoryId(id);
         if (!list.isEmpty()) {
@@ -103,7 +100,6 @@ public class CategoryController extends BaseController {
     }
 
     @PostMapping("/update/{id}")
-    @ResponseBody
     public Message update(@PathVariable("id") Integer id, @RequestBody Category category) {
         category.setCategoryId(id);
         category.setCategoryUpdateTime(new Date());
@@ -113,10 +109,17 @@ public class CategoryController extends BaseController {
     }
 
     @GetMapping("/details/{id}")
-    @ResponseBody
     public CategoryWithParent details(@PathVariable("id") Integer id) {
         Category category = categoryService.selectByPrimaryKey(id);
         if (category != null) return new CategoryWithParent(category.getCategoryTitle(), category);
         else return null;
+    }
+
+    @PostMapping("/add")
+    public Message add(@RequestBody Category category) {
+        category.setCategoryCreateTime(new Date());
+        int count = categoryService.insert(category);
+        if (count == 1) return new Message(0, "success", count);
+        else return new Message(1, "false", count);
     }
 }
