@@ -28,12 +28,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
         try {
             Group group = groupService.findUserOwnGroup(userId);
             groupService.deleteGroup(group.getGroupId());
-        } catch (GroupNotFountException e) {
-            e.printStackTrace();
+        } catch (GroupNotFountException ignored) {
         }
-
+        //delete user-group map
         UserGroupExample userGroupExample = new UserGroupExample();
         userGroupExample.or().andUserIdEqualTo(userId);
         userGroupMapper.deleteByExample(userGroupExample);
+
+        //delete user
+        deleteByPrimaryKey(userId);
     }
 }
