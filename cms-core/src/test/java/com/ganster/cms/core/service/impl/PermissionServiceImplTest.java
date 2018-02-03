@@ -75,13 +75,13 @@ public class PermissionServiceImplTest {
         }
 
         try {
-            permissionService.addPermissionToUser(user.getUserId(), site.getSiteId(), 3, CmsConst.PERMISSION_VIEW);
+            permissionService.addCategoryPermissionToUser(user.getUserId(), site.getSiteId(), 3, CmsConst.PERMISSION_VIEW);
         } catch (GroupNotFountException e) {
             e.printStackTrace();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }
-        boolean hasP = permissionService.hasPermission(user.getUserId(), site.getSiteId(), 3, CmsConst.PERMISSION_VIEW);
+        boolean hasP = permissionService.hasCategoryPermission(user.getUserId(), site.getSiteId(), 3, CmsConst.PERMISSION_VIEW);
         Assert.assertTrue(hasP);
     }
 

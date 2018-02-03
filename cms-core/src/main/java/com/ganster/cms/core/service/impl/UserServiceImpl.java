@@ -5,14 +5,13 @@ import com.ganster.cms.core.dao.mapper.UserGroupMapper;
 import com.ganster.cms.core.dao.mapper.UserMapper;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;
-import com.ganster.cms.core.pojo.Group;
-import com.ganster.cms.core.pojo.User;
-import com.ganster.cms.core.pojo.UserExample;
-import com.ganster.cms.core.pojo.UserGroupExample;
+import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExample> implements UserService {
@@ -37,5 +36,19 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
 
         //delete user
         deleteByPrimaryKey(userId);
+    }
+
+    @Override
+    public User createUser(User user) {
+        user.setUserCreateTime(new Date());
+        insert(user);
+
+        Group group = new Group();
+        group.setGroupName(user.getUserName());
+        groupService.insert(group);
+
+        UserGroup userGroup = new UserGroup(user.getUserId(), group.getGroupId());
+        userGroupMapper.insert(userGroup);
+        return user;
     }
 }

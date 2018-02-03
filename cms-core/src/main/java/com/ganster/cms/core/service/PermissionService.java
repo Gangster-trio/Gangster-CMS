@@ -22,15 +22,21 @@ public interface PermissionService extends BaseService<Permission,PermissionExam
 
     void deleteGroupPermission(Integer groupId, Integer sid, Integer cid, String pName) throws GroupNotFountException;
 
-    Boolean hasPermission(Integer uid, Integer sid, Integer cid, String pName);
+    Boolean hasCategoryPermission(Integer uid, Integer sid, Integer cid, String pName);
 
-    void addPermissionToUser(Integer uid, Integer sid, Integer cid, String pName) throws GroupNotFountException, UserNotFoundException;
+    Boolean hasModulePermission(Integer uid, Integer sid, Integer moduleId, String pName);
 
-    void addPermissionToGroup(Integer gid, Integer sid, Integer cid, String pName);
+    Boolean hasSitePermission(Integer uid, Integer sid) throws GroupNotFountException;
+
+    void addCategoryPermissionToUser(Integer uid, Integer sid, Integer cid, String pName) throws GroupNotFountException, UserNotFoundException;
+
+    void addModulePermissionToUser(Integer uid, Integer sid, Integer moduleId, String pName) throws UserNotFoundException, GroupNotFountException;
+
+    void addCategoryPermissionToGroup(Integer gid, Integer sid, Integer cid, String pName);
+
+    void addModulePermissionToGroup(Integer gid, Integer sid, Integer moduleId, String pName);
 
     void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException, GroupNotFountException;
-
-    Boolean hasPermissionToSite(Integer uid, Integer sid) throws GroupNotFountException;
 
     List<Site> findAllUserSite(Integer uid) throws GroupNotFountException;
 

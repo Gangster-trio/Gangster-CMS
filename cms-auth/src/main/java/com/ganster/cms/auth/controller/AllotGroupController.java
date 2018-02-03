@@ -105,9 +105,9 @@ public class AllotGroupController {
                     group.setGroupName(groupName);
                     groupService.insert(group);
                     groupService.addUserToGroup(userId, groupName);
-//                    groupService.addPermissionToGroup(groupName,"update:"+group.getGroupId());
-//                    groupService.addPermissionToGroup(groupName, "delete:" + group.getGroupId());
-//                    groupService.addPermissionToGroup(groupName,"find:"+group.getGroupId());
+//                    groupService.addCategoryPermissionToGroup(groupName,"update:"+group.getGroupId());
+//                    groupService.addCategoryPermissionToGroup(groupName, "delete:" + group.getGroupId());
+//                    groupService.addCategoryPermissionToGroup(groupName,"find:"+group.getGroupId());
                 } else {
                     for (Group i : groupList) {
                         groupService.addUserToGroup(userId, i.getGroupName());
