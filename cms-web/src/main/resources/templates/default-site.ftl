@@ -61,12 +61,6 @@
                     data-slide-to="${carousel_index}"></li>
             </#list>
         </ol>
-    <#--<ol class="carousel-indicators">-->
-    <#--<li data-target="#myCarousel" data-slide-to="0" class="active"></li>-->
-    <#--<li data-target="#myCarousel" data-slide-to="1"></li>-->
-    <#--<li data-target="#myCarousel" data-slide-to="2"></li>-->
-    <#--</ol>-->
-        <!-- 轮播（Carousel）项目 -->
         <div class="carousel-inner">
                 <#list carouselList as carousel>
                         <div <#if carousel_index == 0>class="item active" <#else>class="item"</#if>>
@@ -85,11 +79,6 @@
     </div>
 
     <div class="page-header">
-    <#--<h1>Non-responsive Bootstrap</h1>-->
-    <#--<p class="lead">Disable the responsiveness of Bootstrap by fixing the width of the container and using the-->
-    <#--first-->
-    <#--grid system tier. <a href="http://getbootstrap.com/getting-started/#disable-responsive">Read the-->
-    <#--documentation</a> for more information.</p>-->
     </div>
 
     <#list articleList as article>

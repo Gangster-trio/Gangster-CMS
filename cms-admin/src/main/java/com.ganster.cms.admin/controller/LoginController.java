@@ -8,21 +8,19 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
 public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-    @RequestMapping("/login")
-    public Message login(Model model, HttpServletRequest request){
-        String username=request.getParameter("userName");
-        String password=request.getParameter("password");
-        logger.info("用户"+username+"进行登录");
-        UsernamePasswordToken token=new UsernamePasswordToken(username,password);
+
+    @PostMapping("/login")
+    public Message login(@RequestParam("userName") String userName, @RequestParam("password") String password) {
+        logger.info("用户" + userName + "进行登录");
+        UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
 //        token.setRememberMe(true);
         Message message=new Message();
         Subject subject= SecurityUtils.getSubject();
