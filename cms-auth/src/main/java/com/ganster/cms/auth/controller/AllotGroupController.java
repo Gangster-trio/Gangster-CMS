@@ -105,9 +105,9 @@ public class AllotGroupController {
                     group.setGroupName(groupName);
                     groupService.insert(group);
                     groupService.addUserToGroup(userId, groupName);
-                    groupService.addPermissionToGroup(groupName,"update:"+group.getGroupId());
-                    groupService.addPermissionToGroup(groupName,"delect:"+group.getGroupId());
-                    groupService.addPermissionToGroup(groupName,"find:"+group.getGroupId());
+//                    groupService.addPermissionToGroup(groupName,"update:"+group.getGroupId());
+//                    groupService.addPermissionToGroup(groupName, "delete:" + group.getGroupId());
+//                    groupService.addPermissionToGroup(groupName,"find:"+group.getGroupId());
                 } else {
                     for (Group i : groupList) {
                         groupService.addUserToGroup(userId, i.getGroupName());
@@ -128,8 +128,8 @@ public class AllotGroupController {
     }
 
 
-    @RequestMapping("/delect")
-    public int delectGroup(@RequestParam(value = "GroupId") Integer groupId) {
+    @RequestMapping("/delete")
+    public int deleteGroup(@RequestParam(value = "GroupId") Integer groupId) {
         this.index();
         Subject subject = SecurityUtils.getSubject();
         List<String> permissionName = this.getPermissionName("group", "delectgroup");
