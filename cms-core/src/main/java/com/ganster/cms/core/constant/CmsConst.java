@@ -1,4 +1,4 @@
-package com.ganster.cms.core;
+package com.ganster.cms.core.constant;
 
 public class CmsConst {
 

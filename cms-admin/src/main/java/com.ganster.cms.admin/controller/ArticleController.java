@@ -6,7 +6,6 @@ import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
-import com.ganster.cms.core.service.SkinService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -135,12 +134,12 @@ public class ArticleController extends BaseController {
 
     @GetMapping("/details/{id}")
     @ResponseBody
-    public CategoryWithArticel details(@PathVariable("id") Integer articleId) {
+    public CategoryWithArticle details(@PathVariable("id") Integer articleId) {
         LOGGER.info("通过了方法");
         Article article = articleService.selectByPrimaryKey(articleId);
         if (article != null) {
             Category category = categoryService.selectByPrimaryKey(article.getArticleCategoryId());
-            return new CategoryWithArticel(category.getCategoryTitle(), article);
+            return new CategoryWithArticle(category.getCategoryTitle(), article);
         } else return null;
     }
 

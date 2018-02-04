@@ -18,6 +18,7 @@
       <arg column="article_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="article_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="article_skin" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_in_homepage" javaType="java.lang.Boolean" jdbcType="BIT" />
     </constructor>
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.ganster.cms.core.pojo.Article">
@@ -37,6 +38,7 @@
       <arg column="article_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="article_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="article_skin" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="article_in_homepage" javaType="java.lang.Boolean" jdbcType="BIT" />
       <arg column="article_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
     </constructor>
   </resultMap>
@@ -101,7 +103,7 @@
   <sql id="Base_Column_List">
     article_id, article_title, article_type, article_author, article_url, article_order, 
     article_site_id, article_category_id, article_create_time, article_update_time, article_thumb, 
-    article_hit, article_desc, article_status, article_skin
+    article_hit, article_desc, article_status, article_skin, article_in_homepage
   </sql>
   <sql id="Blob_Column_List">
     article_content
@@ -165,13 +167,13 @@
       article_category_id, article_create_time, 
       article_update_time, article_thumb, article_hit, 
       article_desc, article_status, article_skin, 
-      article_content)
+      article_in_homepage, article_content)
     values (#{articleTitle,jdbcType=VARCHAR}, #{articleType,jdbcType=VARCHAR}, #{articleAuthor,jdbcType=VARCHAR}, 
       #{articleUrl,jdbcType=VARCHAR}, #{articleOrder,jdbcType=INTEGER}, #{articleSiteId,jdbcType=INTEGER}, 
       #{articleCategoryId,jdbcType=INTEGER}, #{articleCreateTime,jdbcType=TIMESTAMP}, 
       #{articleUpdateTime,jdbcType=TIMESTAMP}, #{articleThumb,jdbcType=VARCHAR}, #{articleHit,jdbcType=INTEGER}, 
       #{articleDesc,jdbcType=VARCHAR}, #{articleStatus,jdbcType=INTEGER}, #{articleSkin,jdbcType=VARCHAR}, 
-      #{articleContent,jdbcType=LONGVARCHAR})
+      #{articleInHomepage,jdbcType=BIT}, #{articleContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Article">
     <selectKey keyProperty="articleId" order="AFTER" resultType="java.lang.Integer">
@@ -221,6 +223,9 @@
       <if test="articleSkin != null">
         article_skin,
       </if>
+      <if test="articleInHomepage != null">
+        article_in_homepage,
+      </if>
       <if test="articleContent != null">
         article_content,
       </if>
@@ -267,6 +272,9 @@
       </if>
       <if test="articleSkin != null">
         #{articleSkin,jdbcType=VARCHAR},
+      </if>
+      <if test="articleInHomepage != null">
+        #{articleInHomepage,jdbcType=BIT},
       </if>
       <if test="articleContent != null">
         #{articleContent,jdbcType=LONGVARCHAR},
@@ -327,6 +335,9 @@
       <if test="record.articleSkin != null">
         article_skin = #{record.articleSkin,jdbcType=VARCHAR},
       </if>
+      <if test="record.articleInHomepage != null">
+        article_in_homepage = #{record.articleInHomepage,jdbcType=BIT},
+      </if>
       <if test="record.articleContent != null">
         article_content = #{record.articleContent,jdbcType=LONGVARCHAR},
       </if>
@@ -352,6 +363,7 @@
       article_desc = #{record.articleDesc,jdbcType=VARCHAR},
       article_status = #{record.articleStatus,jdbcType=INTEGER},
       article_skin = #{record.articleSkin,jdbcType=VARCHAR},
+      article_in_homepage = #{record.articleInHomepage,jdbcType=BIT},
       article_content = #{record.articleContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -373,7 +385,8 @@
       article_hit = #{record.articleHit,jdbcType=INTEGER},
       article_desc = #{record.articleDesc,jdbcType=VARCHAR},
       article_status = #{record.articleStatus,jdbcType=INTEGER},
-      article_skin = #{record.articleSkin,jdbcType=VARCHAR}
+      article_skin = #{record.articleSkin,jdbcType=VARCHAR},
+      article_in_homepage = #{record.articleInHomepage,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -423,6 +436,9 @@
       <if test="articleSkin != null">
         article_skin = #{articleSkin,jdbcType=VARCHAR},
       </if>
+      <if test="articleInHomepage != null">
+        article_in_homepage = #{articleInHomepage,jdbcType=BIT},
+      </if>
       <if test="articleContent != null">
         article_content = #{articleContent,jdbcType=LONGVARCHAR},
       </if>
@@ -445,6 +461,7 @@
       article_desc = #{articleDesc,jdbcType=VARCHAR},
       article_status = #{articleStatus,jdbcType=INTEGER},
       article_skin = #{articleSkin,jdbcType=VARCHAR},
+      article_in_homepage = #{articleInHomepage,jdbcType=BIT},
       article_content = #{articleContent,jdbcType=LONGVARCHAR}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
@@ -463,7 +480,8 @@
       article_hit = #{articleHit,jdbcType=INTEGER},
       article_desc = #{articleDesc,jdbcType=VARCHAR},
       article_status = #{articleStatus,jdbcType=INTEGER},
-      article_skin = #{articleSkin,jdbcType=VARCHAR}
+      article_skin = #{articleSkin,jdbcType=VARCHAR},
+      article_in_homepage = #{articleInHomepage,jdbcType=BIT}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
 </mapper>

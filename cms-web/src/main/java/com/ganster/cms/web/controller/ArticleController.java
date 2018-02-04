@@ -1,6 +1,6 @@
 package com.ganster.cms.web.controller;
 
-import com.ganster.cms.core.CmsConst;
+import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.Article;
 import com.ganster.cms.core.pojo.Category;
 import com.ganster.cms.core.pojo.Tag;

@@ -6,11 +6,11 @@ import com.ganster.cms.core.pojo.Category;
 import java.util.List;
 import java.util.Objects;
 
-public class CategoryWithArticle extends Category {
+public class CategoryWithArticleList extends Category {
 
     private List<Article> articleList;
 
-    public CategoryWithArticle(Category category, List<Article> articleList) {
+    public CategoryWithArticleList(Category category, List<Article> articleList) {
         super(category.getCategoryId()
                 , category.getCategoryTitle()
                 , category.getCategoryCreateTime()
@@ -23,6 +23,7 @@ public class CategoryWithArticle extends Category {
                 , category.getCategoryOrder()
                 , category.getCategorySkin()
                 , category.getCategoryType()
+                , category.getCategoryInHomepage()
         );
         this.articleList = articleList;
     }
@@ -38,15 +39,14 @@ public class CategoryWithArticle extends Category {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CategoryWithArticle)) return false;
+        if (!(o instanceof CategoryWithArticleList)) return false;
         if (!super.equals(o)) return false;
-        CategoryWithArticle that = (CategoryWithArticle) o;
+        CategoryWithArticleList that = (CategoryWithArticleList) o;
         return Objects.equals(articleList, that.articleList);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(super.hashCode(), articleList);
     }
 
