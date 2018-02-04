@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 
-    <title>${category.categoryTitle}</title>
+    <title>${result.category.categoryTitle}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <body>
 <div class="jumbotron">
-    <h1>${category.categoryTitle}</h1>
-    <p>${category.categoryDesc!}</p>
+    <h1>${result.category.categoryTitle}</h1>
+    <p>${result.category.categoryDesc!}</p>
 </div>
 <div class="row">
-    <#list articleList as article>
+    <#list result.articleList as article>
         <div class="col-xs-6 col-lg-4">
-            <h2>${article.articleTitle}</h2>
+            <h2>${result.article.articleTitle}</h2>
             <p>
-                ${article.articleDesc!"none description"}
+                ${result.article.articleDesc!"none description"}
             </p>
-            <p><a class="btn btn-default" href="/view/article/${article.articleId}" role="button">View details »</a></p>
+            <p><a class="btn btn-default" href="/view/article/${result.article.articleId}" role="button">View details »</a></p>
         </div>
     </#list>
 </div>

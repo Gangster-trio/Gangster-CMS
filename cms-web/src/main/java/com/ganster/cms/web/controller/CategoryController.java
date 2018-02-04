@@ -59,6 +59,8 @@ public class CategoryController {
         articleExample.or().andArticleCategoryIdEqualTo(id);
         List<Article> articleList = articleService.selectByExample(articleExample);
 
+        result.put("articleList",articleList)
+                .put("category",category);
 
         //---------------------------------------custom properties start----------------------------------------------//
 

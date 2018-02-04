@@ -125,19 +125,29 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper,Group,GroupExa
 
     @Override
     public void deleteGroup(Integer groupId) {
+        //delete user-group map
         UserGroupExample userGroupExample = new UserGroupExample();
         userGroupExample.or().andGroupIdEqualTo(groupId);
         userGroupMapper.deleteByExample(userGroupExample);
 
+        //delete group-permission map
         GroupPermissionExample groupPermissionExample = new GroupPermissionExample();
         groupPermissionExample.or().andGroupIdEqualTo(groupId);
         List<GroupPermission> groupPermissionList = groupPermissionMapper.selectByExample(groupPermissionExample);
-        if (groupPermissionList != null) {
-            for (GroupPermission groupPermission : groupPermissionList) {
-                permissionService.deleteByPrimaryKey(groupPermission.getPermissionId());
-            }
-        }
         groupPermissionMapper.deleteByExample(groupPermissionExample);
+
+        List<Integer> pidList = new ArrayList<>();
+        for (GroupPermission groupPermission : groupPermissionList) {
+            pidList.add(groupPermission.getPermissionId());
+        }
+
+        //delete group's permission
+        PermissionExample permissionExample = new PermissionExample();
+        permissionExample.or().andPermissionIdIn(pidList);
+        permissionService.deleteByExample(permissionExample);
+
+        //delete group
+        deleteByPrimaryKey(groupId);
     }
 
     private void removeUserFromGroup(Integer Uid, GroupExample groupExample) throws UserNotFoundException, GroupNotFountException {
