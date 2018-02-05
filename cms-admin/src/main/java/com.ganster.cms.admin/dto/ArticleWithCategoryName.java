@@ -20,18 +20,18 @@ public class ArticleWithCategoryName extends Article {
         this.categoryName = categoryName;
     }
 
-    public ArticleWithCategoryName(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, String categoryName) {
-        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin);
+    public ArticleWithCategoryName(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, Boolean inHomepage, String categoryName) {
+        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin, inHomepage);
         this.categoryName = categoryName;
     }
 
-    public ArticleWithCategoryName(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, String articleContent, String categoryName) {
-        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin, articleContent);
+    public ArticleWithCategoryName(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, Boolean inHomepage, String articleContent, String categoryName) {
+        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin, inHomepage, articleContent);
         this.categoryName = categoryName;
     }
 
-    public ArticleWithCategoryName(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, String articleContent, String categoryName, String tagsName) {
-        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin, articleContent);
+    public ArticleWithCategoryName(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, String articleContent, Boolean inHomepage, String categoryName, String tagsName) {
+        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin, inHomepage, articleContent);
         this.categoryName = categoryName;
         this.tagsName = tagsName;
     }
@@ -80,6 +80,7 @@ public class ArticleWithCategoryName extends Article {
                 , article.getArticleDesc()
                 , article.getArticleStatus()
                 , article.getArticleSkin()
+                , article.getArticleInHomepage()
                 , article.getArticleContent()
         );
         this.categoryName = categoryName;

@@ -10,13 +10,13 @@ import java.util.Date;
 public class ArticleWithTag extends Article {
     private String tags;
 
-    public ArticleWithTag(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, String tags) {
-        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin);
+    public ArticleWithTag(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, Boolean inHomepage, String tags) {
+        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin, inHomepage);
         this.tags = tags;
     }
 
-    public ArticleWithTag(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, String articleContent, String tags) {
-        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin, articleContent);
+    public ArticleWithTag(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, Boolean inHomepage, String articleContent, String tags) {
+        super(articleId, articleTitle, articleType, articleAuthor, articleUrl, articleOrder, articleSiteId, articleCategoryId, articleCreateTime, articleUpdateTime, articleThumb, articleHit, articleDesc, articleStatus, articleSkin, inHomepage, articleContent);
         this.tags = tags;
     }
 
