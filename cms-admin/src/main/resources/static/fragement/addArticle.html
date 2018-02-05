@@ -5,13 +5,17 @@
     <meta charset="utf-8"/>
     <title></title>
     <link href="/layui/css/layui.css" rel="stylesheet"/>
-    <script src="/layui/layui.js"></script>
-    <script
-            src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-            crossorigin="anonymous"></script>
+    <link href="/tag/css/tag.css"/>
+    <script src="/layui/layui.all.js"></script>
+    <script type="text/javascript" src="/util/jquery.min.js"></script>
     <script src="/util/jquery.form.js"></script>
     <script src="/util/util.js"></script>
+    <link rel="stylesheet" type="text/css" href="/tag/jquery.tagsinput.css"/>
+    <script type="text/javascript" src="/util/jquery.tagsinput.js"></script>
+    <script type='text/javascript'
+            src='/util/jquery-ui.min.js'></script>
+    <link rel="stylesheet" type="text/css"
+          href="/tag/jquery-ui.css"/>
 </head>
 <body style="background-color:#eee;">
 <br/>
@@ -30,7 +34,7 @@
                class="layui-input">
     </div>
 </div>
-<form class="layui-form" action="">
+<form>
     <div class="layui-form-item">
         <label class="layui-form-label">文章属性</label>
         <div class="layui-input-block">
@@ -66,6 +70,7 @@
         <input name="file" style="margin-left: 40px" type="file" onchange="uploadImg()"/>
     </form>
 </div>
+
 <div class="layui-form-item">
     <label class="layui-form-label">文章作者</label>
     <div class="layui-input-inline">
@@ -80,6 +85,20 @@
         <textarea id="description" name="description" required class="layui-textarea" placeholder="添加描述"></textarea>
     </div>
 </div>
+<div class="block">
+    <div id="wordTags"></div>
+    <input id="wordInput" type="text" name="" placeholder="请输入关键词以空格结尾"/>
+    <input id="wordHiddenInput" type="hidden" name=""/>
+</div>
+<form>
+    <input type="text" id="addNewTag" value=""/><input type="submit" onclick="addNewTag();" value="添加"/>
+    <p><label>Technologies: (Programming languages in yellow)</label>
+        <input id="tags_2" type="text" class="tags" value="php,ios,javascript,ruby,android,kindle"/></p>
+
+    <!--    <p><label>Autocomplete:</label>
+            <input id='tags_3' type='text' class='tags'></p>-->
+
+</form>
 <p style="margin-left: 50px"> 文章内容</p>
 <div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
     <textarea name="txt" id="txt" required style="display:none;"></textarea>
@@ -106,8 +125,23 @@
             });
             var categoryId = getUrlVar("categoryId");
             if (!categoryId) $("#show").show();  //categoryId未定义就是false
-            else $("#show").hide();
+            else {
+                $("#show").hide();
+                $("#parentId").val(categoryId);
+            }
             document.getElementById('btn1').onclick = function () {
+                var tags = $("#tags_2").val();
+                var article = {
+                    "articleTitle": $("#articleTitle").val(),
+                    "articleType": chooseValue("choose"),
+                    "articleAuthor": $("#author").val(),
+                    "articleOrder": $("#order").val(),
+                    "articleCategoryId": $("#parentId").val(),
+                    "articleDesc": $("#desc").val(),
+                    "articleSkin": chooseValue("skin"),
+                    "articleContent": content,
+                    "tags": tags
+                };
                 var categoryId;
                 if (!categoryId) categoryId = document.getElementById("parentId").value;
                 var content = layedit.getContent(editIndex);
@@ -116,16 +150,7 @@
                     type: 'post',
                     dataType: 'json',
                     contentType: "application/json",
-                    data: JSON.stringify({
-                        "articleTitle": $("#articleTitle").val(),
-                        "articleType": chooseValue("choose"),
-                        "articleAuthor": $("#author").val(),
-                        "articleOrder": $("#order").val(),
-                        "articleCategoryId": categoryId,
-                        "articleDesc": $("#desc").val(),
-                        "articleSkin": chooseValue("skin"),
-                        "articleContent": content
-                    }),
+                    data: JSON.stringify(article),
                     success: function (data) {
                         console.log(data);
                         if (data.code === 0) {
@@ -169,4 +194,47 @@
         };
         $("#img").ajaxSubmit(options);
     }
+</script>
+<script type="text/javascript">
+
+    function onAddTag(tag) {
+        alert("Added a tag: " + tag);
+    }
+
+    function onRemoveTag(tag) {
+        alert("Removed a tag: " + tag);
+    }
+
+    function onChangeTag(input, tag) {
+        alert("Changed a tag: " + tag);
+    }
+
+    $(function () {
+
+        $('#tags_1').tagsInput({width: 'auto'});
+        $('#tags_2').tagsInput({
+            width: 'auto',
+            onChange: function (elem, elem_tags) {
+                var languages = ['php', 'ruby', 'javascript'];
+                $('.tag', elem_tags).each(function () {
+                    if ($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+                        $(this).css('background-color', 'yellow');
+                });
+            }
+        });
+        $('#tags_3').tagsInput({
+            width: 'auto',
+
+            //autocomplete_url:'test/fake_plaintext_endpoint.html' //jquery.autocomplete (not jquery ui)
+            autocomplete_url: 'test/fake_json_endpoint.html' // jquery ui autocomplete requires a json endpoint
+        });
+
+
+// Uncomment this line to see the callback functions in action
+//			$('input.tags').tagsInput({onAddTag:onAddTag,onRemoveTag:onRemoveTag,onChange: onChangeTag});
+
+// Uncomment this line to see an input with no interface for adding new tags.
+//			$('input.tags').tagsInput({interactive:false});
+    });
+
 </script>

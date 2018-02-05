@@ -96,9 +96,25 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         }
     }
 
-     public List<Article> selectArticleByCategoryId(Integer id) {
+    public List<Article> selectArticleByCategoryId(Integer id) {
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleCategoryIdEqualTo(id);
         return articleMapper.selectByExample(articleExample);
+    }
+
+    public int deleteArticleWithTags(Integer articleId) {
+        TagArticleExample tagArticleExample = new TagArticleExample();
+        tagArticleExample.or().andArticleIdEqualTo(articleId);
+        List<TagArticle> list = tagArticleMapper.selectByExample(tagArticleExample);   //得到要删除文章的所有标签
+        tagArticleMapper.deleteByExample(tagArticleExample);   //删除中间表
+        for (TagArticle tagArticle : list) {
+            TagExample tagExample = new TagExample();
+            tagExample.or().andTagIdEqualTo(tagArticle.getTagId());
+            long count = tagService.countByExample(tagExample);
+            if (count == 1) {
+                tagService.deleteByPrimaryKey(tagArticle.getTagId());
+            }
+        }
+        return articleMapper.deleteByPrimaryKey(articleId);
     }
 }

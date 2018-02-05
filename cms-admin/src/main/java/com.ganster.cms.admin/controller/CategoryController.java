@@ -2,14 +2,16 @@ package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
+import com.ganster.cms.admin.util.PageUtil;
+import com.ganster.cms.admin.util.UserUtil;
+import com.ganster.cms.core.CmsConst;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
-import com.ganster.cms.core.service.SiteService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.ganster.cms.core.service.PermissionService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,25 +30,17 @@ public class CategoryController extends BaseController {
     private ArticleService articleService;
 
     @Autowired
-    private SiteService siteService;
-    private Integer siteid;
+    private PermissionService permissionService;
+
 
     @GetMapping("/list")
     public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-        siteid = siteId;
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(siteId);
-//        List<Category> categories = categoryService.selectByExample(categoryExample);
-        PageInfo<Category> pageInfo;
         List<Category> list = categoryService.selectByExample(categoryExample);
+        Integer userId = UserUtil.getCurrentUserId();
         if (!list.isEmpty()) {
-            if (page != null && limit != null) {
-                pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
-                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) list);
-            } else {
-                pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
-                return super.buildAjaxData(0, "success", pageInfo.getSize(), (ArrayList) list);
-            }
+            return PageUtil.getAjaxCateogryData(page, limit, categoryExample, categoryService, list);
         } else {
             return super.buildAjaxData(1, "no data", 0, null);
         }
@@ -88,19 +82,37 @@ public class CategoryController extends BaseController {
     }
 
     @GetMapping("/delete/{id}")
-    public Message delete(@PathVariable("id") Integer id) {
+    public Message delete(@PathVariable("id") Integer id, ModelMap modelMap) {
+        Category category = categoryService.selectByPrimaryKey(id);
+        Integer userId = UserUtil.getCurrentUserId();
+
+
+        //Determine whether current user permissions
+        if (!(permissionService.hasCategoryPermission(userId, category.getCategorySiteId(), id, CmsConst.PERMISSION_DEL))) {
+            return super.buildMessage(2, "no permisison", null);
+        }
+
+
+        //Detemermine whether current category article,if true,delete article and category
         List<Article> list = articleService.selectArticleByCategoryId(id);
         if (!list.isEmpty()) {
             for (Article article : list) {
                 articleService.deleteByPrimaryKey(article.getArticleId());
             }
         }
-        if (categoryService.deleteByPrimaryKey(id) == 1) return super.buildMessage(0, "success", 1);
-        else return super.buildMessage(1, "false", 0);
+        if (categoryService.deleteByPrimaryKey(id) == 1) {
+            return super.buildMessage(0, "success", 1);
+        } else {
+            return super.buildMessage(1, "false", 0);
+        }
     }
 
     @PostMapping("/update/{id}")
     public Message update(@PathVariable("id") Integer id, @RequestBody Category category) {
+        Integer userId = UserUtil.getCurrentUserId();
+        if (!(permissionService.hasCategoryPermission(userId, category.getCategorySiteId(), userId, CmsConst.PERMISSION_UPDATE))) {
+            return super.buildMessage(2, "no permission", null);
+        }
         category.setCategoryId(id);
         category.setCategoryUpdateTime(new Date());
         int count = categoryService.updateByPrimaryKeyWithBLOBs(category);
@@ -121,5 +133,21 @@ public class CategoryController extends BaseController {
         int count = categoryService.insert(category);
         if (count == 1) return new Message(0, "success", count);
         else return new Message(1, "false", count);
+    }
+
+    /**
+     * 权限认证的函数
+     *
+     * @param id 栏目的id
+     * @return
+     */
+    @GetMapping("/privalige/{id}")
+    public Message judgePrivaludge(@PathVariable("id") Integer id) {
+        Integer userId = UserUtil.getCurrentUserId();
+        if (!(permissionService.hasCategoryPermission(userId, id, userId, CmsConst.PERMISSION_UPDATE))) {
+            return super.buildMessage(2, "no permission", null);
+        } else {
+            return super.buildMessage(0, "yes", null);
+        }
     }
 }

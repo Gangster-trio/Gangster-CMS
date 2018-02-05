@@ -8,6 +8,11 @@
 <table id="column_table" class="layui-table" style="margin: 0px" lay-filter="columnlist"></table>
 
 <script>
+    //判断该用户是否拥有对栏目的基本操作
+    function judgePrivalige(id) {
+
+    }
+
     var categoryId;
     layui.use('table', function () {
         var first = true;
@@ -15,7 +20,7 @@
         if (siteId) {
             table.render({
                 elem: '#column_table'
-                , url: '/category/list?siteId=' + siteId //数据接口
+                , url: '/category/list?siteId=' + siteId
                 , page: true //开启分页
                 , cols: [[ //表头
                     {field: 'categoryId', title: 'ID', width: '80', sort: true, fixed: 'left'}
@@ -44,49 +49,90 @@
                 if (layEvent === 'detail') { //查看
                     showAtRight("/fragement/listArticle.html");
                 } else if (layEvent === 'del') { //删除
-                    layer.confirm('真的删除行么', function (index) {
-                            deleteCategory(id);
-                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                            layer.close(index);
-                            showAtRight("/fragement/listCategory.html");
-                        }
-                    )
-                } else if (layEvent === 'edit') { //  跳转到文章编辑界面
-                    layer.open({
-                        id: 1,
-                        type: 2,
-                        skin: 'layui-layer-rim',
-                        area: ['700px', '600px'],
-                        closeBtn: 1,
-                        anim: 0,
-                        maxmin: true,
-                        content: '/fragement/editCategory.html?id=' + categoryId,
-                        success: function (layero, index) {
-                            console.log(layero, index);
-                        },
-                        end: function () {
-                            showAtRight("/fragement/listCategory.html");
+                    var delPrivalige = true;
+                    $.ajax({
+                        url: "category/privalige/" + id,
+                        dataType: "json",
+                        type: "get",
+                        success: function (data) {
+                            if (data.code === 2) {
+                                delPrivalige = false;
+                                layer.msg("sorry ,you have not privalige");
+                            }
                         }
                     });
+                    if (delPrivalige) {
+                        layer.confirm('真的删除行么', function (index) {
+                                deleteCategory(id);
+                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                layer.close(index);
+                                showAtRight("/fragement/listCategory.html");
+                            }
+                        )
+                    }
+                } else if (layEvent === 'edit') { //  跳转到栏目编辑界面
+                    var editPrivalige = true;
+                    $.ajax({
+                        url: "category/privalige/" + id,
+                        dataType: "json",
+                        type: "get",
+                        success: function (data) {
+                            if (data.code === 2) {
+                                editPrivalige = false;
+                                layer.msg("sorry ,you have not privalige");
+                            }
+                        }
+                    });
+                    if (editPrivalige) {
+                        layer.open({
+                            id: 1,
+                            type: 2,
+                            skin: 'layui-layer-rim',
+                            area: ['700px', '600px'],
+                            closeBtn: 1,
+                            anim: 0,
+                            maxmin: true,
+                            content: '/fragement/editCategory.html?id=' + categoryId,
+                            success: function (layero, index) {
+                                console.log(layero, index);
+                            },
+                            end: function () {
+                                showAtRight("/fragement/listCategory.html");
+                            }
+                        });
+                    }
                 } else if (layEvent === 'add') {   //跳转到添加文章界面
-                    layer.open({
-                        id: 1,
-                        type: 2,
-                        skin: 'layui-layer-rim',
-                        area: ['700px', '600px'],
-                        closeBtn: 1,
-                        anim: 0,
-                        maxmin: true,
-                        content: '/fragement/addArticle.html?categoryId=' + categoryId,
-                        success: function (layero, index) {
-                            console.log(layero, index);
-                        },
-                        end: function () {
-                            showAtRight("/fragement/listCategory.html");
+                    var addPrivalige = true;
+                    $.ajax({
+                        url: "category/privalige/" + id,
+                        dataType: "json",
+                        type: "get",
+                        success: function (data) {
+                            if (data.code === 2) {
+                                privalige = false;
+                                layer.msg("sorry ,you have not privalige");
+                            }
                         }
                     });
+                    if (addPrivalige) {
+                        layer.open({
+                            id: 1,
+                            type: 2,
+                            skin: 'layui-layer-rim',
+                            area: ['700px', '600px'],
+                            closeBtn: 1,
+                            anim: 0,
+                            maxmin: true,
+                            content: '/fragement/addArticle.html?categoryId=' + categoryId,
+                            success: function (layero, index) {
+                                console.log(layero, index);
+                            },
+                            end: function () {
+                                showAtRight("/fragement/listCategory.html");
+                            }
+                        });
+                    }
                 }
-
             });
         } else {
             layer.open({
@@ -140,15 +186,20 @@
                     layer.msg("server no response : " + url);
                 },
                 success: function (data) {
-                    if (data !== 1) {
-                        layer.msg("delete failed.")
-                    } else {
-                        layer.msg("delete succeed.")
+                    if (data.code === 0) {
+                        layer.msg("delete success.")
+                    } else if (data.code === 1) {
+                        layer.msg("delete false");
+                    } else if (data === 2) {
+                        layer.msg("sorry,you have not privalige");
                     }
                 }
             }
-        )
+        );
+
     }
+
+
 </script>
 
 </html>

@@ -33,8 +33,7 @@
         if (siteId) {
             table.render({
                 elem: '#article_table'
-                , url: 'article/list?siteId='+siteId
-
+                , url: category = -1 ? 'article/list?siteId=' + siteId : 'article/categorylist?id=' + categoryId
                 , page: true //开启分页
                 , cols: [[ //表头
                     {field: 'articleId', title: 'ID', width: 60, sort: true, fixed: 'left'}
@@ -54,7 +53,6 @@
                         layer.msg("加载完成 共" + count + "条数据");
                         first = false;
                     }
-                    current_column_id = -1;
                 }
             });
             table.on('tool(articleListFilter)', function (obj) { //注：tool是工具条事件名，articleListFilter是table原始容器的属性 lay-filter="对应的值"
@@ -72,7 +70,7 @@
                             dataType: 'json',
                             success: function (data) {
                                 console.log(data);
-                                if (data === 1) {
+                                if (data.code === 0) {
                                     //删除这一行
                                     obj.del();
                                     //关闭弹框
@@ -91,6 +89,7 @@
                     });
 
                 } else if (layEvent === 'edit') {
+
                     console.log(data);
                     layer.open({
                         id: 1,

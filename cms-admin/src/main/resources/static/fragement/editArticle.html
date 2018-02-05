@@ -5,13 +5,17 @@
     <meta charset="utf-8"/>
     <title></title>
     <link href="/layui/css/layui.css" rel="stylesheet"/>
-    <script src="/layui/layui.js"></script>
-    <script
-            src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-            crossorigin="anonymous"></script>
+    <link href="/tag/css/tag.css"/>
+    <script src="/layui/layui.all.js"></script>
+    <script type="text/javascript" src="/util/jquery.min.js"></script>
     <script src="/util/jquery.form.js"></script>
     <script src="/util/util.js"></script>
+    <link rel="stylesheet" type="text/css" href="/tag/jquery.tagsinput.css"/>
+    <script type="text/javascript" src="/util/jquery.tagsinput.js"></script>
+    <script type='text/javascript'
+            src='/util/jquery-ui.min.js'></script>
+    <link rel="stylesheet" type="text/css"
+          href="/tag/jquery-ui.css"/>
 </head>
 <body style="background-color:#eee;">
 <br/>
@@ -80,6 +84,17 @@
         <textarea id="description" name="description" required class="layui-textarea" placeholder="添加描述"></textarea>
     </div>
 </div>
+<form>
+    <!--<p><label>Defaults:</label>
+        <input id="tags_1" type="text" class="tags" value="foo,bar,baz,roffle"/></p>
+-->
+    <p><label>Technologies: (Programming languages in yellow)</label>
+        <input id="tags_2" type="text" class="tags" value=""/></p>
+
+    <!--    <p><label>Autocomplete:</label>
+            <input id='tags_3' type='text' class='tags'></p>-->
+
+</form>
 <p style="margin-left: 50px"> 文章内容</p>
 <div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
     <textarea name="txt" id="txt" required style="display:none;"></textarea>
@@ -104,9 +119,10 @@
                 $("#description").val(data.articleDesc);
                 $("#txt").val(data.articleContent);
                 $("#belongCategory").val(data.categoryName);
+                // $("#tags_2").attr("value", data.tagsName);
+                $("#tags_2").val(data.tagsName);
             }
         });
-
         layui.use('layedit', function () {
             var layedit = layui.layedit;
 
@@ -126,6 +142,7 @@
                 var categoryId = document.getElementById("parentId").value;
                 if (categoryId.length === 0) categoryId = initCategoryId;
                 var articleContent = layedit.getContent(editIndex);     //得到layui编辑器里边的文章
+                var tags = $("#tags_2").val();
                 $.ajax({
                     url: "/article/update/" + getUrlVar("id"),
                     type: 'post',
@@ -138,8 +155,9 @@
                         "articleOrder": $("#order").val(),
                         "articleCategoryId": categoryId,
                         "articleDesc": $("#desc").val(),
+                        "articleSkin": chooseValue("skin"),
                         "articleContent": articleContent,
-                        "articleSkin": chooseValue("skin")
+                        "tags": tags
                     }),
                     success: function (data) {
                         console.log(data);
@@ -184,4 +202,47 @@
         };
         $("#img").ajaxSubmit(options);
     }
+</script>
+<script type="text/javascript">
+
+    function onAddTag(tag) {
+        alert("Added a tag: " + tag);
+    }
+
+    function onRemoveTag(tag) {
+        alert("Removed a tag: " + tag);
+    }
+
+    function onChangeTag(input, tag) {
+        alert("Changed a tag: " + tag);
+    }
+
+    $(function () {
+
+        $('#tags_1').tagsInput({width: 'auto'});
+        $('#tags_2').tagsInput({
+            width: 'auto',
+            onChange: function (elem, elem_tags) {
+                var languages = ['php', 'ruby', 'javascript'];
+                $('.tag', elem_tags).each(function () {
+                    if ($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+                        $(this).css('background-color', 'yellow');
+                });
+            }
+        });
+        $('#tags_3').tagsInput({
+            width: 'auto',
+
+            //autocomplete_url:'test/fake_plaintext_endpoint.html' //jquery.autocomplete (not jquery ui)
+            autocomplete_url: 'test/fake_json_endpoint.html' // jquery ui autocomplete requires a json endpoint
+        });
+
+
+// Uncomment this line to see the callback functions in action
+//			$('input.tags').tagsInput({onAddTag:onAddTag,onRemoveTag:onRemoveTag,onChange: onChangeTag});
+
+// Uncomment this line to see an input with no interface for adding new tags.
+//			$('input.tags').tagsInput({interactive:false});
+    });
+
 </script>

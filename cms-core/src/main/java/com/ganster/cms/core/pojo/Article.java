@@ -207,6 +207,17 @@ public class Article implements Serializable {
         this.articleContent = articleContent == null ? null : articleContent.trim();
     }
 
+    public Article(String articleTitle, String articleType, String articleAuthor, Integer articleOrder, Integer articleCategoryId, String articleDesc, String articleSkin, String articleContent) {
+        this.articleTitle = articleTitle;
+        this.articleType = articleType;
+        this.articleAuthor = articleAuthor;
+        this.articleOrder = articleOrder;
+        this.articleCategoryId = articleCategoryId;
+        this.articleDesc = articleDesc;
+        this.articleSkin = articleSkin;
+        this.articleContent = articleContent;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {

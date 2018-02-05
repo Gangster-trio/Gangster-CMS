@@ -82,7 +82,7 @@
 <script></script>
 <script>
     var siteId;
-
+    var category=-1;
     function init(id) {
         siteId = id;
         layer.open({
