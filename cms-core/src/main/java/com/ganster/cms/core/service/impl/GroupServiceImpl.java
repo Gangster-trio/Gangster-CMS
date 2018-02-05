@@ -130,7 +130,7 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper,Group,GroupExa
         userGroupExample.or().andGroupIdEqualTo(groupId);
         userGroupMapper.deleteByExample(userGroupExample);
 
-        //delete group-permission map
+        //delete group-permission map        GroupPermissionExample groupPermissionExample = new GroupPermissionExample();
         GroupPermissionExample groupPermissionExample = new GroupPermissionExample();
         groupPermissionExample.or().andGroupIdEqualTo(groupId);
         List<GroupPermission> groupPermissionList = groupPermissionMapper.selectByExample(groupPermissionExample);

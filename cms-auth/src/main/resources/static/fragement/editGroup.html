@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户组编辑</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <script src="../js/util.js"></script>
+    <script src="../js/jquery.form.js"></script>
+    <script src="../layui/layui.all.js"></script>
+</head>
+<body style="background-color:#eee;">
+<br/>
+<div class="layui-form-item">
+    <label class="layui-form-label">用户组名:</label>
+    <div class="layui-input-inline">
+        <input type="text" id="groupName" name="groupName" required lay-verify="required" placeholder="用户组名"
+               autocomplete="off"
+               class="layui-input">
+    </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">用户组描述:</label>
+    <div class="layui-input-inline">
+        <input type="text" id="groupDesc" name="groupDesc" required lay-verify="required" placeholder="用户组描述"
+               autocomplete="off"
+               class="layui-input">
+    </div>
+</div>
+<input type="button" value="提交信息" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
+</body>
+</html>
+<script type="text/javascript">
+    window.onload = function () {
+        console.log(getUrlVar('groupId'))
+        $.ajax({
+            type : "get",
+            url : "/groupL/find/" + getUrlVar("groupId"),//得到需要更新的用户组的Id
+            success:function (data) {
+                console.log(data);
+                $("#groupName").val(data.groupName);
+                $("#groupDesc").val(data.groupDesc);
+            }
+        });
+    }
+    document.getElementById('btn1').onclick = function () {
+        var groupName = document.getElementById("groupName").value;
+        var groupDesc = document.getElementById("groupDesc").value;
+        console.log(groupName);
+        $.ajax({
+            url: "/groupL/update/"+getUrlVar("groupId"),
+            type:'post',
+            datatype:'json',
+            contentType: "application/json",
+            data:JSON.stringify({
+                "groupId":getUrlVar("groupId"),
+                "groupName":groupName,
+                "groupDesc":groupDesc
+            }),
+            success:function (data) {
+                console.log(data);
+                if (data.code == 0){
+                    layer.msg("修改成功", {icon: 6});
+                    showAtRight("/login/listGroup.html");
+                    location.reload(true);
+                } else {
+                layer.msg("修改失败", {icon: 5});
+                }
+            },
+        });
+    }
+</script>

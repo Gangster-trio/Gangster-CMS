@@ -1,0 +1,133 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>用户组管理</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <script src="../js/util.js"></script>
+    <script src="../js/jquery.form.js"></script>
+    <script src="../layui/layui.all.js"></script>
+</head>
+<body>
+<button style="float: right; margin: 5px" class="layui-btn layui-btn-normal" id="groupAdd">添加用户组</button>
+<div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
+    <p>用户组管理</p>
+</div>
+<table id="group_table" lay-filter="groupListFilter"></table>
+
+<script type="text/html" id="groupToolBar" >
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail" value="查看权限">
+            <i class="layui-icon">&#xe705;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="edit" >
+            <i class="layui-icon">&#xe642;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        var first = true;
+        table.render({
+            elem: '#group_table'
+            ,url:'/groupL/find'
+            ,cols: [[
+                {field:'groupId', width:200, title: '用户组ID', sort: true}
+                ,{field:'groupName', width:200, title: '用户名'}
+                ,{field:'groupDesc', width:200, title: '描述'}
+                ,{field:'permissionNameList', width:500, title: '权限'}
+                ,{title:'操作', width:300, align: 'center',  toolbar: '#groupToolBar'}
+            ]]
+            , limits: [10, 15, 20, 40, 80, 100]
+            ,done: function (res, curr, count) {
+                if (first) {
+                    layer.msg("加载完成 共" + count + "条数据");
+                    first = false;
+                }
+            }
+            ,page: true
+        });
+        //监听工具条
+        table.on('tool(groupListFilter)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                /*layer.msg();*/
+                layer.alert('查看用户：'+ data.groupName + ' 的权限操作')
+                showAtRight("/fragement/listPermission.html")
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    console.log(data);
+                    obj.del();
+                    layer.close(index);
+                    $.ajax({
+                        url: "/groupL/delete/" + data.groupId,
+                        type: 'get',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            if (data === 1) {
+                                //删除这一行
+                                obj.del();
+                                //关闭弹框
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 6});
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                            }
+
+                        },
+                        end: function () {
+                            showAtRight("/fragement/listGroup.html");
+                        }
+                    });
+                });
+            } else if(obj.event === 'edit'){
+               console.log(data)
+                layer.open({
+                    id:1,
+                    type:2,
+                    area:['700px','600px'],
+                    closeBtn:1,
+                    anim:0,
+                    maxmin: true,
+                    content:'/fragement/editGroup.html?groupId=' + data.groupId,
+                    success:function (layero, index) {
+                        console.log(layero, index);
+                    },
+                    end:function () {
+                        showAtRight('/login/listGroup.html')
+                    }
+                })
+            }
+        });
+    });
+</script>
+<script>
+    var groupAdd = $("#groupAdd").on('click',function () {
+        layer.open({
+            id :2,
+            type:2,
+            skin: 'layui-layer-rim',
+            area:['700px','600px'],
+            closeBtn:1,
+            anim: 0,
+            maxmin: true,
+            content:'/fragement/addGroup.html',
+            success:function (layero, index) {
+                console.log(layero, index);
+            },
+            end: function () {
+                showAtRight("/login/listGroup.html");
+            }
+        })
+    })
+</script>
+</body>
+</html>
