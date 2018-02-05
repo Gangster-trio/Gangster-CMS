@@ -1,10 +1,11 @@
 spring:
-
+  jackson:
+    date-format: yyyy-MM-DD
   datasource:
     druid:
       url: jdbc:mysql://db_server:3306/db_cms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
       username: root
-      password: "000000"
+      password: "$%^YGR^&UHGT^&U"
       driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
      mode: LEGACYHTML5

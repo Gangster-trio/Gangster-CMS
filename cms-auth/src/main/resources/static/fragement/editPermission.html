@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+        #myCheck + label {
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid #d3d3d3;
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            left: line-height: 20px;
+        }
+
+        #myCheck:checked + label {
+            background-color: #eee;
+        }
+
+        #myCheck:checked + label:after {
+            content: "\2714";
+        }
+
+        input {
+            display: none;
+        }
+
+    </style>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../layui/css/layui.css" rel="stylesheet" media="all">
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <script src="../layui/lay/modules/form.js"></script>
+    <script src="../layui/layui.js"></script>
+    <script src="../js/util.js"></script>
+    <script src="../js/jquery.form.js"></script>
+    <script src="../layui/layui.all.js"></script>
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>权限分配</legend>
+</fieldset>
+<h1 id="">这是角色名</h1>
+<br/>
+<!--<form class="layui-form>-->
+<!--<div class=" layui-form-item-->
+<!--">-->
+<!--<label class="layui-form-label">文章管理</label>-->
+<!--<div class="layui-input-block">-->
+    <!--<input type="checkbox" name="choose_a" title="增加">-->
+    <!--<input type="checkbox" name="choose_a" title="删除">-->
+    <!--<input type="checkbox" name="choose_a" title="更新">-->
+    <!--<input type="checkbox" name="choose_a" title="查找">-->
+<!--</div>-->
+
+<!--</div>-->
+<!--</form>-->
+
+<!--<div class="layui-form-item" pane="">-->
+<!--<label class="layui-form-label">原始复选框</label>-->
+<!--<div class="layui-input-block">-->
+<!--<input type="checkbox" name="like1[write]" lay-skin="primary" title="写作" checked="">-->
+<!--<input type="checkbox" name="like1[read]" lay-skin="primary" title="阅读">-->
+<!--<input type="checkbox" name="like1[game]" lay-skin="primary" title="游戏" disabled="">-->
+<!--</div>-->
+<!--</div>-->
+<!--</form>-->
+<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
+</body>
+</html>
+<script type="text/javascript">
+    $("#btn").click(function () {
+        $.each($('input:checkbox'), function () {
+            if (this.checked) {
+                window.alert("你选了：" +
+                    $('input[type=checkbox]:checked').length + "个，其中有：" + $(this).val());
+            }
+        });
+    });
+</script>
+<!--//    function getchoose() {-->
+<!--//        var article_Permission = [];-->
+<!--//        $('input[name="choose_a"]:checked').each(function () {-->
+<!--//            article_Permission.push($(this).val());-->
+<!--//        })-->
+<!--//        console.log(article_Permission);-->
+<!--//    }-->
+<!--//    $("#btn").click(function(){-->
+<!--//       var  arr=new Array();-->
+<!--//       $("#layui-input-block:checkbox[checked]").each(function(i){-->
+<!--//           arr[i]=$(this).val();-->
+<!--//       });-->
+<!--//       var vals=arr.join(",");-->
+<!--//       console.log(vals);-->
+<!--//    });-->
+
+<!--//    $.ajax({-->
+<!--//        url: "/permission/update",-->
+<!--//        type: 'post',-->
+<!--//        dataType: "application/json",-->
+<!--//        data: JSON.stringify({-->
+<!--//            "articlePermission":getchoose()-->
+<!--//        }),-->
+<!--//        success:function(data){-->
+<!--//            console.log(data);-->
+<!--//            if (data.code === 0) {-->
+<!--//                //关闭弹框-->
+<!--//                layer.msg("添加成功", {icon: 6});-->
+<!--//            } else {-->
+<!--//                layer.msg("添加失败", {icon: 5});-->
+<!--//            }-->
+<!--//        }-->
+<!--//    })-->

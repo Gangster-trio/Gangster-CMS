@@ -15,9 +15,9 @@
 <body>
 <!--<script src="/util/util.js"></script>-->
 <!--head part-->
-<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="user">添加角色</button>
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="user">添加用户</button>
 <div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
-    <p>角色管理</p>
+    <p>用户管理</p>
 </div>
 <!--body part-->
 <table id="user_table" lay-filter="userListFilter"></table>
@@ -71,7 +71,18 @@
             console.log(data);
             layEvent = obj.event; //获得 lay-event 对应的值
             if (layEvent === 'detail') {
-                showAtRight("/fragement/listUser.html");
+                layer.open({
+                    id: 1,
+                    type: 2,
+                    area: ['700px', '600px'],
+                    closeBtn: 1,
+                    anim: 0,
+                    maxmin: true,
+                    content: '/fragement/allotGroup.html?id=' + data.userId,
+                    success: function (layero, index) {
+                        console.log(layero, index);
+                    }
+                });
             } else if (layEvent === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     console.log(data);
@@ -91,9 +102,6 @@
                                 layer.msg("删除失败", {icon: 5});
                             }
 
-                        },
-                        end: function () {
-                            showAtRight("/fragement/listUser.html");
                         }
                     })
                     ;
@@ -111,9 +119,6 @@
                     content: '/fragement/editUser.html?id=' + data.userId,
                     success: function (layero, index) {
                         console.log(layero, index);
-                    },
-                    end: function () {
-                        showAtRight("/fragement/listUser.html");
                     }
                 });
             }
@@ -130,12 +135,9 @@
             closeBtn: 1,
             anim: 0,
             maxmin: true,
-            content: '/fragement/addArticle.html',
+            content:'/fragement/addUser.html',
             success: function (layero, index) {
                 console.log(layero, index);
-            },
-            end: function () {
-                showAtRight("fragement/listUser.html");
             }
         });
     });
