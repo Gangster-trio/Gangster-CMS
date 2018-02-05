@@ -1,11 +1,10 @@
 package com.ganster.cms.web.controller;
 
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.pojo.Article;
-import com.ganster.cms.core.pojo.ArticleExample;
-import com.ganster.cms.core.pojo.Category;
+import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
+import com.ganster.cms.core.service.SiteService;
 import com.ganster.cms.web.dto.ModelResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +20,14 @@ import java.util.List;
 public class CategoryController {
     private final CategoryService categoryService;
     private final ArticleService articleService;
+    private final SiteService siteService;
+
 
     @Autowired
-    public CategoryController(CategoryService categoryService, ArticleService articleService) {
+    public CategoryController(CategoryService categoryService, ArticleService articleService, SiteService siteService) {
         this.categoryService = categoryService;
         this.articleService = articleService;
+        this.siteService = siteService;
     }
 
     //Extract reusable methods
@@ -54,13 +56,27 @@ public class CategoryController {
         //---------------------------------------default properties start----------------------------------------------//
 
 
+        Site site = siteService.selectByPrimaryKey(category.getCategorySiteId());
+
+        //Get 0 level categorise in this site (displayed above the homepage of the website)
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.or().andCategorySiteIdEqualTo(category.getCategorySiteId()).andCategoryLevelEqualTo(0);
+        List<Category> categoryList = categoryService.selectByExample(categoryExample);
+        //Each level 0 category into category tree
+        List<CategoryTree> categoryTreeList = new ArrayList<>();
+        for (Category c : categoryList) {
+            categoryTreeList.add(categoryService.toTree(c));
+        }
+
         //Get this category's article list (without BLOBs)
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleCategoryIdEqualTo(id);
         List<Article> articleList = articleService.selectByExample(articleExample);
 
-        result.put("articleList",articleList)
-                .put("category",category);
+        result.put("categoryTreeList", categoryTreeList)
+                .put("articleList", articleList)
+                .put("category", category)
+                .put("site", site);
 
         //---------------------------------------custom properties start----------------------------------------------//
 
@@ -71,14 +87,14 @@ public class CategoryController {
         addListToResult(result, homePageArticleList);
 
         //Add result to module
-        model.addAttribute(result);
+        model.addAttribute("result", result);
 
         //If skin = null, set default skin
         if (category.getCategorySkin() == null) {
             category.setCategorySkin(CmsConst.DEFAULT_SKIN);
         }
 
-        //Return to the site's skin view, for example : default-skin
+        //Return to the site's skin view, for example : default-category
         return category.getCategorySkin() + CmsConst.CATEGORY_SKIN_SUFFIX;
     }
 }

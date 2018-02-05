@@ -1,5 +1,6 @@
 spring:
-
+  jackson:
+    date-format: yyyy-MM-DD
   datasource:
     druid:
       url: jdbc:mysql://db_server:3306/db_cms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC

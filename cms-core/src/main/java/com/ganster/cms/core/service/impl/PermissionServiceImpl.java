@@ -64,6 +64,9 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
                 PidList.add(gp.getPermissionId());
             }
         }
+        if (PidList.size() == 0) {
+            return new ArrayList<>();
+        }
         PermissionExample permissionExample = new PermissionExample();
         permissionExample.or().andPermissionIdIn(PidList);
         return selectByExample(permissionExample);

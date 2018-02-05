@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        #myCheck + label{
+            background-color: white;
+            border-radius: 5px;
+            border:1px solid #d3d3d3;
+            width:20px;
+            height:20px;
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            left: line-height: 20px;
+        }
+        #myCheck:checked + label{
+            background-color: #eee;
+        }
+        #myCheck:checked + label:after{
+            content:"\2714";
+        }
+        input {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+<form >
+    选择：<input type="checkbox" id="myCheck">爱好
+    <label for="myCheck"></label>
+</form>
+
+
+</body>
+</html>

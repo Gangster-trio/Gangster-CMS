@@ -106,15 +106,14 @@
                     }),
                     success: function (data) {
                         console.log(data);
-                        if (data.code === 0) {
+                        if (data=== 1) {
                             //关闭弹框
                             layer.msg("添加成功", {icon: 6});
-//                            var index = parent.layer.getFrameIndex(window.name);
-                            layer.closeAll();
                         } else {
                             layer.msg("添加失败", {icon: 5});
                         }
-
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
                     }
                 });
             }

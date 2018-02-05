@@ -88,8 +88,14 @@
             }),
             success: function (data) {
                 console.log(data);
-                if (data.code === 0) layer.msg("添加成功", {icon: 6});
-                else layer.msg("添加失败", {icon: 5});
+                if (data.code === 0) {
+                    layer.msg("添加成功", {icon: 6});
+                } else if (data.code === 1) {
+                    layer.msg("添加失败");
+                } else {
+                    layer.msg("对不起你没有权限");
+                }
+
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
                 showAtRight("/fragement/listCategory.html");
