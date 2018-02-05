@@ -1,6 +1,6 @@
 package com.ganster.cms.core.service.impl;
 
-import com.ganster.cms.core.CmsConst;
+import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.CoreApplication;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;

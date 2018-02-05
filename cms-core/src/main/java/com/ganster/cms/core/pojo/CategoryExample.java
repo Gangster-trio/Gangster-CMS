@@ -864,6 +864,66 @@ public class CategoryExample {
             addCriterion("category_type not between", value1, value2, "categoryType");
             return (Criteria) this;
         }
+
+        public Criteria andCategoryInHomepageIsNull() {
+            addCriterion("category_in_homepage is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageIsNotNull() {
+            addCriterion("category_in_homepage is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageEqualTo(Boolean value) {
+            addCriterion("category_in_homepage =", value, "categoryInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageNotEqualTo(Boolean value) {
+            addCriterion("category_in_homepage <>", value, "categoryInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageGreaterThan(Boolean value) {
+            addCriterion("category_in_homepage >", value, "categoryInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("category_in_homepage >=", value, "categoryInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageLessThan(Boolean value) {
+            addCriterion("category_in_homepage <", value, "categoryInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageLessThanOrEqualTo(Boolean value) {
+            addCriterion("category_in_homepage <=", value, "categoryInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageIn(List<Boolean> values) {
+            addCriterion("category_in_homepage in", values, "categoryInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageNotIn(List<Boolean> values) {
+            addCriterion("category_in_homepage not in", values, "categoryInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageBetween(Boolean value1, Boolean value2) {
+            addCriterion("category_in_homepage between", value1, value2, "categoryInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryInHomepageNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("category_in_homepage not between", value1, value2, "categoryInHomepage");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

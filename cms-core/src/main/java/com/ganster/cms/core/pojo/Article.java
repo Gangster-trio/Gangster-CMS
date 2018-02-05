@@ -34,11 +34,13 @@ public class Article implements Serializable {
 
     private String articleSkin;
 
+    private Boolean articleInHomepage;
+
     private String articleContent;
 
     private static final long serialVersionUID = 1L;
 
-    public Article(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin) {
+    public Article(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, Boolean articleInHomepage) {
         this.articleId = articleId;
         this.articleTitle = articleTitle;
         this.articleType = articleType;
@@ -54,9 +56,10 @@ public class Article implements Serializable {
         this.articleDesc = articleDesc;
         this.articleStatus = articleStatus;
         this.articleSkin = articleSkin;
+        this.articleInHomepage = articleInHomepage;
     }
 
-    public Article(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, String articleContent) {
+    public Article(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, Boolean articleInHomepage, String articleContent) {
         this.articleId = articleId;
         this.articleTitle = articleTitle;
         this.articleType = articleType;
@@ -72,6 +75,7 @@ public class Article implements Serializable {
         this.articleDesc = articleDesc;
         this.articleStatus = articleStatus;
         this.articleSkin = articleSkin;
+        this.articleInHomepage = articleInHomepage;
         this.articleContent = articleContent;
     }
 
@@ -199,12 +203,31 @@ public class Article implements Serializable {
         this.articleSkin = articleSkin == null ? null : articleSkin.trim();
     }
 
+    public Boolean getArticleInHomepage() {
+        return articleInHomepage;
+    }
+
+    public void setArticleInHomepage(Boolean articleInHomepage) {
+        this.articleInHomepage = articleInHomepage;
+    }
+
     public String getArticleContent() {
         return articleContent;
     }
 
     public void setArticleContent(String articleContent) {
         this.articleContent = articleContent == null ? null : articleContent.trim();
+    }
+
+    public Article(String articleTitle, String articleType, String articleAuthor, Integer articleOrder, Integer articleCategoryId, String articleDesc, String articleSkin, String articleContent) {
+        this.articleTitle = articleTitle;
+        this.articleType = articleType;
+        this.articleAuthor = articleAuthor;
+        this.articleOrder = articleOrder;
+        this.articleCategoryId = articleCategoryId;
+        this.articleDesc = articleDesc;
+        this.articleSkin = articleSkin;
+        this.articleContent = articleContent;
     }
 
     @Override
@@ -234,6 +257,7 @@ public class Article implements Serializable {
             && (this.getArticleDesc() == null ? other.getArticleDesc() == null : this.getArticleDesc().equals(other.getArticleDesc()))
             && (this.getArticleStatus() == null ? other.getArticleStatus() == null : this.getArticleStatus().equals(other.getArticleStatus()))
             && (this.getArticleSkin() == null ? other.getArticleSkin() == null : this.getArticleSkin().equals(other.getArticleSkin()))
+            && (this.getArticleInHomepage() == null ? other.getArticleInHomepage() == null : this.getArticleInHomepage().equals(other.getArticleInHomepage()))
             && (this.getArticleContent() == null ? other.getArticleContent() == null : this.getArticleContent().equals(other.getArticleContent()));
     }
 
@@ -256,6 +280,7 @@ public class Article implements Serializable {
         result = prime * result + ((getArticleDesc() == null) ? 0 : getArticleDesc().hashCode());
         result = prime * result + ((getArticleStatus() == null) ? 0 : getArticleStatus().hashCode());
         result = prime * result + ((getArticleSkin() == null) ? 0 : getArticleSkin().hashCode());
+        result = prime * result + ((getArticleInHomepage() == null) ? 0 : getArticleInHomepage().hashCode());
         result = prime * result + ((getArticleContent() == null) ? 0 : getArticleContent().hashCode());
         return result;
     }
@@ -281,6 +306,7 @@ public class Article implements Serializable {
         sb.append(", articleDesc=").append(articleDesc);
         sb.append(", articleStatus=").append(articleStatus);
         sb.append(", articleSkin=").append(articleSkin);
+        sb.append(", articleInHomepage=").append(articleInHomepage);
         sb.append(", articleContent=").append(articleContent);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

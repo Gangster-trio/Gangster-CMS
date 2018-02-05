@@ -1,6 +1,6 @@
 package com.ganster.cms.web.conf;
 
-import com.ganster.cms.core.CmsConst;
+import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.service.SettingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +17,8 @@ public class ImgConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/img/**").addResourceLocations("file:" + settingService.get(CmsConst.PIC_PATH_SETTING));
-        LOGGER.info("Ganster CMS : mapped /img/** to {}",settingService.get(CmsConst.PIC_PATH_SETTING));
+        registry.addResourceHandler("/pic/**").addResourceLocations("file:" + settingService.get(CmsConst.PIC_PATH_SETTING));
+        LOGGER.info("Ganster CMS : mapped /pic/** to {}",settingService.get(CmsConst.PIC_PATH_SETTING));
         super.addResourceHandlers(registry);
     }
 }

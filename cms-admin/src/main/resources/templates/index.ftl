@@ -22,6 +22,9 @@
             <li class="layui-nav-item"><a href="">控制台</a></li>
             <li class="layui-nav-item"><a href="">商品管理</a></li>
             <li class="layui-nav-item"><a href="">用户</a></li>
+
+
+        <#--站点选择区域-->
             <li class="layui-nav-item">
                 <a href="javascript:;">选择站点</a>
                 <#list sites as site>
@@ -49,6 +52,9 @@
         <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+
+
+            <#--模块选择区域-->
         <#list treelist as tree>
         <li class="layui-nav-item layui-nav-itemed">
             <a href="javascript:;">${tree.module.moduleName}</a>
@@ -76,12 +82,13 @@
     </div>
 </div>
 <!--<script src="/layui/"></script>-->
-<script src="layui/layui.all.js" type="text/javascript"></script>
+<script src="/layui/layui.all.js" type="text/javascript"></script>
 </body>
 </html>
 <script></script>
 <script>
     var siteId;
+    var category = -1;
 
     function init(id) {
         siteId = id;
