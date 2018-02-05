@@ -51,7 +51,7 @@ public class SiteController {
         }
         Site site = siteList.get(0);
 
-        //Get 0 level categorise (displayed above the homepage of the website)
+        //Get 0 level categorise in this site (displayed above the homepage of the website)
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(site.getSiteId()).andCategoryLevelEqualTo(0);
         List<Category> categoryList = categoryService.selectByExample(categoryExample);
@@ -146,14 +146,14 @@ public class SiteController {
         CategoryController.addListToResult(result, homePageArticleList);
 
         //Add result to module
-        model.addAttribute(result);
+        model.addAttribute("result",result);
 
         //If skin = null, set default skin
         if (site.getSiteSkin() == null) {
             site.setSiteSkin(CmsConst.DEFAULT_SKIN);
         }
 
-        //Return to the site's skin view, for example : default-skin
+        //Return to the site's skin view, for example : default-site
         return site.getSiteSkin() + CmsConst.SITE_SKIN_SUFFIX;
     }
 

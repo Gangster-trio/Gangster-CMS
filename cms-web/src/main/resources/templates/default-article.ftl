@@ -1,94 +1,112 @@
-<html lang="zh-CN" class="gr__v3_bootcss_com">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<!DOCTYPE html>
+<html lang="en">
 
-    <title>${article.articleTitle!}</title>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>${result.article.articleTitle!'title'}</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/default-article.css" rel="stylesheet">
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+<#--<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+    <!-- Custom fonts for this template -->
+    <#--<link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
+          type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="/css/clean-blog.min.css" rel="stylesheet">
+
 </head>
 
-<body data-gr-c-s-loaded="true">
+<body>
 
-<#--<div class="blog-masthead">-->
-<#--<div class="container">-->
-<#--<nav class="blog-nav">-->
-<#--<a class="blog-nav-item active" href="#">Home</a>-->
-<#--<a class="blog-nav-item" href="#">New features</a>-->
-<#--<a class="blog-nav-item" href="#">Press</a>-->
-<#--<a class="blog-nav-item" href="#">New hires</a>-->
-<#--<a class="blog-nav-item" href="#">About</a>-->
-<#--</nav>-->
-<#--</div>-->
-<#--</div>-->
+    <#import "default-header.ftl" as header/>
+    <@header.header site=result.site TreeList=result.categoryTreeList></@header.header>
 
-<div class="container">
-
-    <div class="blog-header">
-        <h1 class="blog-title">${(category.categoryTitle)!}</h1>
-        <p class="lead blog-description">${(category.categoryDesc)!}</p>
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('${result.article.articleThumb!'/img/post-bg.jpg'}')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="post-heading">
+                    <h1>${result.article.articleTitle}</h1>
+                    <h2 class="subheading">${result.article.articleDesc!"没有描述"}</h2>
+                    <span class="meta">Posted by ${result.article.articleAuthor!"anonymous"}
+                on ${(result.article.articleCreateTime?string("yyyy年MM月dd"))!}</span>
+                </div>
+            </div>
+        </div>
     </div>
+</header>
 
-    <div class="row">
-
-        <div class="col-sm-8 blog-main">
-
-            <div class="blog-post">
-                <h2 class="blog-post-title">${article.articleTitle}</h2>
-                <p class="blog-post-meta">${(article.articleCreateTime?string("yyyy-MM-dd"))!} by <a
-                        href="#">${article.articleAuthor}</a></p>
-
-                <p>${article.articleDesc!"none description"}</p>
-                <hr>
-            ${article.articleContent!"none content"}
-            </div><!-- /.blog-post -->
-
-        <#--<nav>-->
-        <#--<ul class="pager">-->
-        <#--<li><a href="#">Previous</a></li>-->
-        <#--<li><a href="#">Next</a></li>-->
-        <#--</ul>-->
-        <#--</nav>-->
-
-        </div><!-- /.blog-main -->
-
-        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
-            <div class="sidebar-module sidebar-module-inset">
-                <h4>About</h4>
-                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
-                    fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+            ${result.article.articleContent}
             </div>
-            <div class="sidebar-module">
-                <h4>Tag</h4>
-                <ol class="list-unstyled">
-                    <#list tagList as tag>
-                        <li><a href="/view/tag/${tag.tagId}">${tag.tagName}</a></li>
-                    </#list>
-                </ol>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                        <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                  </span>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                        </a>
+                    </li>
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Your Website 2018</p>
             </div>
-            <div class="sidebar-module">
-                <h4>Elsewhere</h4>
-                <ol class="list-unstyled">
-                    <li><a href="#">GitHub</a></li>
-                    <li><a href="#">Twitter</a></li>
-                    <li><a href="#">Facebook</a></li>
-                </ol>
-            </div>
-        </div><!-- /.blog-sidebar -->
+        </div>
+    </div>
+</footer>
 
-    </div><!-- /.row -->
-
-</div><!-- /.container -->
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
+<!-- Bootstrap core JavaScript -->
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<#--<script src="/vendor/jquery/jquery.min.js"></script>-->
+<#--<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+<!-- Custom scripts for this template -->
+<#--<script src="/js/clean-blog.min.js"></script>-->
+
 </body>
+
 </html>
