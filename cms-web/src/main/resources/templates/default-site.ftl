@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>${site.siteName}</title>
+    <title>${result.site.siteName}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -39,12 +39,12 @@
     <div class="container">
         <div class="navbar-header">
             <!-- The mobile navbar-toggle button can be safely removed since you do not need it in a non-responsive implementation -->
-            <a class="navbar-brand" href="#">${site.siteName}</a>
+            <a class="navbar-brand" href="#">${result.site.siteName}</a>
         </div>
         <!-- Note that the .navbar-collapse and .collapse classes have been removed from the #navbar -->
         <div id="navbar">
             <ul class="nav navbar-nav">
-            <#list categoryTreeList as categoryTree>
+            <#list result.categoryTreeList as categoryTree>
                 <@showTree Tree = categoryTree/>
             </#list>
             </ul>
@@ -56,13 +56,13 @@
     <div id="myCarousel" class="carousel slide">
         <!-- 轮播（Carousel）指标 -->
         <ol class="carousel-indicators">
-            <#list carouselList as carousel>
+            <#list result.carouselList as carousel>
                 <li data-target="myCarousel" <#if carousel_index == 1>class="active"</#if>
                     data-slide-to="${carousel_index}"></li>
             </#list>
         </ol>
         <div class="carousel-inner">
-                <#list carouselList as carousel>
+                <#list result.carouselList as carousel>
                         <div <#if carousel_index == 0>class="item active" <#else>class="item"</#if>>
                             <a href="/view/article/${carousel.articleId}">
                                 <img src="${carousel.articleThumb!}" alt="${carousel.articleTitle!"have no title!"}">
@@ -81,7 +81,7 @@
     <div class="page-header">
     </div>
 
-    <#list articleList as article>
+    <#list result.articleList as article>
     <div>
         <h3>
             <a href="/view/article/${article.articleId}">${article.articleTitle}</a>

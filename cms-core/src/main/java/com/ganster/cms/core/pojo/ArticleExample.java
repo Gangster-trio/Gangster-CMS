@@ -1074,6 +1074,66 @@ public class ArticleExample {
             addCriterion("article_skin not between", value1, value2, "articleSkin");
             return (Criteria) this;
         }
+
+        public Criteria andArticleInHomepageIsNull() {
+            addCriterion("article_in_homepage is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageIsNotNull() {
+            addCriterion("article_in_homepage is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageEqualTo(Boolean value) {
+            addCriterion("article_in_homepage =", value, "articleInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageNotEqualTo(Boolean value) {
+            addCriterion("article_in_homepage <>", value, "articleInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageGreaterThan(Boolean value) {
+            addCriterion("article_in_homepage >", value, "articleInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("article_in_homepage >=", value, "articleInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageLessThan(Boolean value) {
+            addCriterion("article_in_homepage <", value, "articleInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageLessThanOrEqualTo(Boolean value) {
+            addCriterion("article_in_homepage <=", value, "articleInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageIn(List<Boolean> values) {
+            addCriterion("article_in_homepage in", values, "articleInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageNotIn(List<Boolean> values) {
+            addCriterion("article_in_homepage not in", values, "articleInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageBetween(Boolean value1, Boolean value2) {
+            addCriterion("article_in_homepage between", value1, value2, "articleInHomepage");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleInHomepageNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("article_in_homepage not between", value1, value2, "articleInHomepage");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

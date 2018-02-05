@@ -15,7 +15,6 @@ import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.TagService;
 import org.apache.ibatis.annotations.Param;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
