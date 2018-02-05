@@ -1,26 +1,27 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
+<!--添加栏目-->
 <button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="column">添加栏目</button>
 <div class="layui-elem-quote" style="margin-bottom: 0;">
     <p>栏目管理</p>
 </div>
 <script src="/util/util.js"></script>
-<table id="column_table" class="layui-table" style="margin: 0px" lay-filter="columnlist"></table>
+<table id="column_table" class="layui-table" style="margin: 0px" lay-filter="categorylist"></table>
 
 <script>
-    //判断该用户是否拥有对栏目的基本操作
-    function judgePrivalige(id) {
-
-    }
-
     var categoryId;
+
+    //栏目表格渲染
     layui.use('table', function () {
         var first = true;
         var table = layui.table;
+
+        //对site进行判断，只有选择了site才有显示
         if (siteId) {
             table.render({
                 elem: '#column_table'
-                , url: '/category/list?siteId=' + siteId
+                , url: '/category/list?siteId=' + siteId     //得到所选site的栏目
                 , page: true //开启分页
                 , cols: [[ //表头
                     {field: 'categoryId', title: 'ID', width: '80', sort: true, fixed: 'left'}
@@ -41,17 +42,23 @@
                     }
                 }
             });
-            table.on('tool(columnlist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+
+            //监听的事件
+            table.on('tool(categorylist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                var id = data.categoryId;   //得到当前点击的栏目id
-                categoryId = id;
-                if (layEvent === 'detail') { //查看
+                categoryId = data.categoryId;   //得到当前点击的栏目id
+
+                //查看栏目的详细信息
+                if (layEvent === 'detail') {
                     showAtRight("/fragement/listArticle.html");
-                } else if (layEvent === 'del') { //删除
+                }
+
+                //删除栏目信息
+                else if (layEvent === 'del') { //删除
                     var delPrivalige = true;
                     $.ajax({
-                        url: "category/privalige/" + id,
+                        url: "/category/privalige?categoryId=" + categoryId,
                         dataType: "json",
                         type: "get",
                         success: function (data) {
@@ -70,10 +77,13 @@
                             }
                         )
                     }
-                } else if (layEvent === 'edit') { //  跳转到栏目编辑界面
+                }
+
+                //编辑栏目
+                else if (layEvent === 'edit') {
                     var editPrivalige = true;
                     $.ajax({
-                        url: "category/privalige/" + id,
+                        url: "/category/privalige?categoryId=" + categoryId,
                         dataType: "json",
                         type: "get",
                         success: function (data) {
@@ -101,10 +111,13 @@
                             }
                         });
                     }
-                } else if (layEvent === 'add') {   //跳转到添加文章界面
+                }
+
+                //跳转到给该栏目添加文章的界面
+                else if (layEvent === 'add') {   //跳转到添加文章界面
                     var addPrivalige = true;
                     $.ajax({
-                        url: "category/privalige/" + id,
+                        url: "/category/privalige?categoryId=" + categoryId,
                         dataType: "json",
                         type: "get",
                         success: function (data) {
@@ -160,6 +173,8 @@
     </div>
 </script>
 <script>
+
+    <!--添加栏目的按钮注册事件-->
     var index = $("#column").on('click', function () {
         layer.open({
             id: 2,
@@ -176,6 +191,7 @@
         });
     });
 
+    //删除栏目的功能实现
     function deleteCategory(id) {
         $.ajax({
                 url: "/category/delete/" + id,
@@ -196,10 +212,6 @@
                 }
             }
         );
-
     }
-
-
 </script>
-
 </html>

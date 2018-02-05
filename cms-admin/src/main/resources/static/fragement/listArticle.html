@@ -5,6 +5,7 @@
 <body>
 <script src="/util/util.js"></script>
 <!--head part-->
+<!--添加文章的按钮-->
 <button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="article">添加文章</button>
 <div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
     <p>文章管理</p>
@@ -27,12 +28,16 @@
     </div>
 </script>
 <script>
+
+    <!--文章表格的渲染-->
     layui.use('table', function () {
         var table = layui.table;
         var first = true;
         if (siteId) {
             table.render({
                 elem: '#article_table'
+
+                //判断栏目是否选择，如果选择，则显示该栏目的文章，如果没选择，显示站的所有文章
                 , url: category = -1 ? 'article/list?siteId=' + siteId : 'article/categorylist?id=' + categoryId
                 , page: true //开启分页
                 , cols: [[ //表头
@@ -55,41 +60,74 @@
                     }
                 }
             });
+
+            //给文章添加基本的事件
             table.on('tool(articleListFilter)', function (obj) { //注：tool是工具条事件名，articleListFilter是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
                 console.log(data);
                 layEvent = obj.event; //获得 lay-event 对应的值
+
+                //显示文章的详细信息
                 if (layEvent === 'detail') {
                     showAtRight("/fragement/listCategory.html");
+
+                    //删除文章的权限判断及实现
                 } else if (layEvent === 'del') {
-                    layer.confirm('真的删除行么', function (index) {
-                        console.log(data);
-                        $.ajax({
-                            url: "/article/delete/" + data.articleId,
-                            type: 'get',
-                            dataType: 'json',
-                            success: function (data) {
-                                console.log(data);
-                                if (data.code === 0) {
-                                    //删除这一行
-                                    obj.del();
-                                    //关闭弹框
-                                    layer.close(index);
-                                    layer.msg("删除成功", {icon: 6});
-                                } else {
-                                    layer.msg("删除失败", {icon: 5});
-                                }
-
-                            },
-                            end: function () {
-                                showAtRight("/fragement/listArticle.html");
+                    var delPrivalige = true;
+                    $.ajax({
+                        url: "category/privalige?siteId=" + siteId + "&categoryId=" + categoryId,
+                        dataType: "json",
+                        type: "get",
+                        success: function (data) {
+                            if (data.code === 2) {
+                                delPrivalige = false;
+                                layer.msg("sorry ,you have not privalige");
                             }
-                        })
-                        ;
+                        }
                     });
+                    if (delPrivalige) {
+                        layer.confirm('真的删除行么', function (index) {
+                            console.log(data);
+                            $.ajax({
+                                url: "/article/delete/" + data.articleId,
+                                type: 'get',
+                                dataType: 'json',
+                                success: function (data) {
+                                    console.log(data);
+                                    if (data.code === 0) {
+                                        //删除这一行
+                                        obj.del();
+                                        //关闭弹框
+                                        layer.close(index);
+                                        layer.msg("删除成功", {icon: 6});
+                                    } else {
+                                        layer.msg("删除失败", {icon: 5});
+                                    }
 
-                } else if (layEvent === 'edit') {
+                                },
+                                end: function () {
+                                    showAtRight("/fragement/listArticle.html");
+                                }
+                            })
+                            ;
+                        });
+                    }
+                }
 
+                //更新文章的权限判断及实现
+                else if (layEvent === 'edit') {
+                    var editPrivalige = true;
+                    $.ajax({
+                        url: "category/privalige?siteId=" + siteId + "&categoryId=" + categoryId,
+                        dataType: "json",
+                        type: "get",
+                        success: function (data) {
+                            if (data.code === 2) {
+                                delPrivalige = false;
+                                layer.msg("sorry ,you have not privalige");
+                            }
+                        }
+                    });
                     console.log(data);
                     layer.open({
                         id: 1,
@@ -118,6 +156,8 @@
     });
 </script>
 <script>
+
+    <!--添加文章功能-->
     var article = $("#article").on('click', function () {
         layer.open({
             id: 2,

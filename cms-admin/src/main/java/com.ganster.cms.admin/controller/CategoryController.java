@@ -5,6 +5,7 @@ import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.admin.util.PageUtil;
 import com.ganster.cms.admin.util.UserUtil;
 import com.ganster.cms.core.CmsConst;
+import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
@@ -135,19 +136,23 @@ public class CategoryController extends BaseController {
         else return new Message(1, "false", count);
     }
 
-    /**
-     * 权限认证的函数
-     *
-     * @param id 栏目的id
-     * @return
-     */
-    @GetMapping("/privalige/{id}")
-    public Message judgePrivaludge(@PathVariable("id") Integer id) {
+    @GetMapping("/privalige")
+    public Message judgePrivaludge(@RequestParam(required = false) Integer siteId, @RequestParam(required = false) Integer categoryId) throws GroupNotFountException {
         Integer userId = UserUtil.getCurrentUserId();
-        if (!(permissionService.hasCategoryPermission(userId, id, userId, CmsConst.PERMISSION_UPDATE))) {
-            return super.buildMessage(2, "no permission", null);
+        if (categoryId != null) {
+            if (!(permissionService.hasCategoryPermission(userId, categoryId, userId, CmsConst.PERMISSION_UPDATE))) {
+                return super.buildMessage(2, "no permission", null);
+            } else {
+                return super.buildMessage(0, "yes", null);
+            }
+        } else if (siteId != null) {
+            if (!(permissionService.hasSitePermission(userId, siteId))) {
+                return super.buildMessage(2, "no permission", null);
+            } else {
+                return super.buildMessage(0, "yes", null);
+            }
         } else {
-            return super.buildMessage(0, "yes", null);
+            return super.buildMessage(1, "nodata", null);
         }
     }
 }

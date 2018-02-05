@@ -18,93 +18,92 @@
           href="/tag/jquery-ui.css"/>
 </head>
 <body style="background-color:#eee;">
-<br/>
-<div class="layui-form-item">
-    <label class="layui-form-label">文章标题</label>
-    <div class="layui-input-inline">
-        <input type="text" id="articleTitle" name="articleTitle" required lay-verify="required" placeholder="文章名称"
-               autocomplete="off"
-               class="layui-input">
-    </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">自定义顺序</label>
-    <div class="layui-input-inline">
-        <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序" autocomplete="off"
-               class="layui-input">
-    </div>
-</div>
+br/>
 <form>
     <div class="layui-form-item">
-        <label class="layui-form-label">文章属性</label>
-        <div class="layui-input-block">
-            <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-            <!--单选框name 为控件名，value是提交到服务器的值-->
-            <input type="radio" name="choose" value="carousel" title="轮播图">
-            <input type="radio" name="choose" value="index" title="主页文章">
-            <input type="radio" name="choose" value="normal" title="普通文章" checked="checked">
+        <label class="layui-form-label">文章标题</label>
+        <div class="layui-input-inline">
+            <input type="text" id="articleTitle" name="articleTitle" required lay-verify="required" placeholder="文章名称"
+                   autocomplete="off"
+                   class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">选择皮肤</label>
-        <div class="layui-input-block">
-            <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-            <!--单选框name 为控件名，value是提交到服务器的值-->
-            <input type="radio" name="skin" value="default" title="默认" checked="checked">
+        <label class="layui-form-label">自定义顺序</label>
+        <div class="layui-input-inline">
+            <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序"
+                   autocomplete="off"
+                   class="layui-input">
         </div>
     </div>
-</form>
-<div id="show" class="layui-form-item">
-    <label class="layui-form-label">所属栏目</label>
-    <div class="layui-input-inline">
-        <input type="text" id="belongCategory" name="belongCategory" required="required" lay-verify="required"
-               placeholder="顶级栏目管理"
-               autocomplete="off"
-               class="layui-input" readonly="readonly"/>
-    </div>
-</div>
-<div class="layui-form-item layui-form-text">
-    <form id="img" action="/article/img" method="post" enctype="multipart/form-data">
-        <img width="100" height="100" style="margin-left: 40px" id="image"/><br/>
-        <!-- 在选择图片的时候添加事件，触发Ajax异步上传 -->
-        <input name="file" style="margin-left: 40px" type="file" onchange="uploadImg()"/>
+    <form>
+        <div class="layui-form-item">
+            <label class="layui-form-label">文章属性</label>
+            <div class="layui-input-block">
+                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
+                <!--单选框name 为控件名，value是提交到服务器的值-->
+                <input type="radio" name="choose" value="carousel" title="轮播图">
+                <input type="radio" name="choose" value="index" title="主页文章">
+                <input type="radio" name="choose" value="normal" title="普通文章" checked="checked">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择皮肤</label>
+            <div class="layui-input-block">
+                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
+                <!--单选框name 为控件名，value是提交到服务器的值-->
+                <input type="radio" name="skin" value="default" title="默认" checked="checked">
+            </div>
+        </div>
     </form>
-</div>
-
-<div class="layui-form-item">
-    <label class="layui-form-label">文章作者</label>
-    <div class="layui-input-inline">
-        <input type="text" id="author" name="author" required lay-verify="required" placeholder="文章作者"
-               autocomplete="off"
-               class="layui-input">
+    <div id="show" class="layui-form-item">
+        <label class="layui-form-label">所属栏目</label>
+        <div class="layui-input-inline">
+            <input type="text" id="belongCategory" name="belongCategory" required="required" lay-verify="required"
+                   placeholder="顶级栏目管理"
+                   autocomplete="off"
+                   class="layui-input" readonly="readonly"/>
+        </div>
     </div>
-</div>
-<div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">描述</label>
-    <div class="layui-input-block">
-        <textarea id="description" name="description" required class="layui-textarea" placeholder="添加描述"></textarea>
+    <div class="layui-form-item layui-form-text">
+        <form id="img" action="/article/img" method="post" enctype="multipart/form-data">
+            <img width="100" height="100" style="margin-left: 40px" id="image"/><br/>
+            <!-- 在选择图片的时候添加事件，触发Ajax异步上传 -->
+            <input name="file" style="margin-left: 40px" type="file" onchange="uploadImg()"/>
+        </form>
     </div>
-</div>
-<div class="block">
-    <div id="wordTags"></div>
-    <input id="wordInput" type="text" name="" placeholder="请输入关键词以空格结尾"/>
-    <input id="wordHiddenInput" type="hidden" name=""/>
-</div>
-<form>
-    <input type="text" id="addNewTag" value=""/><input type="submit" onclick="addNewTag();" value="添加"/>
-    <p><label>Technologies: (Programming languages in yellow)</label>
-        <input id="tags_2" type="text" class="tags" value="php,ios,javascript,ruby,android,kindle"/></p>
 
-    <!--    <p><label>Autocomplete:</label>
-            <input id='tags_3' type='text' class='tags'></p>-->
-
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章作者</label>
+        <div class="layui-input-inline">
+            <input type="text" id="author" name="author" required lay-verify="required" placeholder="文章作者"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea id="description" name="description" required class="layui-textarea" placeholder="添加描述"></textarea>
+        </div>
+    </div>
+    <div class="block">
+        <div id="wordTags"></div>
+        <input id="wordInput" type="text" name="" placeholder="请输入关键词以空格结尾"/>
+        <input id="wordHiddenInput" type="hidden" name=""/>
+    </div>
+    <form>
+        <input type="text" id="addNewTag" value=""/><input type="submit" onclick="addNewTag();" value="添加"/>
+        <p><label>Technologies: (Programming languages in yellow)</label>
+            <input id="tags_2" type="text" class="tags" value="php,ios,javascript,ruby,android,kindle"/></p>
+    </form>
+    <p style="margin-left: 50px"> 文章内容</p>
+    <div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
+        <textarea name="txt" id="txt" required style="display:none;"></textarea>
+    </div>
+    <input id="parentId" name="parentId" type="text" hidden="hidden"/>
+    <input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
 </form>
-<p style="margin-left: 50px"> 文章内容</p>
-<div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
-    <textarea name="txt" id="txt" required style="display:none;"></textarea>
-</div>
-<input id="parentId" name="parentId" type="text" hidden="hidden"/>
-<input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
 </body>
 </html>
 <script type="text/javascript">
@@ -123,49 +122,61 @@
             var editIndex = layedit.build('txt', {
                 height: 400
             });
+
+
+            //如果栏目未指定，就显示指定栏目的框，如果指定，就隐藏
             var categoryId = getUrlVar("categoryId");
             if (!categoryId) $("#show").show();  //categoryId未定义就是false
             else {
                 $("#show").hide();
                 $("#parentId").val(categoryId);
             }
-            document.getElementById('btn1').onclick = function () {
-                var tags = $("#tags_2").val();
-                var article = {
-                    "articleTitle": $("#articleTitle").val(),
-                    "articleType": chooseValue("choose"),
-                    "articleAuthor": $("#author").val(),
-                    "articleOrder": $("#order").val(),
-                    "articleCategoryId": $("#parentId").val(),
-                    "articleDesc": $("#desc").val(),
-                    "articleSkin": chooseValue("skin"),
-                    "articleContent": content,
-                    "tags": tags
-                };
-                var categoryId;
-                if (!categoryId) categoryId = document.getElementById("parentId").value;
-                var content = layedit.getContent(editIndex);
-                $.ajax({
-                    url: "/article/save",
-                    type: 'post',
-                    dataType: 'json',
-                    contentType: "application/json",
-                    data: JSON.stringify(article),
-                    success: function (data) {
-                        console.log(data);
-                        if (data.code === 0) {
-                            //关闭弹框
-                            layer.msg("添加成功", {icon: 6});
-                        } else {
-                            layer.msg("添加失败", {icon: 5});
-                        }
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(index);
-                    }
-                })
-                ;
-            }
+
+            //提交文章事件
         });
+        $("#btn1").onclick = function () {
+            var tags = $("#tags_2").val();
+            var articleCategoryId = $("#parentId").val();
+            var article = {
+                "articleTitle": $("#articleTitle").val(),
+                "articleType": chooseValue("choose"),
+                "articleAuthor": $("#author").val(),
+                "articleOrder": $("#order").val(),
+                "articleCategoryId": articleCategoryId,
+                "articleDesc": $("#desc").val(),
+                "articleSkin": chooseValue("skin"),
+                "articleContent": content,
+                "tags": tags
+            };
+
+            //如果添加文章属于在文章显示页面添加，就让文章栏目名为选择的栏目
+            if (!categoryId) categoryId = articleCategoryId;
+            var content = layedit.getContent(editIndex);
+
+            //ajax提交事件
+            $.ajax({
+                url: "/article/save",
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/json",
+                data: JSON.stringify(article),
+                success: function (data) {
+                    console.log(data);
+                    if (data.code === 0) {
+                        //关闭弹框
+                        layer.msg("添加成功", {icon: 6});
+                    } else {
+                        layer.msg("添加失败", {icon: 5});
+                    }
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                }
+            })
+            ;
+        }
+    }
+    )
+    ;
     }
 </script>
 <script type="text/javascript">
