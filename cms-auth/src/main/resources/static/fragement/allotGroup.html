@@ -104,7 +104,7 @@
             type: 'get',
             dataType: 'json',
             success: function (ajaxdata) {
-                for (var i = 0; i < 4; i++) {
+                for (var i = 0; i < ajaxdata.code; i++) {
                     optionstring += "<option value="+ ajaxdata.data[i].groupId +">" + ajaxdata.data[i].groupName + "</option>";
                 }
                 $("#groups").html(optionstring);

@@ -117,19 +117,6 @@ public class UserController extends BaseController {
         return user;
     }
 
-//    @GetMapping("/findgroup/{UserId}")
-//    @ResponseBody
-//    public AjaxData findUserGroup(@PathVariable("UserId") Integer userId) {
-//        AjaxData ajaxData = new AjaxData();
-//        List<Group> groupList = groupService.selectByUserId(userId);
-//        if (groupList != null && !groupList.isEmpty()) {
-//            ajaxData.setData((ArrayList) groupList);
-//            ajaxData.setCode(0);
-//            return ajaxData;
-//        }
-//        ajaxData.setMsg("查找失败");
-//        return ajaxData;
-//    }
     @GetMapping("/findgroup/{UserId}")
     @ResponseBody
     public AjaxData findUserGroup(@PathVariable("UserId") Integer userId,@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
@@ -170,13 +157,17 @@ public class UserController extends BaseController {
     @GetMapping("/findgroup")
     @ResponseBody
     public AjaxData findAllGroup() {
+        int number=0;
         AjaxData ajaxData = new AjaxData();
         GroupExample groupExample = new GroupExample();
         groupService.selectByExample(groupExample);
         List<Group> groupList = groupService.selectByExample(groupExample);
         if (groupList != null && !groupList.isEmpty()) {
             ajaxData.setData((ArrayList) groupList);
-            ajaxData.setCode(0);
+            for (Group i:groupList){
+                number++;
+            }
+            ajaxData.setCode(number);
             return ajaxData;
         }
         ajaxData.setMsg("查找失败");
@@ -204,16 +195,4 @@ public class UserController extends BaseController {
         }
         return message;
     }
-    //        UserExample userExample = new UserExample();
-//        userExample.createCriteria().andUserIdIsNotNull();
-//        List<User> userList = userService.selectByExample(userExample);
-//        AjaxData ajaxData = new AjaxData();
-//        int count = 0;
-//        for (User i : userList) {
-//            count++;
-//        }
-//        ajaxData.setCount(count);
-//        ajaxData.setData((ArrayList) userList);
-//        return ajaxData;
-//    }
 }
