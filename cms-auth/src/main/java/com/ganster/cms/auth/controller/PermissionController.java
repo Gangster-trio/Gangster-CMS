@@ -1,19 +1,16 @@
 package com.ganster.cms.auth.controller;
 
+import com.ganster.cms.auth.dto.AjaxData;
 import com.ganster.cms.auth.dto.Message;
 import com.ganster.cms.auth.dto.PermissionData;
-import com.ganster.cms.core.pojo.Group;
-import com.ganster.cms.core.service.GroupService;
-import com.ganster.cms.core.service.PermissionService;
-import com.ganster.cms.core.service.UserService;
+import com.ganster.cms.core.pojo.*;
+import com.ganster.cms.core.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,6 +23,12 @@ public class PermissionController {
     private GroupService groupService;
     @Autowired
     private PermissionService permissionService;
+    @Autowired
+    private SiteService siteService;
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private ModuleService moduleService;
 
     @PostMapping("/add/category")
     public Message addCategoryPermission(@RequestBody PermissionData permissionData) {
@@ -70,4 +73,37 @@ public class PermissionController {
         message.setMsg("添加权限失败");
         return message;
     }
+
+    @GetMapping("/findsite")
+    public AjaxData findSite() {
+        AjaxData ajaxData = new AjaxData();
+        SiteExample siteExample = new SiteExample();
+        List<Site> siteList = siteService.selectByExample(siteExample);
+        ajaxData.setCode(siteList.size());
+        ajaxData.setData((ArrayList) siteList);
+        return ajaxData;
+    }
+
+    @GetMapping("/findcategory/{SiteId}")
+    public AjaxData findCategory(@PathVariable("SiteId") Integer siteId) {
+        AjaxData ajaxData = new AjaxData();
+        Site site =siteService.selectByPrimaryKey(siteId);
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.createCriteria().andCategorySiteIdEqualTo(site.getSiteId());
+        List<Category> categoryList = categoryService.selectByExample(categoryExample);
+        ajaxData.setCode(categoryList.size());
+        ajaxData.setData((ArrayList) categoryList);
+        return ajaxData;
+    }
+
+    @GetMapping("/findmodel")
+    public AjaxData findModel() {
+        AjaxData ajaxData = new AjaxData();
+        ModuleExample moduleExample = new ModuleExample();
+        List<Module> moduleList = moduleService.selectByExample(moduleExample);
+        ajaxData.setCode(moduleList.size());
+        ajaxData.setData((ArrayList) moduleList);
+        return ajaxData;
+    }
+
 }

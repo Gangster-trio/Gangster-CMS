@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户组新增</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <script src="../js/util.js"></script>
+    <script src="../js/jquery.form.js"></script>
+    <script src="../layui/layui.all.js"></script>
+    <script src="../layui/layui.js"></script>
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>权限分配</legend>
+</fieldset>
+<h1 id="">这是角色名</h1>
+<br/>
+<!--<div class="layui-form-item">-->
+<!--<label class="layui-form-label">站点选择:</label>-->
+<!--<div class="layui-input-block">-->
+<!--<select id="site" name="site" lay-verify="required" lay-search lay-filter="site">-->
+
+<!--</select>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="layui-inline">-->
+<!--<label class="layui-form-label">栏目选择:</label>-->
+<!--<div class="layui-input-block">-->
+<!--<select id="category" name="category" lay-verify="required" lay-search lay-filter="category">-->
+
+<!--</select>-->
+<!--</div>-->
+<!--</div>-->
+<div class="layui-form-item">
+    <label class="layui-form-label">站点选择:</label>
+    <div class="layui-input-inline">
+        <select name="site" id="site" onclick="selectSite()">
+            <option value="">请选择站点</option>
+        </select>
+    </div>
+    <label class="layui-form-label">模块选择:</label>
+    <div class="layui-input-inline">
+        <select name="module" id="module" onclick="selectModule()">
+            <option value="">请选择模块</option>
+        </select>
+    </div>
+    <label class="layui-form-label">栏目选择:</label>
+    <div class="layui-input-inline">
+        <select name="category" onclick="selectCategory()" id="category">
+            <option value="">请选择栏目</option>
+        </select>
+    </div>
+</div>
+
+<div class="layui-form-item" pane="">
+    <label class="layui-form-label">权限分配</label>
+    <div class="layui-input-block">
+        增加<input type="checkbox" name="like1[write]" lay-skin="primary" title="增加">
+        删除<input type="checkbox" name="like1[read]" lay-skin="primary" title="删除">
+        更新<input type="checkbox" name="like1[game]" lay-skin="primary" title="更新">
+        查看<input type="checkbox" name="like1[game]" lay-skin="primary" title="查看">
+    </div>
+</div>
+
+<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
+</body>
+</html>
+<script type="text/javascript">
+    var sitetime = 1;
+    var sitesign = 1;
+    function selectSite() {
+        if (sitesign === 1) {
+            var optionstring = "";
+            $.ajax({
+                url: "/permission/findsite",
+                type: 'get',
+                dataType: 'json',
+                success: function (ajaxdata) {
+                    for (var i = 0; i < ajaxdata.code; i++) {
+                        optionstring += "<option value="+'"'+ ajaxdata.data[i].siteId +'"'+ ">" + ajaxdata.data[i].siteName + "</option>";
+                        console.log(optionstring);
+                    }
+                    $("#site").append(optionstring);
+                }
+            });
+        }
+        var time = sitetime + 1;
+        sitesign = time % 2;
+    }
+</script>
+<script type="text/javascript">
+    var moduletime = 1;
+    var modulesign = 1;
+    function selectModule() {
+        var optionstring = "";
+        if (modulesign===1) {
+            $.ajax({
+                url: "/permission/findmodel",
+                type: 'get',
+                dataType: 'json',
+                success: function (ajaxdata) {
+                    for (var i = 0; i < ajaxdata.code; i++) {
+                        optionstring += "<option value="+'"'+ ajaxdata.data[i].moduleId +'"'+ ">" + ajaxdata.data[i].moduleName + "</option>";
+                    }
+                    $("#module").append(optionstring);
+                }
+            });
+        }
+        var time = moduletime + 1;
+        modulesign = time % 2;
+    }
+</script>
+<script type="text/javascript">
+//    function Categorysign() {}
+//    var categorysign=new Categorysign();
+//    categorysign.number=1;
+var categorytime = 1;
+var categorysign=1;
+    function selectCategory() {
+        var sid=new Sid();
+        var optionstring=new Optionstring();
+        if (categorysign === 1) {
+            sid.id=null;
+            sid.id=$("#site").val();
+            $.ajax({
+                url: "/permission/findcategory/" +sid.id ,
+                type: 'get',
+                dataType: 'json',
+                success: function (ajaxdata) {
+                    if (ajaxdata.data!=null){
+                        for (var i = 0; i < ajaxdata.code; i++) {
+                            optionstring.have +="<option value="+'"'+ ajaxdata.data[i].categoryId +'"'+ ">" + ajaxdata.data[i].categoryTitle + "</option>";
+                        }
+                        $("#category").html(optionstring.have);
+                        var time = categorytime + 1;
+                        categorysign = time % 2;
+                    }else{
+                        optionstring.have.valueOf("");
+                        $("#category").html(optionstring.have);
+                        var time = categorytime + 1;
+                        categorysign = time % 2;
+                    }
+                }
+//                end:function(){
+//                    delete sid;
+//                    delete  optionstring;
+//                    var time = categorytime + 1;
+//                    categorysign = time % 2;
+////                    time.valueOf(categorytime + 1);
+////                    categorysign.valueOf(time%2);
+//                }
+            });
+        }
+//        categorysign.number.valueOf(time%2);
+
+//        delete categorysign;
+    }
+</script>
+<script>
+    function Sid(){}
+</script>
+<script>
+    function Optionstring(){}
+</script>
