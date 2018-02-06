@@ -1,10 +1,3 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-</head>
-<body>
-<script src="/util/util.js"></script>
-<!--head part-->
 <!--添加文章的按钮-->
 <button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="article">添加文章</button>
 <div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
@@ -30,7 +23,7 @@
 <script>
     var categoryId;   // 用来标记文章的categoryId
     //文章表格渲染
-    layui.use('table', function () {
+    // layui.use('table', function () {
         var table = layui.table;
         var first = true;
         if (siteId) {
@@ -50,7 +43,7 @@
                     , {field: 'articleAuthor', width: 100, title: '文章作者'}
                     , {field: 'articleUrl', width: 150, title: '文章url', sort: true}
                     , {field: 'articleCreateTime', width: 110, title: '创建时间', sort: true}
-                    , {field: 'articleUpdateTime', width: 110, title: '创建时间', sort: true}
+                    , {field: 'articleUpdateTime', width: 110, title: '更新时间', sort: true}
                     , {field: 'articleThumb', width: 150, title: 'Thumb', sort: true}
                     , {title: '操作', align: 'center', toolbar: '#articleToolBar'}
                 ]]//            数据渲染后回调
@@ -74,7 +67,7 @@
                 categoryId = data.articleCategoryId;
                 //显示文章的详细信息
                 if (layEvent === 'detail') {
-                    showAtRight("/fragement/listCategory.html");
+                    showAtRight("/module/listCategory.html");
 
                     //删除文章的权限判断及实现
                 } else if (layEvent === 'del') {
@@ -99,7 +92,7 @@
 
                                 },
                                 end: function () {
-                                    showAtRight("/fragement/listArticle.html");
+                                    showAtRight("/module/listArticle.html");
                                 }
                             })
                             ;
@@ -117,12 +110,12 @@
                             closeBtn: 1,
                             anim: 0,
                             maxmin: true,
-                            content: '/fragement/editArticle.html?id=' + data.articleId,
+                            content: '/module/editArticle.html?id=' + data.articleId,
                             success: function (layero, index) {
                                 console.log(layero, index);
                             },
                             end: function () {
-                                showAtRight("/fragement/listArticle.html");
+                                showAtRight("/module/listArticle.html");
                             }
                         });
                     }
@@ -135,28 +128,9 @@
             });
         }
 
-    });
+    // });
     //添加文章功能
     $("#article").on('click', function () {
-        // if (judgePrivilege(siteId, categoryId)) {
-            layer.open({
-                id: 2,
-                type: 2,
-                skin: 'layui-layer-rim',
-                area: ['700px', '600px'],
-                closeBtn: 1,
-                anim: 0,
-                maxmin: true,
-                content: '/fragement/addArticle.html?siteId=' + siteId,
-                success: function (layero, index) {
-                    console.log(layero, index);
-                },
-                end: function () {
-                    showAtRight("fragement/listArticle.html");
-                }
-            });
-        // }
+        showAtRight("module/addArticle.html")
     });
 </script>
-</body>
-</html>

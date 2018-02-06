@@ -1,23 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta charset="utf-8"/>
-    <title></title>
-    <link href="/layui/css/layui.css" rel="stylesheet"/>
-    <link href="/tag/css/tag.css"/>
-    <script src="/layui/layui.js"></script>
-    <script type="text/javascript" src="/util/jquery.min.js"></script>
-    <script src="/util/jquery.form.js"></script>
-    <script src="/util/util.js"></script>
-    <link rel="stylesheet" type="text/css" href="/tag/jquery.tagsinput.css"/>
-    <script type="text/javascript" src="/util/jquery.tagsinput.js"></script>
-    <script type='text/javascript'
-            src='/util/jquery-ui.min.js'></script>
-    <link rel="stylesheet" type="text/css"
-          href="/tag/jquery-ui.css"/>
-</head>
-<body style="background-color:#eee;">
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+    <!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>-->
+    <!--<meta charset="utf-8"/>-->
+    <!--<title></title>-->
+    <!--<link href="/layui/css/layui.css" rel="stylesheet"/>-->
+    <!--<link href="/tag/css/tag.css"/>-->
+    <!--<script src="/layui/layui.js"></script>-->
+    <!--<script type="text/javascript" src="/util/jquery.min.js"></script>-->
+    <!--<script src="/util/jquery.form.js"></script>-->
+    <!--<script src="/util/util.js"></script>-->
+    <!--<link rel="stylesheet" type="text/css" href="/tag/jquery.tagsinput.css"/>-->
+    <!--<script type="text/javascript" src="/util/jquery.tagsinput.js"></script>-->
+    <!--<script type='text/javascript'-->
+            <!--src='/util/jquery-ui.min.js'></script>-->
+    <!--<link rel="stylesheet" type="text/css"-->
+          <!--href="/tag/jquery-ui.css"/>-->
+<!--</head>-->
+<!--<body style="background-color:#eee;">-->
 <div class="layui-form">
     <div class="layui-form-item">
         <label class="layui-form-label">文章标题</label>
@@ -103,7 +103,7 @@
 </html>
 <script type="text/javascript">
     $(function () {
-            layui.use('layedit', 'form', function () {
+            // layui.use('layedit', 'form', function () {
                 var layedit = layui.layedit;
                 var form = layui.form;
                 form.render();
@@ -170,8 +170,8 @@
                     });
                 });
             });
-        }
-    )
+        // }
+    // )
 </script>
 <script type="text/javascript">
     $("#belongCategory").on('click', function () {

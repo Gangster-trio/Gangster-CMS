@@ -10,17 +10,15 @@
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
     <script src="/util/util.js"></script>
+    <script src="/util/jquery.form.js"></script>
 </head>
 <body class="layui-layout-body">
 
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo"></div>
+        <div class="layui-logo">Gangster-CMS</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="">控制台</a></li>
-            <li class="layui-nav-item"><a href="">商品管理</a></li>
-            <li class="layui-nav-item"><a href="">用户</a></li>
 
 
         <#--站点选择区域-->
@@ -28,7 +26,8 @@
                 <a>选择站点</a>
                 <dl class="layui-nav-child">
                 <#list siteList as site>
-                    <dd><a onclick="init(${site.siteId})"> ${site.siteName}</a></dd>
+                    <dd id="choose_site_${site.siteId}"><a
+                            onclick="init(${site.siteId},${site.siteName})"> ${site.siteName}</a></dd>
                 </#list>
                 </dl>
             </li>
@@ -60,7 +59,7 @@
             <dl class="layui-nav-child">
                     <#list tree.list as module>
                         <dd>
-                            <a onclick="showAtRight('/fragement${module.moduleUrl}')">${module.moduleName}</a>
+                            <a onclick="showAtRight('/module${module.moduleUrl}')">${module.moduleName}</a>
                         </dd>
                     </#list>
             </dl>
@@ -89,13 +88,14 @@
     var siteId;
     <#if siteList?size!=0>
         siteId = ${siteList[0].siteId};
+        init(${siteList[0].siteId}, '${siteList[0].siteName}');
     </#if>
     var category = -1;
 
-    function init(id) {
+    function init(id, name) {
         siteId = id;
-        layer.msg("选择成功", {icon: 6});
-
+        layer.msg("当前站点:" + name, {icon: 6});
+        $("#choose_site_" + id).addClass("layui-this");
     }
 </script>
 

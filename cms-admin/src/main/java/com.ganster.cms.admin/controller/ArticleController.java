@@ -2,17 +2,11 @@ package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.config.ImgConfig;
 import com.ganster.cms.admin.dto.AjaxData;
-import com.ganster.cms.admin.dto.ArticleWithCategoryName;
-import com.ganster.cms.admin.dto.ArticleWithTag;
+import com.ganster.cms.admin.dto.ArticleDTO;
 import com.ganster.cms.admin.dto.Message;
-import com.ganster.cms.core.pojo.Article;
-import com.ganster.cms.core.pojo.ArticleExample;
-import com.ganster.cms.core.pojo.Category;
-import com.ganster.cms.core.pojo.Tag;
-import com.ganster.cms.core.service.ArticleService;
-import com.ganster.cms.core.service.CategoryService;
-import com.ganster.cms.core.service.PermissionService;
-import com.ganster.cms.core.service.TagService;
+import com.ganster.cms.core.constant.CmsConst;
+import com.ganster.cms.core.pojo.*;
+import com.ganster.cms.core.service.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -35,6 +29,9 @@ import java.util.*;
 public class ArticleController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleController.class);
+
+    @Autowired
+    private SettingService settingService;
 
     @Autowired
     private TagService tagService;
@@ -76,21 +73,14 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/save")
     @ResponseBody
-    public Message save(@RequestBody ArticleWithTag articleWithTag) {
-        if (articleWithTag == null) {
+    public Message save(@RequestBody ArticleDTO articleDTO) {
+        if (articleDTO == null) {
             return super.buildMessage(1, "文章为空", null);
         }
-        Article article = new Article(articleWithTag.getArticleTitle()
-                , articleWithTag.getArticleType()
-                , articleWithTag.getArticleAuthor()
-                , articleWithTag.getArticleOrder()
-                , articleWithTag.getArticleCategoryId()
-                , articleWithTag.getArticleDesc()
-                , articleWithTag.getArticleSkin()
-                , articleWithTag.getArticleContent());
+        Article article = articleDTO.toArticle();
         article.setArticleCreateTime(new Date());
         article.setArticleSiteId(siteid);
-        String tags = articleWithTag.getTags();
+        String tags = articleDTO.getTags();
         List<String> tagList;
         int count = 0;
         if (!(tags == null || tags.isEmpty())) {
@@ -130,7 +120,7 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/img")
     @ResponseBody
-    public Map<String, Object> uploadImg(@Param("file") MultipartFile file) {
+    public Message uploadImg(@Param("file") MultipartFile file) {
         String originalFileName = file.getOriginalFilename();   // 得到文件最初的名字
         LOGGER.info(originalFileName);
         String uuid = UUID.randomUUID().toString();
@@ -138,7 +128,7 @@ public class ArticleController extends BaseController {
 //        Calendar date = Calendar.getInstance();
         /*File dateDirs = new File(date.get(Calendar.YEAR)
                 + File.separator + (date.get(Calendar.MONTH) + 1));*/
-        File newFile = new File(imgConfig.getSaveLocation() + File.separator + newName);
+        File newFile = new File(settingService.get(CmsConst.PIC_PATH_SETTING) + File.separator + newName);
         if (!newFile.getParentFile().exists()) {
             newFile.getParentFile().mkdirs();
         }
@@ -149,9 +139,11 @@ public class ArticleController extends BaseController {
             e.printStackTrace();
         }
         String fileUrl = "/pic/" + newName;
-        Map<String, Object> map = new HashMap<>();
-        map.put("src", fileUrl);
-        return map;
+        Map<String, String> data = new HashMap<>();
+        data.put("src", fileUrl);
+        Message result = new Message(0, "success", data);
+        result.setData(data);
+        return result;
     }
 
     @GetMapping("/delete/{id}")
@@ -171,7 +163,7 @@ public class ArticleController extends BaseController {
 
     @GetMapping("/details/{id}")
     @ResponseBody
-    public ArticleWithCategoryName details(@PathVariable("id") Integer articleId) {
+    public ArticleDTO details(@PathVariable("id") Integer articleId) {
         LOGGER.info("通过了方法");
         Article article = articleService.selectByPrimaryKey(articleId);
         if (article != null) {
@@ -184,7 +176,10 @@ public class ArticleController extends BaseController {
                 }
             }
             String tags = String.join(",", tagNameList);
-            return new ArticleWithCategoryName(category.getCategoryTitle(), tags, article);
+            ArticleDTO articleDTO = new ArticleDTO(article);
+            articleDTO.setCategoryName(category.getCategoryTitle());
+            articleDTO.setTags(tags);
+            return articleDTO;
         } else return null;
     }
 

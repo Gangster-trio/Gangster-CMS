@@ -54,6 +54,7 @@ function showAtRight(url) {
     $.ajax({
         url: url,
         type: 'GET',
+        async: false,
         dataType: 'html',
         timeout: '5000',
         error: function () {
@@ -61,6 +62,7 @@ function showAtRight(url) {
         },
         success: function (data) {
             $("#content").html(data);
+            // window.location.href = url;
         }
     });
 }
