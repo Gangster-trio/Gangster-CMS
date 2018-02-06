@@ -27,7 +27,7 @@
                 <dl class="layui-nav-child">
                 <#list siteList as site>
                     <dd id="choose_site_${site.siteId}"><a
-                            onclick="init(${site.siteId},${site.siteName})"> ${site.siteName}</a></dd>
+                            onclick="init(${site.siteId},'${site.siteName}')"> ${site.siteName}</a></dd>
                 </#list>
                 </dl>
             </li>

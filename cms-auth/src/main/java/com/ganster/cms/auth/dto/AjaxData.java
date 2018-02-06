@@ -1,6 +1,6 @@
 package com.ganster.cms.auth.dto;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * layui要求返回的数据格式
@@ -9,9 +9,9 @@ public class AjaxData {
     private int code = 0;
     private String msg = "";
     private long count;
-    private ArrayList data;
+    private List data;
 
-    public AjaxData(int code, String msg, long count, ArrayList data) {
+    public AjaxData(int code, String msg, long count, List data) {
         this.code = code;
         this.msg = msg;
         this.count = count;
@@ -45,11 +45,11 @@ public class AjaxData {
         this.count = count;
     }
 
-    public ArrayList getData() {
+    public List getData() {
         return data;
     }
 
-    public void setData(ArrayList data) {
+    public void setData(List data) {
         this.data = data;
     }
 }

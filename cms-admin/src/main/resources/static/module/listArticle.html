@@ -22,111 +22,99 @@
 </script>
 <script>
     var categoryId;   // 用来标记文章的categoryId
+    var articleId;
     //文章表格渲染
     // layui.use('table', function () {
-        var table = layui.table;
-        var first = true;
-        if (siteId) {
-            table.render({
-                elem: '#article_table'
+    var table = layui.table;
+    var first = true;
+    if (siteId) {
+        table.render({
+            elem: '#article_table'
 
-                //判断栏目是否选择，如果选择，则显示该栏目的文章，如果没选择，显示站的所有文章
-                ,
-                url: '/article/list?siteId=' + siteId
-                ,
-                page: true //开启分页
-                ,
-                cols: [[ //表头
-                    {field: 'articleId', title: 'ID', width: 60, sort: true, fixed: 'left'}
-                    , {field: 'articleTitle', width: 187, title: '标题'}
-                    , {field: 'articleType', width: 100, title: '文章类型'}
-                    , {field: 'articleAuthor', width: 100, title: '文章作者'}
-                    , {field: 'articleUrl', width: 150, title: '文章url', sort: true}
-                    , {field: 'articleCreateTime', width: 110, title: '创建时间', sort: true}
-                    , {field: 'articleUpdateTime', width: 110, title: '更新时间', sort: true}
-                    , {field: 'articleThumb', width: 150, title: 'Thumb', sort: true}
-                    , {title: '操作', align: 'center', toolbar: '#articleToolBar'}
-                ]]//            数据渲染后回调
-                // , limit: 1
-                ,
-                limits: [10, 15, 20, 40, 80, 100]
-                ,
-                done: function (res, curr, count) {
-                    if (first) {
-                        layer.msg("加载完成 共" + count + "条数据");
-                        first = false;
-                    }
+            //判断栏目是否选择，如果选择，则显示该栏目的文章，如果没选择，显示站的所有文章
+            ,
+            url: '/article/list?siteId=' + siteId
+            ,
+            page: true //开启分页
+            ,
+            cols: [[ //表头
+                {field: 'articleId', title: 'ID', width: 60, sort: true, fixed: 'left'}
+                , {field: 'articleTitle', width: 187, title: '标题'}
+                , {field: 'articleType', width: 100, title: '文章类型'}
+                , {field: 'articleAuthor', width: 100, title: '文章作者'}
+                , {field: 'articleUrl', width: 150, title: '文章url', sort: true}
+                , {field: 'articleCreateTime', width: 110, title: '创建时间', sort: true}
+                , {field: 'articleUpdateTime', width: 110, title: '更新时间', sort: true}
+                , {field: 'articleThumb', width: 150, title: 'Thumb', sort: true}
+                , {title: '操作', align: 'center', toolbar: '#articleToolBar'}
+            ]]//            数据渲染后回调
+            // , limit: 1
+            ,
+            limits: [10, 15, 20, 40, 80, 100]
+            ,
+            done: function (res, curr, count) {
+                if (first) {
+                    layer.msg("加载完成 共" + count + "条数据");
+                    first = false;
                 }
-            });
+            }
+        });
 
-            //给文章添加基本的事件
-            table.on('tool(articleListFilter)', function (obj) { //注：tool是工具条事件名，articleListFilter是table原始容器的属性 lay-filter="对应的值"
-                var data = obj.data; //获得当前行数据
-                console.log(data);
-                layEvent = obj.event; //获得 lay-event 对应的值
-                categoryId = data.articleCategoryId;
-                //显示文章的详细信息
-                if (layEvent === 'detail') {
-                    showAtRight("/module/listCategory.html");
+        //给文章添加基本的事件
+        table.on('tool(articleListFilter)', function (obj) { //注：tool是工具条事件名，articleListFilter是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            console.log(data);
+            layEvent = obj.event; //获得 lay-event 对应的值
+            articleId = data.articleId;
+            categoryId = data.articleCategoryId;
+            //显示文章的详细信息
+            if (layEvent === 'detail') {
+                showAtRight("/module/listCategory.html");
 
-                    //删除文章的权限判断及实现
-                } else if (layEvent === 'del') {
-                    if (judgePrivilege(siteId, categoryId)) {
-                        layer.confirm('真的删除行么', function (index) {
-                            console.log(data);
-                            $.ajax({
-                                url: "/article/delete/" + data.articleId,
-                                type: 'get',
-                                dataType: 'json',
-                                success: function (data) {
-                                    console.log(data);
-                                    if (data.code === 0) {
-                                        //删除这一行
-                                        obj.del();
-                                        //关闭弹框
-                                        layer.close(index);
-                                        layer.msg("删除成功", {icon: 6});
-                                    } else {
-                                        layer.msg("删除失败", {icon: 5});
-                                    }
-
-                                },
-                                end: function () {
-                                    showAtRight("/module/listArticle.html");
+                //删除文章的权限判断及实现
+            } else if (layEvent === 'del') {
+                if (judgePrivilege(siteId, categoryId)) {
+                    layer.confirm('真的删除行么', function (index) {
+                        console.log(data);
+                        $.ajax({
+                            url: "/article/delete/" + data.articleId,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function (data) {
+                                console.log(data);
+                                if (data.code === 0) {
+                                    //删除这一行
+                                    obj.del();
+                                    //关闭弹框
+                                    layer.close(index);
+                                    layer.msg("删除成功", {icon: 6});
+                                } else {
+                                    layer.msg("删除失败", {icon: 5});
                                 }
-                            })
-                            ;
-                        });
-                    }
-                }
 
-                //更新文章的权限判断及实现
-                else if (layEvent === 'edit') {
-                    if (judgePrivilege(siteId, categoryId)) {
-                        layer.open({
-                            id: 1,
-                            type: 2,
-                            area: ['700px', '600px'],
-                            closeBtn: 1,
-                            anim: 0,
-                            maxmin: true,
-                            content: '/module/editArticle.html?id=' + data.articleId,
-                            success: function (layero, index) {
-                                console.log(layero, index);
                             },
                             end: function () {
                                 showAtRight("/module/listArticle.html");
                             }
-                        });
-                    }
+                        })
+                        ;
+                    });
                 }
-            });
-        } else {
-            layer.open({
-                title: '文章管理'
-                , content: '请先选择所要操作的站点'
-            });
-        }
+            }
+
+            //更新文章的权限判断及实现
+            else if (layEvent === 'edit') {
+                if (judgePrivilege(siteId, categoryId)) {
+                    showAtRight("module/editArticle.html");
+                }
+            }
+        });
+    } else {
+        layer.open({
+            title: '文章管理'
+            , content: '请先选择所要操作的站点'
+        });
+    }
 
     // });
     //添加文章功能

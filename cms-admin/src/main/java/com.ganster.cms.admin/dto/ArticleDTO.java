@@ -27,7 +27,7 @@ public class ArticleDTO extends Article {
         super();
     }
 
-    public ArticleDTO(Article article){
+    public ArticleDTO(Article article) {
         setArticleId(article.getArticleId());
         setArticleAuthor(article.getArticleAuthor());
         setArticleCategoryId(article.getArticleCategoryId());
@@ -43,6 +43,8 @@ public class ArticleDTO extends Article {
         setArticleStatus(article.getArticleStatus());
         setArticleThumb(article.getArticleThumb());
         setArticleType(article.getArticleType());
+        setArticleTitle(article.getArticleTitle());
+        setArticleUrl(article.getArticleUrl());
     }
 
     //不可以向下转型

@@ -80,6 +80,15 @@ function chooseValue(name) {
     return selectValue;
 }
 
+/*function setRadioValue(name,value) {
+    var radio = document.getElementsByName(name);
+    for (var i=0;i<radio.length;i++){
+        if (radio[i].value()===value){
+
+        }
+    }
+}*/
+
 //对操作进行判断是否具有操作权限
 function judgePrivilege(siteId, categoryId) {
     var operation = true;
