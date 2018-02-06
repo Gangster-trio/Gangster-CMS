@@ -59,16 +59,57 @@
 <div class="layui-form-item" pane="">
     <label class="layui-form-label">权限分配</label>
     <div class="layui-input-block">
-        增加<input type="checkbox" name="like1[write]" lay-skin="primary" title="增加">
-        删除<input type="checkbox" name="like1[read]" lay-skin="primary" title="删除">
-        更新<input type="checkbox" name="like1[game]" lay-skin="primary" title="更新">
-        查看<input type="checkbox" name="like1[game]" lay-skin="primary" title="查看">
+        读权限<input type="checkbox" name="permission" value="READ" lay-skin="primary" title="READ">
+        写权限<input type="checkbox" name="permission" value="WRITE" lay-skin="primary" title="WRITE">
     </div>
 </div>
 
-<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
+<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;" onclick="submit()"/>
 </body>
 </html>
+<script type="text/javascript">
+  function submit(){
+      var  obj=document.getElementsByName('permission');
+      var  permissions=new Array();
+      for (var i=0;i<obj.length;i++){
+          if (obj[i].checked)
+              permissions.push(obj[i].value);
+      }
+      var id=getUrlVar("groupId");
+      console.log(id);
+      $.ajax({
+          url:"/permission/addcategory",
+          type:'post',
+          dataType:'json',
+          contentType:"application/json",
+          data: JSON.stringify({
+              "permissionName": permissions,
+              "groupId": id,
+              "siteId": $("#site").val(),
+              "categoryId": $("#category").val(),
+              "moudleId": $("#module").val(),
+          }),
+          success: function (data) {
+              console.log(data);
+              if (data === 1) {
+                  //关闭弹框
+                  layer.msg("添加成功", {icon: 6});
+                  window.parent.location.reload();
+                  var index = parent.layer.getFrameIndex(window.name);
+                  parent.layer.close(index);
+              } else {
+                  layer.msg("添加失败", {icon: 5});
+                  window.parent.location.reload();
+                  var index = parent.layer.getFrameIndex(window.name);
+                  parent.layer.close(index);
+              }
+              var index = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(index);
+          }
+      })
+  }
+
+</script>
 <script type="text/javascript">
     var sitetime = 1;
     var sitesign = 1;

@@ -3,6 +3,7 @@ package com.ganster.cms.auth.controller;
 import com.ganster.cms.auth.dto.AjaxData;
 import com.ganster.cms.auth.dto.Message;
 import com.ganster.cms.auth.dto.PermissionData;
+import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.*;
 import org.slf4j.Logger;
@@ -30,7 +31,8 @@ public class PermissionController {
     @Autowired
     private ModuleService moduleService;
 
-    @PostMapping("/add/category")
+
+    @PostMapping("/addcategory")
     public Message addCategoryPermission(@RequestBody PermissionData permissionData) {
         Message message = new Message();
         Group group = groupService.selectByPrimaryKey(permissionData.getGroupId());
@@ -41,7 +43,13 @@ public class PermissionController {
             List<String> pName = permissionData.getPermissionName();
             if (pName != null && !pName.isEmpty()) {
                 for (String i : pName) {
-                    permissionService.addCategoryPermissionToGroup(gid, sid, cid, i);
+                    if (i.equals("READ")){
+                        i=CmsConst.PERMISSION_READ;
+                        permissionService.addCategoryPermissionToGroup(gid, sid, cid, i);
+                    }else if (i.equals("WRITE")){
+                        i=CmsConst.PERMISSION_WRITE;
+                        permissionService.addCategoryPermissionToGroup(gid, sid, cid, i);
+                    }
                     message.setMsg("添加权限成功");
                     message.setCode(0);
                 }
