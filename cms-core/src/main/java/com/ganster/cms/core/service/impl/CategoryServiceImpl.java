@@ -23,14 +23,17 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId());
         List<Category> list = selectByExample(categoryExample);  //子栏目
-        List<CategoryTree> categoryTrees = new ArrayList<>();
-        if (list.size() > 0) {
-            for (Category c : list) {
-                CategoryTree categoryTree = toTree(c);
-                categoryTrees.add(categoryTree);
-            }
-            tree.setChildren(categoryTrees);
+        if (list == null || list.isEmpty()) {
+            tree.setChildren(null);
+            return tree;
         }
+        List<CategoryTree> categoryTrees = new ArrayList<>();
+
+        for (Category c : list) {
+            CategoryTree categoryTree = toTree(c);
+            categoryTrees.add(categoryTree);
+        }
+        tree.setChildren(categoryTrees);
         return tree;
     }
 }

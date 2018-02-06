@@ -8,6 +8,7 @@
 </div>
 <script src="/util/util.js"></script>
 <table id="column_table" class="layui-table" style="margin: 0px" lay-filter="categorylist"></table>
+<script src="/util/jquery.min.js"></script>
 
 <script>
     var categoryId;
@@ -51,26 +52,15 @@
 
                 //查看栏目的详细信息
                 if (layEvent === 'detail') {
-                    showAtRight("/fragement/listArticle.html");
+                    alert(categoryId);
+                    showAtRight("/fragement/listArticle.html?categoryId=" + categoryId);
                 }
 
                 //删除栏目信息
                 else if (layEvent === 'del') { //删除
-                    var delPrivalige = true;
-                    $.ajax({
-                        url: "/category/privalige?categoryId=" + categoryId,
-                        dataType: "json",
-                        type: "get",
-                        success: function (data) {
-                            if (data.code === 2) {
-                                delPrivalige = false;
-                                layer.msg("sorry ,you have not privalige");
-                            }
-                        }
-                    });
-                    if (delPrivalige) {
+                    if (judgePrivilege(siteId, categoryId)) {
                         layer.confirm('真的删除行么', function (index) {
-                                deleteCategory(id);
+                                deleteCategory(categoryId);
                                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                                 layer.close(index);
                                 showAtRight("/fragement/listCategory.html");
@@ -81,19 +71,7 @@
 
                 //编辑栏目
                 else if (layEvent === 'edit') {
-                    var editPrivalige = true;
-                    $.ajax({
-                        url: "/category/privalige?categoryId=" + categoryId,
-                        dataType: "json",
-                        type: "get",
-                        success: function (data) {
-                            if (data.code === 2) {
-                                editPrivalige = false;
-                                layer.msg("sorry ,you have not privalige");
-                            }
-                        }
-                    });
-                    if (editPrivalige) {
+                    if (judgePrivilege(siteId, categoryId)) {
                         layer.open({
                             id: 1,
                             type: 2,
@@ -115,19 +93,7 @@
 
                 //跳转到给该栏目添加文章的界面
                 else if (layEvent === 'add') {   //跳转到添加文章界面
-                    var addPrivalige = true;
-                    $.ajax({
-                        url: "/category/privalige?categoryId=" + categoryId,
-                        dataType: "json",
-                        type: "get",
-                        success: function (data) {
-                            if (data.code === 2) {
-                                privalige = false;
-                                layer.msg("sorry ,you have not privalige");
-                            }
-                        }
-                    });
-                    if (addPrivalige) {
+                    if (judgePrivilege(siteId, categoryId)) {
                         layer.open({
                             id: 1,
                             type: 2,
@@ -161,9 +127,9 @@
         <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
             <i class="layui-icon">&#xe654;</i>
         </button>
-        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">
-            <i class="layui-icon">&#xe705;</i>
-        </button>
+        <!--  <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">
+              <i class="layui-icon">&#xe705;</i>
+          </button>-->
         <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="edit">
             <i class="layui-icon">&#xe642;</i>
         </button>
@@ -174,44 +140,47 @@
 </script>
 <script>
 
-    <!--添加栏目的按钮注册事件-->
+    //添加栏目的按钮注册事件
     var index = $("#column").on('click', function () {
-        layer.open({
-            id: 2,
-            type: 2,
-            skin: 'layui-layer-rim',
-            area: ['700px', '600px'],
-            closeBtn: 1,
-            anim: 0,
-            maxmin: true,
-            content: '/fragement/addCategory.html?siteid=' + siteId,
-            success: function (layero, index) {
-                console.log(layero, index);
-            }
-        });
+        if (judgePrivilege(siteId, categoryId)) {
+            layer.open({
+                id: 2,
+                type: 2,
+                skin: 'layui-layer-rim',
+                area: ['700px', '600px'],
+                closeBtn: 1,
+                anim: 0,
+                maxmin: true,
+                content: '/fragement/addCategory.html?siteid=' + siteId,
+                success: function (layero, index) {
+                    console.log(layero, index);
+                }
+            });
+        }
     });
 
     //删除栏目的功能实现
     function deleteCategory(id) {
-        $.ajax({
-                url: "/category/delete/" + id,
-                dataType: "json",
-                type: "get",
-                timeout: "3000",
-                error: function () {
-                    layer.msg("server no response : " + url);
-                },
-                success: function (data) {
-                    if (data.code === 0) {
-                        layer.msg("delete success.")
-                    } else if (data.code === 1) {
-                        layer.msg("delete false");
-                    } else if (data === 2) {
-                        layer.msg("sorry,you have not privalige");
+        if (judgePrivilege(siteId, id)) {
+            $.ajax({
+                    url: "/category/delete/" + id,
+                    dataType: "json",
+                    type: "get",
+                    timeout: "3000",
+                    error: function () {
+                        layer.msg("server no response : " + url);
+                    },
+                    success: function (data) {
+                        if (data.code === 0) {
+                            layer.msg("delete success.")
+                        } else if (data.code === 1) {
+                            layer.msg("delete false");
+                        }
                     }
                 }
-            }
-        );
+            );
+        }
+
     }
 </script>
 </html>

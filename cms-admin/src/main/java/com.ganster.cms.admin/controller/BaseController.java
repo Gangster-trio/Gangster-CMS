@@ -3,7 +3,7 @@ package com.ganster.cms.admin.controller;
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Create by Yoke on 2018/1/30
@@ -19,7 +19,7 @@ public class BaseController {
         return message;
     }
 
-    protected AjaxData buildAjaxData(int code, String msg, long count, ArrayList data) {
+    protected AjaxData buildAjaxData(int code, String msg, long count, List data) {
         AjaxData ajaxData = new AjaxData();
         ajaxData.setCode(code);
         ajaxData.setMsg(msg);

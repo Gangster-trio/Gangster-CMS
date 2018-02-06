@@ -1,5 +1,6 @@
 package com.ganster.cms.admin.util;
 
+import com.ganster.cms.core.pojo.User;
 import org.apache.shiro.SecurityUtils;
 
 /**

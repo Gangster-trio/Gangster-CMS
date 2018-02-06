@@ -2,16 +2,16 @@ package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
-import com.ganster.cms.admin.util.PageUtil;
-import com.ganster.cms.admin.util.UserUtil;
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
-import com.ganster.cms.core.service.PermissionService;
+import com.ganster.cms.core.util.PermissionUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,20 +29,32 @@ public class CategoryController extends BaseController {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private PermissionService permissionService;
-
 
     @GetMapping("/list")
     public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+        if (limit == null || limit == 0) {
+            limit = 10;
+        }
+        if (page == null || page == 0) {
+            page = 1;
+        }
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.or().andCategorySiteIdEqualTo(siteId);
-        List<Category> list = categoryService.selectByExample(categoryExample);
-        Integer userId = UserUtil.getCurrentUserId();
-        if (!list.isEmpty()) {
-            return PageUtil.getAjaxCateogryData(page, limit, categoryExample, categoryService, list);
+        categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(-1);
+        PageInfo<Category> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
+        List<Category> allList = pageInfo.getList();
+        List<Category> list = new ArrayList<>();
+
+        for (Category c : allList) {
+            if (SecurityUtils.getSubject().isPermitted(PermissionUtil.formatCategoryPermissionName(siteId, c.getCategoryId(), CmsConst.PERMISSION_READ))) {
+                list.add(c);
+            }
+        }
+
+
+        if (list.isEmpty()) {
+            return super.buildAjaxData(0, "no data", 0, null);
         } else {
-            return super.buildAjaxData(1, "no data", 0, null);
+            return super.buildAjaxData(0, "success", pageInfo.getTotal(), list);
         }
     }
 
@@ -82,18 +94,9 @@ public class CategoryController extends BaseController {
     }
 
     @GetMapping("/delete/{id}")
-    public Message delete(@PathVariable("id") Integer id, ModelMap modelMap) {
-        Category category = categoryService.selectByPrimaryKey(id);
-        Integer userId = UserUtil.getCurrentUserId();
+    public Message delete(@PathVariable("id") Integer id) {
 
-
-        //Determine whether current user permissions
-        if (!(permissionService.hasCategoryPermission(userId, category.getCategorySiteId(), id, CmsConst.PERMISSION_DEL))) {
-            return super.buildMessage(2, "no permisison", null);
-        }
-
-
-        //Detemermine whether current category article,if true,delete article and category
+        //Determined whether current category article,if true,delete article and category
         List<Article> list = articleService.selectArticleByCategoryId(id);
         if (!list.isEmpty()) {
             for (Article article : list) {
@@ -109,13 +112,9 @@ public class CategoryController extends BaseController {
 
     @PostMapping("/update/{id}")
     public Message update(@PathVariable("id") Integer id, @RequestBody Category category) {
-        Integer userId = UserUtil.getCurrentUserId();
-        if (!(permissionService.hasCategoryPermission(userId, category.getCategorySiteId(), userId, CmsConst.PERMISSION_UPDATE))) {
-            return super.buildMessage(2, "no permission", null);
-        }
         category.setCategoryId(id);
         category.setCategoryUpdateTime(new Date());
-        int count = categoryService.updateByPrimaryKeyWithBLOBs(category);
+        int count = categoryService.updateByPrimaryKeySelective(category);
         if (count == 1) return super.buildMessage(0, "success", 1);
         else return super.buildMessage(1, "false", 0);
     }
@@ -130,28 +129,28 @@ public class CategoryController extends BaseController {
     @PostMapping("/add")
     public Message add(@RequestBody Category category) {
         category.setCategoryCreateTime(new Date());
+        category.setCategorySkin("default");
+        Category parentPategory = categoryService.selectByPrimaryKey(category.getCategoryParentId());
+        Integer level = parentPategory.getCategoryLevel();
+        if (level == -1) {
+            category.setCategoryLevel(1);
+        } else {
+            category.setCategoryLevel(level + 1);
+        }
+
         int count = categoryService.insert(category);
+
         if (count == 1) return new Message(0, "success", count);
         else return new Message(1, "false", count);
     }
 
-    @GetMapping("/privalige")
-    public Message judgePrivaludge(@RequestParam(required = false) Integer siteId, @RequestParam(required = false) Integer categoryId) throws GroupNotFountException {
-        Integer userId = UserUtil.getCurrentUserId();
-        if (categoryId != null) {
-            if (!(permissionService.hasCategoryPermission(userId, categoryId, userId, CmsConst.PERMISSION_UPDATE))) {
-                return super.buildMessage(2, "no permission", null);
-            } else {
-                return super.buildMessage(0, "yes", null);
-            }
-        } else if (siteId != null) {
-            if (!(permissionService.hasSitePermission(userId, siteId))) {
-                return super.buildMessage(2, "no permission", null);
-            } else {
-                return super.buildMessage(0, "yes", null);
-            }
+    @GetMapping("/privilege")
+    public Message judgePrivilege(@RequestParam Integer siteId, @RequestParam Integer categoryId) {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isPermitted(PermissionUtil.formatCategoryPermissionName(siteId, categoryId, CmsConst.PERMISSION_WRITE))) {
+            return super.buildMessage(0, "success", 0);
         } else {
-            return super.buildMessage(1, "nodata", null);
+            return super.buildMessage(2, "no permissin", null);
         }
     }
 }

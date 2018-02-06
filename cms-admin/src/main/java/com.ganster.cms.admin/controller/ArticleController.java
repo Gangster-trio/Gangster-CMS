@@ -5,7 +5,6 @@ import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.ArticleWithCategoryName;
 import com.ganster.cms.admin.dto.ArticleWithTag;
 import com.ganster.cms.admin.dto.Message;
-import com.ganster.cms.admin.util.PageUtil;
 import com.ganster.cms.core.pojo.Article;
 import com.ganster.cms.core.pojo.ArticleExample;
 import com.ganster.cms.core.pojo.Category;
@@ -14,6 +13,8 @@ import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.TagService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,18 +53,24 @@ public class ArticleController extends BaseController {
 
     private Integer siteid;
 
-    //
     @GetMapping("/list")
     @ResponseBody
     public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
         siteid = siteId;
+        if (page == null || page == 0) {
+            page = 1;
+        }
+        if (limit == null || limit == 0) {
+            limit = 10;
+        }
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleSiteIdEqualTo(siteId);
-        List<Article> list = articleService.selectByExample(articleExample);
+        PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+        List<Article> list = pageInfo.getList();
         if (list == null || list.isEmpty()) {
             return super.buildAjaxData(1, "no data", 0, null);
         } else {
-            return PageUtil.getAjaxArticleData(page, limit, articleExample, articleService);
+            return super.buildAjaxData(0, "success", pageInfo.getTotal(), list);
         }
     }
 
@@ -88,9 +95,7 @@ public class ArticleController extends BaseController {
         int count = 0;
         if (!(tags == null || tags.isEmpty())) {
             tagList = Arrays.asList(tags.split(","));  //列出所有的tag标签
-            for (String tag : tagList) {
-                count += articleService.insertSelectiveWithTag(article, tag);
-            }
+            count += articleService.insertSelectiveWithTag(article, tagList);
         }
 
         return super.buildMessage(0, "success", count);
@@ -98,12 +103,29 @@ public class ArticleController extends BaseController {
 
     @GetMapping("/list/categorylist")
     @ResponseBody
-    public AjaxData listArticleByColumnId(@RequestParam("id") Integer id, @RequestParam("page") Integer page, @RequestParam("limit") Integer limit) {
+    public AjaxData listArticleByColumnId(
+            @RequestParam("id") Integer id,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "limit", required = false) Integer limit
+    ) {
         if (id != null) {
+            if (page == null || page == 0) {
+                page = 1;
+            }
+            if (limit == null || limit == 0) {
+                limit = 10;
+            }
             ArticleExample articleExample = new ArticleExample();
             articleExample.or().andArticleCategoryIdEqualTo(id);
-            return PageUtil.getAjaxArticleData(page, limit, articleExample, articleService);
-        } else return super.buildAjaxData(1, "false", 0, null);
+            PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+            List<Article> list = pageInfo.getList();
+            if (list == null || list.isEmpty()) {
+                return super.buildAjaxData(1, "no data", 0, null);
+            }
+            return super.buildAjaxData(0, "success", pageInfo.getTotal(), list);
+        } else {
+            return super.buildAjaxData(1, "false", 0, null);
+        }
     }
 
     @PostMapping("/img")
@@ -126,7 +148,7 @@ public class ArticleController extends BaseController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String fileUrl = "/upload/" + newName;
+        String fileUrl = "/pic/" + newName;
         Map<String, Object> map = new HashMap<>();
         map.put("src", fileUrl);
         return map;
@@ -171,10 +193,8 @@ public class ArticleController extends BaseController {
     public Message update(@PathVariable("id") Integer id, @RequestBody Article article) {
         article.setArticleId(id);
         article.setArticleUpdateTime(new Date());
-        ArticleExample articleExample = new ArticleExample();
-        articleExample.or().andArticleIdEqualTo(id);
-        int count = articleService.updateByExampleSelective(article, articleExample);
-        if (count == 1) return super.buildMessage(0, "succcess", count);
+        int count = articleService.updateByPrimaryKeySelective(article);
+        if (count == 1) return super.buildMessage(0, "success", count);
         else return super.buildMessage(1, "false", 1);
     }
 }

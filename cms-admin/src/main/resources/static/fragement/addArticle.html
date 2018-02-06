@@ -6,7 +6,7 @@
     <title></title>
     <link href="/layui/css/layui.css" rel="stylesheet"/>
     <link href="/tag/css/tag.css"/>
-    <script src="/layui/layui.all.js"></script>
+    <script src="/layui/layui.js"></script>
     <script type="text/javascript" src="/util/jquery.min.js"></script>
     <script src="/util/jquery.form.js"></script>
     <script src="/util/util.js"></script>
@@ -18,8 +18,7 @@
           href="/tag/jquery-ui.css"/>
 </head>
 <body style="background-color:#eee;">
-br/>
-<form>
+<div class="layui-form">
     <div class="layui-form-item">
         <label class="layui-form-label">文章标题</label>
         <div class="layui-input-inline">
@@ -36,7 +35,7 @@ br/>
                    class="layui-input">
         </div>
     </div>
-    <form>
+    <form class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">文章属性</label>
             <div class="layui-input-block">
@@ -87,96 +86,95 @@ br/>
             <textarea id="description" name="description" required class="layui-textarea" placeholder="添加描述"></textarea>
         </div>
     </div>
-    <div class="block">
-        <div id="wordTags"></div>
-        <input id="wordInput" type="text" name="" placeholder="请输入关键词以空格结尾"/>
-        <input id="wordHiddenInput" type="hidden" name=""/>
-    </div>
     <form>
         <input type="text" id="addNewTag" value=""/><input type="submit" onclick="addNewTag();" value="添加"/>
-        <p><label>Technologies: (Programming languages in yellow)</label>
-            <input id="tags_2" type="text" class="tags" value="php,ios,javascript,ruby,android,kindle"/></p>
+        <p><label>标签</label>
+            <input id="tags_2" type="text" class="tags" value=""/></p>
     </form>
     <p style="margin-left: 50px"> 文章内容</p>
     <div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
         <textarea name="txt" id="txt" required style="display:none;"></textarea>
     </div>
     <input id="parentId" name="parentId" type="text" hidden="hidden"/>
-    <input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
-</form>
+    <input type="button" value="提交文章" lay-filter="addArticle" id="btn1" class="layui-btn"
+           style="margin-left:10%;margin-top:20px;"/>
+</div>
 </body>
 </html>
 <script type="text/javascript">
-    window.onload = function () {
-        layui.use('layedit', function () {
-            var layedit = layui.layedit;
-
-            layedit.set({
-                uploadImage: {
-                    url: '/article/upload' //接口url
-                    , type: 'post' //默认post
-                    , size: 0
-                }
-            });
-
-            var editIndex = layedit.build('txt', {
-                height: 400
-            });
-
-
-            //如果栏目未指定，就显示指定栏目的框，如果指定，就隐藏
-            var categoryId = getUrlVar("categoryId");
-            if (!categoryId) $("#show").show();  //categoryId未定义就是false
-            else {
-                $("#show").hide();
-                $("#parentId").val(categoryId);
-            }
-
-            //提交文章事件
-        });
-        $("#btn1").onclick = function () {
-            var tags = $("#tags_2").val();
-            var articleCategoryId = $("#parentId").val();
-            var article = {
-                "articleTitle": $("#articleTitle").val(),
-                "articleType": chooseValue("choose"),
-                "articleAuthor": $("#author").val(),
-                "articleOrder": $("#order").val(),
-                "articleCategoryId": articleCategoryId,
-                "articleDesc": $("#desc").val(),
-                "articleSkin": chooseValue("skin"),
-                "articleContent": content,
-                "tags": tags
-            };
-
-            //如果添加文章属于在文章显示页面添加，就让文章栏目名为选择的栏目
-            if (!categoryId) categoryId = articleCategoryId;
-            var content = layedit.getContent(editIndex);
-
-            //ajax提交事件
-            $.ajax({
-                url: "/article/save",
-                type: 'post',
-                dataType: 'json',
-                contentType: "application/json",
-                data: JSON.stringify(article),
-                success: function (data) {
-                    console.log(data);
-                    if (data.code === 0) {
-                        //关闭弹框
-                        layer.msg("添加成功", {icon: 6});
-                    } else {
-                        layer.msg("添加失败", {icon: 5});
+    $(function () {
+            layui.use('layedit', 'form', function () {
+                var layedit = layui.layedit;
+                var form = layui.form;
+                form.render();
+                layedit.set({
+                    uploadImage: {
+                        url: '/article/img' //接口url
+                        , type: 'post' //默认post
+                        , size: 0
                     }
-                    var index = parent.layer.getFrameIndex(window.name);
-                    parent.layer.close(index);
+                });
+
+                var editIndex = layedit.build('txt', {
+                    height: 400
+                });
+
+
+                //如果栏目未指定，就显示指定栏目的框，如果指定，就隐藏
+                var categoryId = getUrlVar("categoryId");
+                if (!categoryId) $("#show").show();  //categoryId未定义就是false
+                else {
+                    $("#show").hide();
+                    $("#parentId").val(categoryId);
                 }
+
+                //提交文章事件
+                form.on('submit(addArticle)', function () {
+                    alert(getUrlVar("siteId"));
+                    if (!categoryId) {
+                        var articleCategoryId = document.getElementById("parentId").value;
+                    } else {
+                        articleCategoryId = categoryId;
+                    }
+                    // if (categoryId.length === 0) categoryId = initCategoryId;
+                    var articleContent = layedit.getContent(editIndex);     //得到layui编辑器里边的文章
+                    var tags = $("#tags_2").val();
+                    $.ajax({
+                        url: "/article/save/",
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            "articleTitle": $("#articleTitle").val(),
+                            "articleType": chooseValue("choose"),
+                            "articleAuthor": $("#author").val(),
+                            "articleOrder": $("#order").val(),
+                            "articleSiteId": getUrlVar("siteId"),
+                            "articleCategoryId": articleCategoryId,
+                            "articleDesc": $("#desc").val(),
+                            "articleSkin": chooseValue("skin"),
+                            "articleContent": articleContent,
+                            "tags": tags
+                        }),
+                        success: function (data) {
+                            console.log(data);
+                            if (data.code === 0) {
+                                //关闭弹框
+                                layer.msg("添加成功", {icon: 6});
+                            } else {
+                                layer.msg("添加失败", {icon: 5});
+                            }
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        }
+                    });
+                });
             });
         }
-    }
+    )
 </script>
 <script type="text/javascript">
-    var index = $("#belongCategory").on('click', function () {
+    $("#belongCategory").on('click', function () {
         layer.open({
             id: 1,
             type: 2,
@@ -195,7 +193,7 @@ br/>
             url: "/article/img",
             type: 'post',
             dataType: "json",
-            success: function (data, status, xhr) {
+            success: function (data) {
                 $("#image").attr("src", data.src);
             }
         };

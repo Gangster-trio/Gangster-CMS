@@ -65,6 +65,7 @@ function showAtRight(url) {
     });
 }
 
+//单选框选择值
 function chooseValue(name) {
     var radio = document.getElementsByName(name);
     var selectValue = null;
@@ -75,4 +76,22 @@ function chooseValue(name) {
         }
     }
     return selectValue;
+}
+
+//对操作进行判断是否具有操作权限
+function judgePrivilege(siteId, categoryId) {
+    var operation = true;
+    $.ajax({
+        url: '/category/privilege?siteId=' + siteId + '&categoryId=' + categoryId,
+        dataType: "json",
+        async: false,
+        type: "get",
+        success: function (data) {
+            if (data.code === 2) {
+                operation = false;
+                layer.msg("sorry ,you have not privilege");
+            }
+        }
+    });
+    return operation;
 }

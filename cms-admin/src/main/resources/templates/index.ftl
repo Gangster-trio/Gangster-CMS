@@ -10,7 +10,6 @@
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
     <script src="/util/util.js"></script>
-    <script src="/layui/layui.all.js"></script>
 </head>
 <body class="layui-layout-body">
 
@@ -26,19 +25,19 @@
 
         <#--站点选择区域-->
             <li class="layui-nav-item">
-                <a href="javascript:;">选择站点</a>
-                <#list sites as site>
-                    <dl class="layui-nav-child">
-                        <dd><a onclick="init(${site.siteId})"> ${site.siteName}</a></dd>
-                    </dl>
+                <a>选择站点</a>
+                <dl class="layui-nav-child">
+                <#list siteList as site>
+                    <dd><a onclick="init(${site.siteId})"> ${site.siteName}</a></dd>
                 </#list>
+                </dl>
             </li>
         </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="" id="userinfo">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    username
+                ${user.userName}
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
@@ -55,7 +54,7 @@
 
 
             <#--模块选择区域-->
-        <#list treelist as tree>
+        <#list moduleTreeList as tree>
         <li class="layui-nav-item layui-nav-itemed">
             <a href="javascript:;">${tree.module.moduleName}</a>
             <dl class="layui-nav-child">
@@ -88,14 +87,15 @@
 <script></script>
 <script>
     var siteId;
+    <#if siteList?size!=0>
+        siteId = ${siteList[0].siteId};
+    </#if>
     var category = -1;
 
     function init(id) {
         siteId = id;
-        layer.open({
-            title: '主页管理'
-            , content: '选择成功'
-        });
+        layer.msg("选择成功", {icon: 6});
+
     }
 </script>
 

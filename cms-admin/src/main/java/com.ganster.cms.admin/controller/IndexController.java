@@ -25,8 +25,6 @@ public class IndexController {
     private ModuleService moduleService;
 
     @Autowired
-    private ArticleService articleService;
-    @Autowired
     private SiteService siteService;
 
     @Autowired
@@ -39,12 +37,13 @@ public class IndexController {
     @GetMapping("/index")
     public ModelAndView index() {
         Subject subject = SecurityUtils.getSubject();
-        Integer id = (Integer) subject.getSession().getAttribute("id");
-        User user = userService.selectByPrimaryKey(id);
+        Integer userId = (Integer) subject.getSession().getAttribute("id");
+        User user = userService.selectByPrimaryKey(userId);
+
         ModelAndView modelAndView = new ModelAndView();
-        SiteExample siteExample = new SiteExample();
-        List<Site> siteList = siteService.selectByExample(siteExample);
-        List<ModuleTree> treeList = new ArrayList<ModuleTree>();
+
+        //TODO: add permission
+        List<ModuleTree> treeList = new ArrayList<>();
         ModuleExample moduleExample = new ModuleExample();
         moduleExample.or().andModuleParentIdEqualTo(0);
         List<Module> parents = moduleService.selectByExample(moduleExample);
@@ -57,9 +56,17 @@ public class IndexController {
             moduleTree.setList(childs);
             treeList.add(moduleTree);
         }
-        modelAndView.addObject("treelist", treeList);
-        modelAndView.addObject("test", "test");
-        modelAndView.addObject("sites", siteList);
+
+        List siteList = new ArrayList();
+        try {
+           siteList = permissionService.findAllUserSite(userId);
+        } catch (GroupNotFountException e) {
+            e.printStackTrace();
+        }
+
+        modelAndView.addObject("moduleTreeList", treeList);
+        modelAndView.addObject("siteList", siteList);
+        modelAndView.addObject("user",user);
 
         return modelAndView;
     }

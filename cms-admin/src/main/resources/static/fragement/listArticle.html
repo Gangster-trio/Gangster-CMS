@@ -28,8 +28,8 @@
     </div>
 </script>
 <script>
-
-    <!--文章表格的渲染-->
+    var categoryId;   // 用来标记文章的categoryId
+    //文章表格渲染
     layui.use('table', function () {
         var table = layui.table;
         var first = true;
@@ -38,9 +38,12 @@
                 elem: '#article_table'
 
                 //判断栏目是否选择，如果选择，则显示该栏目的文章，如果没选择，显示站的所有文章
-                , url: category = -1 ? 'article/list?siteId=' + siteId : 'article/categorylist?id=' + categoryId
-                , page: true //开启分页
-                , cols: [[ //表头
+                ,
+                url: '/article/list?siteId=' + siteId
+                ,
+                page: true //开启分页
+                ,
+                cols: [[ //表头
                     {field: 'articleId', title: 'ID', width: 60, sort: true, fixed: 'left'}
                     , {field: 'articleTitle', width: 187, title: '标题'}
                     , {field: 'articleType', width: 100, title: '文章类型'}
@@ -52,8 +55,10 @@
                     , {title: '操作', align: 'center', toolbar: '#articleToolBar'}
                 ]]//            数据渲染后回调
                 // , limit: 1
-                , limits: [10, 15, 20, 40, 80, 100]
-                , done: function (res, curr, count) {
+                ,
+                limits: [10, 15, 20, 40, 80, 100]
+                ,
+                done: function (res, curr, count) {
                     if (first) {
                         layer.msg("加载完成 共" + count + "条数据");
                         first = false;
@@ -66,26 +71,14 @@
                 var data = obj.data; //获得当前行数据
                 console.log(data);
                 layEvent = obj.event; //获得 lay-event 对应的值
-
+                categoryId = data.articleCategoryId;
                 //显示文章的详细信息
                 if (layEvent === 'detail') {
                     showAtRight("/fragement/listCategory.html");
 
                     //删除文章的权限判断及实现
                 } else if (layEvent === 'del') {
-                    var delPrivalige = true;
-                    $.ajax({
-                        url: "category/privalige?siteId=" + siteId + "&categoryId=" + categoryId,
-                        dataType: "json",
-                        type: "get",
-                        success: function (data) {
-                            if (data.code === 2) {
-                                delPrivalige = false;
-                                layer.msg("sorry ,you have not privalige");
-                            }
-                        }
-                    });
-                    if (delPrivalige) {
+                    if (judgePrivilege(siteId, categoryId)) {
                         layer.confirm('真的删除行么', function (index) {
                             console.log(data);
                             $.ajax({
@@ -116,34 +109,23 @@
 
                 //更新文章的权限判断及实现
                 else if (layEvent === 'edit') {
-                    var editPrivalige = true;
-                    $.ajax({
-                        url: "category/privalige?siteId=" + siteId + "&categoryId=" + categoryId,
-                        dataType: "json",
-                        type: "get",
-                        success: function (data) {
-                            if (data.code === 2) {
-                                delPrivalige = false;
-                                layer.msg("sorry ,you have not privalige");
+                    if (judgePrivilege(siteId, categoryId)) {
+                        layer.open({
+                            id: 1,
+                            type: 2,
+                            area: ['700px', '600px'],
+                            closeBtn: 1,
+                            anim: 0,
+                            maxmin: true,
+                            content: '/fragement/editArticle.html?id=' + data.articleId,
+                            success: function (layero, index) {
+                                console.log(layero, index);
+                            },
+                            end: function () {
+                                showAtRight("/fragement/listArticle.html");
                             }
-                        }
-                    });
-                    console.log(data);
-                    layer.open({
-                        id: 1,
-                        type: 2,
-                        area: ['700px', '600px'],
-                        closeBtn: 1,
-                        anim: 0,
-                        maxmin: true,
-                        content: '/fragement/editArticle.html?id=' + data.articleId,
-                        success: function (layero, index) {
-                            console.log(layero, index);
-                        },
-                        end: function () {
-                            showAtRight("/fragement/listArticle.html");
-                        }
-                    });
+                        });
+                    }
                 }
             });
         } else {
@@ -154,27 +136,26 @@
         }
 
     });
-</script>
-<script>
-
-    <!--添加文章功能-->
-    var article = $("#article").on('click', function () {
-        layer.open({
-            id: 2,
-            type: 2,
-            skin: 'layui-layer-rim',
-            area: ['700px', '600px'],
-            closeBtn: 1,
-            anim: 0,
-            maxmin: true,
-            content: '/fragement/addArticle.html',
-            success: function (layero, index) {
-                console.log(layero, index);
-            },
-            end: function () {
-                showAtRight("fragement/listArticle.html");
-            }
-        });
+    //添加文章功能
+    $("#article").on('click', function () {
+        // if (judgePrivilege(siteId, categoryId)) {
+            layer.open({
+                id: 2,
+                type: 2,
+                skin: 'layui-layer-rim',
+                area: ['700px', '600px'],
+                closeBtn: 1,
+                anim: 0,
+                maxmin: true,
+                content: '/fragement/addArticle.html?siteId=' + siteId,
+                success: function (layero, index) {
+                    console.log(layero, index);
+                },
+                end: function () {
+                    showAtRight("fragement/listArticle.html");
+                }
+            });
+        // }
     });
 </script>
 </body>

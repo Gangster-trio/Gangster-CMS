@@ -11,6 +11,7 @@ import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.SiteService;
 import com.ganster.cms.core.service.UserService;
+import com.ganster.cms.core.util.PermissionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,13 +90,13 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     @Override
     @Transactional
     public void deleteUserPermission(Integer userId, Integer sid, Integer cid, String pName) throws UserNotFoundException, GroupNotFountException {
-        deleteUserPermission(userId, formatCategoryPermissionName(sid, cid, pName));
+        deleteUserPermission(userId, PermissionUtil.formatCategoryPermissionName(sid, cid, pName));
     }
 
     @Override
     @Transactional
     public void deleteGroupPermission(Integer groupId, Integer sid, Integer cid, String pName) throws GroupNotFountException {
-        deleteGroupPermission(groupId, formatCategoryPermissionName(sid, cid, pName));
+        deleteGroupPermission(groupId, PermissionUtil.formatCategoryPermissionName(sid, cid, pName));
     }
 
     private Boolean hasPermission(Integer userId, String pName) throws GroupNotFountException {
@@ -132,7 +133,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
 
     @Override
     public Boolean hasCategoryPermission(Integer uid, Integer sid, Integer cid, String pName) {
-        String permissionName = formatCategoryPermissionName(sid, cid, pName);
+        String permissionName = PermissionUtil.formatCategoryPermissionName(sid, cid, pName);
         try {
             return hasPermission(uid, permissionName);
         } catch (GroupNotFountException e) {
@@ -142,7 +143,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
 
     @Override
     public Boolean hasModulePermission(Integer uid, Integer sid, Integer moduleId, String pName) {
-        String permissionName = formatModulePermissionName(sid,moduleId,pName);
+        String permissionName = PermissionUtil.formatModulePermissionName(sid,moduleId,pName);
         try {
             return hasPermission(uid, permissionName);
         } catch (GroupNotFountException e) {
@@ -168,7 +169,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     public void addCategoryPermissionToGroup(Integer gid, Integer sid, Integer cid, String pName) {
 
         Permission permission = new Permission();
-        permission.setPermissionName(formatCategoryPermissionName(sid, cid, pName));
+        permission.setPermissionName(PermissionUtil.formatCategoryPermissionName(sid, cid, pName));
         insert(permission);
 
         GroupPermission groupPermission = new GroupPermission();
@@ -180,7 +181,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     @Override
     public void addModulePermissionToGroup(Integer gid, Integer sid, Integer moduleId, String pName) {
         Permission permission = new Permission();
-        permission.setPermissionName(formatModulePermissionName(sid, moduleId, pName));
+        permission.setPermissionName(PermissionUtil.formatModulePermissionName(sid, moduleId, pName));
         insert(permission);
 
         GroupPermission groupPermission = new GroupPermission();
@@ -194,7 +195,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     public void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException, GroupNotFountException {
         Group group = groupService.findUserOwnGroup(uid);
         Permission permission = new Permission();
-        permission.setPermissionName(sid.toString());
+        permission.setPermissionName(PermissionUtil.formatSitePermissionName(sid));
         insert(permission);
 
         GroupPermission groupPermission = new GroupPermission();
@@ -205,7 +206,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
 
     @Override
     public Boolean hasSitePermission(Integer uid, Integer sid) throws GroupNotFountException {
-        return hasPermission(uid, sid.toString());
+        return hasPermission(uid, PermissionUtil.formatSitePermissionName(sid));
     }
 
     @Override
@@ -238,15 +239,5 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
         groupPermissionMapper.deleteByExample(groupPermissionExample);
 
         deleteByPrimaryKey(pid);
-    }
-
-    private String formatCategoryPermissionName(Integer sid, Integer cid, String pName) {
-        //for example | "Site(1):Category(23):Permission(view)
-        return "Site(" + sid + ")" + ":Category(" + cid + "):Permission(" + pName + ")";
-    }
-
-    private String formatModulePermissionName(Integer sid, Integer moduleId, String pName) {
-        //for example | "Site(1):Module(23):Permission(view)
-        return "Site(" + sid + ")" + ":Module(" + moduleId + "):Permission(" + pName + ")";
     }
 }
