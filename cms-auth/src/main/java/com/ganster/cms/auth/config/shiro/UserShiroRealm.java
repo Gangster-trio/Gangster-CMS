@@ -33,6 +33,7 @@ public class UserShiroRealm extends AuthorizingRealm {
     @Resource
     private GroupService groupService;
     private Integer userId;
+
     /**
      * 认证信息.(身份验证)
      * :
@@ -42,27 +43,27 @@ public class UserShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String username = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
-        logger.info("-----------------------------"+password+"--------------------------------------");
+        logger.info("-----------------------------" + password + "--------------------------------------");
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserNameEqualTo(username);
-        List<User> users=userService.selectByExample(userExample);
-        Integer j=0;
-        for (User i:users){
-            userId=i.getUserId();
+        List<User> users = userService.selectByExample(userExample);
+        Integer j = 0;
+        for (User i : users) {
+            userId = i.getUserId();
             j++;
         }
-        if (j>=2){
+        if (j >= 2) {
             throw new AuthenticationException();
         }
-        User user=userService.selectByPrimaryKey(userId);
+        User user = userService.selectByPrimaryKey(userId);
         if (!user.getUserName().equals(username)) {
             SecurityUtils.getSubject().logout();
             throw new AuthenticationException();
         }
-        if (user==null) {
+        if (user == null) {
             throw new AuthenticationException();
         }
-        SecurityUtils.getSubject().getSession().setAttribute("id",user.getUserId());
+        SecurityUtils.getSubject().getSession().setAttribute("id", user.getUserId());
         logger.info("用户" + user.getUserName() + "进行认证");
         if (!Objects.equals(password, user.getUserPassword())) {
             throw new IncorrectCredentialsException();
@@ -77,7 +78,7 @@ public class UserShiroRealm extends AuthorizingRealm {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserNameEqualTo(username);
         List<User> users = userService.selectByExample(userExample);
-        Integer j=0;
+        Integer j = 0;
         for (User i : users) {
             userId = i.getUserId();
             j++;

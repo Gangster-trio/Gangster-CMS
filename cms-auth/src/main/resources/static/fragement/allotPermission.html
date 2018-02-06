@@ -9,14 +9,10 @@
     <link rel="stylesheet" href="../layui/css/layui.css" media="all">
     <script src="../js/util.js"></script>
     <script src="../js/jquery.form.js"></script>
-    <script src="../layui/layui.all.js"></script>
     <script src="../layui/layui.js"></script>
 </head>
 <body>
 
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    <legend>权限分配</legend>
-</fieldset>
 <h1 id="">这是角色名</h1>
 <br/>
 <div class="layui-form-item">
@@ -47,8 +43,8 @@
         写权限<input type="checkbox" name="permission" value="WRITE" lay-skin="primary" title="WRITE">
     </div>
 </div>
-
-<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;" onclick="submit()"/>
+</form>
+<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
 </body>
 </html>
 <script type="text/javascript">
@@ -95,8 +91,10 @@
 
 </script>
 <script type="text/javascript">
+
     var sitetime = 1;
     var sitesign = 1;
+
     function selectSite() {
         if (sitesign === 1) {
             var optionstring = "";
@@ -106,7 +104,7 @@
                 dataType: 'json',
                 success: function (ajaxdata) {
                     for (var i = 0; i < ajaxdata.code; i++) {
-                        optionstring += "<option value="+'"'+ ajaxdata.data[i].siteId +'"'+ ">" + ajaxdata.data[i].siteName + "</option>";
+                        optionstring += "<option value=" + '"' + ajaxdata.data[i].siteId + '"' + ">" + ajaxdata.data[i].siteName + "</option>";
                         console.log(optionstring);
                     }
                     $("#site").append(optionstring);
@@ -120,16 +118,17 @@
 <script type="text/javascript">
     var moduletime = 1;
     var modulesign = 1;
+
     function selectModule() {
         var optionstring = "";
-        if (modulesign===1) {
+        if (modulesign === 1) {
             $.ajax({
                 url: "/permission/findmodel",
                 type: 'get',
                 dataType: 'json',
                 success: function (ajaxdata) {
                     for (var i = 0; i < ajaxdata.code; i++) {
-                        optionstring += "<option value="+'"'+ ajaxdata.data[i].moduleId +'"'+ ">" + ajaxdata.data[i].moduleName + "</option>";
+                        optionstring += "<option value=" + '"' + ajaxdata.data[i].moduleId + '"' + ">" + ajaxdata.data[i].moduleName + "</option>";
                     }
                     $("#module").append(optionstring);
                 }
@@ -140,30 +139,31 @@
     }
 </script>
 <script type="text/javascript">
-//    function Categorysign() {}
-//    var categorysign=new Categorysign();
-//    categorysign.number=1;
-var categorytime = 1;
-var categorysign=1;
+    //    function Categorysign() {}
+    //    var categorysign=new Categorysign();
+    //    categorysign.number=1;
+    var categorytime = 1;
+    var categorysign = 1;
+
     function selectCategory() {
-        var sid=new Sid();
-        var optionstring=new Optionstring();
+        var sid = new Sid();
+        var optionstring = new Optionstring();
         if (categorysign === 1) {
-            sid.id=null;
-            sid.id=$("#site").val();
+            sid.id = null;
+            sid.id = $("#site").val();
             $.ajax({
-                url: "/permission/findcategory/" +sid.id ,
+                url: "/permission/findcategory/" + sid.id,
                 type: 'get',
                 dataType: 'json',
                 success: function (ajaxdata) {
-                    if (ajaxdata.data!=null){
+                    if (ajaxdata.data != null) {
                         for (var i = 0; i < ajaxdata.code; i++) {
-                            optionstring.have +="<option value="+'"'+ ajaxdata.data[i].categoryId +'"'+ ">" + ajaxdata.data[i].categoryTitle + "</option>";
+                            optionstring.have += "<option value=" + '"' + ajaxdata.data[i].categoryId + '"' + ">" + ajaxdata.data[i].categoryTitle + "</option>";
                         }
                         $("#category").html(optionstring.have);
                         var time = categorytime + 1;
                         categorysign = time % 2;
-                    }else{
+                    } else {
                         optionstring.have.valueOf("");
                         $("#category").html(optionstring.have);
                         var time = categorytime + 1;
@@ -176,8 +176,10 @@ var categorysign=1;
     }
 </script>
 <script>
-    function Sid(){}
+    function Sid() {
+    }
 </script>
 <script>
-    function Optionstring(){}
+    function Optionstring() {
+    }
 </script>

@@ -1,131 +1,116 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta charset="utf-8"/>
-    <title></title>
-    <link href="/layui/css/layui.css" rel="stylesheet"/>
-    <link href="/tag/css/tag.css"/>
-    <script src="/layui/layui.all.js"></script>
-    <script type="text/javascript" src="/util/jquery.min.js"></script>
-    <script src="/util/jquery.form.js"></script>
-    <script src="/util/util.js"></script>
-    <link rel="stylesheet" type="text/css" href="/tag/jquery.tagsinput.css"/>
-    <script type="text/javascript" src="/util/jquery.tagsinput.js"></script>
-    <script type='text/javascript'
-            src='/util/jquery-ui.min.js'></script>
-    <link rel="stylesheet" type="text/css"
-          href="/tag/jquery-ui.css"/>
-</head>
-<body style="background-color:#eee;">
-<br/>
-<div class="layui-form-item">
-    <label class="layui-form-label">文章标题</label>
-    <div class="layui-input-inline">
-        <input type="text" id="articleTitle" name="articleTitle" required lay-verify="required" placeholder="文章名称"
-               autocomplete="off"
-               class="layui-input">
-    </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">自定义顺序</label>
-    <div class="layui-input-inline">
-        <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序" autocomplete="off"
-               class="layui-input">
-    </div>
-</div>
-<form class="layui-form" action="">
-    <div class="layui-form-item">
-        <label class="layui-form-label">文章属性</label>
-        <div class="layui-input-block">
-            <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-            <!--单选框name 为控件名，value是提交到服务器的值-->
-            <input type="radio" name="choose" value="carousel" title="轮播图">
-            <input type="radio" name="choose" value="index" title="主页文章">
-            <input type="radio" name="choose" value="normal" title="普通文章" checked="checked">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>更新文章</legend>
+</fieldset>
+<div class="site-text site-block">
+    <form id="updateArticleForm" class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">文章标题</label>
+            <div class="layui-input-inline">
+                <input type="text" name="articleTitle" id="articleTitle" required="" lay-verify="required"
+                       placeholder="请输入文章标题" autocomplete="off"
+                       class="layui-input">
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">选择皮肤</label>
-        <div class="layui-input-block">
-            <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-            <!--单选框name 为控件名，value是提交到服务器的值-->
-            <input type="radio" name="skin" value="default" title="默认" checked="checked">
+        <div class="layui-form-item">
+            <label class="layui-form-label">自定义顺序</label>
+            <div class="layui-input-inline">
+                <input type="text" id="articleOrder" name="articleOrder" required="" lay-verify="required|number"
+                       placeholder="自定义顺序" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">辅助文字</div>
         </div>
-    </div>
-</form>
-<div id="show" class="layui-form-item">
-    <label class="layui-form-label">所属栏目</label>
-    <div class="layui-input-inline">
-        <input type="text" id="belongCategory" name="belongCategory" required="required" lay-verify="required"
-               placeholder="顶级栏目管理"
-               autocomplete="off"
-               class="layui-input" readonly="readonly"/>
-    </div>
-</div>
-<div class="layui-form-item layui-form-text">
-    <form id="img" action="/article/img" method="post" enctype="multipart/form-data">
-        <img width="100" height="100" style="margin-left: 40px" id="image"/><br/>
-        <!-- 在选择图片的时候添加事件，触发Ajax异步上传 -->
-        <input name="file" style="margin-left: 40px" type="file" onchange="uploadImg()"/>
+        <!--<div class="layui-input-block">
+            <input type="radio" name="articleType" value="carousel" title="轮播图">
+            <input type="radio" name="articleType" value="index" title="主页文章">
+            <input type="radio" name="articleType" value="normal" title="普通文章" checked="checked">
+        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">文章类型</label>
+            <div class="layui-input-inline">
+                <select id="articleType" name="city" lay-verify="required">
+                    <option value="carousel">轮播图</option>
+                    <option value="index">主页文章</option>
+                    <option value="normal">普通文章</option>
+                </select>
+            </div>
+        </div>
+        <!--<div class="layui-input-inline">-->
+        <!--<input type="text" name="articleType" value="" title="自定义类型" placeholder="自定义类型" class="layui-input">-->
+        <!--<div class="layui-form-mid layui-word-aux">自定义模板时使用</div>-->
+        <!--</div>-->
+        <!--TODO: skin choose-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择皮肤</label>
+            <div class="layui-input-block">
+                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
+                <!--单选框name 为控件名，value是提交到服务器的值-->
+                <input type="radio" id="articleSkin" name="articleSkin" value="default" title="默认" checked="checked">
+            </div>
+        </div>
+        <div id="show" class="layui-form-item">
+            <label class="layui-form-label">所属栏目</label>
+            <div class="layui-input-inline">
+                <input id="category_id" class="layui-hide" name="articleCategoryId" required
+                       lay-verify="required|number">
+                <input type="text" id="belongCategory" required="required" lay-verify="required"
+                       placeholder="选择栏目"
+                       autocomplete="off"
+                       class="layui-input" readonly="readonly"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">文章作者</label>
+            <div class="layui-input-inline">
+                <input type="text" id="articleAuthor" name="articleAuthor" required lay-verify="required"
+                       placeholder="文章作者"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Tag</label>
+            <div class="layui-input-block">
+                <input type="text" id="tags" name="tags" value="" placeholder="Tag"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <button type="button" class="layui-btn" id="test1">
+                <i class="layui-icon">&#xe67c;</i>上传图片
+            </button>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea id="articleDesc" name="articleDesc" required class="layui-textarea"
+                          placeholder="添加描述"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">文章内容</label>
+            <div class="layui-input-block">
+                <textarea name="articleContent" id="articleContent" class="layui-hide" lay-verify="content"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button lay-submit class="layui-btn" lay-filter="updateArticle">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
     </form>
 </div>
-<div class="layui-form-item">
-    <label class="layui-form-label">文章作者</label>
-    <div class="layui-input-inline">
-        <input type="text" id="author" name="author" required lay-verify="required" placeholder="文章作者"
-               autocomplete="off"
-               class="layui-input">
-    </div>
-</div>
-<div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">描述</label>
-    <div class="layui-input-block">
-        <textarea id="description" name="description" required class="layui-textarea" placeholder="添加描述"></textarea>
-    </div>
-</div>
-<form>
-    <!--<p><label>Defaults:</label>
-        <input id="tags_1" type="text" class="tags" value="foo,bar,baz,roffle"/></p>
--->
-    <p><label>Technologies: (Programming languages in yellow)</label>
-        <input id="tags_2" type="text" class="tags" value=""/></p>
 
-    <!--    <p><label>Autocomplete:</label>
-            <input id='tags_3' type='text' class='tags'></p>-->
-
-</form>
-<p style="margin-left: 50px"> 文章内容</p>
-<div style="width:90%;margin-left:5%;margin-top:100px;background-color:#fff;">
-    <textarea name="txt" id="txt" required style="display:none;"></textarea>
-</div>
-<input id="parentId" name="parentId" type="text" hidden="hidden"/>
-<input type="button" value="提交文章" id="btn1" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
-</body>
-</html>
 <script type="text/javascript">
-    var initCategoryId;   //初始加载的文章表的栏目id
-    window.onload = function () {
-        $.ajax({
-            type: "get",
-            url: "/article/details/" + getUrlVar("id"),  //得到需要更新文章的id
-            success: function (data) {
-                console.log(data);
-                initCategoryId = data.articleCategoryId;
-                $("#articleTitle").val(data.articleTitle);
-                $("#choose").val(data.articleType);
-                $("#order").val(data.articleOrder);
-                $("#author").val(data.articleAuthor);
-                $("#description").val(data.articleDesc);
-                $("#txt").val(data.articleContent);
-                $("#belongCategory").val(data.categoryName);
-                // $("#tags_2").attr("value", data.tagsName);
-                $("#tags_2").val(data.tagsName);
-            }
-        });
-        layui.use('layedit', function () {
+    var updateArticle;
+    $(function () {
             var layedit = layui.layedit;
-
+            var form = layui.form;
+            form.render();
             layedit.set({
                 uploadImage: {
                     url: '/article/img' //接口url
@@ -134,115 +119,87 @@
                 }
             });
 
-            var editIndex = layedit.build('txt', {
+            updateArticle = layedit.build('articleContent', {
                 height: 400
             });
+            form.on('submit(updateArticle)', function () {
+                layui.layer.alert("enter form on func");
+                updateArticleSubmit();
+                layui.layer.alert("end");
+                return false;
+            });
+            $.ajax({
+                type: "get",
+                url: "/article/details/" + articleId,  //得到需要更新文章的id
+                success: function (data) {
+                    console.log(data);
+                    initCategoryId = data.articleCategoryId;
+                    $("#articleTitle").val(data.articleTitle);
+                    $("#articleType").val(data.articleType);
+                    $("#articleOrder").val(data.articleOrder);
+                    $("#articleAuthor").val(data.articleAuthor);
+                    $("#belongCategory").val(data.categoryName);
+                    $("#tags").val(data.tags);
+                    $("#articleDesc").val(data.articleDesc);
+                    layedit.setContent(updateArticle, data.articleContent);    //配置layui 文本编辑器回显
+                }
+            });
+        }
+    );
+    //将form表单转化成Javascript object
 
-            document.getElementById('btn1').onclick = function () {
-                var categoryId = document.getElementById("parentId").value;
-                if (categoryId.length === 0) categoryId = initCategoryId;
-                var articleContent = layedit.getContent(editIndex);     //得到layui编辑器里边的文章
-                var tags = $("#tags_2").val();
-                $.ajax({
-                    url: "/article/update/" + getUrlVar("id"),
-                    type: 'post',
-                    dataType: 'json',
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        "articleTitle": $("#articleTitle").val(),
-                        "articleType": chooseValue("choose"),
-                        "articleAuthor": $("#author").val(),
-                        "articleOrder": $("#order").val(),
-                        "articleCategoryId": categoryId,
-                        "articleDesc": $("#desc").val(),
-                        "articleSkin": chooseValue("skin"),
-                        "articleContent": articleContent,
-                        "tags": tags
-                    }),
-                    success: function (data) {
-                        console.log(data);
-                        if (data.code === 0) {
-                            //关闭弹框
-                            layer.msg("添加成功", {icon: 6});
-                        } else {
-                            layer.msg("添加失败", {icon: 5});
-                        }
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(index);
-                    }
-                });
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
             }
         });
-    }
-</script>
-<script type="text/javascript">
-    var index = $("#belongCategory").on('click', function () {
-        layer.open({
-            id: 1,
-            type: 2,
-            skin: 'layui-layer-rim',
-            closeBtn: 1,
-            anim: 5,
-            content: '/fragement/selectCategory.html',
-            success: function (layero, index) {
-                console.log(layero, index);
-            }
-        });
-    });
+        return o;
+    };
 
-    //  上传缩略图
-    function uploadImg() {
-        var options = {
-            url: "/article/img",
+
+    function updateArticleSubmit() {
+        layui.layedit.sync(updateArticle);
+        formData = $("#updateArticleForm").serializeObject();
+        layui.layer.alert("fomr data:" + JSON.stringify(formData));
+        $.ajax({
             type: 'post',
-            dataType: "json",
-            success: function (data, status, xhr) {
-                $("#image").attr("src", data.src);
-            }
-        };
-        $("#img").ajaxSubmit(options);
-    }
-</script>
-<script type="text/javascript">
-
-    function onAddTag(tag) {
-        alert("Added a tag: " + tag);
-    }
-
-    function onRemoveTag(tag) {
-        alert("Removed a tag: " + tag);
-    }
-
-    function onChangeTag(input, tag) {
-        alert("Changed a tag: " + tag);
-    }
-
-    $(function () {
-
-        $('#tags_1').tagsInput({width: 'auto'});
-        $('#tags_2').tagsInput({
-            width: 'auto',
-            onChange: function (elem, elem_tags) {
-                var languages = ['php', 'ruby', 'javascript'];
-                $('.tag', elem_tags).each(function () {
-                    if ($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
-                        $(this).css('background-color', 'yellow');
-                });
+            url: '/article/update/' + articleId,
+            data: JSON.stringify(formData),
+            async: false,
+            contentType: "application/json",
+            dataType: 'json',
+            error: function (resp) {
+                layui.layer.alert("failed. " + resp)
+            },
+            success: function (resp) {
+                layui.layer.alert("添加成功 :" + resp);
+                showAtRight("/module/listArticle.html");
             }
         });
-        $('#tags_3').tagsInput({
-            width: 'auto',
+    }
 
-            //autocomplete_url:'test/fake_plaintext_endpoint.html' //jquery.autocomplete (not jquery ui)
-            autocomplete_url: 'test/fake_json_endpoint.html' // jquery ui autocomplete requires a json endpoint
+    $("#belongCategory").on('click', function () {
+        // layer.alert("click belongCategory");
+        $.get('/module/selectCategory.html', {}, function (str) {
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-rim',
+                closeBtn: 1,
+                anim: 5,
+                area: ['300px', '350px'],
+                content: str,
+                success: function (layero, index) {
+                    console.log(layero, index);
+                }
+            });
         });
-
-
-// Uncomment this line to see the callback functions in action
-//			$('input.tags').tagsInput({onAddTag:onAddTag,onRemoveTag:onRemoveTag,onChange: onChangeTag});
-
-// Uncomment this line to see an input with no interface for adding new tags.
-//			$('input.tags').tagsInput({interactive:false});
     });
-
 </script>

@@ -15,57 +15,61 @@
 </head>
 <body style="background-color:#eee;">
 <br/>
-<div class="layui-form-item">
-    <label class="layui-form-label">用户姓名:</label>
-    <div class="layui-input-inline">
-        <input type="text" id="userName" name="userName" required lay-verify="required" placeholder="用户姓名"
-               autocomplete="off"
-               class="layui-input">
+<form>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户姓名:</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userName" name="userName" required lay-verify="" placeholder="用户姓名"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
     </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">用户密码:</label>
-    <div class="layui-input-inline">
-        <input type="text" id="userPassword" name="userPassword" required lay-verify="required" placeholder="用户密码" autocomplete="off"
-               class="layui-input">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户密码:</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userPassword" name="userPassword" required lay-verify="required" placeholder="用户密码"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
     </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">用户电话:</label>
-    <div class="layui-input-inline">
-        <input type="text" id="userPhone" name="userPhone" required lay-verify="required" placeholder="用户电话" autocomplete="off"
-               class="layui-input">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户电话:</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userPhone" name="userPhone" required lay-verify="phone" placeholder="用户电话"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
     </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">用户Email:</label>
-    <div class="layui-input-inline">
-        <input type="text" id="userEmail" name="userEmail" required lay-verify="required" placeholder="用户Email"
-               autocomplete="off"
-               class="layui-input">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户Email:</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userEmail" name="userEmail" required lay-verify="email" placeholder="用户Email"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
     </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">用户状态:</label>
-    <div class="layui-input-inline">
-        <input type="text" id="userStatus" name="userStatus" required lay-verify="required" placeholder="用户状态"
-               autocomplete="off"
-               class="layui-input">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户状态:</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userStatus" name="userStatus" required lay-verify="required" placeholder="用户状态"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
     </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">所属组织:</label>
-    <div class="layui-input-inline">
-        <input type="text" id="userOrg" name="userOrg" required lay-verify="required" placeholder="所属组织"
-               autocomplete="off"
-               class="layui-input">
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属组织:</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userOrg" name="userOrg" required lay-verify="required" placeholder="所属组织"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
     </div>
-</div>
-<input type="button" value="提交信息" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
+    <input type="submit" value="提交信息" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
+</form>
 </body>
 </html>
 <script type="text/javascript">
-//    var initUserId;   //初始加载的用户表的栏目id
+    //    var initUserId;   //初始加载的用户表的栏目id
     window.onload = function () {
         console.log(getUrlVar("id"));
         $.ajax({
@@ -82,40 +86,40 @@
             }
         });
 
-            document.getElementById('btn1').onclick = function () {
-                var userName = document.getElementById("userName").value;
-                var userPhone=document.getElementById("userPhone").value;
-                var userPassword = document.getElementById("userPassword").value;
-                var userEmail = document.getElementById("userEmail").value;
-                var userOrg = document.getElementById("userOrg").value;
-                var userStatus = document.getElementById("userStatus").value;
-                console.log(userName);
-                $.ajax({
-                    url: "/user/update/" + getUrlVar("id"),
-                    type: 'post',
-                    dataType: 'json',
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        "userId":getUrlVar("id"),
-                        "userName":userName,
-                        "userPhone":userPhone,
-                        "userPassword":userPassword,
-                        "userEmail":userEmail,
-                        "userStatus":userStatus,
-                        "userOrg":userOrg
-                    }),
-                    success: function (data) {
-                        console.log(data);
-                        if (data=== 1) {
-                            //关闭弹框
-                            layer.msg("添加成功", {icon: 6});
-                        } else {
-                            layer.msg("添加失败", {icon: 5});
-                        }
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(index);
+        document.getElementById('btn1').onclick = function () {
+            var userName = document.getElementById("userName").value;
+            var userPhone = document.getElementById("userPhone").value;
+            var userPassword = document.getElementById("userPassword").value;
+            var userEmail = document.getElementById("userEmail").value;
+            var userOrg = document.getElementById("userOrg").value;
+            var userStatus = document.getElementById("userStatus").value;
+            console.log(userName);
+            $.ajax({
+                url: "/user/update/" + getUrlVar("id"),
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "userId": getUrlVar("id"),
+                    "userName": userName,
+                    "userPhone": userPhone,
+                    "userPassword": userPassword,
+                    "userEmail": userEmail,
+                    "userStatus": userStatus,
+                    "userOrg": userOrg
+                }),
+                success: function (data) {
+                    console.log(data);
+                    if (data === 1) {
+                        //关闭弹框
+                        layer.msg("添加成功", {icon: 6});
+                    } else {
+                        layer.msg("添加失败", {icon: 5});
                     }
-                });
-            }
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                }
+            });
+        }
     }
 </script>
