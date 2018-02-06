@@ -19,22 +19,6 @@
 </fieldset>
 <h1 id="">这是角色名</h1>
 <br/>
-<!--<div class="layui-form-item">-->
-<!--<label class="layui-form-label">站点选择:</label>-->
-<!--<div class="layui-input-block">-->
-<!--<select id="site" name="site" lay-verify="required" lay-search lay-filter="site">-->
-
-<!--</select>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="layui-inline">-->
-<!--<label class="layui-form-label">栏目选择:</label>-->
-<!--<div class="layui-input-block">-->
-<!--<select id="category" name="category" lay-verify="required" lay-search lay-filter="category">-->
-
-<!--</select>-->
-<!--</div>-->
-<!--</div>-->
 <div class="layui-form-item">
     <label class="layui-form-label">站点选择:</label>
     <div class="layui-input-inline">
@@ -68,56 +52,57 @@
 </body>
 </html>
 <script type="text/javascript">
-  function submit(){
-      var  obj=document.getElementsByName('permission');
-      var  permissions=new Array();
-      for (var i=0;i<obj.length;i++){
-          if (obj[i].checked)
-              permissions.push(obj[i].value);
-      }
-      var id=getUrlVar("groupId");
-      console.log(id);
-      $.ajax({
-          url:"/permission/addcategory",
-          type:'post',
-          dataType:'json',
-          contentType:"application/json",
-          data: JSON.stringify({
-              "permissionName": permissions,
-              "groupId": id,
-              "siteId": $("#site").val(),
-              "categoryId": $("#category").val(),
-              "moudleId": $("#module").val(),
-          }),
-          success: function (data) {
-              console.log(data);
-              if (data === 1) {
-                  //关闭弹框
-                  layer.msg("添加成功", {icon: 6});
-                  window.parent.location.reload();
-                  var index = parent.layer.getFrameIndex(window.name);
-                  parent.layer.close(index);
-              } else {
-                  layer.msg("添加失败", {icon: 5});
-                  window.parent.location.reload();
-                  var index = parent.layer.getFrameIndex(window.name);
-                  parent.layer.close(index);
-              }
-              var index = parent.layer.getFrameIndex(window.name);
-              parent.layer.close(index);
-          }
-      })
-  }
+    function submit(){
+        var  obj=document.getElementsByName('permission');
+        var  permissions=new Array();
+        for (var i=0;i<obj.length;i++){
+            if (obj[i].checked)
+                permissions.push(obj[i].value);
+        }
+        var id=getUrlVar("groupId");
+        console.log(id);
+        $.ajax({
+            url:"/permission/addpermission",
+            type:'post',
+            dataType:'json',
+            contentType:"application/json",
+            data: JSON.stringify({
+                "permissionName": permissions,
+                "groupId": id,
+                "siteId": $("#site").val(),
+                "categoryId": $("#category").val(),
+                "moudleId": $("#module").val()
+            }),
+            success: function (data) {
+                console.log(data);
+                if (data === 1) {
+                    //关闭弹框
+                    layer.msg("添加成功", {icon: 6});
+                    window.parent.location.reload();
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg("添加失败", {icon: 5});
+                    window.parent.location.reload();
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                }
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            }
+        })
+    }
 
 </script>
 <script type="text/javascript">
     var sitetime = 1;
     var sitesign = 1;
     function selectSite() {
+        var id=getUrlVar("groupId");
         if (sitesign === 1) {
             var optionstring = "";
             $.ajax({
-                url: "/permission/findsite",
+                url: "/permission/findsite"+id,
                 type: 'get',
                 dataType: 'json',
                 success: function (ajaxdata) {
@@ -156,11 +141,11 @@
     }
 </script>
 <script type="text/javascript">
-//    function Categorysign() {}
-//    var categorysign=new Categorysign();
-//    categorysign.number=1;
-var categorytime = 1;
-var categorysign=1;
+    //    function Categorysign() {}
+    //    var categorysign=new Categorysign();
+    //    categorysign.number=1;
+    var categorytime = 1;
+    var categorysign=1;
     function selectCategory() {
         var sid=new Sid();
         var optionstring=new Optionstring();
@@ -186,19 +171,9 @@ var categorysign=1;
                         categorysign = time % 2;
                     }
                 }
-//                end:function(){
-//                    delete sid;
-//                    delete  optionstring;
-//                    var time = categorytime + 1;
-//                    categorysign = time % 2;
-////                    time.valueOf(categorytime + 1);
-////                    categorysign.valueOf(time%2);
-//                }
             });
         }
-//        categorysign.number.valueOf(time%2);
 
-//        delete categorysign;
     }
 </script>
 <script>

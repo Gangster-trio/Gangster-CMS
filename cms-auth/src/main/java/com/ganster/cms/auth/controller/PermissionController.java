@@ -32,8 +32,8 @@ public class PermissionController {
     private ModuleService moduleService;
 
 
-    @PostMapping("/addcategory")
-    public Message addCategoryPermission(@RequestBody PermissionData permissionData) {
+    @PostMapping("/addpermission")
+    public Message addPermission(@RequestBody PermissionData permissionData) {
         Message message = new Message();
         Group group = groupService.selectByPrimaryKey(permissionData.getGroupId());
         if (group != null) {
@@ -41,6 +41,7 @@ public class PermissionController {
             Integer cid = permissionData.getCategoryId();
             Integer sid = permissionData.getSiteId();
             List<String> pName = permissionData.getPermissionName();
+            Integer mid = permissionData.getMoudleId();
             if (pName != null && !pName.isEmpty()) {
                 for (String i : pName) {
                     if (i.equals("READ")){
@@ -50,33 +51,23 @@ public class PermissionController {
                         i=CmsConst.PERMISSION_WRITE;
                         permissionService.addCategoryPermissionToGroup(gid, sid, cid, i);
                     }
-                    message.setMsg("添加权限成功");
-                    message.setCode(0);
                 }
+                message.setMsg("添加权限成功");
+                message.setCode(0);
             }
-            message.setMsg("添加权限失败");
-        }
-        message.setMsg("添加权限失败");
-        return message;
-    }
-
-    @RequestMapping("/add/model")
-    public Message addModelPermission(@RequestBody PermissionData permissionData) {
-        Message message = new Message();
-        Group group = groupService.selectByPrimaryKey(permissionData.getGroupId());
-        if (group != null) {
-            Integer gid = permissionData.getGroupId();
-            Integer mid = permissionData.getCategoryId();
-            Integer sid = permissionData.getSiteId();
-            List<String> pName = permissionData.getPermissionName();
-            if (pName != null && !pName.isEmpty()) {
+            if (mid != null && pName != null && !pName.isEmpty()) {
                 for (String i : pName) {
-                    permissionService.addModulePermissionToGroup(gid, sid, mid, i);
-                    message.setMsg("添加权限成功");
-                    message.setCode(0);
+                    if (i.equals("READ")) {
+                        i = CmsConst.PERMISSION_READ;
+                        permissionService.addModulePermissionToGroup(gid, sid, mid, i);
+                    } else if (i.equals("WRITE")) {
+                        i = CmsConst.PERMISSION_WRITE;
+                        permissionService.addModulePermissionToGroup(gid, sid, mid, i);
+                    }
                 }
+                message.setMsg("添加权限成功");
+                message.setCode(0);
             }
-            message.setMsg("添加权限失败");
         }
         message.setMsg("添加权限失败");
         return message;
