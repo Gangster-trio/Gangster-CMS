@@ -59,8 +59,24 @@
             var data = obj.data;
             if(obj.event === 'detail'){
                 /*layer.msg();*/
-                layer.alert('查看用户：'+ data.groupName + ' 的权限操作')
-                showAtRight("/fragement/listPermission.html")
+                console.log(data);
+                layer.open({
+                    id:1,
+                    type:2,
+                    area:['700px','600px'],
+                    closeBtn:1,
+                    anim:0,
+                    maxmin: true,
+                    content:'/fragement/allotPermission.html?groupId=' + data.groupId,
+                    success:function (layero, index) {
+                        console.log(layero, index);
+                    },
+                    end:function () {
+                        showAtRight('/login/listGroup.html')
+                    }
+                })
+//                layer.alert('查看用户：'+ data.groupName + ' 的权限操作')
+//                showAtRight("/fragement/listPermission.html")
             } else if(obj.event === 'del'){
                 layer.confirm('真的删除行么', function(index){
                     console.log(data);
