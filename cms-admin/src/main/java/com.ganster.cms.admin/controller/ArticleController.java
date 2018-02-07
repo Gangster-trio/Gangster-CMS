@@ -185,11 +185,14 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/update/{id}")
     @ResponseBody
-    public Message update(@PathVariable("id") Integer id, @RequestBody Article article) {
+    public Message update(@PathVariable("id") Integer id, @RequestBody ArticleDTO articleDTO) {
+        if (articleDTO == null) {
+            return super.buildMessage(1, "文章为空", null);
+        }
+        Article article = articleDTO.toArticle();
         article.setArticleId(id);
         article.setArticleUpdateTime(new Date());
-        int count = articleService.updateByPrimaryKeySelective(article);
-        if (count == 1) return super.buildMessage(0, "success", count);
-        else return super.buildMessage(1, "false", 1);
+        articleService.updateByPrimaryKeySelective(article);
+        return super.buildMessage(0, "success", "success");
     }
 }

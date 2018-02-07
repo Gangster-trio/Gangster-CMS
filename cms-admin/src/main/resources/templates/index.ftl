@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>CMS manage</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/util/jquery-editable-select.css">
     <script
             src="https://code.jquery.com/jquery-3.2.1.min.js"
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
     <script src="/util/util.js"></script>
+    <script src="/util/jquery-editable-select.js"></script>
     <script src="/util/jquery.form.js"></script>
 </head>
 <body class="layui-layout-body">

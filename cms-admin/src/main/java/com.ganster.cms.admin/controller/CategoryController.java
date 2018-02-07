@@ -130,8 +130,10 @@ public class CategoryController extends BaseController {
     public Message add(@RequestBody Category category) {
         category.setCategoryCreateTime(new Date());
         category.setCategorySkin("default");
-        Category parentPategory = categoryService.selectByPrimaryKey(category.getCategoryParentId());
-        Integer level = parentPategory.getCategoryLevel();
+        Category parentCategory = categoryService.selectByPrimaryKey(category.getCategoryParentId());
+        Integer siteId = parentCategory.getCategorySiteId();
+        category.setCategorySiteId(siteId);
+        Integer level = parentCategory.getCategoryLevel();
         if (level == -1) {
             category.setCategoryLevel(1);
         } else {

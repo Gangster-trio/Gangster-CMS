@@ -1,6 +1,9 @@
+<script src="/util/jquery-editable-select.js"></script>
+<link rel="stylesheet" href="/util/jquery-editable-select.css">
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>更新文章</legend>
 </fieldset>
+
 <div class="site-text site-block">
     <form id="updateArticleForm" class="layui-form">
         <div class="layui-form-item">
@@ -24,16 +27,18 @@
             <input type="radio" name="articleType" value="index" title="主页文章">
             <input type="radio" name="articleType" value="normal" title="普通文章" checked="checked">
         </div>-->
-        <div class="layui-form-item">
+        <!--<div class="layui-form-item">
             <label class="layui-form-label">文章类型</label>
             <div class="layui-input-inline">
-                <select id="articleType" name="city" lay-verify="required">
-                    <option value="carousel">轮播图</option>
-                    <option value="index">主页文章</option>
-                    <option value="normal">普通文章</option>
-                </select>
+
             </div>
-        </div>
+        </div>-->
+        <label class="layui-form-label">文章类型</label>
+        <select id="articleType" name="articleType" lay-ignore style="margin-left:0px;width:166px;height:36px">
+            <option style="padding-left: 50px" value="轮播图">轮播图</option>
+            <option style="padding-left: 50px" value="主页文章">主页文章</option>
+            <option style="padding-left: 50px" value="普通文章">普通文章</option>
+        </select>
         <!--<div class="layui-input-inline">-->
         <!--<input type="text" name="articleType" value="" title="自定义类型" placeholder="自定义类型" class="layui-input">-->
         <!--<div class="layui-form-mid layui-word-aux">自定义模板时使用</div>-->
@@ -106,9 +111,25 @@
 </div>
 
 <script type="text/javascript">
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
     var updateArticle;
+    var layedit;
     $(function () {
-            var layedit = layui.layedit;
+            layedit = layui.layedit;
             var form = layui.form;
             form.render();
             layedit.set({
@@ -118,8 +139,22 @@
                     , size: 0
                 }
             });
-
+            $('#articleType').editableSelect({effects: 'fade'});
             updateArticle = layedit.build('articleContent', {
+                tool: [
+                    'strong' //加粗
+                    , 'italic' //斜体
+                    , 'underline' //下划线
+                    , 'del' //删除线
+                    , '|' //分割线
+                    , 'left' //左对齐
+                    , 'center' //居中对齐
+                    , 'right' //右对齐
+                    , '|' //分割线
+                    , 'link' //超链接
+                    , 'unlink' //清除链接
+                    , 'image' //插入图片
+                ],
                 height: 400
             });
             form.on('submit(updateArticle)', function () {
@@ -141,34 +176,28 @@
                     $("#belongCategory").val(data.categoryName);
                     $("#tags").val(data.tags);
                     $("#articleDesc").val(data.articleDesc);
+                    $("#category_id").val(data.articleCategoryId);
+                    var value = data.articleType;
+                    $("select").children("option").each(function () {
+                        var temp_value = $(this).val();
+                        if (temp_value === value) {
+                            $(this).attr("selected", "selected");
+                        }
+                    });
                     layedit.setContent(updateArticle, data.articleContent);    //配置layui 文本编辑器回显
                 }
             });
         }
     );
-    //将form表单转化成Javascript object
 
-    $.fn.serializeObject = function () {
-        var o = {};
-        var a = this.serializeArray();
-        $.each(a, function () {
-            if (o[this.name]) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
-            }
-        });
-        return o;
-    };
+    //将form表单转化成Javascript object
 
 
     function updateArticleSubmit() {
         layui.layedit.sync(updateArticle);
         formData = $("#updateArticleForm").serializeObject();
-        layui.layer.alert("fomr data:" + JSON.stringify(formData));
+        alert(JSON.stringify(formData));
+        layui.layer.alert("form data:" + JSON.stringify(formData));
         $.ajax({
             type: 'post',
             url: '/article/update/' + articleId,
@@ -187,7 +216,6 @@
     }
 
     $("#belongCategory").on('click', function () {
-        // layer.alert("click belongCategory");
         $.get('/module/selectCategory.html', {}, function (str) {
             layer.open({
                 type: 1,
