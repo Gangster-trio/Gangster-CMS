@@ -90,20 +90,19 @@ public class UserController extends BaseController {
     @GetMapping("/find")
     @ResponseBody
     public AjaxData findUser(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-        PageInfo pageInfo;
-        int count = 0;
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andUserIdIsNotNull();
-        List<User> userList = userService.selectByExample(userExample);
-        for (User i : userList) {
-            count++;
+        if (page == null || page == 0) {
+            page = 1;
         }
-        if (page != null && limit != null) {
-            pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> userService.selectByExample(userExample));
-            return super.buildAjaxData(0, "success", count, (ArrayList) userList);
+        if (limit == null || limit == 0) {
+            limit = 10;
+        }
+        UserExample userExample = new UserExample();
+        PageInfo<User> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> userService.selectByExample(userExample));
+        List<User> list = pageInfo.getList();
+        if (list == null || list.isEmpty()) {
+            return super.buildAjaxData(1, "false", 0, null);
         } else {
-            pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> userService.selectByExample(userExample));
-            return super.buildAjaxData(0, "success", count, (ArrayList) userList);
+            return super.buildAjaxData(0, "true", pageInfo.getTotal(), list);
         }
     }
 
@@ -119,14 +118,14 @@ public class UserController extends BaseController {
 
     @GetMapping("/findgroup/{UserId}")
     @ResponseBody
-    public AjaxData findUserGroup(@PathVariable("UserId") Integer userId,@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-        AjaxData ajaxData=new AjaxData();
+    public AjaxData findUserGroup(@PathVariable("UserId") Integer userId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+        AjaxData ajaxData = new AjaxData();
         PageInfo pageInfo;
-        int count=0;
-        GroupExample groupExample=new GroupExample();
+        int count = 0;
+        GroupExample groupExample = new GroupExample();
         List<Group> groupList = groupService.selectByUserId(userId);
         if (groupList != null && !groupList.isEmpty()) {
-            for (Group i:groupList){
+            for (Group i : groupList) {
                 count++;
             }
             if (page != null && limit != null) {
@@ -157,14 +156,14 @@ public class UserController extends BaseController {
     @GetMapping("/findgroup")
     @ResponseBody
     public AjaxData findAllGroup() {
-        int number=0;
+        int number = 0;
         AjaxData ajaxData = new AjaxData();
         GroupExample groupExample = new GroupExample();
         groupService.selectByExample(groupExample);
         List<Group> groupList = groupService.selectByExample(groupExample);
         if (groupList != null && !groupList.isEmpty()) {
             ajaxData.setData((ArrayList) groupList);
-            for (Group i:groupList){
+            for (Group i : groupList) {
                 number++;
             }
             ajaxData.setCode(number);

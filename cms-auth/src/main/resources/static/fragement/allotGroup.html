@@ -17,7 +17,22 @@
 </head>
 <body style="background-color:#eee;">
 <br/>
+
 <table id="group_table" lay-filter="groupListFilter"></table>
+<form class="layui-form">
+    <div class="layui-inline">
+        <label class="layui-form-label">添加角色组:</label>
+        <div class="layui-input-inline">
+            <select id="groups" name="groups" lay-verify="required" lay-search lay-filter="groups">
+            </select>
+        </div>
+    </div>
+</form>
+<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"
+       onclick="addGroup()"/>
+</body>
+</html>
+
 
 <script type="text/html" id="userToolBar">
     <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
@@ -28,8 +43,10 @@
     </div>
 </script>
 <script>
-    layui.use('table', function () {
+    layui.use(['table', 'form'], function () {
         var table = layui.table;
+        var form = layui.form;
+        form.render();
         var first = true;
         table.render({
             elem: '#group_table'
@@ -85,17 +102,7 @@
     })
 
 </script>
-    <div class="layui-inline">
-        <label class="layui-form-label">添加角色组:</label>
-        <div class="layui-input-inline">
-            <select id="groups" name="groups" lay-verify="required" lay-search lay-filter="groups">
 
-            </select>
-        </div>
-    </div>
-<input type="button" value="提交信息" id="btn"  class="layui-btn" style="margin-left:10%;margin-top:20px;" onclick="addGroup()"/>
-</body>
-</html>
 <script type="text/javascript">
     window.onload = function () {
         var optionstring = "";
@@ -105,7 +112,7 @@
             dataType: 'json',
             success: function (ajaxdata) {
                 for (var i = 0; i < ajaxdata.code; i++) {
-                    optionstring += "<option value="+ ajaxdata.data[i].groupId +">" + ajaxdata.data[i].groupName + "</option>";
+                    optionstring += "<option value=" + ajaxdata.data[i].groupId + ">" + ajaxdata.data[i].groupName + "</option>";
                 }
                 $("#groups").html(optionstring);
             }
@@ -113,14 +120,14 @@
     }
 </script>
 <script>
-       function  addGroup(){
-           var  value= $("#groups").val();
-           console.log(value);
+    function addGroup() {
+        var value = $("#groups").val();
+        console.log(value);
         $.ajax({
-            url:"/user/addGroupToUse/"+value+"/"+getUrlVar("id"),
-            type:'get',
-            dataType:'json',
-            success: function (data,index) {
+            url: "/user/addGroupToUse/" + value + "/" + getUrlVar("id"),
+            type: 'get',
+            dataType: 'json',
+            success: function (data, index) {
                 console.log(data);
                 if (data === 1) {
                     layer.confirm('添加成功', function (index) {
@@ -135,7 +142,7 @@
                 }
             }
         })
-        
+
     }
 </script>
 
