@@ -191,6 +191,18 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     }
 
     @Override
+    public void addSitePermissionToGroup(Integer sid, Integer gid) {
+        Permission permission=new Permission();
+        permission.setPermissionName(PermissionUtil.formatSitePermissionName(sid));
+        insert(permission);
+
+        GroupPermission groupPermission=new GroupPermission();
+        groupPermission.setGroupId(gid);
+        groupPermission.setPermissionId(permission.getPermissionId());
+        groupPermissionMapper.insert(groupPermission);
+    }
+
+    @Override
     @Transactional
     public void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException, GroupNotFountException {
         Group group = groupService.findUserOwnGroup(uid);

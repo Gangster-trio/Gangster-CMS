@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>用户组新增</title>
@@ -13,39 +13,8 @@
 </head>
 <body>
 
-<h1 id="">这是角色名</h1>
+<h1 id="groupName">这是角色名</h1>
 <br/>
-<form class="layui-form-item">
-<div class="layui-form-item">
-    <label class="layui-form-label">联动选择框</label>
-    <div class="layui-input-inline">
-        <select name="quiz1">
-            <option value="">请选择省</option>
-            <option value="浙江" selected="">浙江省</option>
-            <option value="你的工号">江西省</option>
-            <option value="你最喜欢的老师">福建省</option>
-        </select>
-    </div>
-    <div class="layui-input-inline">
-        <select name="quiz2">
-            <option value="">请选择市</option>
-            <option value="杭州">杭州</option>
-            <option value="宁波" disabled="">宁波</option>
-            <option value="温州">温州</option>
-            <option value="温州">台州</option>
-            <option value="温州">绍兴</option>
-        </select>
-    </div>
-    <div class="layui-input-inline">
-        <select name="quiz3">
-            <option value="">请选择县/区</option>
-            <option value="西湖区">西湖区</option>
-            <option value="余杭区">余杭区</option>
-            <option value="拱墅区">临安市</option>
-        </select>
-    </div>
-    <div class="layui-form-mid layui-word-aux">此处只是演示联动排版，并未做联动交互</div>
-</div>
 <div class="layui-form-item">
     <label class="layui-form-label">站点选择:</label>
     <div class="layui-input-inline">
@@ -74,17 +43,58 @@
         写权限<input type="checkbox" name="permission" value="WRITE" lay-skin="primary" title="WRITE">
     </div>
 </div>
-</form>
-<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
+
+<input onclick="submit()"  type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
 </body>
 </html>
 <script type="text/javascript">
-    window.onload = function () {
-        layui.use('form', function () {
-            var form = layui.form;
-            form.render();
-        });
-    };
+  function submit(){
+      var  obj=document.getElementsByName('permission');
+      var  permissions=new Array();
+      for (var i=0;i<obj.length;i++){
+          if (obj[i].checked)
+              permissions.push(obj[i].value);
+      }
+      var id=getUrlVar("groupId");
+      console.log(id);
+      $.ajax({
+          url:"/permission/addpermission",
+          type:'post',
+          dataType:'json',
+          contentType:"application/json",
+          data: JSON.stringify({
+              "permissionName": permissions,
+              "groupId": id,
+              "siteId": $("#site").val(),
+              "categoryId": $("#category").val(),
+              "moudleId": $("#module").val()
+          }),
+          success: function (data) {
+              console.log(data);
+              if (data === 1) {
+                  //关闭弹框
+                  layer.msg("添加成功", {icon: 6});
+                  window.parent.location.reload();
+                  var index = parent.layer.getFrameIndex(window.name);
+                  parent.layer.close(index);
+                  showAtRight("/login/listGroup.html");
+              } else {
+                  layer.msg("添加失败", {icon: 5});
+                  window.parent.location.reload();
+                  var index = parent.layer.getFrameIndex(window.name);
+                  parent.layer.close(index);
+                  showAtRight("/login/listGroup.html");
+
+              }
+              var index = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(index);
+              showAtRight("/login/listGroup.html");
+          }
+      })
+  }
+</script>
+<script type="text/javascript">
+
     var sitetime = 1;
     var sitesign = 1;
 
@@ -132,9 +142,6 @@
     }
 </script>
 <script type="text/javascript">
-    //    function Categorysign() {}
-    //    var categorysign=new Categorysign();
-    //    categorysign.number=1;
     var categorytime = 1;
     var categorysign = 1;
 
@@ -163,19 +170,24 @@
                         categorysign = time % 2;
                     }
                 }
-//                end:function(){
-//                    delete sid;
-//                    delete  optionstring;
-//                    var time = categorytime + 1;
-//                    categorysign = time % 2;
-////                    time.valueOf(categorytime + 1);
-////                    categorysign.valueOf(time%2);
-//                }
             });
         }
-//        categorysign.number.valueOf(time%2);
 
-//        delete categorysign;
+    }
+</script>
+<script>
+    window.onload=function(){
+        var id=getUrlVar("groupId");
+        $.ajax({
+            url:"/permission/findGroupName/"+id,
+            type:'get',
+            dataType: 'json',
+            success:function(ajaxdata){
+                if (ajaxdata!=null){
+                    $("#groupName").html(ajaxdata.data[0].groupName);
+                }
+            }
+        })
     }
 </script>
 <script>

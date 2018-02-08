@@ -14,7 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +59,8 @@ public class GroupController extends AjaxData{
             List<String> permissionNameList = new ArrayList<>();
             if (permissionList!=null){
                 for (Permission permission :permissionList){
-                    permissionNameList.add(permission.getPermissionName());
+                    String permissionNames = permission.getPermissionName() + "<br/>";
+                    permissionNameList.add(permissionNames);
                 }
             }
             GroupWithPermission groupWithPermission = new GroupWithPermission(group,permissionNameList);

@@ -36,6 +36,8 @@ public interface PermissionService extends BaseService<Permission,PermissionExam
 
     void addModulePermissionToGroup(Integer gid, Integer sid, Integer moduleId, String pName);
 
+    void addSitePermissionToGroup(Integer sid,Integer gid);
+
     void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException, GroupNotFountException;
 
     List<Site> findAllUserSite(Integer uid) throws GroupNotFountException;

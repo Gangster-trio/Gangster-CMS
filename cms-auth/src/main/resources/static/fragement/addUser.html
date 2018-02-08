@@ -92,14 +92,18 @@
                         window.parent.location.reload();
                         var index = parent.layer.getFrameIndex(window.name);
                         parent.layer.close(index);
+                        showAtRight("/login/listUser.html");
                     } else {
                         layer.msg("添加失败", {icon: 5});
                         window.parent.location.reload();
                         var index = parent.layer.getFrameIndex(window.name);
                         parent.layer.close(index);
+                        showAtRight("/login/listUser.html");
+
                     }
                     var index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
+                    showAtRight("/login/listUser.html");
                 }
             });
         }
