@@ -1,118 +1,80 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta charset="utf-8"/>
-    <title></title>
-    <link href="/layui/css/layui.css" rel="stylesheet"/>
-    <script src="/layui/layui.js"></script>
-    <script
-            src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-            crossorigin="anonymous"></script>
-    <script src="/util/jquery.form.js"></script>
-    <script src="/util/util.js"></script>
-</head>
-<body style="background-color:#eee;">
-<br/>
-<form class="layui-form" action="/category/add" method="post">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>添加栏目</legend>
+</fieldset>
+<div class="site-text site-block">
+    <form id="addSiteForm" class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">站点名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="siteName" id="siteName" required="" lay-verify="required"
+                       placeholder="请输入站点名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">栏目名称</label>
-        <div class="layui-input-inline">
-            <input type="text" id="categoryTitle" name="categoryTitle" required lay-verify="required" placeholder="栏目名称"
-                   autocomplete="off"
-                   class="layui-input">
+        <!--TODO: skin choose-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择皮肤</label>
+            <div class="layui-input-block">
+                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
+                <!--单选框name 为控件名，value是提交到服务器的值-->
+                <input type="radio" name="categorySkin" value="default" title="默认" checked="checked">
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">自定义顺序</label>
-        <div class="layui-input-inline">
-            <input type="text" id="order" name="order" required lay-verify="required" placeholder="自定义顺序"
-                   autocomplete="off"
-                   class="layui-input">
+        <div id="show" class="layui-form-item">
+            <label class="layui-form-label">站点网址</label>
+            <div class="layui-input-inline">
+                <input type="text" id="siteUrl" name="siteUrl" required="required" lay-verify="required"
+                       placeholder="选择栏目"
+                       autocomplete="off"
+                       class="layui-input" readonly="readonly"/>
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">栏目属性</label>
-        <div class="layui-input-block">
-            <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-            <!--单选框name 为控件名，value是提交到服务器的值-->
-            <input type="radio" name="choose" value="index" title="主页栏目">
-            <input type="radio" name="choose" value="normal" title="普通栏目" checked="checked">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea id="siteDesc" name="siteDesc" required class="layui-textarea"
+                          placeholder="添加描述"></textarea>
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">所属栏目</label>
-        <div class="layui-input-inline">
-            <input type="text" id="belongCategory" name="belongCategory" required lay-verify="required"
-                   placeholder="所属栏目" autocomplete="off"
-                   class="layui-input">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button lay-submit class="layui-btn" lay-filter="createSite">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label layui-form-text">栏目描述</label>
-        <div class="layui-input-inline">
-            <input type="text" id="desc" name="desc" required="required" lay-verify="required" placeholder="请输入内容"
-                   autocomplete="off"
-                   class="layui-input">
-        </div>
-    </div>
-    <!--隐藏 parentid-->
-    <input id="parentId" name="parentId" type="text" hidden="hidden"/>
-    <input type="button" value="提交" id="btn1" class="layui-btn" style="margin-left:5%;margin-top:20px;"/>
-</form>
-</body>
-</html>
-<script type="text/javascript">
-    window.onload = function () {
-        layui.use("form", function () {
-            var form = layui.form;
-        });
-    }
-</script>
-<script type="text/javascript">
-    document.getElementById('btn1').onclick = function () {
-        var categoryTitle = document.getElementById("categoryTitle").value;
-        var parentId = document.getElementById("parentId").value;
-        var order = document.getElementById("order").value;
-        var desc = document.getElementById("desc").value;
-        var categoryType = chooseValue("choose");
-        $.ajax({
-            url: "/category/add",
-            type: 'post',
-            dataType: 'json',
-            contentType: "application/json",
-            data: JSON.stringify({
-                "categoryTitle": categoryTitle,
-                "categoryParentId": parentId,
-                "categoryDesc": desc,
-                "categoryOrder": order,
-                "categoryType": categoryType
-            }),
-            success: function (data) {
-                console.log(data);
-                if (data.code === 0) layer.msg("添加成功", {icon: 6});
-                else layer.msg("添加失败", {icon: 5});
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(index);
-                showAtRight("/fragement/listCategory.html");
-            }
-        });
-    }
-</script>
-<script type="text/javascript">
-    var index = $("#belongCategory").on('click', function () {
-        layer.open({
-            id: 2,
-            type: 2,
-            skin: 'layui-layer-rim',
-            closeBtn: 1,
-            anim: 2,
-            content: '/fragement/selectCategory.html',
-            success: function (layero, index) {
-                console.log(layero, index);
-            }
+    </form>
+</div>
+<script>
+    $(function () {
+        var form = layui.form;
+        form.render();
+        form.on('submit(createSite)', function () {
+            layui.layer.alert("enter form on func");
+            submitSite();
+            layui.layer.alert("end");
+            return false;
         });
     });
+
+    function submitSite() {
+        formData = $("#addSiteForm").serializeObject();
+        alert("form data: " + JSON.stringify(formData));
+        $.ajax({
+            type: "POST",
+            url: '/site/add',
+            data: JSON.stringify(formData),
+            async: false,
+            contentType: 'application/json',
+            dataType: 'json',
+            error: function (resp) {
+                alert("form data: " + JSON.stringify(formData));
+                layui.layer.alert("failed. " + resp);
+            },
+            success: function (resp) {
+                layui.layer.alert("添加成功; " + resp);
+                showAtRight("/module/listSite.html");
+            }
+        });
+    }
 </script>

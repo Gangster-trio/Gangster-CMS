@@ -139,7 +139,11 @@
                     , size: 0
                 }
             });
+
+            //得到既能输入又能点击的文本框
             $('#articleType').editableSelect({effects: 'fade'});
+
+
             updateArticle = layedit.build('articleContent', {
                 tool: [
                     'strong' //加粗
@@ -177,13 +181,13 @@
                     $("#tags").val(data.tags);
                     $("#articleDesc").val(data.articleDesc);
                     $("#category_id").val(data.articleCategoryId);
-                    var value = data.articleType;
-                    $("select").children("option").each(function () {
+                    // var value = data.articleType;
+                    /*$("select").children("option").each(function () {
                         var temp_value = $(this).val();
                         if (temp_value === value) {
                             $(this).attr("selected", "selected");
                         }
-                    });
+                    });*/
                     layedit.setContent(updateArticle, data.articleContent);    //配置layui 文本编辑器回显
                 }
             });

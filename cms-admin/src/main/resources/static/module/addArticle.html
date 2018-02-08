@@ -1,3 +1,4 @@
+<script src="/layui/layui.all.js" type="text/javascript"></script>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>添加文章</legend>
 </fieldset>
@@ -19,18 +20,13 @@
             </div>
             <div class="layui-form-mid layui-word-aux">辅助文字</div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">文章属性</label>
-            <div class="layui-input-block">
-                <input type="radio" name="articleType" value="carousel" title="轮播图">
-                <input type="radio" name="articleType" value="index" title="主页文章">
-                <input type="radio" name="articleType" value="normal" title="普通文章" checked="checked">
-            </div>
-            <!--<div class="layui-input-inline">-->
-            <!--<input type="text" name="articleType" value="" title="自定义类型" placeholder="自定义类型" class="layui-input">-->
-            <!--<div class="layui-form-mid layui-word-aux">自定义模板时使用</div>-->
-            <!--</div>-->
-        </div>
+
+        <label class="layui-form-label">文章类型</label>
+        <select id="articleType" name="articleType" lay-ignore style="margin-left:0px;width:166px;height:36px">
+            <option style="padding-left: 50px" value="轮播图">轮播图</option>
+            <option style="padding-left: 50px" value="主页文章">主页文章</option>
+            <option style="padding-left: 50px" value="普通文章">普通文章</option>
+        </select>
         <!--TODO: skin choose-->
         <div class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
@@ -68,12 +64,13 @@
                        class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label"></label>
-            <button type="button" class="layui-btn" id="test1">
-                <i class="layui-icon">&#xe67c;</i>上传图片
-            </button>
+        <label class="layui-form-label">缩略图上传</label>
+        <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
+            <i class="layui-icon"></i>
+            <p>点击上传，或将文件拖拽到此处</p>
         </div>
+
+
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
@@ -98,103 +95,113 @@
     </form>
 </div>
 <script type="text/javascript">
-    $.fn.serializeObject = function () {
-        var o = {};
-        var a = this.serializeArray();
-        $.each(a, function () {
-            if (o[this.name]) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
+
+    var editId;
+    layui.use(['form', 'upload', 'layedit'], function () {
+        var form = layui.form, upload = layui.upload, layedit = layui.layedit;
+        form.render();
+        form.on('submit(createArticle)', function () {
+            layui.layer.alert("enter form on func");
+            submitArticleCreate();
+            layui.layer.alert("end");
+            return false;
+        });
+
+
+        var uploadInst = layui.upload.render({
+            elem: '#uploadImg',
+            url: '/article/img',
+            done: function (res) {
+                console.log(res);
+            },
+            error: function () {
+
             }
         });
-        return o;
-    };
-    var editId;
-    var treeWindowId;
-    $(function () {
-            var layedit = layui.layedit;
-            var form = layui.form;
-            form.render();
-            layedit.set({
-                uploadImage: {
-                    url: '/article/img' //接口url
-                    , type: 'post' //默认post
-                    , size: 0
+
+
+        layedit.set({
+            uploadImage: {
+                url: '/article/img' //接口url
+                , type: 'post' //默认post
+                , size: 0
+            }
+        });
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
                 }
             });
-
-            editId = layedit.build('articleContent', {
-                tool: [
-                    'strong' //加粗
-                    , 'italic' //斜体
-                    , 'underline' //下划线
-                    , 'del' //删除线
-                    , '|' //分割线
-                    , 'left' //左对齐
-                    , 'center' //居中对齐
-                    , 'right' //右对齐
-                    , '|' //分割线
-                    , 'link' //超链接
-                    , 'unlink' //清除链接
-                    , 'image' //插入图片
-                ],
-                height: 400
-            });
-
-            form.on('submit(createArticle)', function () {
-                layui.layer.alert("enter form on func");
-                submitArticleCreate();
-                layui.layer.alert("end");
-                return false;
-            });
+            return o;
+        };
+        editId = layedit.build('articleContent', {
+            tool: [
+                'strong' //加粗
+                , 'italic' //斜体
+                , 'underline' //下划线
+                , 'del' //删除线
+                , '|' //分割线
+                , 'left' //左对齐
+                , 'center' //居中对齐
+                , 'right' //右对齐
+                , '|' //分割线
+                , 'link' //超链接
+                , 'unlink' //清除链接
+                , 'image' //插入图片
+            ],
+            height: 400
+        });
+        $('#articleType').editableSelect({effects: 'fade'});
 
 
-            $("#belongCategory").on('click', function () {
-                // layer.alert("click belongCategory");
-                $.get('/module/selectCategory.html', {}, function (str) {
-                    layer.open({
-                        type: 1,
-                        skin: 'layui-layer-rim',
-                        closeBtn: 1,
-                        anim: 5,
-                        area: ['300px', '350px'],
-                        content: str,
-                        success: function (layero, index) {
-                            console.log(layero, index);
-                        }
-                    });
+        $("#belongCategory").on('click', function () {
+            // layer.alert("click belongCategory");
+            $.get('/module/selectCategory.html', {}, function (str) {
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    closeBtn: 1,
+                    anim: 5,
+                    area: ['300px', '350px'],
+                    content: str,
+                    success: function (layero, index) {
+                        console.log(layero, index);
+                    }
                 });
-
             });
 
+        });
 
+        function submitArticleCreate() {
+            layui.layedit.sync(editId);
+
+            formData = $("#addArticleForm").serializeObject();
+            layui.layer.alert("format data : " + JSON.stringify(formData));
+            $.ajax({
+                type: "POST",
+                url: "/article/save",
+                data: JSON.stringify(formData),
+                async: false,
+                contentType: "application/json",
+                dataType: "json",
+                error: function (resp) {
+                    layui.layer.alert("failed. " + resp)
+                },
+                success: function (resp) {
+                    layui.layer.alert("添加成功 :" + resp);
+                    showAtRight("/module/listArticle.html");
+                }
+            })
         }
-    );
+    });
 
 
-    function submitArticleCreate() {
-        layui.layedit.sync(editId);
-
-        formData = $("#addArticleForm").serializeObject();
-        layui.layer.alert("format data : " + JSON.stringify(formData));
-        $.ajax({
-            type: "POST",
-            url: "/article/save",
-            data: JSON.stringify(formData),
-            async: false,
-            contentType: "application/json",
-            dataType: "json",
-            error: function (resp) {
-                layui.layer.alert("failed. " + resp)
-            },
-            success: function (resp) {
-                layui.layer.alert("添加成功 :" + resp);
-                showAtRight("/module/listArticle.html");
-            }
-        })
-    }
 </script>
