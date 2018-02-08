@@ -56,6 +56,7 @@ public class SiteController extends BaseController {
         }
 
         site.setSiteCreateTime(new Date());
+        site.setSiteStatus(0);
         int count = siteService.insert(site);
         if (count == 0) {
             return super.buildMessage(1, "add site failed", null);
@@ -71,4 +72,25 @@ public class SiteController extends BaseController {
         return null;
     }
 
+    @GetMapping("/details")
+    public Site details(@PathVariable Integer siteId) {
+        if (siteId == null) {
+            return null;
+        }
+        return siteService.selectByPrimaryKey(siteId);
+    }
+
+    @PostMapping("/update")
+    public Message update(@PathVariable Integer siteId, @RequestBody Site site) {
+        if (siteId == null) {
+            return super.buildMessage(0, "no data to update", null);
+        }
+        site.setSiteId(siteId);
+        int count = siteService.updateByPrimaryKeySelective(site);
+        if (count == 0) {
+            return super.buildMessage(1, "false to update", null);
+        } else {
+            return super.buildMessage(0, "success", count);
+        }
+    }
 }

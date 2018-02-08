@@ -1,12 +1,12 @@
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-    <legend>添加站点</legend>
+    <legend>更新站点</legend>
 </fieldset>
 <div class="site-text site-block">
-    <form id="addSiteForm" class="layui-form">
+    <form id="updateSiteForm" class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">站点名称</label>
             <div class="layui-input-inline">
-                <input type="text" name="siteName" id="siteName" required="" lay-verify="required"
+                <input type="text" name="siteName" id="siteName" required="required" lay-verify="required"
                        placeholder="请输入站点名称" autocomplete="off"
                        class="layui-input">
             </div>
@@ -18,7 +18,7 @@
             <div class="layui-input-block">
                 <!--<input type="radio" name="sex" value="女" title="女" checked>-->
                 <!--单选框name 为控件名，value是提交到服务器的值-->
-                <input type="radio" name="categorySkin" value="default" title="默认" checked="checked">
+                <input type="radio" name="siteSkin" value="default" title="默认" checked="checked">
             </div>
         </div>
         <div id="show" class="layui-form-item">
@@ -46,7 +46,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button lay-submit class="layui-btn" lay-filter="createSite">立即提交</button>
+                <button lay-submit class="layui-btn" lay-filter="updateSite">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
@@ -56,9 +56,9 @@
     layui.use(['form', 'upload'], function () {
         var form = layui.form, upload = layui.upload;
         form.render();
-        form.on('submit(createSite)', function () {
+        form.on('submit(updateSiteForm)', function () {
             layui.layer.alert("enter form on func");
-            submitSite();
+            updateSite();
             layui.layer.alert("end");
             return false;
         });
@@ -75,6 +75,7 @@
             }
 
         });
+
 
         $.fn.serializeObject = function () {
             var o = {};
@@ -93,23 +94,32 @@
         };
 
 
-        function submitSite() {
-            formData = $("#addSiteForm").serializeObject();
+        $.ajax({
+            type: "GET",
+            url: "/site/details/" + siteId,
+            async: false,
+            success: function (data) {
+                $("#siteName").val(data.siteName);
+                $("#siteUrl").val(data.siteUrl);
+                $("#siteDesc").val(data.siteDesc);
+            }
+        });
+
+        function updateSite() {
+            formData = $("#updateSiteForm").serializeObject();
             alert("form data: " + JSON.stringify(formData));
             $.ajax({
                 type: "POST",
-                url: '/site/add',
+                url: "/site/update/" + siteId,
                 data: JSON.stringify(formData),
                 async: false,
-                contentType: 'application/json',
-                dataType: 'json',
+                contentType: "application/json",
+                dataType: "json",
                 error: function (resp) {
-                    alert("form data: " + JSON.stringify(formData));
-                    layui.layer.alert("failed. " + resp);
+                    layui.layer.alert("failed " + resp);
                 },
                 success: function (resp) {
-                    layui.layer.alert("添加成功; " + resp);
-                    showAtRight("/module/listSite.html");
+                    layui.layer.alert("success " + resp);
                 }
             });
         }

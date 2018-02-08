@@ -36,7 +36,6 @@
                 <input type="radio" name="articleSkin" value="default" title="默认" checked="checked">
             </div>
         </div>
-        TOOD
         <div id="show" class="layui-form-item">
             <label class="layui-form-label">所属栏目</label>
             <div class="layui-input-inline">
@@ -64,6 +63,10 @@
                        class="layui-input">
             </div>
         </div>
+
+
+        <input id="articleThumb" class="layui-hide" name="articleThumb"
+               lay-verify="required">
         <label class="layui-form-label">缩略图上传</label>
         <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
             <i class="layui-icon"></i>
@@ -111,11 +114,18 @@
         var uploadInst = layui.upload.render({
             elem: '#uploadImg',
             url: '/article/img',
+            before: function (obj) {
+                layer.load();
+            },
+            //上传后的回调
             done: function (res) {
-                console.log(res);
+                console.log(res.data.src);
+                $("#articleThumb").val(res.data.src);
+                layer.closeAll();
             },
             error: function () {
-
+                layui.layer.alert("上传失败 ");
+                layer.closeAll();
             }
         });
 
