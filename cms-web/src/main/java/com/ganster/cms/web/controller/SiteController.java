@@ -95,7 +95,7 @@ public class SiteController {
         //The default template needs the data
         result.put("categoryTreeList", categoryTreeList)
                 .put("site", site)
-                .put("categoryWithArticleListList", categoryWithArticleList)
+                .put("categoryWithArticleList", categoryWithArticleList)
                 .put("articleList", articleList)
                 .put("carouselList", carouselList);
 
