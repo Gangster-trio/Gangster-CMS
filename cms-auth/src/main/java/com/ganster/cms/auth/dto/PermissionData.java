@@ -10,13 +10,26 @@ public class PermissionData {
     private Integer categoryId;
     private Integer moudleId;
 
-    public PermissionData(List<String> permissionName, Integer groupId, Integer siteId, Integer categoryId, Integer moudleId) {
+    public PermissionData(List<String> permissionName, Integer groupId, Integer siteId, Integer categoryId, Integer moudleId, Long articleIntro) {
         this.permissionName = permissionName;
         this.groupId = groupId;
         this.siteId = siteId;
         this.categoryId = categoryId;
         this.moudleId = moudleId;
+        this.articleIntro = articleIntro;
     }
+
+    private Long articleIntro;
+
+    public Long getArticleIntro() {
+        return articleIntro;
+    }
+
+    public void setArticleIntro(Long articleIntro) {
+        this.articleIntro = articleIntro;
+    }
+
+
 
     public PermissionData() {
     }

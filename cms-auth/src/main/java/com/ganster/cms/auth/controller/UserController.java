@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Controller   与用户有关的所有操作
+ */
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController {
@@ -32,6 +35,13 @@ public class UserController extends BaseController {
     private UserService userService;
     @Autowired
     private GroupService groupService;
+
+    /**
+     *
+     * 添加用户
+     * @param user
+     * @return   Message 添加用户是否成功
+     */
 
     @PostMapping("/add")
     @ResponseBody
@@ -53,6 +63,13 @@ public class UserController extends BaseController {
         return message;
     }
 
+    /**
+     * 修改用户信息
+     *
+     * @param userid
+     * @param user
+     * @return  Message  修改用户是否成功
+     */
     @PostMapping(value = "/update/{userid}")
     @ResponseBody
     public Message updateUser(@PathVariable("userid") Integer userid, @RequestBody User user) {
@@ -69,6 +86,11 @@ public class UserController extends BaseController {
         return message;
     }
 
+    /**
+     *  删除用户
+     * @param userId
+     * @return   int   删除用户数量
+     */
     @GetMapping("/delete/{UserId}")
     @ResponseBody
     public int deleteUser(@PathVariable("UserId") Integer userId) {
@@ -87,6 +109,12 @@ public class UserController extends BaseController {
         return message;
     }
 
+    /**
+     *  查找所有的用户
+     * @param page
+     * @param limit
+     * @return  AjaxData 查找到的所有用户
+     */
     @GetMapping("/find")
     @ResponseBody
     public AjaxData findUser(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
@@ -106,6 +134,11 @@ public class UserController extends BaseController {
         }
     }
 
+    /**
+     *  通过用户Id查找用户
+     * @param userId
+     * @return  User 查找到的用户
+     */
     @GetMapping("/find/{UserId}")
     @ResponseBody
     public User fingUserById(@PathVariable("UserId") Integer userId) {
@@ -116,6 +149,14 @@ public class UserController extends BaseController {
         return user;
     }
 
+    /**
+     * 通过用户Id，查找所属于的的用户组
+     *
+     * @param userId
+     * @param page
+     * @param limit
+     * @return  AjaxData 通过用户Id，查找所属于的用户组
+     */
     @GetMapping("/findgroup/{UserId}")
     @ResponseBody
     public AjaxData findUserGroup(@PathVariable("UserId") Integer userId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
@@ -140,6 +181,13 @@ public class UserController extends BaseController {
         return ajaxData;
     }
 
+    /**
+     * 通过用户Id和用户组Id，将用户从用户组中移出
+     *
+     * @param userId
+     * @param groupId
+     * @return int 移出用户的数量
+     */
     @ResponseBody
     @GetMapping("/deletegroup/{UserId}/{GroupId}")
     public int deleteUserGroup(@PathVariable("UserId") Integer userId, @PathVariable("GroupId") Integer groupId) {
@@ -153,6 +201,10 @@ public class UserController extends BaseController {
         return message;
     }
 
+    /**
+     * 查找所有的用户组
+     * @return AjaxData  查找到的信息
+     */
     @GetMapping("/findgroup")
     @ResponseBody
     public AjaxData findAllGroup() {
@@ -173,6 +225,12 @@ public class UserController extends BaseController {
         return ajaxData;
     }
 
+    /**
+     * 通过用户Id和用户组Id，来向用户组中添加用户
+     * @param groupId
+     * @param userId
+     * @return Integer 为用户添加的角色组数量
+     */
     @GetMapping("/addGroupToUse/{GroupId}/{UserId}")
     @ResponseBody
     public Integer addGroupToUser(@PathVariable("GroupId") Integer groupId, @PathVariable("UserId") Integer userId) {

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>用户组新增</title>
@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<h1 id="">这是角色名</h1>
+<h1 id="groupName">这是角色名</h1>
 <br/>
 <div class="layui-form-item">
     <label class="layui-form-label">站点选择:</label>
@@ -43,8 +43,8 @@
         写权限<input type="checkbox" name="permission" value="WRITE" lay-skin="primary" title="WRITE">
     </div>
 </div>
-</form>
-<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
+
+<input onclick="submit()"  type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"/>
 </body>
 </html>
 <script type="text/javascript">
@@ -77,18 +77,21 @@
                   window.parent.location.reload();
                   var index = parent.layer.getFrameIndex(window.name);
                   parent.layer.close(index);
+                  showAtRight("/login/listGroup.html");
               } else {
                   layer.msg("添加失败", {icon: 5});
                   window.parent.location.reload();
                   var index = parent.layer.getFrameIndex(window.name);
                   parent.layer.close(index);
+                  showAtRight("/login/listGroup.html");
+
               }
               var index = parent.layer.getFrameIndex(window.name);
               parent.layer.close(index);
+              showAtRight("/login/listGroup.html");
           }
       })
   }
-
 </script>
 <script type="text/javascript">
 
@@ -139,9 +142,6 @@
     }
 </script>
 <script type="text/javascript">
-    //    function Categorysign() {}
-    //    var categorysign=new Categorysign();
-    //    categorysign.number=1;
     var categorytime = 1;
     var categorysign = 1;
 
@@ -173,6 +173,21 @@
             });
         }
 
+    }
+</script>
+<script>
+    window.onload=function(){
+        var id=getUrlVar("groupId");
+        $.ajax({
+            url:"/permission/findGroupName/"+id,
+            type:'get',
+            dataType: 'json',
+            success:function(ajaxdata){
+                if (ajaxdata!=null){
+                    $("#groupName").html(ajaxdata.data[0].groupName);
+                }
+            }
+        })
     }
 </script>
 <script>

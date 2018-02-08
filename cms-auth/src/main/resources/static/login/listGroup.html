@@ -20,10 +20,10 @@
 
 <script type="text/html" id="groupToolBar" >
     <div class="layui-btn-group">
-        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail" value="添加权限">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add" value="添加权限">
             <i class="layui-icon">&#xe608;</i>
         </button>
-        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail" value="添加权限">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="find" value="查看权限">
             <i class="layui-icon">&#xe705;</i>
         </button>
         <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="edit"  value="编辑角色组">
@@ -60,13 +60,13 @@
         //监听工具条
         table.on('tool(groupListFilter)', function(obj){
             var data = obj.data;
-            if(obj.event === 'detail'){
+            if(obj.event === 'add'){
                 /*layer.msg();*/
                 console.log(data);
                 layer.open({
                     id:1,
                     type:2,
-                    area:['700px','600px'],
+                    area:['930px','400px'],
                     closeBtn:1,
                     anim:0,
                     maxmin: true,
@@ -117,6 +117,23 @@
                     anim:0,
                     maxmin: true,
                     content:'/fragement/editGroup.html?groupId=' + data.groupId,
+                    success:function (layero, index) {
+                        console.log(layero, index);
+                    },
+                    end:function () {
+                        showAtRight('/login/listGroup.html')
+                    }
+                })
+            }else if (obj.event==='find'){
+                console.log(data);
+                layer.open({
+                    id:1,
+                    type:2,
+                    area:['700px','600px'],
+                    closeBtn:1,
+                    anim:0,
+                    maxmin: true,
+                    content:'/fragement/editPermission.html?groupId=' + data.groupId,
                     success:function (layero, index) {
                         console.log(layero, index);
                     },

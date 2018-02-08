@@ -50,10 +50,11 @@
             success:function (data) {
                 console.log(data);
                 if (data.code == 0){
-                    layer.msg("增加成功", {icon: 6});
+                    layui.layer.msg("增加成功", {icon: 6});
                     showAtRight("/login/listGroup.html");
                 } else {
-                    layer.msg("增加失败", {icon: 5});
+                    layui.layer.msg("增加失败", {icon: 5});
+                    showAtRight("/login/listGroup.html");
                 }
             },
             end: function () {
