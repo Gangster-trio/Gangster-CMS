@@ -3,19 +3,19 @@ package com.ganster.cms.core.constant;
 public class CmsConst {
 
     //放置在主页上的目录
-    public static final String INDEX_CATEGORY_TYPE = "index";
+    public static final String INDEX_CATEGORY_TYPE = "主页目录";
 
     // 普通栏目
-    public static final String NORMAL_CATEGORY_TYPE = "normal";
+    public static final String NORMAL_CATEGORY_TYPE = "普通目录";
 
     //轮播图
-    public static final String CAROUSEL_ARTICLE_TYPE = "carousel";
+    public static final String CAROUSEL_ARTICLE_TYPE = "轮播图";
 
     //主页文章
-    public static final String INDEX_ARTICLE_TYPE = "index";
+    public static final String INDEX_ARTICLE_TYPE = "主页文章";
 
     //普通文章,不放置在主页上
-    public static final String NORMAL_ARTICLE_TYPE = "normal";
+    public static final String NORMAL_ARTICLE_TYPE = "普通文章";
 
     public static final String ARTICLE_SKIN_SUFFIX = "-article";
 

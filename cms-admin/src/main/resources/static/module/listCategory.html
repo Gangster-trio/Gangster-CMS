@@ -6,10 +6,7 @@
 <div class="layui-elem-quote" style="margin-bottom: 0;">
     <p>栏目管理</p>
 </div>
-<script src="/util/util.js"></script>
 <table id="column_table" class="layui-table" style="margin: 0px" lay-filter="categorylist"></table>
-<script src="/util/jquery.min.js"></script>
-
 <script>
     var categoryId;
 
@@ -55,62 +52,25 @@
                     alert(categoryId);
                     showAtRight("/fragement/listArticle.html?categoryId=" + categoryId);
                 }
-
                 //删除栏目信息
                 else if (layEvent === 'del') { //删除
-                    if (judgePrivilege(siteId, categoryId)) {
-                        layer.confirm('真的删除行么', function (index) {
-                                deleteCategory(categoryId);
-                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                layer.close(index);
-                                showAtRight("/fragement/listCategory.html");
-                            }
-                        )
-                    }
+                    layer.confirm('真的删除行么', function (index) {
+                            deleteCategory(categoryId);
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            showAtRight("/module/listCategory.html");
+                        }
+                    )
                 }
 
                 //编辑栏目
                 else if (layEvent === 'edit') {
-                    if (judgePrivilege(siteId, categoryId)) {
-                        layer.open({
-                            id: 1,
-                            type: 2,
-                            skin: 'layui-layer-rim',
-                            area: ['700px', '600px'],
-                            closeBtn: 1,
-                            anim: 0,
-                            maxmin: true,
-                            content: '/fragement/editCategory.html?id=' + categoryId,
-                            success: function (layero, index) {
-                                console.log(layero, index);
-                            },
-                            end: function () {
-                                showAtRight("/fragement/listCategory.html");
-                            }
-                        });
-                    }
+                    showAtRight("/module/editCategory.html");
                 }
 
                 //跳转到给该栏目添加文章的界面
                 else if (layEvent === 'add') {   //跳转到添加文章界面
-                    if (judgePrivilege(siteId, categoryId)) {
-                        layer.open({
-                            id: 1,
-                            type: 2,
-                            skin: 'layui-layer-rim',
-                            area: ['700px', '600px'],
-                            closeBtn: 1,
-                            anim: 0,
-                            maxmin: true,
-                            content: '/fragement/addArticle.html?categoryId=' + categoryId,
-                            success: function (layero, index) {
-                                console.log(layero, index);
-                            },
-                            end: function () {
-                                showAtRight("/fragement/listCategory.html");
-                            }
-                        });
-                    }
+                    showAtRight("/module/addCategory.html");
                 }
             });
         } else {
@@ -142,45 +102,28 @@
 
     //添加栏目的按钮注册事件
     var index = $("#column").on('click', function () {
-        if (judgePrivilege(siteId, categoryId)) {
-            layer.open({
-                id: 2,
-                type: 2,
-                skin: 'layui-layer-rim',
-                area: ['700px', '600px'],
-                closeBtn: 1,
-                anim: 0,
-                maxmin: true,
-                content: '/fragement/addCategory.html?siteid=' + siteId,
-                success: function (layero, index) {
-                    console.log(layero, index);
-                }
-            });
-        }
+        showAtRight("/module/addCategory.html");
     });
 
     //删除栏目的功能实现
     function deleteCategory(id) {
-        if (judgePrivilege(siteId, id)) {
-            $.ajax({
-                    url: "/category/delete/" + id,
-                    dataType: "json",
-                    type: "get",
-                    timeout: "3000",
-                    error: function () {
-                        layer.msg("server no response : " + url);
-                    },
-                    success: function (data) {
-                        if (data.code === 0) {
-                            layer.msg("delete success.")
-                        } else if (data.code === 1) {
-                            layer.msg("delete false");
-                        }
+        $.ajax({
+                url: "/category/delete/" + id,
+                dataType: "json",
+                type: "get",
+                timeout: "3000",
+                error: function () {
+                    layer.msg("server no response : " + url);
+                },
+                success: function (data) {
+                    if (data.code === 0) {
+                        layer.msg("delete success.")
+                    } else if (data.code === 1) {
+                        layer.msg("delete false");
                     }
                 }
-            );
-        }
-
+            }
+        );
     }
 </script>
 </html>

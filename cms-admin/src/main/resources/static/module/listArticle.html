@@ -104,9 +104,7 @@
 
             //更新文章的权限判断及实现
             else if (layEvent === 'edit') {
-                if (judgePrivilege(siteId, categoryId)) {
-                    showAtRight("module/editArticle.html");
-                }
+                showAtRight("module/editArticle.html");
             }
         });
     } else {

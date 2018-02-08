@@ -125,25 +125,30 @@ public class ArticleController extends BaseController {
         LOGGER.info(originalFileName);
         String uuid = UUID.randomUUID().toString();
         String newName = uuid + originalFileName.substring(originalFileName.lastIndexOf("."));
-//        Calendar date = Calendar.getInstance();
-        /*File dateDirs = new File(date.get(Calendar.YEAR)
-                + File.separator + (date.get(Calendar.MONTH) + 1));*/
-        File newFile = new File(settingService.get(CmsConst.PIC_PATH_SETTING) + File.separator + newName);
-        if (!newFile.getParentFile().exists()) {
-            newFile.getParentFile().mkdirs();
+        File dir = new File(settingService.get(CmsConst.PIC_PATH_SETTING));
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File newFile = new File(dir, newName);
+        if (!newFile.exists()) {
+            try {
+                newFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         LOGGER.info("文件上传" + newFile.toString());
         try {
             file.transferTo(newFile);
         } catch (IOException e) {
             e.printStackTrace();
+//            return new Message(2, "存储文件错误", null);
         }
         String fileUrl = "/pic/" + newName;
-        Map<String, String> data = new HashMap<>();
-        data.put("src", fileUrl);
-        Message result = new Message(0, "success", data);
-        result.setData(data);
-        return result;
+        Map<String, Object> map  = new HashMap<>();
+        map.put("src",fileUrl);
+
+        return new Message(0, "success", map);
     }
 
     @GetMapping("/delete/{id}")
@@ -185,11 +190,14 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/update/{id}")
     @ResponseBody
-    public Message update(@PathVariable("id") Integer id, @RequestBody Article article) {
+    public Message update(@PathVariable("id") Integer id, @RequestBody ArticleDTO articleDTO) {
+        if (articleDTO == null) {
+            return super.buildMessage(1, "文章为空", null);
+        }
+        Article article = articleDTO.toArticle();
         article.setArticleId(id);
         article.setArticleUpdateTime(new Date());
-        int count = articleService.updateByPrimaryKeySelective(article);
-        if (count == 1) return super.buildMessage(0, "success", count);
-        else return super.buildMessage(1, "false", 1);
+        articleService.updateByPrimaryKeySelective(article);
+        return super.buildMessage(0, "success", "success");
     }
 }
