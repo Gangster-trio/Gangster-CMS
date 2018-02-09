@@ -92,32 +92,35 @@ function chooseValue(name) {
 //对操作进行判断是否具有操作权限
 function judgePrivilege(siteId, categoryId) {
     var operation = true;
-    if (categoryId != null) {
-        $.ajax({
-            url: '/privilege/category?siteId=' + siteId + '&categoryId=' + categoryId,
-            dataType: "json",
-            async: false,
-            type: "get",
-            success: function (data) {
-                if (data.code === 2) {
-                    operation = false;
-                    layer.msg("sorry ,you have not privilege");
-                }
+    $.ajax({
+        url: '/privilege/category?siteId=' + siteId + '&categoryId=' + categoryId,
+        dataType: "json",
+        async: false,
+        type: "get",
+        success: function (data) {
+            if (data.code === 2) {
+                operation = false;
+                layer.msg("sorry ,you have not privilege");
             }
-        });
-        return operation;
-    } else {
-        $.ajax({
-            url: 'privilege/site?siteId=' + siteId,
-            dataType: 'json',
-            async: false,
-            type: 'get',
-            success: function (data) {
-                if (data.code === 2) {
-                    operation = false;
-                    layer.msg("sorry,you have no privilege");
-                }
+        }
+    });
+    return operation;
+}
+
+//判断对站是否具有一系列的操作
+function judgeSitePrivilege(siteId) {
+    var operation = true;
+    $.ajax({
+        url: '/privilege/site?siteId=' + siteId,
+        dataType: 'json',
+        async: false,
+        type: 'get',
+        success: function (data) {
+            if (data.code === 2) {
+                operation = false;
+                layer.msg("sorry,you have no privilege");
             }
-        });
-    }
+        }
+    });
+    return operation;
 }

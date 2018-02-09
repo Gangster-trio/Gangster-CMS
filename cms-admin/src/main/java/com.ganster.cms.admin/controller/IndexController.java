@@ -47,7 +47,11 @@ public class IndexController {
         //查出所有的父模块
         List<ModuleTree> treeList = new ArrayList<>();
         ModuleExample moduleExample = new ModuleExample();
-        moduleExample.or().andModuleParentIdEqualTo(0);
+        if (user.getUserName().equals("admin")) {
+            moduleExample.or().andModuleParentIdEqualTo(0);
+        } else {
+            moduleExample.or().andModuleParentIdEqualTo(0).andModuleIdNotEqualTo(4);
+        }
         List<Module> parents = moduleService.selectByExample(moduleExample);
         for (Module module : parents) {
             ModuleExample moduleExample1 = new ModuleExample();
@@ -69,7 +73,6 @@ public class IndexController {
         modelAndView.addObject("moduleTreeList", treeList);
         modelAndView.addObject("siteList", siteList);
         modelAndView.addObject("user", user);
-
         return modelAndView;
     }
 }

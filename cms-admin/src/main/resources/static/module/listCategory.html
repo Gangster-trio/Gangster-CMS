@@ -46,7 +46,7 @@
                 categoryId = data.categoryId;   //得到当前点击的栏目id
                 //查看栏目的详细信息
                 if (layEvent === 'detail') {
-                    showAtRight("/module/listArticle.html");
+                    showAtRight("/module/listCategoryArticle.html");
                 }
                 if (judgePrivilege(siteId, categoryId)) {
                     //删除栏目信息
@@ -96,7 +96,8 @@
 
     //添加栏目的按钮注册事件
     $("#column").on('click', function () {
-        if (judgePrivilege(siteId, null)) {
+        alert(judgeSitePrivilege(siteId));
+        if (judgePrivilege(siteId)) {
             showAtRight("/module/addCategory.html");
         }
     });

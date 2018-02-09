@@ -132,14 +132,4 @@ public class CategoryController extends BaseController {
         if (count == 1) return new Message(0, "success", count);
         else return new Message(1, "false", count);
     }
-
-    @GetMapping("/privilege")
-    public Message judgePrivilege(@RequestParam Integer siteId, @RequestParam Integer categoryId) {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        if (PermissionUtil.permittedCategory(userId, siteId, categoryId, CmsConst.PERMISSION_WRITE)) {
-            return super.buildMessage(0, "success", "yes");
-        } else {
-            return super.buildMessage(2, "no privilege", null);
-        }
-    }
 }
