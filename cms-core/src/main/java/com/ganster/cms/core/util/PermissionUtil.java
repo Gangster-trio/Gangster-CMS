@@ -19,11 +19,7 @@ import java.util.*;
 public class PermissionUtil {
     private static final Logger logger = LoggerFactory.getLogger(PermissionUtil.class);
     @Resource
-    private UserService userService;
-    @Resource
     private PermissionService permissionService;
-    @Resource
-    private GroupService groupService;
 
     private static PermissionUtil permissionUtil;
 
@@ -33,14 +29,12 @@ public class PermissionUtil {
     public void init() {
         permissionUtil = this;
         permissionUtil.permissionService = this.permissionService;
-        permissionUtil.userService = this.userService;
-        permissionUtil.groupService = this.groupService;
         permissionMap = new HashMap<>();
     }
 
 
     public static List<Permission> flush(Integer uid) {
-        List<Permission> permissions = null;
+        List<Permission> permissions;
         try {
             permissions = permissionUtil.permissionService.selectByUserId(uid);
         } catch (GroupNotFountException e) {
@@ -57,7 +51,9 @@ public class PermissionUtil {
     }
 
     private static Boolean permitted(Integer uid, String pName) {
-        flush(uid);
+        if (permissionMap.get(uid)==null){
+            flush(uid);
+        }
         Set<String> set = permissionMap.get(uid);
         return set != null && set.contains(pName);
     }

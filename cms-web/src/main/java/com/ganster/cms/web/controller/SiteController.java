@@ -78,7 +78,7 @@ public class SiteController {
 
         //Get the list of articles to place on the homepage
         ArticleExample articleExample = new ArticleExample();
-        articleExample.or().andArticleTypeEqualTo(CmsConst.INDEX_ARTICLE_TYPE);
+        articleExample.or().andArticleTypeEqualTo(CmsConst.INDEX_ARTICLE_TYPE).andArticleSiteIdEqualTo(site.getSiteId());
         List<Article> articleList = articleService.selectByExample(articleExample);
         if (articleList == null) {
             articleList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class SiteController {
 
         //Get the home carousel article
         articleExample.clear();
-        articleExample.or().andArticleTypeEqualTo(CmsConst.CAROUSEL_ARTICLE_TYPE);
+        articleExample.or().andArticleTypeEqualTo(CmsConst.CAROUSEL_ARTICLE_TYPE).andArticleSiteIdEqualTo(site.getSiteId());
         List<Article> carouselList = articleService.selectByExample(articleExample);
         if (carouselList == null) {
             carouselList = new ArrayList<>();
@@ -114,7 +114,7 @@ public class SiteController {
                 >
         */
         categoryExample.clear();
-        categoryExample.or().andCategoryInHomepageEqualTo(true);
+        categoryExample.or().andCategoryInHomepageEqualTo(true).andCategorySiteIdEqualTo(site.getSiteId());
         List<Category> homePageCategoryList = categoryService.selectByExample(categoryExample);
         for (Category category : homePageCategoryList) {
             CategoryWithArticleList cwal = new CategoryWithArticleList(
@@ -141,7 +141,7 @@ public class SiteController {
                  >
         */
         articleExample.clear();
-        articleExample.or().andArticleInHomepageEqualTo(true);
+        articleExample.or().andArticleInHomepageEqualTo(true).andArticleSiteIdEqualTo(site.getSiteId());
         List<Article> homePageArticleList = articleService.selectByExample(articleExample);
         CategoryController.addListToResult(result, homePageArticleList);
 
