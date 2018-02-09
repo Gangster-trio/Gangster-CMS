@@ -7,6 +7,6 @@ import com.ganster.cms.core.pojo.CategoryTree;
 
 import java.util.List;
 
-public interface CategoryService extends BaseService<Category,CategoryExample> {
-     CategoryTree toTree(Category category);
+public interface CategoryService extends BaseService<Category, CategoryExample> {
+    CategoryTree toTree(Category category);
 }

@@ -13,6 +13,8 @@
     <script src="/util/util.js"></script>
     <script src="/util/jquery-editable-select.js"></script>
     <script src="/util/jquery.form.js"></script>
+    <script src="/util/jquery-editable-select.js"></script>
+    <link rel="stylesheet" href="/util/jquery-editable-select.css">
 </head>
 <body class="layui-layout-body">
 

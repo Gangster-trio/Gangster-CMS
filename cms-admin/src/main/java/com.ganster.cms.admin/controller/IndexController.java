@@ -4,6 +4,8 @@ import com.ganster.cms.admin.dto.ModuleTree;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.*;
+import com.ganster.cms.core.util.PermissionUtil;
+import com.sun.istack.internal.Interned;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +44,7 @@ public class IndexController {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        //TODO: add permission
+        //查出所有的父模块
         List<ModuleTree> treeList = new ArrayList<>();
         ModuleExample moduleExample = new ModuleExample();
         moduleExample.or().andModuleParentIdEqualTo(0);
@@ -59,14 +61,14 @@ public class IndexController {
 
         List siteList = new ArrayList();
         try {
-           siteList = permissionService.findAllUserSite(userId);
+            siteList = permissionService.findAllUserSite(userId);
         } catch (GroupNotFountException e) {
             e.printStackTrace();
         }
 
         modelAndView.addObject("moduleTreeList", treeList);
         modelAndView.addObject("siteList", siteList);
-        modelAndView.addObject("user",user);
+        modelAndView.addObject("user", user);
 
         return modelAndView;
     }

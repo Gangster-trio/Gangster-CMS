@@ -1,8 +1,9 @@
-<script src="/layui/layui.all.js" type="text/javascript"></script>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>添加文章</legend>
 </fieldset>
+
 <div class="site-text site-block">
+
     <form id="addArticleForm" class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">文章标题</label>
@@ -12,6 +13,7 @@
                        class="layui-input">
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">自定义顺序</label>
             <div class="layui-input-inline">
@@ -27,6 +29,7 @@
             <option style="padding-left: 50px" value="主页文章">主页文章</option>
             <option style="padding-left: 50px" value="普通文章">普通文章</option>
         </select>
+
         <!--TODO: skin choose-->
         <div class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
@@ -36,6 +39,7 @@
                 <input type="radio" name="articleSkin" value="default" title="默认" checked="checked">
             </div>
         </div>
+
         <div id="show" class="layui-form-item">
             <label class="layui-form-label">所属栏目</label>
             <div class="layui-input-inline">
@@ -47,6 +51,7 @@
                        class="layui-input" readonly="readonly"/>
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">文章作者</label>
             <div class="layui-input-inline">
@@ -55,6 +60,7 @@
                        class="layui-input">
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">Tag</label>
             <div class="layui-input-block">
@@ -64,15 +70,12 @@
             </div>
         </div>
 
-
-        <input id="articleThumb" class="layui-hide" name="articleThumb"
-               lay-verify="required">
+        <input id="articleThumb" class="layui-hide" name="articleThumb">
         <label class="layui-form-label">缩略图上传</label>
         <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
             <i class="layui-icon"></i>
             <p>点击上传，或将文件拖拽到此处</p>
         </div>
-
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
@@ -97,6 +100,7 @@
         </div>
     </form>
 </div>
+
 <script type="text/javascript">
 
     var editId;
@@ -137,6 +141,8 @@
                 , size: 0
             }
         });
+
+
         $.fn.serializeObject = function () {
             var o = {};
             var a = this.serializeArray();
@@ -152,6 +158,8 @@
             });
             return o;
         };
+
+
         editId = layedit.build('articleContent', {
             tool: [
                 'strong' //加粗
@@ -190,6 +198,7 @@
 
         });
 
+
         function submitArticleCreate() {
             layui.layedit.sync(editId);
 
@@ -212,6 +221,5 @@
             })
         }
     });
-
 
 </script>

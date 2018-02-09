@@ -31,31 +31,18 @@ public class CategoryController extends BaseController {
 
 
     @GetMapping("/list")
-    public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-        if (limit == null || limit == 0) {
-            limit = 10;
-        }
-        if (page == null || page == 0) {
-            page = 1;
-        }
+    public AjaxData list(@RequestParam Integer siteId) {
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(-1);
-        PageInfo<Category> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
-        List<Category> allList = pageInfo.getList();
-        List<Category> list = new ArrayList<>();
-
-        for (Category c : allList) {
-            if (SecurityUtils.getSubject().isPermitted(PermissionUtil.formatCategoryPermissionName(siteId, c.getCategoryId(), CmsConst.PERMISSION_READ))) {
-                list.add(c);
+        List<Category> categories = categoryService.selectByExample(categoryExample);
+        List<Category> categoryList = new ArrayList<>();
+        for (Category category : categories) {
+            if (PermissionUtil.permittedCategory(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ)) {
+                categoryList.add(category);
             }
         }
-
-
-        if (list.isEmpty()) {
-            return super.buildAjaxData(0, "no data", 0, null);
-        } else {
-            return super.buildAjaxData(0, "success", pageInfo.getTotal(), list);
-        }
+        return super.buildAjaxData(0, "success", categoryList.size(), categoryList);
     }
 
     @GetMapping("/select")
@@ -148,11 +135,11 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/privilege")
     public Message judgePrivilege(@RequestParam Integer siteId, @RequestParam Integer categoryId) {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject.isPermitted(PermissionUtil.formatCategoryPermissionName(siteId, categoryId, CmsConst.PERMISSION_WRITE))) {
-            return super.buildMessage(0, "success", 0);
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        if (PermissionUtil.permittedCategory(userId, siteId, categoryId, CmsConst.PERMISSION_WRITE)) {
+            return super.buildMessage(0, "success", "yes");
         } else {
-            return super.buildMessage(2, "no permissin", null);
+            return super.buildMessage(2, "no privilege", null);
         }
     }
 }

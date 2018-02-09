@@ -19,50 +19,47 @@ import java.util.*;
 public class PermissionUtil {
     private static final Logger logger = LoggerFactory.getLogger(PermissionUtil.class);
     @Resource
-    private  UserService userService;
+    private UserService userService;
     @Resource
-    private  PermissionService permissionService;
+    private PermissionService permissionService;
     @Resource
-    private  GroupService groupService;
+    private GroupService groupService;
 
     private static PermissionUtil permissionUtil;
-    @PostConstruct
-    public void  init(){
-        permissionUtil=this;
-        permissionUtil.permissionService=this.permissionService;
-        permissionUtil.userService=this.userService;
-        permissionUtil.groupService=this.groupService;
-        permissionMap = new HashMap<>();
-    }
 
     public static Map<Integer, Set<String>> permissionMap;
 
-    public static void flush(Integer uid) throws GroupNotFountException {
-        List<Permission> permissions = permissionUtil.permissionService.selectByUserId(uid);
+    @PostConstruct
+    public void init() {
+        permissionUtil = this;
+        permissionUtil.permissionService = this.permissionService;
+        permissionUtil.userService = this.userService;
+        permissionUtil.groupService = this.groupService;
+        permissionMap = new HashMap<>();
+    }
+
+
+    public static List<Permission> flush(Integer uid) {
+        List<Permission> permissions = null;
+        try {
+            permissions = permissionUtil.permissionService.selectByUserId(uid);
+        } catch (GroupNotFountException e) {
+            logger.info("Current userId: {} has no permission", uid);
+            return null;
+        }
         Set<String> permissionName = new HashSet<>();
         for (Permission i : permissions) {
             permissionName.add(i.getPermissionName());
         }
 
-        permissionMap.put(uid,permissionName);
+        permissionMap.put(uid, permissionName);
+        return permissions;
     }
 
     private static Boolean permitted(Integer uid, String pName) {
-        try {
-            User user = permissionUtil.userService.selectByPrimaryKey(uid);
-            if (user == null) return false;
-            List<Permission> permissionList =permissionUtil.permissionService.selectByUserId(uid);
-            logger.info("+++++++++++++++++++"+permissionList.toString()+"+++++++++++++++++++++++++");
-            for (Permission i : permissionList) {
-                if (i != null && i.getPermissionName().equals(pName)) {
-                    return true;
-                } else return false;
-            }
-        } catch (Exception e) {
-            logger.info("+++++++++++++用户组未找到++++++++++++++++");
-            return false;
-        }
-        return false;
+        flush(uid);
+        Set<String> set = permissionMap.get(uid);
+        return set != null && set.contains(pName);
     }
 
     public static Boolean permittedCategory(Integer uid, Integer sid, Integer cid, String p) {

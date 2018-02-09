@@ -31,7 +31,7 @@
 
             //判断栏目是否选择，如果选择，则显示该栏目的文章，如果没选择，显示站的所有文章
             ,
-            url: '/article/list?siteId=' + siteId
+            url: '/article/list/category?id=' + categoryId
             ,
             page: true //开启分页
             ,
@@ -60,56 +60,59 @@
 
         //给文章添加基本的事件
         table.on('tool(articleListFilter)', function (obj) { //注：tool是工具条事件名，articleListFilter是table原始容器的属性 lay-filter="对应的值"
-                var data = obj.data; //获得当前行数据
-                console.log(data);
-                layEvent = obj.event; //获得 lay-event 对应的值
-                articleId = data.articleId;
-                categoryId = data.articleCategoryId;
-                //显示文章的详细信息
-                if (layEvent === 'detail') {
-                    showAtRight("/module/listCategory.html");
-                }
+            var data = obj.data; //获得当前行数据
+            console.log(data);
+            layEvent = obj.event; //获得 lay-event 对应的值
+            articleId = data.articleId;
+            categoryId = data.articleCategoryId;
+            //显示文章的详细信息
+            if (layEvent === 'detail') {
+                showAtRight("/module/listCategory.html");
+
+                //删除文章的权限判断及实现
+            } else if (layEvent === 'del') {
                 if (judgePrivilege(siteId, categoryId)) {
-                    //删除文章的权限判断及实现
-                    if (layEvent === 'del') {
-                        layer.confirm('真的删除行么', function (index) {
-                            console.log(data);
-                            $.ajax({
-                                url: "/article/delete/" + data.articleId,
-                                type: 'get',
-                                dataType: 'json',
-                                success: function (data) {
-                                    console.log(data);
-                                    if (data.code === 0) {
-                                        //删除这一行
-                                        obj.del();
-                                        //关闭弹框
-                                        layer.close(index);
-                                        layer.msg("删除成功", {icon: 6});
-                                    } else {
-                                        layer.msg("删除失败", {icon: 5});
-                                    }
-
-                                },
-                                end: function () {
-                                    showAtRight("/module/listArticle.html");
+                    layer.confirm('真的删除行么', function (index) {
+                        console.log(data);
+                        $.ajax({
+                            url: "/article/delete/" + data.articleId,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function (data) {
+                                console.log(data);
+                                if (data.code === 0) {
+                                    //删除这一行
+                                    obj.del();
+                                    //关闭弹框
+                                    layer.close(index);
+                                    layer.msg("删除成功", {icon: 6});
+                                } else {
+                                    layer.msg("删除失败", {icon: 5});
                                 }
-                            })
-                            ;
-                        });
-                    }
 
-                    //更新文章的权限判断及实现
-                    else if (layEvent === 'edit') {
-                        showAtRight("module/editArticle.html");
-                    }
+                            },
+                            end: function () {
+                                showAtRight("/module/listArticle.html");
+                            }
+                        })
+                        ;
+                    });
                 }
             }
-        )
-        ;
+
+            //更新文章的权限判断及实现
+            else if (layEvent === 'edit') {
+                showAtRight("module/editArticle.html");
+            }
+        });
+    } else {
+        layer.open({
+            title: '文章管理'
+            , content: '请先选择所要操作的站点'
+        });
     }
 
-
+    // });
     //添加文章功能
     $("#article").on('click', function () {
         showAtRight("module/addArticle.html")

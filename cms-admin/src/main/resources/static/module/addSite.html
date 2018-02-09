@@ -1,6 +1,7 @@
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>添加站点</legend>
 </fieldset>
+
 <div class="site-text site-block">
     <form id="addSiteForm" class="layui-form">
         <div class="layui-form-item">
@@ -18,9 +19,10 @@
             <div class="layui-input-block">
                 <!--<input type="radio" name="sex" value="女" title="女" checked>-->
                 <!--单选框name 为控件名，value是提交到服务器的值-->
-                <input type="radio" name="categorySkin" value="default" title="默认" checked="checked">
+                <input type="radio" name="siteSkin" value="default" title="默认" checked="checked">
             </div>
         </div>
+
         <div id="show" class="layui-form-item">
             <label class="layui-form-label">站点网址</label>
             <div class="layui-input-inline">
@@ -30,7 +32,8 @@
                        class="layui-input"/>
             </div>
         </div>
-        <!--TODO: site uploadImg -->
+
+        <input id="sitePic" class="layui-hide" name="sitePic">
         <label class="layui-form-label">缩略图上传</label>
         <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
             <i class="layui-icon"></i>
@@ -44,6 +47,7 @@
                           placeholder="添加描述"></textarea>
             </div>
         </div>
+
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button lay-submit class="layui-btn" lay-filter="createSite">立即提交</button>
@@ -53,6 +57,7 @@
     </form>
 </div>
 <script>
+
     layui.use(['form', 'upload'], function () {
         var form = layui.form, upload = layui.upload;
         form.render();
@@ -64,17 +69,24 @@
         });
 
 
-        var uploadInst = layui.upload.render({
+        layui.upload.render({
             elem: '#uploadImg',
-            url: '。site/img',
+            url: '/article/img',
+            before: function (obj) {
+                layer.load();
+            },
             done: function (res) {
                 console.log(res);
+                $("#sitePic").val(res.data.src);
+                layer.closeAll();
+
             },
             error: function (res) {
                 console.log(res);
+                layer.closeAll();
             }
-
         });
+
 
         $.fn.serializeObject = function () {
             var o = {};
