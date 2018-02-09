@@ -42,6 +42,7 @@
                     <h2 class="subheading">${result.article.articleDesc!"没有描述"}</h2>
                     <span class="meta">Posted by ${result.article.articleAuthor!"anonymous"}
                 on ${(result.article.articleCreateTime?string("yyyy年MM月dd"))!}</span>
+                    <span class="meta">click: ${result.article.articleHit!"0"}</span>
                 </div>
             </div>
         </div>

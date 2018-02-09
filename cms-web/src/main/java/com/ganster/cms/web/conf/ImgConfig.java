@@ -17,8 +17,9 @@ public class ImgConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //pic path must end with "/"
         registry.addResourceHandler("/pic/**").addResourceLocations("file:" + settingService.get(CmsConst.PIC_PATH_SETTING));
-        LOGGER.info("Ganster CMS : mapped /pic/** to {}",settingService.get(CmsConst.PIC_PATH_SETTING));
+        LOGGER.info("Gangster CMS : mapped /pic/** to {}", settingService.get(CmsConst.PIC_PATH_SETTING));
         super.addResourceHandlers(registry);
     }
 }

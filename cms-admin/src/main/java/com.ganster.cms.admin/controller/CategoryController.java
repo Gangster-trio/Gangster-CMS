@@ -122,7 +122,7 @@ public class CategoryController extends BaseController {
         category.setCategorySiteId(siteId);
         Integer level = parentCategory.getCategoryLevel();
         if (level == -1) {
-            category.setCategoryLevel(1);
+            category.setCategoryLevel(0);
         } else {
             category.setCategoryLevel(level + 1);
         }
