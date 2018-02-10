@@ -7,6 +7,7 @@ import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.*;
+import com.ganster.cms.core.util.PermissionUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -64,8 +65,11 @@ public class ArticleController extends BaseController {
             limit = 10;
         }
         Integer uid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+
+        List<Integer> categoryIdList = PermissionUtil.getAllPermittedCategory(uid, siteId, CmsConst.PERMISSION_READ);
+
         ArticleExample articleExample = new ArticleExample();
-        articleExample.or().andArticleSiteIdEqualTo(siteId);
+        articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleCategoryIdIn(categoryIdList);
         PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
         List<Article> list = pageInfo.getList();
         if (list == null || list.isEmpty()) {
@@ -78,6 +82,7 @@ public class ArticleController extends BaseController {
     @PostMapping("/save")
     @ResponseBody
     public Message save(@RequestBody ArticleDTO articleDTO) {
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         if (articleDTO == null) {
             return super.buildMessage(1, "文章为空", null);
         }
@@ -91,7 +96,6 @@ public class ArticleController extends BaseController {
             tagList = Arrays.asList(tags.split(","));  //列出所有的tag标签
             count += articleService.insertSelectiveWithTag(article, tagList);
         }
-
         return super.buildMessage(0, "success", count);
     }
 

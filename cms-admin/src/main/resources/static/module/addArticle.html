@@ -118,6 +118,8 @@
         var uploadInst = layui.upload.render({
             elem: '#uploadImg',
             url: '/article/img',
+            accept: 'images',
+            size: 1000,
             before: function (obj) {
                 layer.load();
             },

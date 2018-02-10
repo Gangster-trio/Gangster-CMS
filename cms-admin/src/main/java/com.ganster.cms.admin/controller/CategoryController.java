@@ -3,15 +3,18 @@ package com.ganster.cms.admin.controller;
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.constant.CmsConst;
+import com.ganster.cms.core.exception.GroupNotFountException;
+import com.ganster.cms.core.exception.PermissionNotFoundException;
+import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
+import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.UserService;
 import com.ganster.cms.core.util.PermissionUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,26 +34,33 @@ public class CategoryController extends BaseController {
     private ArticleService articleService;
 
     @Autowired
+    private PermissionService permissionService;
+
+    @Autowired
     UserService userService;
 
+    private Integer siteid;
+
     @GetMapping("/list")
-    public AjaxData list(@RequestParam Integer siteId) {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        User user = userService.selectByPrimaryKey(userId);
-        CategoryExample categoryExample = new CategoryExample();
-        categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(-1);
-        List<Category> categories = categoryService.selectByExample(categoryExample);
-        List<Category> categoryList = new ArrayList<>();
-        for (Category category : categories) {
-            if (!user.getUserName().equals("admin")) {
-                if (PermissionUtil.permittedCategory(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ)) {
-                    categoryList.add(category);
-                }
-            } else {
-                categoryList.add(category);
-            }
+    public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+        if (page == null || page == 0) {
+            page = 1;
         }
-        return super.buildAjaxData(0, "success", categoryList.size(), categoryList);
+        if (limit == null || limit == 0) {
+            limit = 1;
+        }
+        siteid = siteId;
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        CategoryExample categoryExample = new CategoryExample();
+        List<Integer> categoryIdList = PermissionUtil.getAllPermittedCategory(userId, siteId, CmsConst.PERMISSION_READ);
+        categoryExample.or().andCategoryLevelNotEqualTo(-1).andCategoryIdIn(categoryIdList);
+        PageInfo<Category> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
+        List<Category> categories = pageInfo.getList();
+        if (categories == null || categories.isEmpty()) {
+            return super.buildAjaxData(0, "success", 0, null);
+        } else {
+            return super.buildAjaxData(0, "success", pageInfo.getTotal(), categories);
+        }
     }
 
     @GetMapping("/select")
@@ -92,13 +102,31 @@ public class CategoryController extends BaseController {
     public Message delete(@PathVariable("id") Integer id) {
 
         //Determined whether current category article,if true,delete article and category
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Article> list = articleService.selectArticleByCategoryId(id);
         if (!list.isEmpty()) {
             for (Article article : list) {
                 articleService.deleteByPrimaryKey(article.getArticleId());
             }
         }
+        //删除作者对栏目的权限
         if (categoryService.deleteByPrimaryKey(id) == 1) {
+            try {
+                permissionService.deleteUserPermission(userId, siteid, id, CmsConst.PERMISSION_READ);
+                permissionService.deleteUserPermission(userId, siteid, id, CmsConst.PERMISSION_WRITE);
+                permissionService.deleteUserPermission(1, siteid, id, CmsConst.PERMISSION_READ);
+                permissionService.deleteUserPermission(1, siteid, id, CmsConst.PERMISSION_WRITE);
+            } catch (UserNotFoundException e) {
+                e.printStackTrace();
+                return new Message(1, "false", "用户未找到");
+            } catch (GroupNotFountException e) {
+                e.printStackTrace();
+                return new Message(1, "false", "组找不见");
+            } catch (PermissionNotFoundException e) {
+                e.printStackTrace();
+                return new Message(1, "false", "权限没有找到");
+            }
+
             return super.buildMessage(0, "success", 1);
         } else {
             return super.buildMessage(1, "false", 0);
@@ -123,6 +151,7 @@ public class CategoryController extends BaseController {
 
     @PostMapping("/add")
     public Message add(@RequestBody Category category) {
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         category.setCategoryCreateTime(new Date());
         category.setCategorySkin("default");
         Category parentCategory = categoryService.selectByPrimaryKey(category.getCategoryParentId());
@@ -137,6 +166,18 @@ public class CategoryController extends BaseController {
 
         int count = categoryService.insert(category);
 
+        try {
+            permissionService.addCategoryPermissionToUser(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ);
+            permissionService.addCategoryPermissionToUser(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_WRITE);
+            permissionService.addCategoryPermissionToUser(1, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ);
+            permissionService.addCategoryPermissionToUser(1, siteId, category.getCategoryId(), CmsConst.PERMISSION_WRITE);
+        } catch (GroupNotFountException e) {
+            e.printStackTrace();
+            return new Message(1, "false", "组找不见");
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return new Message(1, "false", "没有找到该用户");
+        }
         if (count == 1) return new Message(0, "success", count);
         else return new Message(1, "false", count);
     }

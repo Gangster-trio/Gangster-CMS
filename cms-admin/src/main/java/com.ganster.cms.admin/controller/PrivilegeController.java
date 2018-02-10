@@ -43,7 +43,6 @@ public class PrivilegeController extends BaseController {
         } else {
             return super.buildMessage(0, "success", "yes");
         }
-
     }
 
     @GetMapping("/site")
