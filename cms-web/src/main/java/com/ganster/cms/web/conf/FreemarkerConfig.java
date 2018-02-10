@@ -15,18 +15,24 @@ public class FreemarkerConfig extends WebMvcConfigurerAdapter {
 
     private static Logger LOGGER = LoggerFactory.getLogger(FreemarkerConfig.class);
 
-    @Autowired
+    private final
     SettingService settingService;
+
+    @Autowired
+    public FreemarkerConfig(SettingService settingService) {
+        this.settingService = settingService;
+    }
 
     @Bean
     public FreeMarkerConfigurer loadPathConfig() {
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
         String path = settingService.get(CmsConst.SKIN_PATH_SETTING);
+        String DEFAULT_SKIN_PATH = "classpath:templates";
         if (!path.isEmpty()) {
-            configurer.setTemplateLoaderPath(path);
-            LOGGER.info("Gangster CMS : templates path = {}", path);
+            configurer.setTemplateLoaderPaths(DEFAULT_SKIN_PATH, path);
+            LOGGER.info("Gangster CMS : templates path = {},{}", DEFAULT_SKIN_PATH, path);
         } else {
-            configurer.setTemplateLoaderPath("classpath:templates");
+            configurer.setTemplateLoaderPath(DEFAULT_SKIN_PATH);
 //            configurer.setTemplateLoaderPath("file:/home/bigmeng/Desktop/templates/");
         }
 

@@ -10,6 +10,7 @@ import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.*;
+import com.ganster.cms.core.util.PermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

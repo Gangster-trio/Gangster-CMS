@@ -7,6 +7,7 @@ import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.service.UserService;
+import com.ganster.cms.core.util.PermissionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -5,6 +5,7 @@ import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.pojo.Site;
 import com.ganster.cms.core.pojo.SiteExample;
 import com.ganster.cms.core.service.SiteService;
+import com.ganster.cms.core.util.PermissionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
