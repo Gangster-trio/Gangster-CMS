@@ -5,4 +5,10 @@ import com.ganster.cms.core.pojo.Site;
 import com.ganster.cms.core.pojo.SiteExample;
 
 public interface SiteService extends BaseService<Site,SiteExample> {
+    /**
+     * delete all about this site
+     *
+     * @param sid Site ID
+     */
+    void deleteSite(Integer sid);
 }
