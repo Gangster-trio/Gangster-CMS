@@ -49,14 +49,11 @@
 </div>
 <script type="text/javascript">
         $(function () {
-        layui.layer.alert("ok");
         var form = layui.form;
-//        form.render();
         $.ajax({
             type: "get",
             url: "/information/getUserId",
             success: function (userId) {
-//                layui.layer.alert(userId);
                 $.ajax({
                     type: "get",
                     async: false,
