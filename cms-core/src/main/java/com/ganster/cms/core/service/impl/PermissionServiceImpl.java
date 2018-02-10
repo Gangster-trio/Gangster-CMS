@@ -245,11 +245,16 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
 
     @Override
     @Transactional
-    public void deletePermission(Integer pid) {
+    public int deletePermission(Integer pid) {
         GroupPermissionExample groupPermissionExample = new GroupPermissionExample();
         groupPermissionExample.or().andPermissionIdEqualTo(pid);
         groupPermissionMapper.deleteByExample(groupPermissionExample);
 
-        deleteByPrimaryKey(pid);
+        return super.deleteByPrimaryKey(pid);
+    }
+
+    @Override
+    public int deleteByPrimaryKey(Integer id) {
+        return deletePermission(id);
     }
 }
