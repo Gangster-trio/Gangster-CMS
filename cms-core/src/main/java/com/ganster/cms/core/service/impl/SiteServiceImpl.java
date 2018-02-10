@@ -24,7 +24,7 @@ public class SiteServiceImpl extends BaseServiceImpl<SiteMapper, Site, SiteExamp
     PermissionService permissionService;
 
     @Override
-    public void deleteSite(Integer sid) {
+    public int deleteSite(Integer sid) {
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(sid);
         List<Category> categoryList = categoryService.selectByExample(categoryExample);
@@ -44,6 +44,11 @@ public class SiteServiceImpl extends BaseServiceImpl<SiteMapper, Site, SiteExamp
             }
         }
         categoryService.deleteByExample(categoryExample);
-        deleteByPrimaryKey(sid);
+        return super.deleteByPrimaryKey(sid);
+    }
+
+    @Override
+    public int deleteByPrimaryKey(Integer id) {
+        return deleteSite(id);
     }
 }
