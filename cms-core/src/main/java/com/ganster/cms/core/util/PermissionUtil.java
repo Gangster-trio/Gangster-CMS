@@ -34,7 +34,7 @@ public class PermissionUtil {
         Map<String, String> map;
         for (String s : permissionSet) {
             map = split(s);
-            if (map.containsKey("Category") && map.get("Permission").equals(per)) {
+            if (map.containsKey("Category") && map.get("Permission").equals(per) && map.get("Site").equals(String.valueOf(sid))) {
                 categoryIdList.add(Integer.valueOf(map.get("Category")));
             }
         }
@@ -145,7 +145,7 @@ public class PermissionUtil {
     }
 
     @PostConstruct
-    public void init() {
+    private void init() {
         permissionUtil = this;
         permissionUtil.permissionService = this.permissionService;
         permissionMap = new ConcurrentHashMap<>();
