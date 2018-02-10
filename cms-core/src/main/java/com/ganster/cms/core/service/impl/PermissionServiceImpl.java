@@ -50,7 +50,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
 
     private List<Permission> selectByGroupExample(GroupExample example) throws GroupNotFountException {
         List<Group> groupList = groupService.selectByExample(example);
-        List<Integer> PidList = new ArrayList<>();
+        List<Integer> pidList = new ArrayList<>();
         if (groupList == null || groupList.size() == 0) {
             throw new GroupNotFountException();
         }
@@ -62,14 +62,14 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
                 return new ArrayList<>();
             }
             for (GroupPermission gp : groupPermissionList) {
-                PidList.add(gp.getPermissionId());
+                pidList.add(gp.getPermissionId());
             }
         }
-        if (PidList.size() == 0) {
+        if (pidList.isEmpty()) {
             return new ArrayList<>();
         }
         PermissionExample permissionExample = new PermissionExample();
-        permissionExample.or().andPermissionIdIn(PidList);
+        permissionExample.or().andPermissionIdIn(pidList);
         return selectByExample(permissionExample);
     }
 

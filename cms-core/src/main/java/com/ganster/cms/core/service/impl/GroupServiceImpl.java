@@ -198,6 +198,9 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper, Group, GroupE
                 userGroupList) {
             userIdList.add(ug.getUserId());
         }
+        if (userIdList.isEmpty()) {
+            return new ArrayList<>();
+        }
         UserExample userExample = new UserExample();
         userExample.or().andUserIdIn(userIdList);
         return userService.selectByExample(userExample);
