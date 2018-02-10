@@ -55,13 +55,12 @@
                                 //删除这一行
                                 obj.del();
                                 //关闭弹框
-                                layer.close(index);
                                 layer.msg("删除成功", {icon: 6});
-                                showAtRight("/module/listGroup.html");
+                                showAtRight("/module/editPermission.html");
                             } else {
                                 layer.msg("删除失败", {icon: 5});
                                 location.reload();
-                                showAtRight("/module/listGroup.html");
+                                showAtRight("/module/editPermission.html");
                             }
                         }
                     });
