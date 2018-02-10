@@ -96,7 +96,6 @@
 
     //添加栏目的按钮注册事件
     $("#column").on('click', function () {
-        alert(judgeSitePrivilege(siteId));
         if (judgePrivilege(siteId)) {
             showAtRight("/module/addCategory.html");
         }

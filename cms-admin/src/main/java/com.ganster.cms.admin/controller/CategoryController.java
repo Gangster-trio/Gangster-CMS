@@ -6,6 +6,7 @@ import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
+import com.ganster.cms.core.service.UserService;
 import com.ganster.cms.core.util.PermissionUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -29,16 +30,23 @@ public class CategoryController extends BaseController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    UserService userService;
 
     @GetMapping("/list")
     public AjaxData list(@RequestParam Integer siteId) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        User user = userService.selectByPrimaryKey(userId);
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(-1);
         List<Category> categories = categoryService.selectByExample(categoryExample);
         List<Category> categoryList = new ArrayList<>();
         for (Category category : categories) {
-            if (PermissionUtil.permittedCategory(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ)) {
+            if (!user.getUserName().equals("admin")) {
+                if (PermissionUtil.permittedCategory(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ)) {
+                    categoryList.add(category);
+                }
+            } else {
                 categoryList.add(category);
             }
         }
