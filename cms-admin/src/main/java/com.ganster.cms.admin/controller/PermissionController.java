@@ -11,6 +11,7 @@ import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.*;
 import com.ganster.cms.core.util.PermissionUtil;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +44,31 @@ public class PermissionController extends BaseController {
     @Autowired
     private JudgeAuthUtil judgeAuthUtil;
 
+
+    public Boolean index() {
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        List<Group> group = groupService.selectByUserId(userId);
+        for (Group i : group) {
+            if (i.getGroupName().equals("admin")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * 为用户组添加权限
      *
-     * @param
      * @return  Message  权限是否添加成功
      */
     @PostMapping("/addpermission")
     public Message addPermission(@RequestBody PermissionData permissionData) {
         Message message = new Message();
+        if (!this.index()) {
+            message.setMsg("添加权限失败");
+            return message;
+        }
         Group group = groupService.selectByPrimaryKey(permissionData.getGroupId());
         if (group != null) {
             Integer gid = permissionData.getGroupId();
@@ -64,7 +81,7 @@ public class PermissionController extends BaseController {
                 permissionService.addSitePermissionToGroup(sid, gid);
                 addPermissionDescUtil.setSitePermissionDesc(sid);
             }
-            if (pName != null && !pName.isEmpty() && cid!=null&&sid!=null) {
+            if (!pName.isEmpty() && cid != null) {
                 for (String i : pName) {
                     if (i.equals("READ")){
                         if (judgeAuthUtil.judgeAuthIsNull(gid, PermissionUtil.formatCategoryPermissionName(sid, cid, i))) {
@@ -83,7 +100,7 @@ public class PermissionController extends BaseController {
                 message.setMsg("添加权限成功");
                 message.setCode(0);
             }
-            if (sid != null && mid != null && pName != null && !pName.isEmpty()) {
+            if (mid != null && !pName.isEmpty()) {
                 for (String i : pName) {
                     if (i.equals("READ")) {
                         if (judgeAuthUtil.judgeAuthIsNull(gid, PermissionUtil.formatModulePermissionName(sid, mid, i))) {
@@ -144,6 +161,9 @@ public class PermissionController extends BaseController {
      */
     @GetMapping("/deletepermission/{PermissionId}")
     public int deletePermission(@PathVariable("PermissionId") Integer permissionId) {
+        if (!this.index()) {
+            return 0;
+        }
         Permission permission = permissionService.selectByPrimaryKey(permissionId);
         if (permission != null) {
             permissionService.deletePermission(permissionId);

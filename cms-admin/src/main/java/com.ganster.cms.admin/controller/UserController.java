@@ -14,6 +14,7 @@ import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,19 @@ public class UserController extends BaseController {
     @Autowired
     private GroupService groupService;
 
+
+    public Boolean index() {
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        List<Group> group = groupService.selectByUserId(userId);
+        for (Group i : group) {
+            if (i.getGroupName().equals("admin")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      *
      * 添加用户
@@ -47,8 +61,12 @@ public class UserController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public Message addUser(@RequestBody User user) {
-        user.setUserCreateTime(new Date());
         Message message = new Message();
+        if (!this.index()){
+            message.setMsg("添加权限失败");
+            return message;
+        }
+        user.setUserCreateTime(new Date());
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserNameEqualTo(user.getUserName());
         List<User> userList = userService.selectByExample(userExample);
@@ -75,6 +93,10 @@ public class UserController extends BaseController {
     @ResponseBody
     public Message updateUser(@PathVariable("userid") Integer userid, @RequestBody User user) {
         Message message = new Message();
+        if (!this.index()){
+            message.setMsg("添加权限失败");
+            return message;
+        }
         int updateNumber;
         if (userService.selectByPrimaryKey(userid) != null) {
             updateNumber = userService.updateByPrimaryKeySelective(user);
@@ -95,6 +117,9 @@ public class UserController extends BaseController {
     @GetMapping("/delete/{UserId}")
     @ResponseBody
     public int deleteUser(@PathVariable("UserId") Integer userId) {
+        if (!this.index()){
+            return 0;
+        }
         int message = 0;
         int delectNumber;
         if (userService.selectByPrimaryKey(userId) != null) {
@@ -146,8 +171,7 @@ public class UserController extends BaseController {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserIdEqualTo(userId);
         List<User> userList = userService.selectByExample(userExample);
-        User user = userList.get(0);
-        return user;
+        return userList.get(0);
     }
 
     /**
@@ -192,6 +216,9 @@ public class UserController extends BaseController {
     @ResponseBody
     @GetMapping("/deletegroup/{UserId}/{GroupId}")
     public int deleteUserGroup(@PathVariable("UserId") Integer userId, @PathVariable("GroupId") Integer groupId) {
+        if (!this.index()){
+            return 0;
+        }
         Integer message;
         try {
             groupService.removeUserFromGroup(userId, groupId);
@@ -235,6 +262,9 @@ public class UserController extends BaseController {
     @GetMapping("/addGroupToUse/{GroupId}/{UserId}")
     @ResponseBody
     public Integer addGroupToUser(@PathVariable("GroupId") Integer groupId, @PathVariable("UserId") Integer userId) {
+        if (!this.index()){
+            return 0;
+        }
         int message;
         List<Group> groupList = groupService.selectByUserId(userId);
         for (Group i : groupList) {

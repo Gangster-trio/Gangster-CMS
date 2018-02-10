@@ -83,28 +83,25 @@ public class AddPermissionDescUtil {
         }
     }
 
-    public List<Permission> getCategoryPermission(Integer sid, Integer cid, String pName) {
+    private List<Permission> getCategoryPermission(Integer sid, Integer cid, String pName) {
         String permissionName = PermissionUtil.formatCategoryPermissionName(sid, cid, pName);
         PermissionExample permissionExample = new PermissionExample();
         permissionExample.createCriteria().andPermissionNameEqualTo(permissionName);
-        List<Permission> permissionList = permissionService.selectByExample(permissionExample);
-        return permissionList;
+        return permissionService.selectByExample(permissionExample);
     }
 
-    public List<Permission> getModulePermission(Integer sid, Integer mid, String pName) {
+    private List<Permission> getModulePermission(Integer sid, Integer mid, String pName) {
         String permissionName = PermissionUtil.formatModulePermissionName(sid, mid, pName);
         PermissionExample permissionExample = new PermissionExample();
         permissionExample.createCriteria().andPermissionNameEqualTo(permissionName);
-        List<Permission> permissionList = permissionService.selectByExample(permissionExample);
-        return permissionList;
+        return permissionService.selectByExample(permissionExample);
     }
 
-    public List<Permission> getSitePermission(Integer sid) {
+    private List<Permission> getSitePermission(Integer sid) {
         String permissionName = PermissionUtil.formatSitePermissionName(sid);
         logger.info("+++++++++++++++++++++++++++++"+permissionName+"++++++++++++++++++++++");
         PermissionExample permissionExample = new PermissionExample();
         permissionExample.or().andPermissionNameEqualTo(permissionName);
-        List<Permission> permissionList = permissionService.selectByExample(permissionExample);
-        return permissionList;
+        return permissionService.selectByExample(permissionExample);
     }
 }
