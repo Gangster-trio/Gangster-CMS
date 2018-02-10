@@ -46,6 +46,9 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
 
     public List<Article> selectByTagName(String tag) {
         List<Integer> ids = selectArticlesIdByTagName(tag);
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
         ArticleExample articleExample = new ArticleExample();
         articleExample.createCriteria().andArticleIdIn(ids);
         return selectByExample(articleExample);
@@ -53,6 +56,9 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
 
     public List<Article> selectByTagNameWithBLOBs(String tag) {
         List<Integer> ids = selectArticlesIdByTagName(tag);
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
         ArticleExample articleExample = new ArticleExample();
         articleExample.createCriteria().andArticleIdIn(ids);
         return selectByExampleWithBLOBs(articleExample);
