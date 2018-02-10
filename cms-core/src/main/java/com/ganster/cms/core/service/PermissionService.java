@@ -44,5 +44,11 @@ public interface PermissionService extends BaseService<Permission,PermissionExam
 
     void deleteUserFromSite(Integer uid, Integer sid) throws GroupNotFountException, UserNotFoundException;
 
-    void deletePermission(Integer pid);
+    /**
+     * delete permission and permission-group map
+     * (instead with deleteByPrimaryKey)
+     *
+     * @param pid permission ID
+     */
+    int deletePermission(Integer pid);
 }
