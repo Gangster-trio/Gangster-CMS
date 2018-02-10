@@ -167,10 +167,14 @@ public class CategoryController extends BaseController {
         int count = categoryService.insert(category);
 
         try {
+            User user = userService.selectByPrimaryKey(userId);
             permissionService.addCategoryPermissionToUser(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ);
             permissionService.addCategoryPermissionToUser(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_WRITE);
-            permissionService.addCategoryPermissionToUser(1, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ);
-            permissionService.addCategoryPermissionToUser(1, siteId, category.getCategoryId(), CmsConst.PERMISSION_WRITE);
+            if (!user.getUserName().equals("admin")) {
+                permissionService.addCategoryPermissionToUser(1, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ);
+                permissionService.addCategoryPermissionToUser(1, siteId, category.getCategoryId(), CmsConst.PERMISSION_WRITE);
+            }
+            PermissionUtil.flush(userId);
         } catch (GroupNotFountException e) {
             e.printStackTrace();
             return new Message(1, "false", "组找不见");

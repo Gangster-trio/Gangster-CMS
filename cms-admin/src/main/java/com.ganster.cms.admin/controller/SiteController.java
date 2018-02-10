@@ -5,9 +5,11 @@ import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.pojo.Group;
 import com.ganster.cms.core.pojo.Site;
 import com.ganster.cms.core.pojo.SiteExample;
+import com.ganster.cms.core.pojo.User;
 import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.SiteService;
+import com.ganster.cms.core.service.UserService;
 import com.ganster.cms.core.util.PermissionUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -34,6 +36,9 @@ public class SiteController extends BaseController {
     @Autowired
     private PermissionService permissionService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/list")
     public AjaxData list(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
@@ -53,7 +58,6 @@ public class SiteController extends BaseController {
         } else {
             return super.buildAjaxData(0, "success", pageInfo.getTotal(), siteList);
         }
-
     }
 
     @PostMapping("/add")
@@ -70,9 +74,11 @@ public class SiteController extends BaseController {
         if (count == 0) {
             return super.buildMessage(1, "add site failed", null);
         }
+        User user = userService.selectByPrimaryKey(userId);
         List<Group> groups = groupService.selectByUserId(userId);
         permissionService.addSitePermissionToGroup(site.getSiteId(), groups.get(0).getGroupId());
         permissionService.addSitePermissionToGroup(site.getSiteId(), 8);
+        PermissionUtil.flush(userId);
         return super.buildMessage(0, "success", count);
     }
 
@@ -110,5 +116,4 @@ public class SiteController extends BaseController {
             return super.buildMessage(0, "success", count);
         }
     }
-
 }

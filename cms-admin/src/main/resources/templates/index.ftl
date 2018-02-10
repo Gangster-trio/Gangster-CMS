@@ -6,10 +6,7 @@
     <title>CMS manage</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
     <link rel="stylesheet" href="/util/jquery-editable-select.css">
-    <script
-            src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-            crossorigin="anonymous"></script>
+    <script src="/util/jquery.min.js"></script>
     <script src="/util/util.js"></script>
     <script src="/util/jquery-editable-select.js"></script>
     <script src="/util/jquery.form.js"></script>
@@ -43,7 +40,7 @@
                 ${user.userName}
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="">基本资料</a></dd>
+                    <dd><a onclick="showAtRight('/module/information.html')">基本资料</a></dd>
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
