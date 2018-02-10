@@ -6,6 +6,7 @@ import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.service.ModuleService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.SiteService;
+import com.ganster.cms.core.util.PermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
