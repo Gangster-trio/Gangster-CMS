@@ -2,18 +2,15 @@ package com.ganster.cms.core.util;
 
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.Permission;
-import com.ganster.cms.core.pojo.User;
-import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
-import com.ganster.cms.core.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class PermissionUtil {
@@ -23,13 +20,65 @@ public class PermissionUtil {
 
     private static PermissionUtil permissionUtil;
 
-    public static Map<Integer, Set<String>> permissionMap;
+    private static Map<Integer, Set<String>> permissionMap;
 
-    @PostConstruct
-    public void init() {
-        permissionUtil = this;
-        permissionUtil.permissionService = this.permissionService;
-        permissionMap = new HashMap<>();
+    public static List<Integer> getAllPermittedCategory(Integer uid, Integer sid, String per) {
+        if (permissionMap.get(uid) == null) {
+            if (flush(uid) == null) {
+                return new ArrayList<>();
+            }
+        }
+        Set<String> permissionSet = permissionMap.get(uid);
+
+        List<Integer> categoryIdList = new ArrayList<>();
+        Map<String, String> map;
+        for (String s : permissionSet) {
+            map = split(s);
+            if (map.containsKey("Category") && map.get("Permission").equals(per)) {
+                categoryIdList.add(Integer.valueOf(map.get("Category")));
+            }
+        }
+        return categoryIdList;
+    }
+
+    public static List<Integer> getAllPermissionSite(Integer uid) {
+        if (permissionMap.get(uid) == null) {
+            if (flush(uid) == null) {
+                return new ArrayList<>();
+            }
+        }
+        Set<String> permissionSet = permissionMap.get(uid);
+
+        List<Integer> siteIdList = new ArrayList<>();
+
+        Map<String, String> map;
+        for (String s : permissionSet) {
+            map = split(s);
+            if (map.size() == 1 && map.containsKey("Site")) {
+                siteIdList.add(Integer.valueOf(map.get("Site")));
+            }
+        }
+        return siteIdList;
+    }
+
+    public static List<Integer> getAllPermissionModule(Integer uid, Integer sid, String per) {
+        if (permissionMap.get(uid) == null) {
+            if (flush(uid) == null) {
+                return new ArrayList<>();
+            }
+        }
+        Set<String> permissionSet = permissionMap.get(uid);
+
+        List<Integer> moduleIdList = new ArrayList<>();
+
+        Map<String, String> map;
+        for (String s : permissionSet) {
+            map = split(s);
+            if (map.containsKey("Module") && Integer.parseInt(map.get("Site")) == sid && map.get("Permission").equals(per)) {
+                moduleIdList.add(Integer.valueOf(map.get("Module")));
+            }
+        }
+        return moduleIdList;
     }
 
 
@@ -70,6 +119,16 @@ public class PermissionUtil {
         return permitted(uid, formatModulePermissionName(sid, mid, p));
     }
 
+    private static Map<String, String> split(String p) {
+        HashMap<String, String> map = new HashMap<>();
+        List<String> list = Arrays.asList(p.split(":"));
+        for (String s : list) {
+            String k = s.substring(0, s.indexOf('('));
+            String v = s.substring(s.indexOf('(') + 1, s.indexOf(')'));
+            map.put(k, v);
+        }
+        return map;
+    }
 
     public static String formatCategoryPermissionName(Integer sid, Integer cid, String pName) {
         //for example | "Site(1):Category(23):Permission(view)
@@ -83,5 +142,12 @@ public class PermissionUtil {
 
     public static String formatSitePermissionName(Integer sid) {
         return "Site(" + sid + ")";
+    }
+
+    @PostConstruct
+    public void init() {
+        permissionUtil = this;
+        permissionUtil.permissionService = this.permissionService;
+        permissionMap = new ConcurrentHashMap<>();
     }
 }

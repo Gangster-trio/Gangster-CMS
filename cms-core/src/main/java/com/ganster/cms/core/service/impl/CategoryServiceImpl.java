@@ -1,14 +1,11 @@
 package com.ganster.cms.core.service.impl;
 
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
-import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.dao.mapper.CategoryMapper;
 import com.ganster.cms.core.pojo.Category;
 import com.ganster.cms.core.pojo.CategoryExample;
 import com.ganster.cms.core.pojo.CategoryTree;
 import com.ganster.cms.core.service.CategoryService;
-import com.ganster.cms.core.util.PermissionUtil;
-import com.github.pagehelper.Dialect;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

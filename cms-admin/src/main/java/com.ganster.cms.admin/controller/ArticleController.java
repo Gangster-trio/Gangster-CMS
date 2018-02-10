@@ -7,7 +7,6 @@ import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.*;
-import com.ganster.cms.core.util.PermissionUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -64,6 +63,7 @@ public class ArticleController extends BaseController {
         if (limit == null || limit == 0) {
             limit = 10;
         }
+        Integer uid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleSiteIdEqualTo(siteId);
         PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
