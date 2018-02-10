@@ -1,5 +1,3 @@
-<script src="/util/jquery-editable-select.js"></script>
-<link rel="stylesheet" href="/util/jquery-editable-select.css">
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>更新文章</legend>
 </fieldset>
@@ -14,6 +12,7 @@
                        class="layui-input">
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">自定义顺序</label>
             <div class="layui-input-inline">
@@ -22,27 +21,14 @@
             </div>
             <div class="layui-form-mid layui-word-aux">辅助文字</div>
         </div>
-        <!--<div class="layui-input-block">
-            <input type="radio" name="articleType" value="carousel" title="轮播图">
-            <input type="radio" name="articleType" value="index" title="主页文章">
-            <input type="radio" name="articleType" value="normal" title="普通文章" checked="checked">
-        </div>-->
-        <!--<div class="layui-form-item">
-            <label class="layui-form-label">文章类型</label>
-            <div class="layui-input-inline">
 
-            </div>
-        </div>-->
         <label class="layui-form-label">文章类型</label>
         <select id="articleType" name="articleType" lay-ignore style="margin-left:0px;width:166px;height:36px">
             <option style="padding-left: 50px" value="轮播图">轮播图</option>
             <option style="padding-left: 50px" value="主页文章">主页文章</option>
             <option style="padding-left: 50px" value="普通文章">普通文章</option>
         </select>
-        <!--<div class="layui-input-inline">-->
-        <!--<input type="text" name="articleType" value="" title="自定义类型" placeholder="自定义类型" class="layui-input">-->
-        <!--<div class="layui-form-mid layui-word-aux">自定义模板时使用</div>-->
-        <!--</div>-->
+
         <!--TODO: skin choose-->
         <div class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
@@ -52,6 +38,7 @@
                 <input type="radio" id="articleSkin" name="articleSkin" value="default" title="默认" checked="checked">
             </div>
         </div>
+
         <div id="show" class="layui-form-item">
             <label class="layui-form-label">所属栏目</label>
             <div class="layui-input-inline">
@@ -63,6 +50,7 @@
                        class="layui-input" readonly="readonly"/>
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">文章作者</label>
             <div class="layui-input-inline">
@@ -72,6 +60,7 @@
                        class="layui-input">
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">Tag</label>
             <div class="layui-input-block">
@@ -80,12 +69,14 @@
                        class="layui-input">
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label"></label>
             <button type="button" class="layui-btn" id="test1">
                 <i class="layui-icon">&#xe67c;</i>上传图片
             </button>
         </div>
+
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
@@ -107,10 +98,13 @@
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
+
     </form>
+
 </div>
 
 <script type="text/javascript">
+
     $.fn.serializeObject = function () {
         var o = {};
         var a = this.serializeArray();
@@ -126,8 +120,12 @@
         });
         return o;
     };
+
+
     var updateArticle;
     var layedit;
+
+
     $(function () {
             layedit = layui.layedit;
             var form = layui.form;
@@ -161,12 +159,16 @@
                 ],
                 height: 400
             });
+
+
             form.on('submit(updateArticle)', function () {
                 layui.layer.alert("enter form on func");
                 updateArticleSubmit();
                 layui.layer.alert("end");
                 return false;
             });
+
+
             $.ajax({
                 type: "get",
                 url: "/article/details/" + articleId,  //得到需要更新文章的id
@@ -181,13 +183,6 @@
                     $("#tags").val(data.tags);
                     $("#articleDesc").val(data.articleDesc);
                     $("#category_id").val(data.articleCategoryId);
-                    // var value = data.articleType;
-                    /*$("select").children("option").each(function () {
-                        var temp_value = $(this).val();
-                        if (temp_value === value) {
-                            $(this).attr("selected", "selected");
-                        }
-                    });*/
                     layedit.setContent(updateArticle, data.articleContent);    //配置layui 文本编辑器回显
                 }
             });
@@ -219,6 +214,7 @@
         });
     }
 
+
     $("#belongCategory").on('click', function () {
         $.get('/module/selectCategory.html', {}, function (str) {
             layer.open({
@@ -234,4 +230,5 @@
             });
         });
     });
+
 </script>

@@ -1,9 +1,9 @@
-<script src="/util/jquery-editable-select.js"></script>
-<link rel="stylesheet" href="/util/jquery-editable-select.css">
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>更新栏目</legend>
 </fieldset>
+
 <div class="site-text site-block" style="padding: 5px;">
+
     <form id="updateCategoryForm" class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">栏目名称</label>
@@ -13,6 +13,7 @@
                        class="layui-input">
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">自定义顺序</label>
             <div class="layui-input-inline">
@@ -21,18 +22,13 @@
             </div>
             <div class="layui-form-mid layui-word-aux">辅助文字</div>
         </div>
-        <!--  <div class="layui-form-item">
-              <label class="layui-form-label">属性</label>
-              <div class="layui-input-block">
-                  <input type="radio" name="categoryType" value="index" title="主页栏目">
-                  <input type="radio" name="categoryType" value="normal" title="普通栏目" checked="checked">
-              </div>
-          </div>-->
+
         <label class="layui-form-label">栏目类型</label>
         <select id="categoryType" name="categoryType" lay-ignore style="margin-left:0px;width:166px;height:36px">
             <option style="padding-left: 50px" value="主页目录">主页目录</option>
             <option style="padding-left: 50px" value="普通目录">普通目录</option>
         </select>
+
         <!--TODO: skin choose-->
         <div class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
@@ -42,6 +38,7 @@
                 <input type="radio" name="categorySkin" value="default" title="默认" checked="checked">
             </div>
         </div>
+
         <div id="show" class="layui-form-item">
             <label class="layui-form-label">所属栏目</label>
             <div class="layui-input-inline">
@@ -53,6 +50,7 @@
                        class="layui-input" readonly="readonly"/>
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">是否放到首页</label>
             <div class="layui-input-block">
@@ -60,6 +58,7 @@
                 <input type="radio" name="categoryInHomepage" value="false" title="否" checked>
             </div>
         </div>
+
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
@@ -67,6 +66,7 @@
                           placeholder="添加描述"></textarea>
             </div>
         </div>
+
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button lay-submit class="layui-btn" lay-filter="updateCategory">立即提交</button>
@@ -74,8 +74,11 @@
             </div>
         </div>
     </form>
+
 </div>
+
 <script>
+
     $.fn.serializeObject = function () {
         var o = {};
         var a = this.serializeArray();
@@ -91,6 +94,8 @@
         });
         return o;
     };
+
+
     $(function () {
         var form = layui.form;
         form.render();
@@ -118,10 +123,8 @@
                 $("#belongCategory").val(data.parentName);
             }
         });
-
-
-        //得到既能输入又能点击的文本框
     });
+
 
     function updateCategory() {
         formData = $("#updateCategoryForm").serializeObject();
@@ -137,13 +140,15 @@
             error: function (resp) {
                 layui.layer.alert("failed: " + resp);
             },
-            success: function (resp) {
+            success: function () {
                 layui.layer.alert("更新成功");
                 showAtRight("/module/listCategory.html");
             }
         });
     }
+
 </script>
+
 <script type="text/javascript">
     $("#belongCategory").on('click', function () {
         $.get('/module/selectCategory.html', {}, function (str) {

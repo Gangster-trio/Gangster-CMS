@@ -1,0 +1,92 @@
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>系统设置</legend>
+</fieldset>
+
+<div class="site-text site-block">
+    <form id="sysSetting" class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片路径设置</label>
+            <div class="layui-input-inline">
+                <input type="text" name="picSetting" id="picSetting" required="" lay-verify="required"
+                       placeholder="图片路径" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">皮肤路径设置</label>
+            <div class="layui-input-inline">
+                <input type="text" name="skinSetting" id="skinSetting" required="" lay-verify="required"
+                       placeholder="图片路径" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button lay-submit class="layui-btn" lay-filter="systemSetting">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+    $(function () {
+        var form = layui.form;
+        form.render();
+        form.on('submit(systemSetting)', function () {
+            submitSysSetting();
+            return false;
+        });
+    });
+
+    $.ajax({
+        type: 'get',
+        url: '/setting/list/' + siteId,
+        async: false,
+        success: function (data) {
+            console.log(data);
+            console.log(data[0]);
+            console.log(data[0]["sysValue"]);
+            $("#picSetting").val(data[0]["sysValue"]);
+            $("#skinSetting").val(data[1]["sysValue"]);
+        }
+    });
+
+    function submitSysSetting() {
+        formData = $("#sysSetting").serializeObject();
+        alert("form data: " + JSON.stringify(formData));
+        $.ajax({
+            type: "POST",
+            url: '/setting/update',
+            data: JSON.stringify(formData),
+            async: false,
+            contentType: 'application/json',
+            dataType: 'json',
+            error: function (resp) {
+                alert("error");
+                layui.layer.alert("failed. " + resp);
+            },
+            success: function (resp) {
+                alert("success");
+                layui.layer.alert("更新成功; " + resp);
+                showAtRight("/module/storageSetting.html");
+            }
+        });
+    }
+</script>

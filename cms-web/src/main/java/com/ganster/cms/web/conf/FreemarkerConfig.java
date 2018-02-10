@@ -27,7 +27,9 @@ public class FreemarkerConfig extends WebMvcConfigurerAdapter {
             LOGGER.info("Gangster CMS : templates path = {}", path);
         } else {
             configurer.setTemplateLoaderPath("classpath:templates");
+//            configurer.setTemplateLoaderPath("file:/home/bigmeng/Desktop/templates/");
         }
+
         configurer.setDefaultEncoding("UTF-8");
         return configurer;
     }

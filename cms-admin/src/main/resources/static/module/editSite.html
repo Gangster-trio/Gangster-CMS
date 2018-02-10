@@ -1,13 +1,14 @@
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-    <legend>添加站点</legend>
+    <legend>更新站点</legend>
 </fieldset>
 
 <div class="site-text site-block">
-    <form id="addSiteForm" class="layui-form">
+    <form id="updateSiteForm" class="layui-form">
+
         <div class="layui-form-item">
             <label class="layui-form-label">站点名称</label>
             <div class="layui-input-inline">
-                <input type="text" name="siteName" id="siteName" required="" lay-verify="required"
+                <input type="text" name="siteName" id="siteName" required="required" lay-verify="required"
                        placeholder="请输入站点名称" autocomplete="off"
                        class="layui-input">
             </div>
@@ -33,7 +34,7 @@
             </div>
         </div>
 
-        <input id="sitePic" class="layui-hide" name="sitePic">
+        <input id="sitePic" name="sitePic" class="layui-hide">
         <label class="layui-form-label">缩略图上传</label>
         <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
             <i class="layui-icon"></i>
@@ -43,14 +44,14 @@
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
-                <textarea id="siteDesc" name="siteDesc" required class="layui-textarea"
+                <textarea id="siteDesc" name="siteDesc" required="required" class="layui-textarea"
                           placeholder="添加描述"></textarea>
             </div>
         </div>
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button lay-submit class="layui-btn" lay-filter="createSite">立即提交</button>
+                <button lay-submit class="layui-btn" lay-filter="updateSite">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
@@ -58,69 +59,74 @@
 </div>
 <script>
 
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+
     layui.use(['form', 'upload'], function () {
         var form = layui.form, upload = layui.upload;
         form.render();
-        form.on('submit(createSite)', function () {
+        form.on('submit(updateSite)', function () {
             layui.layer.alert("enter form on func");
-            submitSite();
+            updateSite();
             layui.layer.alert("end");
+
             return false;
         });
 
 
-        layui.upload.render({
+        upload.render({
             elem: '#uploadImg',
             url: '/article/img',
-            before: function (obj) {
-                layer.load();
-            },
             done: function (res) {
                 console.log(res);
-                $("#sitePic").val(res.data.src);
-                layer.closeAll();
-
             },
             error: function (res) {
                 console.log(res);
-                layer.closeAll();
             }
         });
 
 
-        $.fn.serializeObject = function () {
-            var o = {};
-            var a = this.serializeArray();
-            $.each(a, function () {
-                if (o[this.name]) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
-                }
-            });
-            return o;
-        };
+        $.ajax({
+            type: "GET",
+            url: "/site/details/" + siteId,
+            async: false,
+            success: function (data) {
+                $("#siteName").val(data.siteName);
+                $("#siteUrl").val(data.siteUrl);
+                $("#siteDesc").val(data.siteDesc);
+            }
+        });
 
 
-        function submitSite() {
-            formData = $("#addSiteForm").serializeObject();
+        function updateSite() {
+            formData = $("#updateSiteForm").serializeObject();
             alert("form data: " + JSON.stringify(formData));
             $.ajax({
                 type: "POST",
-                url: '/site/add',
+                url: "/site/update/" + siteId,
                 data: JSON.stringify(formData),
                 async: false,
-                contentType: 'application/json',
-                dataType: 'json',
+                contentType: "application/json",
+                dataType: "json",
                 error: function (resp) {
-                    alert("form data: " + JSON.stringify(formData));
-                    layui.layer.alert("failed. " + resp);
+                    layui.layer.alert("failed " + resp);
                 },
                 success: function (resp) {
-                    layui.layer.alert("添加成功; " + resp);
+                    layui.layer.alert("success " + resp);
                     showAtRight("/module/listSite.html");
                 }
             });

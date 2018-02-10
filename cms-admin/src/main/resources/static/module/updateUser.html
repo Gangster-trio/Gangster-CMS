@@ -1,0 +1,118 @@
+<script src="/util/jquery-editable-select.js"></script>
+<link rel="stylesheet" href="/util/jquery-editable-select.css">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>修改用户信息</legend>
+</fieldset>
+<div>
+    <form class="layui-form" id="updateUser">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户姓名:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="userName" name="userName" required lay-verify="required" placeholder="用户姓名"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户密码:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="userPassword" name="userPassword" required lay-verify="required"
+                       placeholder="用户密码"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户电话:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="userPhone" name="userPhone" required lay-verify="phone" placeholder="用户电话"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户Email:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="userEmail" name="userEmail" required lay-verify="email" placeholder="用户Email"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户状态:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="userStatus" name="userStatus" required lay-verify="required" placeholder="用户状态"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属组织:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="userOrg" name="userOrg" required lay-verify="required" placeholder="所属组织"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button lay-submit class="layui-btn" lay-filter="btn">提交信息</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var form = layui.form;
+        form.render();
+        $.ajax({
+            type: "get",
+            url: "/user/find/" + userId,
+            success: function (data) {
+                console.log(data);
+                $("#userName").val(data.userName);
+                $("#userPhone").val(data.userPhone);
+                $("#userPassword").val(data.userPassword);
+                $("#userEmail").val(data.userEmail);
+                $("#userStatus").val(data.userStatus);
+                $("#userOrg").val(data.userOrg);
+            }
+        });
+        form.on('submit(btn)', function () {
+            var userName = document.getElementById("userName").value;
+            var userPhone = document.getElementById("userPhone").value;
+            var userPassword = document.getElementById("userPassword").value;
+            var userEmail = document.getElementById("userEmail").value;
+            var userOrg = document.getElementById("userOrg").value;
+            var userStatus = document.getElementById("userStatus").value;
+            console.log(userName);
+            $.ajax({
+                url: "/user/update/" + userId,
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "userId": userId,
+                    "userName": userName,
+                    "userPhone": userPhone,
+                    "userPassword": userPassword,
+                    "userEmail": userEmail,
+                    "userStatus": userStatus,
+                    "userOrg": userOrg
+                }),
+                success: function (data) {
+                    console.log(data);
+                    if (data.code === 1) {
+                        //关闭弹框
+                        layer.msg("添加成功", {icon: 6});
+                        showAtRight("/module/listUser.html");
+                    } else {
+                        layer.msg("添加失败", {icon: 5});
+                        showAtRight("/module/listUser.html");
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>

@@ -6,10 +6,9 @@ import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.ganster.cms.core.service.UserService;
+import com.ganster.cms.core.util.PermissionUtil;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,33 +27,27 @@ public class CategoryController extends BaseController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    UserService userService;
 
     @GetMapping("/list")
-    public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-        if (limit == null || limit == 0) {
-            limit = 10;
-        }
-        if (page == null || page == 0) {
-            page = 1;
-        }
+    public AjaxData list(@RequestParam Integer siteId) {
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        User user = userService.selectByPrimaryKey(userId);
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(-1);
-        PageInfo<Category> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
-        List<Category> allList = pageInfo.getList();
-        List<Category> list = new ArrayList<>();
-
-        for (Category c : allList) {
-            if (SecurityUtils.getSubject().isPermitted(PermissionUtil.formatCategoryPermissionName(siteId, c.getCategoryId(), CmsConst.PERMISSION_READ))) {
-                list.add(c);
+        List<Category> categories = categoryService.selectByExample(categoryExample);
+        List<Category> categoryList = new ArrayList<>();
+        for (Category category : categories) {
+            if (!user.getUserName().equals("admin")) {
+                if (PermissionUtil.permittedCategory(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ)) {
+                    categoryList.add(category);
+                }
+            } else {
+                categoryList.add(category);
             }
         }
-
-
-        if (list.isEmpty()) {
-            return super.buildAjaxData(0, "no data", 0, null);
-        } else {
-            return super.buildAjaxData(0, "success", pageInfo.getTotal(), list);
-        }
+        return super.buildAjaxData(0, "success", categoryList.size(), categoryList);
     }
 
     @GetMapping("/select")
@@ -134,7 +127,7 @@ public class CategoryController extends BaseController {
         category.setCategorySiteId(siteId);
         Integer level = parentCategory.getCategoryLevel();
         if (level == -1) {
-            category.setCategoryLevel(1);
+            category.setCategoryLevel(0);
         } else {
             category.setCategoryLevel(level + 1);
         }
@@ -143,15 +136,5 @@ public class CategoryController extends BaseController {
 
         if (count == 1) return new Message(0, "success", count);
         else return new Message(1, "false", count);
-    }
-
-    @GetMapping("/privilege")
-    public Message judgePrivilege(@RequestParam Integer siteId, @RequestParam Integer categoryId) {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject.isPermitted(PermissionUtil.formatCategoryPermissionName(siteId, categoryId, CmsConst.PERMISSION_WRITE))) {
-            return super.buildMessage(0, "success", 0);
-        } else {
-            return super.buildMessage(2, "no permissin", null);
-        }
     }
 }

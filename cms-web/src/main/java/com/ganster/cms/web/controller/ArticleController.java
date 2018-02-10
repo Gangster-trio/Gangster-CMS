@@ -74,6 +74,13 @@ public class ArticleController {
 
         model.addAttribute("result", result);
 
+        //hit add
+        if (article.getArticleHit() == null) {
+            article.setArticleHit(0);
+        }
+        article.setArticleHit(article.getArticleHit() + 1);
+        articleService.updateByPrimaryKeySelective(article);
+
         //If skin = null, set default skin
         if (article.getArticleSkin() == null) {
             article.setArticleSkin(CmsConst.DEFAULT_SKIN);

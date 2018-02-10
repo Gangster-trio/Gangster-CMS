@@ -1,10 +1,11 @@
-package com.ganster.cms.auth.controller;
+package com.ganster.cms.admin.controller;
 
-import com.ganster.cms.auth.dto.AjaxData;
-import com.ganster.cms.auth.dto.Message;
-import com.ganster.cms.auth.dto.PermissionData;
-import com.ganster.cms.auth.util.AddPermissionDescUtil;
-import com.ganster.cms.auth.util.JudgeAuthUtil;
+
+import com.ganster.cms.admin.dto.AjaxData;
+import com.ganster.cms.admin.dto.Message;
+import com.ganster.cms.admin.dto.PermissionData;
+import com.ganster.cms.admin.util.AddPermissionDescUtil;
+import com.ganster.cms.admin.util.JudgeAuthUtil;
 import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.*;

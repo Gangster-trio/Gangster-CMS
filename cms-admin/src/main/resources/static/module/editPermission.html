@@ -1,0 +1,72 @@
+<script src="/util/jquery-editable-select.js"></script>
+<link rel="stylesheet" href="/util/jquery-editable-select.css">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>编辑权限</legend>
+</fieldset>
+<table id="permission_table" lay-filter="permissionListFilter"></table>
+
+<script type="text/html" id="permissionToolBar">
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>
+<script src="../layui/layui.all.js"></script>
+<script>
+    layui.use(['table', 'form'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        form.render();
+        var first = true;
+        table.render({
+            elem: '#permission_table'
+            , url: '/permission/findpermission/' + groupId
+            , page: true //开启分页
+            , cols: [[ //表头
+                {field: 'permissionId', title: 'ID', width: 60, sort: true, fixed: 'left'}
+                , {field: 'permissionName', width: 300, title: '权限名'}
+                , {field: 'permissionDesc', width: 500, title: '权限简介'}
+                , {title: '操作', align: 'center', toolbar: '#permissionToolBar'}
+            ]]//            数据渲染后回调
+            , limit: 10
+            , limits: [10, 15, 20, 40, 80, 100]
+            , done: function (res, curr, count) {
+                if (first) {
+                    layer.msg("加载完成 共" + count + "条数据");
+                    first = false;
+                }
+            }
+        });
+        table.on('tool(permissionListFilter)', function (obj) { //注：tool是工具条事件名，articleListFilter是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            console.log(data);
+            layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    console.log(data);
+                    $.ajax({
+                        url: "/permission/deletepermission/"+ data.permissionId,
+                        type: 'get',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            if (data === 1) {
+                                //删除这一行
+                                obj.del();
+                                //关闭弹框
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 6});
+                                showAtRight("/module/listGroup.html");
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                                location.reload();
+                                showAtRight("/module/listGroup.html");
+                            }
+                        }
+                    });
+                });
+            }
+        })
+    })
+</script>

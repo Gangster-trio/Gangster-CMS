@@ -10,6 +10,7 @@ import com.ganster.cms.core.service.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,16 @@ public class ArticleController extends BaseController {
     @GetMapping("/list")
     @ResponseBody
     public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+
         siteid = siteId;
+
         if (page == null || page == 0) {
             page = 1;
         }
         if (limit == null || limit == 0) {
             limit = 10;
         }
+        Integer uid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleSiteIdEqualTo(siteId);
         PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
@@ -91,7 +95,7 @@ public class ArticleController extends BaseController {
         return super.buildMessage(0, "success", count);
     }
 
-    @GetMapping("/list/categorylist")
+    @GetMapping("/list/category")
     @ResponseBody
     public AjaxData listArticleByColumnId(
             @RequestParam("id") Integer id,
@@ -145,8 +149,8 @@ public class ArticleController extends BaseController {
 //            return new Message(2, "存储文件错误", null);
         }
         String fileUrl = "/pic/" + newName;
-        Map<String, Object> map  = new HashMap<>();
-        map.put("src",fileUrl);
+        Map<String, Object> map = new HashMap<>();
+        map.put("src", fileUrl);
 
         return new Message(0, "success", map);
     }
