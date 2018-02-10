@@ -2,7 +2,8 @@ package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
-import com.ganster.cms.core.pojo.Group;
+import com.ganster.cms.core.exception.GroupNotFountException;
+import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.Site;
 import com.ganster.cms.core.pojo.SiteExample;
 import com.ganster.cms.core.pojo.User;
@@ -64,7 +65,6 @@ public class SiteController extends BaseController {
     public Message add(@RequestBody Site site) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         User user = userService.selectByPrimaryKey(userId);
-
         if (site == null) {
             return super.buildMessage(1, "no data", null);
         }
@@ -75,26 +75,32 @@ public class SiteController extends BaseController {
         if (count == 0) {
             return super.buildMessage(1, "add site failed", null);
         }
-        List<Group> groups = groupService.selectByUserId(userId);
-        permissionService.addSitePermissionToGroup(site.getSiteId(), groups.get(0).getGroupId());
-        if (!user.getUserName().equals("admin")) {
-            permissionService.addSitePermissionToGroup(site.getSiteId(), 8);
+        try {
+            if (!user.getUserName().equals("admin")) {
+                permissionService.addUserToSite(1, site.getSiteId());
+            }
+            permissionService.addUserToSite(userId, site.getSiteId());
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return super.buildMessage(1, "用户未找到", null);
+        } catch (GroupNotFountException e) {
+            e.printStackTrace();
+            return super.buildMessage(1, "组未找到", null);
         }
         PermissionUtil.flush(userId);
         return super.buildMessage(0, "success", count);
     }
 
+    //TODO: some time no flush
     @GetMapping("/delete/{id}")
     public Message delete(@PathVariable("id") Integer id) {
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         if (id == null) {
             return super.buildMessage(1, "no data", null);
         }
-        int count = siteService.deleteByPrimaryKey(id);
-        if (count == 0) {
-            return super.buildMessage(1, "false", null);
-        } else {
-            return super.buildMessage(0, "success", count);
-        }
+        siteService.deleteSite(id);
+        PermissionUtil.flush(userId);
+        return super.buildMessage(0, "success", "success");
     }
 
     @GetMapping("/details/{id}")

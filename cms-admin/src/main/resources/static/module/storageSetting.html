@@ -61,9 +61,6 @@
         url: '/setting/list/' + siteId,
         async: false,
         success: function (data) {
-            console.log(data);
-            console.log(data[0]);
-            console.log(data[0]["sysValue"]);
             $("#picSetting").val(data[0]["sysValue"]);
             $("#skinSetting").val(data[1]["sysValue"]);
         }

@@ -59,25 +59,27 @@
             if (layEvent === 'detail') {
                 showAtRight("/module/listCategory");
             }
-            //删除栏目信息
-            else if (layEvent === 'del') { //删除
-                layer.confirm('真的删除行么', function (index) {
-                        deleteSite(siteId);
-                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                        layer.close(index);
-                        showAtRight("/module/listSite.html");
-                    }
-                )
-            }
+            if (judgeSitePrivilege(siteId)) {
+                //删除栏目信息
+                if (layEvent === 'del') { //删除
+                    layer.confirm('真的删除行么', function (index) {
+                            deleteSite(siteId);
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            showAtRight("/module/listSite.html");
+                        }
+                    )
+                }
 
-            //编辑栏目
-            else if (layEvent === 'edit') {
-                showAtRight("/module/editSite.html");
-            }
+                //编辑栏目
+                else if (layEvent === 'edit') {
+                    showAtRight("/module/editSite.html");
+                }
 
-            //跳转到给该栏目添加文章的界面
-            else if (layEvent === 'add') {   //跳转到添加文章界面
-                showAtRight("/module/addSite.html");
+                //跳转到给该栏目添加文章的界面
+                else if (layEvent === 'add') {   //跳转到添加文章界面
+                    showAtRight("/module/addSite.html");
+                }
             }
         });
 
@@ -86,10 +88,7 @@
                 url: "/site/delete/" + siteId,
                 dataType: "application/json",
                 type: "get",
-                error: function () {
-                    layui.layer.alert("server no response ");
-                },
-                success: function () {
+                success: function (data) {
                     if (data.code === 0) {
                         layer.msg("delete success.");
                     } else if (data.code === 1) {

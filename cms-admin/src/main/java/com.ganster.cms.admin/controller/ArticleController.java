@@ -1,12 +1,17 @@
 package com.ganster.cms.admin.controller;
 
-import com.ganster.cms.admin.config.ImgConfig;
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.ArticleDTO;
 import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.pojo.*;
-import com.ganster.cms.core.service.*;
+import com.ganster.cms.core.pojo.Article;
+import com.ganster.cms.core.pojo.ArticleExample;
+import com.ganster.cms.core.pojo.Category;
+import com.ganster.cms.core.pojo.Tag;
+import com.ganster.cms.core.service.ArticleService;
+import com.ganster.cms.core.service.CategoryService;
+import com.ganster.cms.core.service.SettingService;
+import com.ganster.cms.core.service.TagService;
 import com.ganster.cms.core.util.PermissionUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -44,12 +49,6 @@ public class ArticleController extends BaseController {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private ImgConfig imgConfig;
-
-    @Autowired
-    private PermissionService permissionService;
-
     private Integer siteid;
 
     @GetMapping("/list")
@@ -82,7 +81,6 @@ public class ArticleController extends BaseController {
     @PostMapping("/save")
     @ResponseBody
     public Message save(@RequestBody ArticleDTO articleDTO) {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         if (articleDTO == null) {
             return super.buildMessage(1, "文章为空", null);
         }

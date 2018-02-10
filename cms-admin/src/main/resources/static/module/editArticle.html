@@ -195,7 +195,6 @@
     function updateArticleSubmit() {
         layui.layedit.sync(updateArticle);
         formData = $("#updateArticleForm").serializeObject();
-        alert(JSON.stringify(formData));
         layui.layer.alert("form data:" + JSON.stringify(formData));
         $.ajax({
             type: 'post',

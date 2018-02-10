@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GroupServiceImpl extends BaseServiceImpl<GroupMapper,Group,GroupExample> implements GroupService {
+public class GroupServiceImpl extends BaseServiceImpl<GroupMapper, Group, GroupExample> implements GroupService {
     @Autowired
     UserGroupMapper userGroupMapper;
     @Autowired
@@ -115,8 +115,8 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper,Group,GroupExa
     @Override
     public Boolean hasGroup(Integer userId, String gName) {
         List<Group> groupList = selectByUserId(userId);
-        for (Group g:groupList){
-            if (g.getGroupName().equals(gName)){
+        for (Group g : groupList) {
+            if (g.getGroupName().equals(gName)) {
                 return true;
             }
         }
@@ -143,8 +143,10 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper,Group,GroupExa
 
         //delete group's permission
         PermissionExample permissionExample = new PermissionExample();
-        permissionExample.or().andPermissionIdIn(pidList);
-        permissionService.deleteByExample(permissionExample);
+        if (!pidList.isEmpty()) {
+            permissionExample.or().andPermissionIdIn(pidList);
+            permissionService.deleteByExample(permissionExample);
+        }
 
         //delete group
         deleteByPrimaryKey(groupId);

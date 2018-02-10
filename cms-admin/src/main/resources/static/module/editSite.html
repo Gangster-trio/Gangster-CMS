@@ -114,7 +114,6 @@
 
         function updateSite() {
             formData = $("#updateSiteForm").serializeObject();
-            alert("form data: " + JSON.stringify(formData));
             $.ajax({
                 type: "POST",
                 url: "/site/update/" + siteId,
@@ -126,7 +125,6 @@
                     layui.layer.alert("failed " + resp);
                 },
                 success: function (resp) {
-                    layui.layer.alert("success " + resp);
                     showAtRight("/module/listSite.html");
                 }
             });

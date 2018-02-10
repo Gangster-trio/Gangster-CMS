@@ -1,5 +1,3 @@
-<script src="/util/jquery-editable-select.js"></script>
-<link rel="stylesheet" href="/util/jquery-editable-select.css">
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend id="groupName">分配权限</legend>
 </fieldset>
@@ -36,7 +34,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button lay-submit class="layui-btn"  id="btn" name="btn"   lay-filter="btn">提交信息</button>
+                <button lay-submit class="layui-btn" id="btn" name="btn" lay-filter="btn">提交信息</button>
             </div>
         </div>
     </form>
@@ -146,19 +144,16 @@
                 url: "/permission/findcategory/" + sid,
                 type: 'get',
                 dataType: 'json',
-//                async: true,
+                async: false,
                 success: function (ajaxdata) {
-                    var optionstring3 = new obj();
+                    var optionstring3 = "";
                     if (ajaxdata.data !== null) {
                         for (var i = 0; i < ajaxdata.code; i++) {
                             console.log(ajaxdata.data[i]);
-                            optionstring3.string += "<option value=" + '"' + ajaxdata.data[i].categoryId + '"' + "id='category'" + ">" + ajaxdata.data[i].categoryTitle + "</option>";
+                            optionstring3 += "<option value=" + '"' + ajaxdata.data[i].categoryId + '"' + "id='category'" + ">" + ajaxdata.data[i].categoryTitle + "</option>";
                         }
-                        $("#selectCategory").append(optionstring3.string);
-                        delete  optionstring3.string;
+                        $("#selectCategory").append(optionstring3);
                         form.render('select');
-                        var time = categorytime + 1;
-                        categorysign = time % 2;
                     }
                 }
             });

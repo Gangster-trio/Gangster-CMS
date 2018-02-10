@@ -154,6 +154,9 @@ public class CategoryController extends BaseController {
 
     @PostMapping("/add")
     public Message add(@RequestBody Category category) {
+        if (category == null) {
+            return super.buildMessage(1, "false", null);
+        }
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         category.setCategoryCreateTime(new Date());
         category.setCategorySkin("default");

@@ -2,14 +2,22 @@ package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.dto.ModuleTree;
 import com.ganster.cms.core.exception.GroupNotFountException;
-import com.ganster.cms.core.pojo.*;
-import com.ganster.cms.core.service.*;
+import com.ganster.cms.core.pojo.Module;
+import com.ganster.cms.core.pojo.ModuleExample;
+import com.ganster.cms.core.pojo.User;
+import com.ganster.cms.core.service.ModuleService;
+import com.ganster.cms.core.service.PermissionService;
+import com.ganster.cms.core.service.SiteService;
+import com.ganster.cms.core.service.UserService;
 import com.ganster.cms.core.util.PermissionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -20,6 +28,8 @@ import java.util.List;
  */
 @Controller
 public class IndexController {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
     @Autowired
     private ModuleService moduleService;
@@ -35,11 +45,16 @@ public class IndexController {
 
     //    @RequiresPermissions("super")
     @GetMapping("/index")
-    public ModelAndView index() {
+    public ModelAndView index(@RequestParam(required = false) Integer id) {
+
         Subject subject = SecurityUtils.getSubject();
         Integer userId = (Integer) subject.getSession().getAttribute("id");
         User user = userService.selectByPrimaryKey(userId);
+        if (id != null) {
+            LOGGER.info("用户id为{},名字为{} 刷新权限", userId, user.getUserName());
+            PermissionUtil.flush(userId);
 
+        }
         ModelAndView modelAndView = new ModelAndView();
 
         //查出所有的父模块
@@ -48,7 +63,7 @@ public class IndexController {
         if (user.getUserName().equals("admin")) {
             moduleExample.or().andModuleParentIdEqualTo(0);
         } else {
-            moduleExample.or().andModuleParentIdEqualTo(0).andModuleIdNotEqualTo(4);
+            moduleExample.or().andModuleParentIdEqualTo(0).andModuleIdNotEqualTo(4).andModuleIdNotEqualTo(8);
         }
         List<Module> parents = moduleService.selectByExample(moduleExample);
         for (Module module : parents) {

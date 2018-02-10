@@ -128,7 +128,6 @@
 
     function updateCategory() {
         formData = $("#updateCategoryForm").serializeObject();
-        alert(JSON.stringify(formData));
         layui.layer.alert("form data: " + JSON.stringify(formData));
         $.ajax({
             type: 'post',

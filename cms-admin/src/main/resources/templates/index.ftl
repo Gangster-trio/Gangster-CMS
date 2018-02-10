@@ -32,6 +32,9 @@
                 </#list>
                 </dl>
             </li>
+            <button class="layui-btn">
+                <a class="layui-icon" href="/index?id=1">刷新权限</a>
+            </button>
         </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">

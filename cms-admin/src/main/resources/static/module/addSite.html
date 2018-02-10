@@ -107,7 +107,6 @@
 
         function submitSite() {
             formData = $("#addSiteForm").serializeObject();
-            alert("form data: " + JSON.stringify(formData));
             $.ajax({
                 type: "POST",
                 url: '/site/add',
@@ -116,7 +115,6 @@
                 contentType: 'application/json',
                 dataType: 'json',
                 error: function (resp) {
-                    alert("form data: " + JSON.stringify(formData));
                     layui.layer.alert("failed. " + resp);
                 },
                 success: function (resp) {
