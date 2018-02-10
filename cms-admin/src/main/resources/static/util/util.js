@@ -93,7 +93,7 @@ function chooseValue(name) {
 function judgePrivilege(siteId, categoryId) {
     var operation = true;
     $.ajax({
-        url: '/category/privilege?siteId=' + siteId + '&categoryId=' + categoryId,
+        url: '/privilege/category?siteId=' + siteId + '&categoryId=' + categoryId,
         dataType: "json",
         async: false,
         type: "get",
@@ -101,6 +101,24 @@ function judgePrivilege(siteId, categoryId) {
             if (data.code === 2) {
                 operation = false;
                 layer.msg("sorry ,you have not privilege");
+            }
+        }
+    });
+    return operation;
+}
+
+//判断对站是否具有一系列的操作
+function judgeSitePrivilege(siteId) {
+    var operation = true;
+    $.ajax({
+        url: '/privilege/site?siteId=' + siteId,
+        dataType: 'json',
+        async: false,
+        type: 'get',
+        success: function (data) {
+            if (data.code === 2) {
+                operation = false;
+                layer.msg("sorry,you have no privilege");
             }
         }
     });

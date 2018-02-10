@@ -2,8 +2,8 @@
 <div class="layui-elem-quote" style="margin-bottom: 0;">
     <p>站点管理</p>
 </div>
-<table id="column_table" class="layui-table" style="margin: 0px" lay-filter="siteList"></table>
-<script type="text/html" id="articleToolBar">
+<table id="site_table" class="layui-table" style="margin: 0px" lay-filter="siteList"></table>
+<script type="text/html" id="siteToolBar">
     <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
     <div class="layui-btn-group">
         <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">
@@ -27,17 +27,18 @@
 
         //对site进行判断，只有选择了site才有显示
         table.render({
-            elem: '#column_table'
+            elem: '#site_table'
             , url: '/site/list'
             , page: true //开启分页
             , cols: [[ //表头
                 {field: 'siteId', title: 'ID', width: '80', sort: true, fixed: 'left'}
                 , {field: 'siteName', title: '站点名', width: '190', align: 'center'}
-                , {field: 'siteUrl', title: "站点网址", width: '110', align: 'center', sort: true}
-                , {field: 'siteSkin', title: '站点皮肤', width: '110', align: 'center', sort: true}
+                , {field: 'siteUrl', title: "站点网址", width: '200', align: 'center'}
+                , {field: 'siteDesc', title: "站点描述", width: '200', align: 'center'}
+                , {field: 'siteSkin', title: '站点皮肤', width: '110', align: 'center'}
                 , {field: 'siteCreateTime', title: '创建时间', width: '110', align: 'center', sort: true}
-                , {field: 'siteStatus', title: '状态', width: '80', align: 'center', sort: true}
-                , {filed: 'tool', title: '操作', align: 'center', toolbar: "#toolBar"}
+                , {field: 'siteStatus', title: '状态', width: '80', align: 'center'}
+                , {filed: 'tool', title: '操作', align: 'center', toolbar: "#siteToolBar"}
             ]]
             , limit: 10
             , limits: [10, 15, 20, 40, 80, 100]
@@ -61,6 +62,7 @@
             //删除栏目信息
             else if (layEvent === 'del') { //删除
                 layer.confirm('真的删除行么', function (index) {
+                        deleteSite(siteId);
                         obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                         layer.close(index);
                         showAtRight("/module/listSite.html");
@@ -78,9 +80,28 @@
                 showAtRight("/module/addSite.html");
             }
         });
+
+        function deleteSite(siteId) {
+            $.ajax({
+                url: "/site/delete/" + siteId,
+                dataType: "application/json",
+                type: "get",
+                error: function () {
+                    layui.layer.alert("server no response ");
+                },
+                success: function () {
+                    if (data.code === 0) {
+                        layer.msg("delete success.");
+                    } else if (data.code === 1) {
+                        layer.msg("delete false");
+                    }
+                }
+            });
+        }
     });
 
     $("#site").on('click', function () {
         showAtRight("/module/addSite.html");
     });
+
 </script>
