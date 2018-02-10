@@ -2,11 +2,9 @@ package com.ganster.cms.auth.util;
 
 import com.ganster.cms.auth.authApplication;
 import com.ganster.cms.core.exception.GroupNotFountException;
-import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.UserService;
-import com.ganster.cms.core.util.PermissionUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
