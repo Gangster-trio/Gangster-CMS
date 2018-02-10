@@ -56,7 +56,7 @@ public class PermissionUtil {
             for (Permission i : permissionList) {
                 if (i != null && i.getPermissionName().equals(pName)) {
                     return true;
-                } else return false;
+                }
             }
         } catch (Exception e) {
             logger.info("+++++++++++++用户组未找到++++++++++++++++");
