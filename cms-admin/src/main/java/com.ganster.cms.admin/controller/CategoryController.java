@@ -112,10 +112,13 @@ public class CategoryController extends BaseController {
         //删除作者对栏目的权限
         if (categoryService.deleteByPrimaryKey(id) == 1) {
             try {
+                if (userId != 1) {
+                    permissionService.deleteUserPermission(1, siteid, id, CmsConst.PERMISSION_READ);
+                    permissionService.deleteUserPermission(1, siteid, id, CmsConst.PERMISSION_WRITE);
+                }
                 permissionService.deleteUserPermission(userId, siteid, id, CmsConst.PERMISSION_READ);
                 permissionService.deleteUserPermission(userId, siteid, id, CmsConst.PERMISSION_WRITE);
-                permissionService.deleteUserPermission(1, siteid, id, CmsConst.PERMISSION_READ);
-                permissionService.deleteUserPermission(1, siteid, id, CmsConst.PERMISSION_WRITE);
+
             } catch (UserNotFoundException e) {
                 e.printStackTrace();
                 return new Message(1, "false", "用户未找到");

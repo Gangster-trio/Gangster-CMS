@@ -63,10 +63,11 @@ public class SiteController extends BaseController {
     @PostMapping("/add")
     public Message add(@RequestBody Site site) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        User user = userService.selectByPrimaryKey(userId);
+
         if (site == null) {
             return super.buildMessage(1, "no data", null);
         }
-
         site.setSiteCreateTime(new Date());
         site.setSiteStatus(0);
         int count = siteService.insert(site);
@@ -74,10 +75,11 @@ public class SiteController extends BaseController {
         if (count == 0) {
             return super.buildMessage(1, "add site failed", null);
         }
-        User user = userService.selectByPrimaryKey(userId);
         List<Group> groups = groupService.selectByUserId(userId);
         permissionService.addSitePermissionToGroup(site.getSiteId(), groups.get(0).getGroupId());
-        permissionService.addSitePermissionToGroup(site.getSiteId(), 8);
+        if (!user.getUserName().equals("admin")) {
+            permissionService.addSitePermissionToGroup(site.getSiteId(), 8);
+        }
         PermissionUtil.flush(userId);
         return super.buildMessage(0, "success", count);
     }
