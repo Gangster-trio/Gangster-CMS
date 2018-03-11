@@ -1,7 +1,7 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
 <!--添加栏目-->
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="batchDelete" data-type="batchDelete">
+    批量删除
+</button>
 <button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="column">添加栏目</button>
 <div class="layui-elem-quote" style="margin-bottom: 0;">
     <p>栏目管理</p>
@@ -20,9 +20,10 @@
             table.render({
                 elem: '#column_table'
                 , url: '/category/list?siteId=' + siteId     //得到所选site的栏目
-                , page: false
+                , page: true
                 , cols: [[ //表头
-                    {field: 'categoryId', title: 'ID', width: '80', sort: true, fixed: 'left'}
+                    {type: 'checkbox'}
+                    , {field: 'categoryId', title: 'ID', width: '80', sort: true}
                     , {field: 'categoryTitle', title: '栏目名', width: '190', align: 'center'}
                     , {field: 'categoryCreateTime', title: "创建时间", width: '110', align: 'center', sort: true}
                     , {field: 'categoryUpdate', title: '更新时间', width: '110', align: 'center', sort: true}
@@ -37,6 +38,10 @@
                         first = false;
                     }
                 }
+            });
+
+            table.on('checkbox(categorylist)', function (obj) {
+                console.log(obj);
             });
 
             //监听的事件
@@ -55,6 +60,7 @@
                                 deleteCategory(categoryId);
                                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                                 layer.close(index);
+                                console.log("删除成功");
                                 showAtRight("/module/listCategory.html");
                             }
                         )
@@ -71,6 +77,48 @@
                     }
                 }
             });
+
+
+            // 添加复选框操作
+            var $ = layui.$, active = {
+                batchDelete: function () { // 获取选中的数据
+                    var checkStatus = table.checkStatus('column_table')
+                        , data = checkStatus.data;
+                    var categoryIdData = "";
+                    var boo = 0;
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        if (boo === 0) {
+                            categoryIdData += data[i].categoryId;
+                            boo = 1;
+                        } else {
+                            categoryIdData += "," + data[i].categoryId;
+                        }
+                    }
+                    $.ajax({
+                        type: 'post',
+                        url: '/category/delete/batch',
+                        data: {
+                            "categoryIdData": categoryIdData
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            if (data.code === 0) {
+                                layer.msg("删除成功", {icon: 6});
+                                console.log("删除成功");
+                                showAtRight("module/category.html");
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+                    });
+                }
+            };
+            $('#batchDelete').on('click', function () { // 添加按钮点击事件
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
         }
     });
 </script>
