@@ -51,6 +51,9 @@ public class SiteController extends BaseController {
         }
         SiteExample siteExample = new SiteExample();
         List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(userId);
+        if (siteIdList == null || siteIdList.isEmpty()) {
+            return super.buildAjaxData(2, "no privilege", 0, null);
+        }
         siteExample.or().andSiteIdIn(siteIdList);
         PageInfo<Site> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> siteService.selectByExample(siteExample));
         List<Site> siteList = pageInfo.getList();

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="/util/jquery-editable-select.css">
+<script src="/util/jquery.min.js"></script>
+<script src="/util/jquery-editable-select.js"></script>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>更新文章</legend>
 </fieldset>
@@ -70,11 +73,11 @@
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <label class="layui-form-label"></label>
-            <button type="button" class="layui-btn" id="test1">
-                <i class="layui-icon">&#xe67c;</i>上传图片
-            </button>
+        <input id="articleThumb" class="layui-hide" name="articleThumb">
+        <label class="layui-form-label">缩略图上传</label>
+        <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
+            <i class="layui-icon"></i>
+            <p>点击上传，或将文件拖拽到此处</p>
         </div>
 
         <div class="layui-form-item layui-form-text">
@@ -166,6 +169,27 @@
                 updateArticleSubmit();
                 layui.layer.alert("end");
                 return false;
+            });
+
+
+            layui.upload.render({
+                elem: '#uploadImg',
+                url: '/article/img',
+                accept: 'images',
+                size: 1000,
+                before: function () {
+                    layer.load();
+                },
+                //上传后的回调
+                done: function (res) {
+                    console.log(res.data.src);
+                    $("#articleThumb").val(res.data.src);
+                    layer.closeAll();
+                },
+                error: function () {
+                    layui.layer.alert("上传失败 ");
+                    layer.closeAll();
+                }
             });
 
 
