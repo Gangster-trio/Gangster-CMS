@@ -43,8 +43,8 @@ public class GroupController extends AjaxData {
 
     /**
      * 用户组的查询(包含权限)
-     * @return
-     * @throws GroupNotFountException
+     * @return AjaxData
+     * @throws GroupNotFountException  用户组未找到
      */
     @RequestMapping(value = "/find")
     @ResponseBody
@@ -59,7 +59,8 @@ public class GroupController extends AjaxData {
             List<String> permissionNameList = new ArrayList<>();
             if (permissionList!=null){
                 for (Permission permission :permissionList){
-                    String permissionNames = permission.getPermissionName() + "<br/>";
+//                    String permissionNames = permission.getPermissionName() + "<br/>";
+                    String permissionNames = permission.getPermissionName();
                     permissionNameList.add(permissionNames);
                 }
             }
@@ -75,26 +76,24 @@ public class GroupController extends AjaxData {
 
     /**
      * 查看单个用户组
-     * @param groupId
+     * @param groupId  用户组id
      */
     @RequestMapping("/find/{groupId}")
     @ResponseBody
     public Group listGroupById(@PathVariable("groupId") Integer groupId){
-        if (groupId.equals(null)){
+        if (groupId == null) {
             LOGGER.info("用户组id为空");
         }
-        Group group = groupService.selectByPrimaryKey(groupId);
-        return group;
+        return groupService.selectByPrimaryKey(groupId);
     }
 
     /**
      * 增加用户组
-     * @param group
+     * @param group   用户组对象
      */
     @RequestMapping("/add")
     @ResponseBody
     public AjaxData addGroup(@RequestBody Group group ){
-        System.out.println("groupaaaaaaa"+group);
         int flag = groupService.insert(group);
         if (flag==1){return new AjaxData(0,"success",0,null);}
         else {
@@ -104,9 +103,9 @@ public class GroupController extends AjaxData {
 
     /**
      * 更新用户组
-     * @param groupId
-     * @param group
-     * @return
+     * @param groupId  用户组id
+     * @param group   用户组对象
+     * @return AjaxData
      */
     @RequestMapping("/update/{groupId}")
     @ResponseBody
@@ -120,7 +119,7 @@ public class GroupController extends AjaxData {
 
     /**
      * 删除用户组
-     * @param groupId
+     * @param groupId   用户组id
      */
     @RequestMapping("/delete/{groupId}")
     @ResponseBody

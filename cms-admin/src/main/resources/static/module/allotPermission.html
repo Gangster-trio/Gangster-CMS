@@ -44,7 +44,7 @@
     form.render();
     form.on('submit(btn)', function () {
         var obj = document.getElementsByName('permission');
-        var permissions = new Array();
+        var permissions = [];
         for (var i = 0; i < obj.length; i++) {
             if (obj[i].checked)
                 permissions.push(obj[i].value);
@@ -112,8 +112,8 @@
                         }
                         $("#selectSite").append(optionstring1.string);
                         delete optionstring1.string;
-                        $("#category").remove();
-                        $("#selectCategory").append("<option value=''>请点击选择栏目</option>");
+//                        $("#category").remove();
+//                        $("#selectCategory").append("<option value=''>请点击选择栏目</option>");
                         form.render('select');
                     }
                 });
@@ -150,9 +150,10 @@
                     if (ajaxdata.data !== null) {
                         for (var i = 0; i < ajaxdata.code; i++) {
                             console.log(ajaxdata.data[i]);
-                            optionstring3 += "<option value=" + '"' + ajaxdata.data[i].categoryId + '"' + "id='category'" + ">" + ajaxdata.data[i].categoryTitle + "</option>";
+                            optionstring3.string += "<option value=" + '"' + ajaxdata.data[i].categoryId + '"' + "id='category'" + ">" + ajaxdata.data[i].categoryTitle + "</option>";
                         }
-                        $("#selectCategory").append(optionstring3);
+                        $("#selectCategory").append(optionstring3.string);
+                        delete optionstring3.string;
                         form.render('select');
                     }
                 }

@@ -44,7 +44,11 @@ public class PermissionController extends BaseController {
     @Autowired
     private JudgeAuthUtil judgeAuthUtil;
 
-
+    /**
+     * 判断该用户是否为超级管理员
+     *
+     * @return Boolean 判断是否具有操作权限
+     */
     public Boolean index() {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Group> group = groupService.selectByUserId(userId);
@@ -56,6 +60,25 @@ public class PermissionController extends BaseController {
         return false;
     }
 
+    /**
+     * 通过用户组id删除多余的权限
+     *
+     * @param gid 用户组id
+     */
+    private void delectSurplusPermission(Integer gid) {
+        try {
+            List<Permission> permissionList = permissionService.selectByGroupId(gid);
+            for (int i = 0; i < permissionList.size() - 1; i++) {
+                for (int j = permissionList.size() - 1; j > i; j--) {
+                    if (permissionList.get(i).getPermissionName().equals(permissionList.get(j).getPermissionName())) {
+                        permissionService.deletePermission(permissionList.get(j).getPermissionId());
+                    }
+                }
+            }
+        } catch (GroupNotFountException e) {
+            logger.info("无法查找到用户组");
+        }
+    }
 
     /**
      * 为用户组添加权限
@@ -65,6 +88,8 @@ public class PermissionController extends BaseController {
     @PostMapping("/addpermission")
     public Message addPermission(@RequestBody PermissionData permissionData) {
         Message message = new Message();
+        message.setMsg("添加权限失败");
+        message.setCode(0);
         if (!this.index()) {
             message.setMsg("添加权限失败");
             return message;
@@ -80,6 +105,7 @@ public class PermissionController extends BaseController {
             if (judgeAuthUtil.judgeAuthIsNull(gid, PermissionUtil.formatSitePermissionName(sid))) {
                 permissionService.addSitePermissionToGroup(sid, gid);
                 addPermissionDescUtil.setSitePermissionDesc(sid);
+                message.setMsg("添加权限成功");
             }
             if (!pName.isEmpty() && cid != null) {
                 for (String i : pName) {
@@ -116,20 +142,20 @@ public class PermissionController extends BaseController {
                         }
                     }
                 }
+                this.delectSurplusPermission(gid);
                 message.setMsg("添加权限成功");
                 message.setCode(0);
             }
         }
-        message.setMsg("添加权限失败");
         return message;
     }
 
     /**
      *  通过角色组ID，查找它所拥有的权限
      *
-     * @param groupId
-     * @param page
-     * @param limit
+     * @param groupId 用户组id
+     * @param page   页数
+     * @param limit  条数
      * @return    查找到的权限
      */
     @GetMapping("/findpermission/{GroupId}")
@@ -156,7 +182,7 @@ public class PermissionController extends BaseController {
     /**
      * 通过权限Id删除权限
      *
-     * @param permissionId
+     * @param permissionId  权限id
      * @return int   删除的数量
      */
     @GetMapping("/deletepermission/{PermissionId}")
@@ -224,7 +250,7 @@ public class PermissionController extends BaseController {
     /**
      * 查找所有角色组
      *
-     * @param groupId
+     * @param groupId  用户组id
      * @return  AjaxData 查找到的所有角色组
      */
     @GetMapping("/findGroupName/{GroupId}")
