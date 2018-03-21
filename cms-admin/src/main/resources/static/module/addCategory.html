@@ -59,6 +59,7 @@
                 <input type="radio" name="categoryInHomepage" value="false" title="否" checked>
             </div>
         </div>
+
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
@@ -72,6 +73,7 @@
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
+        <input id="siteId" name="categorySiteId" type="hidden"/>
     </form>
 </div>
 <script>
@@ -122,6 +124,7 @@
     });
 
     function submitCategory() {
+        $("#siteId").val(siteId);
         formData = $("#addCategoryForm").serializeObject();
         $.ajax({
             type: "POST",

@@ -4,15 +4,12 @@ import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.ArticleDTO;
 import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.pojo.Article;
-import com.ganster.cms.core.pojo.ArticleExample;
-import com.ganster.cms.core.pojo.Category;
-import com.ganster.cms.core.pojo.Tag;
-import com.ganster.cms.core.service.ArticleService;
-import com.ganster.cms.core.service.CategoryService;
-import com.ganster.cms.core.service.SettingService;
-import com.ganster.cms.core.service.TagService;
+import com.ganster.cms.core.exception.GroupNotFountException;
+import com.ganster.cms.core.exception.UserNotFoundException;
+import com.ganster.cms.core.pojo.*;
+import com.ganster.cms.core.service.*;
 import com.ganster.cms.core.util.PermissionUtil;
+import com.ganster.cms.core.util.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -49,13 +46,14 @@ public class ArticleController extends BaseController {
     @Autowired
     private ArticleService articleService;
 
-    private Integer siteid;
+    @Autowired
+    private PermissionService permissionService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/list")
     @ResponseBody
     public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-
-        siteid = siteId;
 
         if (page == null || page == 0) {
             page = 1;
@@ -66,7 +64,9 @@ public class ArticleController extends BaseController {
         Integer uid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
 
         List<Integer> categoryIdList = PermissionUtil.getAllPermittedCategory(uid, siteId, CmsConst.PERMISSION_READ);
-
+        if (categoryIdList == null || categoryIdList.isEmpty()) {
+            return super.buildAjaxData(2, "no privilege", 0, null);
+        }
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleCategoryIdIn(categoryIdList);
         PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
@@ -81,18 +81,52 @@ public class ArticleController extends BaseController {
     @PostMapping("/save")
     @ResponseBody
     public Message save(@RequestBody ArticleDTO articleDTO) {
+        // 得到用户的id
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+
         if (articleDTO == null) {
             return super.buildMessage(1, "文章为空", null);
         }
+        // 得到添加文章的网站的id
+        Category category = categoryService.selectByPrimaryKey(articleDTO.getArticleCategoryId());
+        Integer siteId = category.getCategorySiteId();
+
+        if (!permissionService.hasCategoryPermission(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_WRITE)) {
+            return super.buildMessage(2, "no permission", null);
+        }
+
+        // 插入文章和标签
         Article article = articleDTO.toArticle();
         article.setArticleCreateTime(new Date());
-        article.setArticleSiteId(siteid);
+        article.setArticleSiteId(siteId);
         String tags = articleDTO.getTags();
         List<String> tagList;
         int count = 0;
         if (!(tags == null || tags.isEmpty())) {
             tagList = Arrays.asList(tags.split(","));  //列出所有的tag标签
             count += articleService.insertSelectiveWithTag(article, tagList);
+        }
+
+        // 插入权限表操作
+        try {
+            User user = userService.selectByPrimaryKey(userId);
+            permissionService.addCategoryPermissionToUser(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ);
+            permissionService.addCategoryPermissionToUser(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_WRITE);
+            if (!user.getUserName().equals("admin")) {
+                // 得到超级管理员的id
+                UserExample userExample = new UserExample();
+                userExample.or().andUserNameEqualTo("admin");
+                User u = userService.selectByExample(userExample).get(0);
+                permissionService.addCategoryPermissionToUser(u.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
+                permissionService.addCategoryPermissionToUser(u.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
+            }
+            PermissionUtil.flush(userId);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return super.buildMessage(1, "false", "用户找不见");
+        } catch (GroupNotFountException e) {
+            e.printStackTrace();
+            return super.buildMessage(1, "false", "组找不见");
         }
         return super.buildMessage(0, "success", count);
     }
@@ -160,10 +194,17 @@ public class ArticleController extends BaseController {
     @GetMapping("/delete/{id}")
     @ResponseBody
     public Message delete(@PathVariable("id") Integer id) {
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         Article article = articleService.selectByPrimaryKey(id);
         if (article == null) {
             return super.buildMessage(1, "false", 0);
         }
+
+        if (!permissionService.hasCategoryPermission(userId, article.getArticleSiteId(), article.getArticleCategoryId(), CmsConst.PERMISSION_WRITE)) {
+            return super.buildMessage(2, "no permission", null);
+        }
+
+
         int count = articleService.deleteArticleWithTags(id);
         if (count == 0) {
             return super.buildMessage(1, "false", 0);
@@ -206,4 +247,23 @@ public class ArticleController extends BaseController {
         articleService.updateByPrimaryKeySelective(article);
         return super.buildMessage(0, "success", "success");
     }
+
+    @PostMapping("/delete/batch")
+    @ResponseBody
+    public Message batchDelete(String articleIdData) {
+        if (StringUtil.isNullOrEmpty(articleIdData)) {
+            String[] articleIds = articleIdData.split(",");
+            int count = 0;
+
+            for (String articleId : articleIds) {
+                count += articleService.deleteArticleWithTags(Integer.parseInt(articleId));
+            }
+            if (count != 0) {
+                return super.buildMessage(0, "success", "success");
+            } else {
+                return super.buildMessage(1, "false", null);
+            }
+        } else return super.buildMessage(1, "false", null);
+    }
+
 }

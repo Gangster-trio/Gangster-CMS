@@ -9,5 +9,5 @@ import com.ganster.cms.core.pojo.UserExample;
 public interface UserService extends BaseService<User, UserExample> {
     void deleteUser(Integer userId) throws UserNotFoundException, GroupNotFountException;
 
-    User createUser(User user);
+    int createUser(User user);
 }

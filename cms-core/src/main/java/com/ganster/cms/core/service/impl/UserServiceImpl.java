@@ -39,9 +39,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
     }
 
     @Override
-    public User createUser(User user) {
+    public int insert(User user) {
+        return createUser(user);
+    }
+
+    @Override
+    public int createUser(User user) {
         user.setUserCreateTime(new Date());
-        insert(user);
+        int ret = super.insert(user);
 
         Group group = new Group();
         group.setGroupName(user.getUserName());
@@ -49,6 +54,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
 
         UserGroup userGroup = new UserGroup(user.getUserId(), group.getGroupId());
         userGroupMapper.insert(userGroup);
-        return user;
+        return ret;
     }
 }
