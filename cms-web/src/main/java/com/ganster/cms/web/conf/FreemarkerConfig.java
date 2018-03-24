@@ -39,4 +39,5 @@ public class FreemarkerConfig extends WebMvcConfigurerAdapter {
         configurer.setDefaultEncoding("UTF-8");
         return configurer;
     }
+
 }

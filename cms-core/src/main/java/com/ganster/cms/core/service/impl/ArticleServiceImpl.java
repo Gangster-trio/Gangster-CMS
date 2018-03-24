@@ -111,6 +111,14 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         return articleMapper.selectByExample(articleExample);
     }
 
+    @Override
+    public List<Article> selectArticleByCategoryId(Integer cid, String sort) {
+        ArticleExample articleExample = new ArticleExample();
+        articleExample.or().andArticleCategoryIdEqualTo(cid);
+        articleExample.setOrderByClause(sort);
+        return articleMapper.selectByExample(articleExample);
+    }
+
     public int deleteArticleWithTags(Integer articleId) {
         TagArticleExample tagArticleExample = new TagArticleExample();
         tagArticleExample.or().andArticleIdEqualTo(articleId);
