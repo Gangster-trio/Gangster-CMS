@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, ArticleExample> implements ArticleService {
@@ -29,25 +31,23 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         tagExample.createCriteria().andTagNameEqualTo(tag);
         List<Tag> tags = tagService.selectByExample(tagExample);
         if (tags == null || tags.size() == 0) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
+
         TagArticleExample tagArticleExample = new TagArticleExample();
         tagArticleExample.createCriteria().andTagIdEqualTo(tags.get(0).getTagId());
-        List<TagArticle> tagArticleList = tagArticleMapper.selectByExample(tagArticleExample);
-        if (tagArticleList == null || tagArticleList.size() == 0) {
-            return new ArrayList<>();
-        }
-        ArrayList<Integer> ids = new ArrayList<>();
-        for (TagArticle aTagArticleList : tagArticleList) {
-            ids.add(aTagArticleList.getArticleId());
-        }
-        return ids;
+        tagArticleMapper.selectByExample(tagArticleExample);
+
+        return tagArticleMapper.selectByExample(tagArticleExample)
+                .stream()
+                .map(TagArticle::getArticleId)
+                .collect(Collectors.toList());
     }
 
     public List<Article> selectByTagName(String tag) {
         List<Integer> ids = selectArticlesIdByTagName(tag);
         if (ids == null || ids.isEmpty()) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         ArticleExample articleExample = new ArticleExample();
         articleExample.createCriteria().andArticleIdIn(ids);
@@ -57,7 +57,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
     public List<Article> selectByTagNameWithBLOBs(String tag) {
         List<Integer> ids = selectArticlesIdByTagName(tag);
         if (ids == null || ids.isEmpty()) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         ArticleExample articleExample = new ArticleExample();
         articleExample.createCriteria().andArticleIdIn(ids);

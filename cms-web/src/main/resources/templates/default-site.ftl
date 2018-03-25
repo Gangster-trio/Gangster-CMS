@@ -81,26 +81,6 @@
 
 
     <div class="row">
-
-    <#--<#list result.categoryWithArticleList as cwal>-->
-    <#--<div class="col-sm-4" style="border-radius:.4rem; margin:20px 0px 20px 0px">-->
-    <#--<h3><a href="/view/category/${cwal.categoryId}">${cwal.categoryTitle}</a></h3>-->
-    <#--<#list cwal.articleList as article>-->
-    <#--<a href="/view/article/${article.articleId}">${article.articleTitle}</a><br>-->
-    <#--</#list>-->
-    <#--</div>-->
-    <#--</#list>-->
-
-    <#--<#list result.indexCategoryList as category>-->
-        <#--<@cms_content_list categoryId=category.categoryId size=3 ret="rst">-->
-            <#--<div class="col-sm-4" style="border-radius:.4rem; margin:20px 0px 20px 0px">-->
-                <#--<h3><a href="/view/category/${category.categoryId}">${category.categoryTitle}</a></h3>-->
-                <#--<#list rst as article>-->
-                    <#--<a href="/view/article/${article.articleId}">${article.articleTitle}</a><br>-->
-                <#--</#list>-->
-            <#--</div>-->
-        <#--</@cms_content_list>-->
-    <#--</#list>-->
     <@cms_index_category ret="cate_list">
         <#list cate_list as category>
             <@cms_content_list categoryId=category.categoryId size=3 ret="rst">
@@ -114,12 +94,7 @@
         </#list>
     </@cms_index_category>
 
-    </div>
-</div>
-
-<div>
-    <div>
-        <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="mx-auto">
             <hr>
         <#list result.articleList as article>
 
@@ -145,6 +120,12 @@
                 <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
             </div> -->
         </div>
+    </div>
+</div>
+
+<div>
+    <div>
+
     </div>
 </div>
 

@@ -12,8 +12,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class ImgConfig extends WebMvcConfigurerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImgConfig.class);
-    @Autowired
+    private final
     SettingService settingService;
+
+    @Autowired
+    public ImgConfig(SettingService settingService) {
+        this.settingService = settingService;
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

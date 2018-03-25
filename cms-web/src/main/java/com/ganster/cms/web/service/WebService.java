@@ -9,9 +9,13 @@ import com.ganster.cms.core.service.TagService;
 import com.ganster.cms.web.dto.ModelResult;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * @author bigmeng
+ */
 @Service
 public class WebService {
     private final
@@ -51,10 +55,8 @@ public class WebService {
         categoryExample.or().andCategorySiteIdEqualTo(site.getSiteId()).andCategoryLevelEqualTo(0);
         List<Category> categoryList = categoryService.selectByExample(categoryExample);
         //Each level 0 category into category tree
-        List<CategoryTree> categoryTreeList = new ArrayList<>();
-        for (Category category : categoryList) {
-            categoryTreeList.add(categoryService.toTree(category));
-        }
+        List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryService::toTree).collect(Collectors.toList());
+
 
         //Get a list of categories to put on the home page (with short article info)
         categoryExample.clear();
@@ -95,16 +97,16 @@ public class WebService {
         */
         categoryExample.clear();
         categoryExample.or().andCategoryInHomepageEqualTo(true).andCategorySiteIdEqualTo(site.getSiteId());
-        List<Category> homePageCategoryList = categoryService.selectByExample(categoryExample);
-        for (Category category : homePageCategoryList) {
-            List list = (List) result.get(category.getCategoryType());
-            //put (category with article list) to (home page category list)
-            if (list == null) {
-                list = new ArrayList<>();
-                result.put(category.getCategoryType(), list);
-            }
-            list.add(category);
-        }
+        categoryService.selectByExample(categoryExample).forEach(
+                (category) -> {
+                    List tmp = (List) result.get(category.getCategoryType());
+                    if (tmp == null)
+                        //DO NOT CHANGE : Collections.singletonList() is immutable.
+                        result.put(category.getCategoryType(), Arrays.asList(category));
+                    else
+                        tmp.add(category);
+                }
+        );
 
         /*
         The custom type article Need to pass to the home page
@@ -118,15 +120,16 @@ public class WebService {
         */
         articleExample.clear();
         articleExample.or().andArticleInHomepageEqualTo(true).andArticleSiteIdEqualTo(site.getSiteId());
-        List<Article> homePageArticleList = articleService.selectByExample(articleExample);
-        for (Article article : homePageArticleList) {
-            List list = (List) result.get(article.getArticleType());
-            if (list == null) {
-                list = new ArrayList();
-                result.put(article.getArticleType(), list);
-            }
-            list.add(article);
-        }
+        articleService.selectByExample(articleExample).forEach(
+                (article) -> {
+                    List tmp = (List) result.get(article.getArticleType());
+                    if (tmp == null)
+                        //DO NOT CHANGE : Collections.singletonList() is immutable.
+                        result.put(article.getArticleAuthor(), Arrays.asList(article));
+                    else
+                        tmp.add(article);
+                }
+        );
         return result;
     }
 
@@ -151,10 +154,7 @@ public class WebService {
         categoryExample.or().andCategorySiteIdEqualTo(category.getCategorySiteId()).andCategoryLevelEqualTo(0);
         List<Category> categoryList = categoryService.selectByExample(categoryExample);
         //Each level 0 category into category tree
-        List<CategoryTree> categoryTreeList = new ArrayList<>();
-        for (Category c : categoryList) {
-            categoryTreeList.add(categoryService.toTree(c));
-        }
+        List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryService::toTree).collect(Collectors.toList());
 
         //Get this category's article list (without BLOBs)
         ArticleExample articleExample = new ArticleExample();
@@ -191,10 +191,7 @@ public class WebService {
         categoryExample.or().andCategorySiteIdEqualTo(article.getArticleSiteId()).andCategoryLevelEqualTo(0);
         List<Category> categoryList = categoryService.selectByExample(categoryExample);
         //Each level 0 category into category tree
-        List<CategoryTree> categoryTreeList = new ArrayList<>();
-        for (Category c : categoryList) {
-            categoryTreeList.add(categoryService.toTree(c));
-        }
+        List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryService::toTree).collect(Collectors.toList());
 
         result.put("category", category)
                 .put("article", article)
