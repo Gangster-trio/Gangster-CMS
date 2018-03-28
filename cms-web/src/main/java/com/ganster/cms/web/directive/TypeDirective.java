@@ -2,6 +2,7 @@ package com.ganster.cms.web.directive;
 
 import com.ganster.cms.core.pojo.ArticleExample;
 import com.ganster.cms.core.pojo.CategoryExample;
+import com.ganster.cms.core.pojo.Site;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
 import com.github.pagehelper.PageHelper;
@@ -44,8 +45,13 @@ public class TypeDirective implements TemplateDirectiveModel {
         String sort = DirectiveUtil.getString(PARAM_SORT, params);
         Integer size = DirectiveUtil.getInteger(PARAM_SIZE, params);
         Integer page = DirectiveUtil.getInteger(PARAM_PAGE, params);
+        Site site = DirectiveUtil.getSite(env);
 
-        //异或非运算
+        if (site == null) {
+            throw new TemplateException("site can't found", env);
+        }
+
+        //异或非运算 有且仅有一个不为null
         if ((cateType == null) == (articleType == null)) {
             throw new TemplateException(PARAM_ARTICLE_TYPE + " and " + PARAM_CATEGORY_TYPE + " only one must be specified.", env);
         }
@@ -64,18 +70,18 @@ public class TypeDirective implements TemplateDirectiveModel {
         List retList;
         if (cateType != null) {
             CategoryExample categoryExample = new CategoryExample();
-            categoryExample.or().andCategoryTypeEqualTo(cateType);
+            categoryExample.or().andCategoryTypeEqualTo(cateType).andCategorySiteIdEqualTo(site.getSiteId());
             categoryExample.setOrderByClause(sort);
             retList = PageHelper.startPage(page, size).doSelectPage(() -> categoryService.selectByExample(categoryExample));
-        }else {
+        } else {
             ArticleExample articleExample = new ArticleExample();
-            articleExample.or().andArticleTypeEqualTo(articleType);
+            articleExample.or().andArticleTypeEqualTo(articleType).andArticleSiteIdEqualTo(site.getSiteId());
             articleExample.setOrderByClause(sort);
-            retList = PageHelper.startPage(page,size).doSelectPage(() -> articleService.selectByExample(articleExample));
+            retList = PageHelper.startPage(page, size).doSelectPage(() -> articleService.selectByExample(articleExample));
         }
 
         DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());
-        env.setVariable(DirectiveUtil.getRetName(PARAM_RET,params),builder.build().wrap(retList));
+        env.setVariable(DirectiveUtil.getRetName(PARAM_RET, params), builder.build().wrap(retList));
 
         body.render(env.getOut());
     }

@@ -9,7 +9,6 @@ import com.ganster.cms.core.service.TagService;
 import com.ganster.cms.web.dto.ModelResult;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,16 +96,8 @@ public class WebService {
         */
         categoryExample.clear();
         categoryExample.or().andCategoryInHomepageEqualTo(true).andCategorySiteIdEqualTo(site.getSiteId());
-        categoryService.selectByExample(categoryExample).forEach(
-                (category) -> {
-                    List tmp = (List) result.get(category.getCategoryType());
-                    if (tmp == null)
-                        //DO NOT CHANGE : Collections.singletonList() is immutable.
-                        result.put(category.getCategoryType(), Arrays.asList(category));
-                    else
-                        tmp.add(category);
-                }
-        );
+        result.getMap().putAll(categoryService.selectByExample(categoryExample).stream()
+                .collect(Collectors.groupingBy(Category::getCategoryType)));
 
         /*
         The custom type article Need to pass to the home page
@@ -120,16 +111,9 @@ public class WebService {
         */
         articleExample.clear();
         articleExample.or().andArticleInHomepageEqualTo(true).andArticleSiteIdEqualTo(site.getSiteId());
-        articleService.selectByExample(articleExample).forEach(
-                (article) -> {
-                    List tmp = (List) result.get(article.getArticleType());
-                    if (tmp == null)
-                        //DO NOT CHANGE : Collections.singletonList() is immutable.
-                        result.put(article.getArticleAuthor(), Arrays.asList(article));
-                    else
-                        tmp.add(article);
-                }
-        );
+        result.getMap().putAll(articleService.selectByExample(articleExample).parallelStream()
+                .collect(Collectors.groupingBy(Article::getArticleType)));
+
         return result;
     }
 

@@ -1,11 +1,16 @@
 package com.ganster.cms.web.directive;
 
+import com.ganster.cms.core.pojo.Site;
+import com.ganster.cms.web.dto.ModelResult;
+import freemarker.core.Environment;
 import freemarker.template.*;
 
 import java.util.Map;
 
 
 class DirectiveUtil {
+    private static DefaultObjectWrapper wrapper = new DefaultObjectWrapper(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+
     static String getRetName(String retParam, Map params) {
         return getRetName(retParam, params, retParam);
     }
@@ -74,5 +79,9 @@ class DirectiveUtil {
             }
         }
         return false;
+    }
+
+    static Site getSite(Environment env) throws TemplateModelException {
+        return (Site) ((ModelResult) wrapper.unwrap(env.getVariable("result"))).get("site");
     }
 }

@@ -24,7 +24,7 @@ public class CategoryDirective implements TemplateDirectiveModel {
     }
 
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
+    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException {
         Integer id = DirectiveUtil.getInteger(PARAM_ID, params);
 
         if (id == null) {

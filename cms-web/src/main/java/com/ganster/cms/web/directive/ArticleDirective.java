@@ -26,7 +26,7 @@ public class ArticleDirective implements TemplateDirectiveModel {
     }
 
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
+    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException {
         Integer id = DirectiveUtil.getInteger(PARAM_ID, params);
         Boolean blob = DirectiveUtil.getBoolean(PARAM_BLOB, params);
 

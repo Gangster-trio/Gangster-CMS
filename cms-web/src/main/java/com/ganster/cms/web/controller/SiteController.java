@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Optional;
+
 @Controller
 public class SiteController {
 
@@ -25,6 +27,10 @@ public class SiteController {
     public String show(@PathVariable("siteUrl") String siteUrl, Model model) {
 
         ModelResult result = webService.getSiteModel(siteUrl);
+
+        if (result == null) {
+            return "404";
+        }
 
         //Add result to module
         model.addAttribute("result", result);
