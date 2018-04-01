@@ -35,12 +35,6 @@ public class IndexController {
     private ModuleService moduleService;
 
     @Autowired
-    private SiteService siteService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
     PermissionService permissionService;
 
     //    @RequiresPermissions("super")
@@ -48,12 +42,10 @@ public class IndexController {
     public ModelAndView index(@RequestParam(required = false) Integer id) {
 
         Subject subject = SecurityUtils.getSubject();
-        Integer userId = (Integer) subject.getSession().getAttribute("id");
-        User user = userService.selectByPrimaryKey(userId);
+        User user = (User) subject.getPrincipal();
         if (id != null) {
-            LOGGER.info("用户id为{},名字为{} 刷新权限", userId, user.getUserName());
-            PermissionUtil.flush(userId);
-
+            LOGGER.info("用户id为{},名字为{} 刷新权限", user.getUserId(), user.getUserName());
+            PermissionUtil.flush(user.getUserId());
         }
         ModelAndView modelAndView = new ModelAndView();
 
@@ -76,12 +68,7 @@ public class IndexController {
             treeList.add(moduleTree);
         }
 
-        List siteList = new ArrayList();
-        try {
-            siteList = permissionService.findAllUserSite(userId);
-        } catch (GroupNotFountException e) {
-            e.printStackTrace();
-        }
+        List siteList = permissionService.findAllUserSite(user.getUserId());
 
         modelAndView.addObject("moduleTreeList", treeList);
         modelAndView.addObject("siteList", siteList);

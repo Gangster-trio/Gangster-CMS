@@ -86,9 +86,6 @@ public class SiteController extends BaseController {
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return super.buildMessage(1, "用户未找到", null);
-        } catch (GroupNotFountException e) {
-            e.printStackTrace();
-            return super.buildMessage(1, "组未找到", null);
         }
         PermissionUtil.flush(userId);
         return super.buildMessage(0, "success", count);

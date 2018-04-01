@@ -22,13 +22,13 @@ public class LoginController {
         logger.info("用户" + userName + "进行登录");
         UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
 //        token.setRememberMe(true);
-        Message message=new Message();
-        Subject subject= SecurityUtils.getSubject();
+        Message message = new Message();
+        Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
             message.setCode(100);
             message.setMsg("ok");
-        }catch (Exception e) {
+        } catch (Exception e) {
             message.setCode(120);
             message.setMsg("抱歉，信息错误");
             return message;

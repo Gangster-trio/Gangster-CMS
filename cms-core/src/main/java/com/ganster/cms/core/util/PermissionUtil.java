@@ -84,12 +84,7 @@ public class PermissionUtil {
 
     public static List<Permission> flush(Integer uid) {
         List<Permission> permissions;
-        try {
-            permissions = permissionUtil.permissionService.selectByUserId(uid);
-        } catch (GroupNotFountException e) {
-            logger.info("Current userId: {} has no permission", uid);
-            return null;
-        }
+        permissions = permissionUtil.permissionService.selectByUserId(uid);
         Set<String> permissionName = new HashSet<>();
         for (Permission i : permissions) {
             permissionName.add(i.getPermissionName());

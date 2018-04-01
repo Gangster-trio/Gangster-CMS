@@ -10,19 +10,11 @@ public interface CategoryService extends BaseService<Category, CategoryExample> 
 
     /**
      * 删除栏目表信息的同时，删除关联表的信息
-     *
-     * @param siteId
-     * @param categoryId
-     * @param permission
-     * @return
      */
     int deleteCategoryInfo(Integer siteId, Integer categoryId, String permission);
 
     /**
      * 批量删除栏目信息，包括权限表的信息
-     * @param categoryIdStr
-     * @param permission
-     * @return
      */
     int deleteBatchCategoryInfo( String categoryIdStr, String permission);
 }

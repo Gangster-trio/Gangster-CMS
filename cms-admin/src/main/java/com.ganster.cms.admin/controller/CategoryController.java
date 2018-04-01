@@ -209,9 +209,6 @@ public class CategoryController extends BaseController {
                 permissionService.addCategoryPermissionToUser(u.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
             }
             PermissionUtil.flush(userId);
-        } catch (GroupNotFountException e) {
-            e.printStackTrace();
-            return new Message(1, "false", "组找不见");
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return new Message(1, "false", "没有找到该用户");

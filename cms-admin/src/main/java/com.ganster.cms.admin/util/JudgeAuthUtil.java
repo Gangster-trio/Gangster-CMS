@@ -1,6 +1,5 @@
 package com.ganster.cms.admin.util;
 
-import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.Permission;
 import com.ganster.cms.core.service.PermissionService;
 import org.slf4j.Logger;
@@ -8,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  *   Util 判断权限是否存在
@@ -20,16 +19,12 @@ public class JudgeAuthUtil {
     private PermissionService permissionService;
 
     public Boolean judgeAuthIsNull(Integer gid, String pName) {
-        try {
-            List<Permission> permissionList = permissionService.selectByGroupId(gid);
-            for (Permission i : permissionList) {
-                if (i.getPermissionName().equals(pName)) {
-                    return false;
-                }
+        Set<Permission> permissionList = permissionService.selectByGroupId(gid);
+        for (Permission i : permissionList) {
+            if (i.getPermissionName().equals(pName)) {
+                return false;
             }
-            return true;
-        } catch (GroupNotFountException e) {
-            return false;
         }
+        return true;
     }
 }

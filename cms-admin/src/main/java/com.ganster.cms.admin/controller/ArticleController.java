@@ -124,9 +124,6 @@ public class ArticleController extends BaseController {
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return super.buildMessage(1, "false", "用户找不见");
-        } catch (GroupNotFountException e) {
-            e.printStackTrace();
-            return super.buildMessage(1, "false", "组找不见");
         }
         return super.buildMessage(0, "success", count);
     }

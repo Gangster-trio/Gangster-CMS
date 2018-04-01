@@ -20,7 +20,6 @@ import java.util.Properties;
 public class ShiroConfig {
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
-        System.out.println("ShiroConfiguration.shirFilter()");
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 
         // 必须设置 SecurityManager
@@ -67,9 +66,8 @@ public class ShiroConfig {
     //    身份验证realm
     @Bean
     public UserShiroRealm shiroRealm() {
-        UserShiroRealm shiroRealm = new UserShiroRealm();
-//        shiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
-        return shiroRealm;
+        //        shiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        return new UserShiroRealm();
     }
 
     //    凭证匹配器

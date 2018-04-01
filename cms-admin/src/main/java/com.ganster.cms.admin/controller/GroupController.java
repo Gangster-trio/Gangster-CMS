@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户组的增删改查
@@ -43,16 +44,15 @@ public class GroupController extends BaseController {
     /**
      * 用户组的查询(包含权限)
      * @return AjaxData
-     * @throws GroupNotFountException  用户组未找到
      */
     @RequestMapping(value = "/find")
     @ResponseBody
-    public AjaxData getGroupList() throws GroupNotFountException {
+    public AjaxData getGroupList() {
         //查询所有的用户组
         GroupExample groupExample = new GroupExample();
         List<Group> groupList = groupService.selectByExample(groupExample);
         List<GroupWithPermission> gpList = new ArrayList<>();
-        List<Permission> permissionList = null;
+        Set<Permission> permissionList;
         for (Group group : groupList) {
             permissionList = permissionService.selectByGroupId(group.getGroupId());
             List<String> permissionNameList = new ArrayList<>();

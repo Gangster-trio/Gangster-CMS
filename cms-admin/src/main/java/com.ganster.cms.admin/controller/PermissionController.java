@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Controller     与权限有关的所有操作
@@ -66,17 +68,13 @@ public class PermissionController extends BaseController {
      * @param gid 用户组id
      */
     private void delectSurplusPermission(Integer gid) {
-        try {
-            List<Permission> permissionList = permissionService.selectByGroupId(gid);
-            for (int i = 0; i < permissionList.size() - 1; i++) {
-                for (int j = permissionList.size() - 1; j > i; j--) {
-                    if (permissionList.get(i).getPermissionName().equals(permissionList.get(j).getPermissionName())) {
-                        permissionService.deletePermission(permissionList.get(j).getPermissionId());
-                    }
+        List<Permission> permissionList = new ArrayList(permissionService.selectByGroupId(gid));
+        for (int i = 0; i < permissionList.size() - 1; i++) {
+            for (int j = permissionList.size() - 1; j > i; j--) {
+                if (permissionList.get(i).getPermissionName().equals(permissionList.get(j).getPermissionName())) {
+                    permissionService.deletePermission(permissionList.get(j).getPermissionId());
                 }
             }
-        } catch (GroupNotFountException e) {
-            logger.info("无法查找到用户组");
         }
     }
 
@@ -166,17 +164,13 @@ public class PermissionController extends BaseController {
         if (limit == null || limit == 0) {
             limit = 10;
         }
-        List<Permission> list = new ArrayList<>();
+        Set<Permission> list;
         Integer j = 0;
-        try {
-            list = permissionService.selectByGroupId(groupId);
-            for (int i = 0; i < list.size(); i++) {
-                j++;
-            }
-            return super.buildAjaxData(0, "true", j, list);
-        } catch (GroupNotFountException e) {
-            return super.buildAjaxData(1, "false", 0, null);
+        list = permissionService.selectByGroupId(groupId);
+        for (int i = 0; i < list.size(); i++) {
+            j++;
         }
+        return super.buildAjaxData(0, "true", j, new ArrayList(list));
     }
 
     /**

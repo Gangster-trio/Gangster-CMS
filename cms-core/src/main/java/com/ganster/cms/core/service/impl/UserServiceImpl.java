@@ -16,19 +16,18 @@ import java.util.Date;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExample> implements UserService {
     @Autowired
+    private
     GroupService groupService;
 
     @Autowired
+    private
     UserGroupMapper userGroupMapper;
 
     @Override
     public void deleteUser(Integer userId) throws UserNotFoundException {
         //delete user's own group
-        try {
-            Group group = groupService.findUserOwnGroup(userId);
-            groupService.deleteGroup(group.getGroupId());
-        } catch (GroupNotFountException ignored) {
-        }
+        Group group = groupService.findUserOwnGroup(userId);
+        groupService.deleteGroup(group.getGroupId());
         //delete user-group map
         UserGroupExample userGroupExample = new UserGroupExample();
         userGroupExample.or().andUserIdEqualTo(userId);
