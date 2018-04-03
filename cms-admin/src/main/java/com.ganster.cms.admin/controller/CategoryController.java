@@ -3,7 +3,6 @@ package com.ganster.cms.admin.controller;
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.*;
@@ -153,8 +152,11 @@ public class CategoryController extends BaseController {
         category.setCategoryUpdateTime(new Date());
         try {
             int count = categoryService.updateByPrimaryKeySelective(category);
-            if (count == 1) return super.buildMessage(0, "success", 1);
-            else return super.buildMessage(1, "false", 0);
+            if (count == 1) {
+                return super.buildMessage(0, "success", 1);
+            } else {
+                return super.buildMessage(1, "false", 0);
+            }
         } catch (Exception e) {
             LOGGER.error("update category error  " + e);
             return super.buildMessage(1, "false", null);
@@ -164,8 +166,11 @@ public class CategoryController extends BaseController {
     @GetMapping("/details/{id}")
     public CategoryWithParent details(@PathVariable("id") Integer id) {
         Category category = categoryService.selectByPrimaryKey(id);
-        if (category != null) return new CategoryWithParent(category.getCategoryTitle(), category);
-        else return null;
+        if (category != null) {
+            return new CategoryWithParent(category.getCategoryTitle(), category);
+        } else {
+            return null;
+        }
     }
 
     @PostMapping("/add")
@@ -201,20 +206,17 @@ public class CategoryController extends BaseController {
             User user = userService.selectByPrimaryKey(userId);
             permissionService.addCategoryPermissionToUser(userId, category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
             permissionService.addCategoryPermissionToUser(userId, category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
-            if (!user.getUserName().equals("admin")) {
-                UserExample userExample = new UserExample();
-                userExample.or().andUserNameEqualTo("admin");
-                User u = userService.selectByExample(userExample).get(0);
-                permissionService.addCategoryPermissionToUser(u.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
-                permissionService.addCategoryPermissionToUser(u.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
-            }
+            ArticleController.addPermission(category, user, userService, permissionService);
             PermissionUtil.flush(userId);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return new Message(1, "false", "没有找到该用户");
         }
-        if (count == 1) return new Message(0, "success", count);
-        else return new Message(1, "false", count);
+        if (count == 1) {
+            return new Message(0, "success", count);
+        } else {
+            return new Message(1, "false", count);
+        }
     }
 
     @PostMapping("delete/batch")

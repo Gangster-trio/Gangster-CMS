@@ -27,7 +27,7 @@ public class PrivilegeController extends BaseController {
     public Message judgeCategory(@RequestParam Integer siteId, @RequestParam Integer categoryId) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         User user = userService.selectByPrimaryKey(userId);
-        if (!user.getUserName().equals("admin")) {
+        if (!"admin".equals(user.getUserName())) {
             if (PermissionUtil.permittedCategory(userId, siteId, categoryId, CmsConst.PERMISSION_WRITE)) {
                 return super.buildMessage(0, "success", "yes");
             } else {
@@ -42,7 +42,7 @@ public class PrivilegeController extends BaseController {
     public Message judgeSite(@RequestParam Integer siteId) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         User user = userService.selectByPrimaryKey(userId);
-        if (!user.getUserName().equals("admin")) {
+        if (!"admin".equals(user.getUserName())) {
             if (PermissionUtil.permittedSite(userId, siteId)) {
                 return super.buildMessage(0, "success", "yes");
             } else {

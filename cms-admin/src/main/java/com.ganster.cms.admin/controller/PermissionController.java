@@ -55,7 +55,7 @@ public class PermissionController extends BaseController {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Group> group = groupService.selectByUserId(userId);
         for (Group i : group) {
-            if (i.getGroupName().equals("admin")) {
+            if ("admin".equals(i.getGroupName())) {
                 return true;
             }
         }

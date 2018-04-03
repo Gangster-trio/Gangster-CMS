@@ -43,7 +43,7 @@ public class UserController extends BaseController {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Group> group = groupService.selectByUserId(userId);
         for (Group i : group) {
-            if (i.getGroupName().equals("admin")) {
+            if ("admin".equals(i.getGroupName())) {
                 return true;
             }
         }
@@ -121,7 +121,6 @@ public class UserController extends BaseController {
             return 0;
         }
         int message = 0;
-        int delectNumber;
         if (userService.selectByPrimaryKey(userId) != null) {
             try {
                 userService.deleteUser(userId);
@@ -143,13 +142,7 @@ public class UserController extends BaseController {
      */
     @GetMapping("/find")
     @ResponseBody
-    public AjaxData findUser(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-        if (page == null || page == 0) {
-            page = 1;
-        }
-        if (limit == null || limit == 0) {
-            limit = 10;
-        }
+    public AjaxData findUser(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         UserExample userExample = new UserExample();
         PageInfo<User> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> userService.selectByExample(userExample));
         List<User> list = pageInfo.getList();
@@ -167,7 +160,7 @@ public class UserController extends BaseController {
      */
     @GetMapping("/find/{UserId}")
     @ResponseBody
-    public User fingUserById(@PathVariable("UserId") Integer userId) {
+    public User findUserById(@PathVariable("UserId") Integer userId) {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserIdEqualTo(userId);
         List<User> userList = userService.selectByExample(userExample);

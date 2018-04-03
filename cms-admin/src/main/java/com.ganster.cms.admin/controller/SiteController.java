@@ -41,14 +41,8 @@ public class SiteController extends BaseController {
     private UserService userService;
 
     @GetMapping("/list")
-    public AjaxData list(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+    public AjaxData list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        if (page == null) {
-            page = 1;
-        }
-        if (limit == null) {
-            limit = 10;
-        }
         SiteExample siteExample = new SiteExample();
         List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(userId);
         if (siteIdList == null || siteIdList.isEmpty()) {

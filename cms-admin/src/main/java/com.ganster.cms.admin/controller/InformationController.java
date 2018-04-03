@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -40,21 +41,18 @@ public class InformationController {
         informationObject.setUserStatus(user.getUserStatus());
         informationObject.setUserCreateTime(user.getUserCreateTime());
         informationObject.setUserOrg(user.getUserOrg());
-        List<Group> groupList = groupService.selectByUserId(userId);
-        List<String> groupName = new ArrayList<>();
-        for (Group i : groupList) {
-            String string = "<input type='text' disabled='disabled' value='" + i.getGroupName() + "'"+"class='layui-input'" + "/>";
-            groupName.add(string);
-        }
+        List<String> groupName = groupService.selectByUserId(userId).stream()
+                .map(group -> "<input type='text' disabled='disabled' value='" + group.getGroupName() + "'" + "class='layui-input'" + "/>")
+                .collect(Collectors.toList());
         informationObject.setUserGroup(groupName);
         message.setData(informationObject);
         return message;
     }
 
     @GetMapping("/getUserId")
-    public Integer findUserId(){
-        Integer userId= (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        logger.info("++++++++++++++++"+userId);
+    public Integer findUserId() {
+        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        logger.info("++++++++++++++++" + userId);
         return userId;
     }
 

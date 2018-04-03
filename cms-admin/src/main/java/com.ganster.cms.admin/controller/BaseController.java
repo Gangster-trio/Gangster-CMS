@@ -9,9 +9,9 @@ import java.util.List;
  * Create by Yoke on 2018/1/30
  */
 
-public class BaseController {
+class BaseController {
 
-    protected Message buildMessage(int code, String msg, Object data) {
+    Message buildMessage(int code, String msg, Object data) {
         Message message = new Message();
         message.setCode(code);
         message.setMsg(msg);
@@ -19,7 +19,7 @@ public class BaseController {
         return message;
     }
 
-    protected AjaxData buildAjaxData(int code, String msg, long count, List data) {
+    AjaxData buildAjaxData(int code, String msg, long count, List data) {
         AjaxData ajaxData = new AjaxData();
         ajaxData.setCode(code);
         ajaxData.setMsg(msg);

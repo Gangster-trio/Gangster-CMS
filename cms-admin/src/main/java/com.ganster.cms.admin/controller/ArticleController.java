@@ -4,7 +4,6 @@ import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.ArticleDTO;
 import com.ganster.cms.admin.dto.Message;
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.*;
@@ -24,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Create by Yoke on 2018/1/30
@@ -53,14 +53,7 @@ public class ArticleController extends BaseController {
 
     @GetMapping("/list")
     @ResponseBody
-    public AjaxData list(@RequestParam Integer siteId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-
-        if (page == null || page == 0) {
-            page = 1;
-        }
-        if (limit == null || limit == 0) {
-            limit = 10;
-        }
+    public AjaxData list(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         Integer uid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
 
         List<Integer> categoryIdList = PermissionUtil.getAllPermittedCategory(uid, siteId, CmsConst.PERMISSION_READ);
@@ -103,7 +96,8 @@ public class ArticleController extends BaseController {
         List<String> tagList;
         int count = 0;
         if (!(tags == null || tags.isEmpty())) {
-            tagList = Arrays.asList(tags.split(","));  //列出所有的tag标签
+            //列出所有的tag标签
+            tagList = Arrays.asList(tags.split(","));
             count += articleService.insertSelectiveWithTag(article, tagList);
         }
 
@@ -112,14 +106,7 @@ public class ArticleController extends BaseController {
             User user = userService.selectByPrimaryKey(userId);
             permissionService.addCategoryPermissionToUser(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_READ);
             permissionService.addCategoryPermissionToUser(userId, siteId, category.getCategoryId(), CmsConst.PERMISSION_WRITE);
-            if (!user.getUserName().equals("admin")) {
-                // 得到超级管理员的id
-                UserExample userExample = new UserExample();
-                userExample.or().andUserNameEqualTo("admin");
-                User u = userService.selectByExample(userExample).get(0);
-                permissionService.addCategoryPermissionToUser(u.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
-                permissionService.addCategoryPermissionToUser(u.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
-            }
+            addPermission(category, user, userService, permissionService);
             PermissionUtil.flush(userId);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
@@ -128,20 +115,25 @@ public class ArticleController extends BaseController {
         return super.buildMessage(0, "success", count);
     }
 
+    static void addPermission(Category category, User user, UserService userService, PermissionService permissionService) throws UserNotFoundException {
+        if (!"admin".equals(user.getUserName())) {
+            // 得到超级管理员的id
+            UserExample userExample = new UserExample();
+            userExample.or().andUserNameEqualTo("admin");
+            User u = userService.selectByExample(userExample).get(0);
+            permissionService.addCategoryPermissionToUser(u.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
+            permissionService.addCategoryPermissionToUser(u.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
+        }
+    }
+
     @GetMapping("/list/category")
     @ResponseBody
     public AjaxData listArticleByColumnId(
             @RequestParam("id") Integer id,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "limit", required = false) Integer limit
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "limit", defaultValue = "10") Integer limit
     ) {
         if (id != null) {
-            if (page == null || page == 0) {
-                page = 1;
-            }
-            if (limit == null || limit == 0) {
-                limit = 10;
-            }
             ArticleExample articleExample = new ArticleExample();
             articleExample.or().andArticleCategoryIdEqualTo(id);
             PageInfo<Article> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
@@ -158,7 +150,8 @@ public class ArticleController extends BaseController {
     @PostMapping("/img")
     @ResponseBody
     public Message uploadImg(@Param("file") MultipartFile file) {
-        String originalFileName = file.getOriginalFilename();   // 得到文件最初的名字
+        // 得到文件最初的名字
+        String originalFileName = file.getOriginalFilename();
         LOGGER.info(originalFileName);
         String uuid = UUID.randomUUID().toString();
         String newName = uuid + originalFileName.substring(originalFileName.lastIndexOf("."));
@@ -218,18 +211,19 @@ public class ArticleController extends BaseController {
         if (article != null) {
             Category category = categoryService.selectByPrimaryKey(article.getArticleCategoryId());
             List<Tag> list = tagService.selectByArticleId(articleId);
-            List<String> tagNameList = new ArrayList<>();
+            List<String> tagNameList = null;
             if (!(list == null || list.isEmpty())) {
-                for (Tag tag : list) {
-                    tagNameList.add(tag.getTagName());
-                }
+                tagNameList = list.stream().map(Tag::getTagName).collect(Collectors.toList());
             }
+            assert tagNameList != null;
             String tags = String.join(",", tagNameList);
             ArticleDTO articleDTO = new ArticleDTO(article);
             articleDTO.setCategoryName(category.getCategoryTitle());
             articleDTO.setTags(tags);
             return articleDTO;
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     @PostMapping("/update/{id}")
@@ -251,7 +245,6 @@ public class ArticleController extends BaseController {
         if (StringUtil.isNullOrEmpty(articleIdData)) {
             String[] articleIds = articleIdData.split(",");
             int count = 0;
-
             for (String articleId : articleIds) {
                 count += articleService.deleteArticleWithTags(Integer.parseInt(articleId));
             }
@@ -260,7 +253,8 @@ public class ArticleController extends BaseController {
             } else {
                 return super.buildMessage(1, "false", null);
             }
-        } else return super.buildMessage(1, "false", null);
+        } else {
+            return super.buildMessage(1, "false", null);
+        }
     }
-
 }
