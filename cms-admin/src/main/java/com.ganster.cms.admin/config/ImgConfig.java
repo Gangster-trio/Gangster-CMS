@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @PropertySource(value = "classpath:imgconfig.yml")
-@ConfigurationProperties(prefix = "ImgConfig")
+@ConfigurationProperties(prefix = "img-config")
 public class ImgConfig {
     @Value("${saveLocation}")
     private String saveLocation;

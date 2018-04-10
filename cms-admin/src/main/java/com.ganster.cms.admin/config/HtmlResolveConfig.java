@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource(value = "classpath:imgconfig.yml")
-@ConfigurationProperties(prefix = "htmlConfig")
+@ConfigurationProperties(prefix = "html-config")
 public class HtmlResolveConfig {
     @Value("${templatePrefix}")
     private String templatePrefix;

@@ -32,4 +32,14 @@ public class CmsConst {
     public static final String PERMISSION_READ = "READ";
 
     public static final String PERMISSION_WRITE = "WRITE";
+
+    public static final String LOG_ERR = "error";
+
+    public static final String LOG_INFO = "info";
+
+    public static final String LOG_DEBUG = "debug";
+
+    public static final String LOG_ACCESS = "access_log";
+
+    public static final String LOG_MODIFY = "modify_log";
 }
