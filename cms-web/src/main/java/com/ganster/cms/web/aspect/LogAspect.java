@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.LogEntry;
 import com.ganster.cms.core.service.LogService;
-import org.aspectj.lang.JoinPoint;
+import com.ganster.cms.core.util.IPUtil;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -40,12 +40,10 @@ public class LogAspect {
     }
 
     @Before("loggerService()")
-    public void doBeforeAdvice(JoinPoint point) { //获取RequestAttributes
+    public void doBeforeAdvice() { //获取RequestAttributes
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         //从获取RequestAttributes中获取HttpServletRequest的信息
-        assert requestAttributes != null;
         HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-        assert request != null;
         String path = request.getRequestURI();
         String ip = getIpAddress(request);
 
@@ -54,6 +52,7 @@ public class LogAspect {
         map.put("path", path);
         map.put("ip", ip);
         map.put("param",paramMap);
+        map.put("addr", IPUtil.getAddr(ip));
 
         LogEntry logEntry = new LogEntry();
         logEntry.setLogTime(Calendar.getInstance().getTime());

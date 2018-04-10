@@ -1,63 +1,47 @@
 package com.ganster.cms.core.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ganster.cms.core.pojo.LogEntry;
-import com.ganster.cms.core.service.LogService;
-import org.springframework.stereotype.Component;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+import com.maxmind.geoip2.model.CityResponse;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.stream.Stream;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-@Component
 public class IPUtil {
-    private static IPUtil ipUtil;
-    private static LinkedBlockingQueue<Integer> queue;
-    @Resource
-    private
-    LogService logService;
+    private static final InputStream db_city = IPUtil.class.getClassLoader().getResourceAsStream("GeoLite2-City.mmdb");
+    private static DatabaseReader cityReader;
 
-    public void makeAddr(Integer logId) {
-        queue.offer(logId);
+    static {
+        try {
+            cityReader = new DatabaseReader.Builder(db_city).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void processId() {
-        Stream.generate(() -> {
-            try {
-                return queue.take();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }).forEach((Integer id) -> {
-            LogEntry logEntry = logService.selectByPrimaryKey(id);
-            String info = logEntry.getLogInfo();
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map map = mapper.readValue(info, Map.class);
-                String ip = (String) map.get("ip");
-                String addr = getAddr(ip);
-                map.put("addr",addr);
-                logEntry.setLogInfo(mapper.writeValueAsString(map));
-                logService.updateByPrimaryKeyWithBLOBs(logEntry);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    private IPUtil() {
     }
 
-    //TODO
-    public String getAddr(String ip){
-        return "";
-    }
-    @PostConstruct
-    private void init() {
-        ipUtil = this;
-        ipUtil.logService = this.logService;
-        queue = new LinkedBlockingQueue<>();
-        new Thread(this::processId).start();
+    public static String getAddr(String ip) {
+        InetAddress ipAddr;
+        try {
+            ipAddr = InetAddress.getByName(ip);
+        } catch (UnknownHostException e) {
+            return null;
+        }
+        CityResponse response;
+        try {
+            response = cityReader.city(ipAddr);
+        } catch (IOException | GeoIp2Exception e) {
+            return null;
+        }
+        String ret = response.getContinent().getNames().get("zh-CN") + "-"
+                + response.getCountry().getNames().get("zh-CN") + "-"
+                + response.getCity().getNames().get("zh-CN") + "-("
+                + response.getLocation().getLatitude() + "," + response.getLocation().getLongitude() + ")";
+        System.out.println(ret);
+        return ret;
     }
 }

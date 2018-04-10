@@ -74,7 +74,7 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
     @Override
     public List<Record> selectByExampleWithBLOBs(Example example) {
         try {
-            Method method = mapper.getClass().getDeclaredMethod("selectByExampleWithBLOBS", example.getClass());
+            Method method = mapper.getClass().getDeclaredMethod("selectByExampleWithBLOBs", example.getClass());
             Object result = method.invoke(mapper, example);
             return (List<Record>)result;
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {

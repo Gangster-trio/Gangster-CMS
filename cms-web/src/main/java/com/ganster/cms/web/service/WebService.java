@@ -114,6 +114,11 @@ public class WebService {
         result.getMap().putAll(articleService.selectByExample(articleExample).parallelStream()
                 .collect(Collectors.groupingBy(Article::getArticleType)));
 
+        if (site.getSiteHit() == null) {
+            site.setSiteHit(0);
+        }
+        site.setSiteHit(site.getSiteHit() + 1);
+        siteService.updateByPrimaryKey(site);
         return result;
     }
 
@@ -150,6 +155,13 @@ public class WebService {
                 .put("category", category)
                 .put("site", site);
 
+        Integer hit = category.getCategoryHit();
+        if (hit == null) {
+            category.setCategoryHit(0);
+            hit = 0;
+        }
+        category.setCategoryHit(hit + 1);
+        categoryService.updateByPrimaryKey(category);
         return result;
     }
 

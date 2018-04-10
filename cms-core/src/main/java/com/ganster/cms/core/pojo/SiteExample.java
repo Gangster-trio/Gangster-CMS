@@ -704,6 +704,66 @@ public class SiteExample {
             addCriterion("site_pic not between", value1, value2, "sitePic");
             return (Criteria) this;
         }
+
+        public Criteria andSiteHitIsNull() {
+            addCriterion("site_hit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitIsNotNull() {
+            addCriterion("site_hit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitEqualTo(Integer value) {
+            addCriterion("site_hit =", value, "siteHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitNotEqualTo(Integer value) {
+            addCriterion("site_hit <>", value, "siteHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitGreaterThan(Integer value) {
+            addCriterion("site_hit >", value, "siteHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitGreaterThanOrEqualTo(Integer value) {
+            addCriterion("site_hit >=", value, "siteHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitLessThan(Integer value) {
+            addCriterion("site_hit <", value, "siteHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitLessThanOrEqualTo(Integer value) {
+            addCriterion("site_hit <=", value, "siteHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitIn(List<Integer> values) {
+            addCriterion("site_hit in", values, "siteHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitNotIn(List<Integer> values) {
+            addCriterion("site_hit not in", values, "siteHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitBetween(Integer value1, Integer value2) {
+            addCriterion("site_hit between", value1, value2, "siteHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteHitNotBetween(Integer value1, Integer value2) {
+            addCriterion("site_hit not between", value1, value2, "siteHit");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

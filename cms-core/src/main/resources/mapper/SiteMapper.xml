@@ -12,6 +12,7 @@
       <arg column="site_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="site_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="site_pic" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="site_hit" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     site_id, site_name, site_url, site_desc, site_copyright, site_skin, site_create_time, 
-    site_status, site_pic
+    site_status, site_pic, site_hit
   </sql>
   <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.SiteExample" resultMap="BaseResultMap">
     select
@@ -113,10 +114,12 @@
     </selectKey>
     insert into cms_site (site_name, site_url, site_desc, 
       site_copyright, site_skin, site_create_time, 
-      site_status, site_pic)
+      site_status, site_pic, site_hit
+      )
     values (#{siteName,jdbcType=VARCHAR}, #{siteUrl,jdbcType=VARCHAR}, #{siteDesc,jdbcType=VARCHAR}, 
       #{siteCopyright,jdbcType=VARCHAR}, #{siteSkin,jdbcType=VARCHAR}, #{siteCreateTime,jdbcType=TIMESTAMP}, 
-      #{siteStatus,jdbcType=INTEGER}, #{sitePic,jdbcType=VARCHAR})
+      #{siteStatus,jdbcType=INTEGER}, #{sitePic,jdbcType=VARCHAR}, #{siteHit,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.Site">
     <selectKey keyProperty="siteId" order="AFTER" resultType="java.lang.Integer">
@@ -148,6 +151,9 @@
       <if test="sitePic != null">
         site_pic,
       </if>
+      <if test="siteHit != null">
+        site_hit,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="siteName != null">
@@ -173,6 +179,9 @@
       </if>
       <if test="sitePic != null">
         #{sitePic,jdbcType=VARCHAR},
+      </if>
+      <if test="siteHit != null">
+        #{siteHit,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -212,6 +221,9 @@
       <if test="record.sitePic != null">
         site_pic = #{record.sitePic,jdbcType=VARCHAR},
       </if>
+      <if test="record.siteHit != null">
+        site_hit = #{record.siteHit,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -227,7 +239,8 @@
       site_skin = #{record.siteSkin,jdbcType=VARCHAR},
       site_create_time = #{record.siteCreateTime,jdbcType=TIMESTAMP},
       site_status = #{record.siteStatus,jdbcType=INTEGER},
-      site_pic = #{record.sitePic,jdbcType=VARCHAR}
+      site_pic = #{record.sitePic,jdbcType=VARCHAR},
+      site_hit = #{record.siteHit,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -259,6 +272,9 @@
       <if test="sitePic != null">
         site_pic = #{sitePic,jdbcType=VARCHAR},
       </if>
+      <if test="siteHit != null">
+        site_hit = #{siteHit,jdbcType=INTEGER},
+      </if>
     </set>
     where site_id = #{siteId,jdbcType=INTEGER}
   </update>
@@ -271,7 +287,8 @@
       site_skin = #{siteSkin,jdbcType=VARCHAR},
       site_create_time = #{siteCreateTime,jdbcType=TIMESTAMP},
       site_status = #{siteStatus,jdbcType=INTEGER},
-      site_pic = #{sitePic,jdbcType=VARCHAR}
+      site_pic = #{sitePic,jdbcType=VARCHAR},
+      site_hit = #{siteHit,jdbcType=INTEGER}
     where site_id = #{siteId,jdbcType=INTEGER}
   </update>
 </mapper>

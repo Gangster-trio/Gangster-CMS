@@ -22,9 +22,11 @@ public class Site implements Serializable {
 
     private String sitePic;
 
+    private Integer siteHit;
+
     private static final long serialVersionUID = 1L;
 
-    public Site(Integer siteId, String siteName, String siteUrl, String siteDesc, String siteCopyright, String siteSkin, Date siteCreateTime, Integer siteStatus, String sitePic) {
+    public Site(Integer siteId, String siteName, String siteUrl, String siteDesc, String siteCopyright, String siteSkin, Date siteCreateTime, Integer siteStatus, String sitePic, Integer siteHit) {
         this.siteId = siteId;
         this.siteName = siteName;
         this.siteUrl = siteUrl;
@@ -34,6 +36,7 @@ public class Site implements Serializable {
         this.siteCreateTime = siteCreateTime;
         this.siteStatus = siteStatus;
         this.sitePic = sitePic;
+        this.siteHit = siteHit;
     }
 
     public Site() {
@@ -112,6 +115,14 @@ public class Site implements Serializable {
         this.sitePic = sitePic == null ? null : sitePic.trim();
     }
 
+    public Integer getSiteHit() {
+        return siteHit;
+    }
+
+    public void setSiteHit(Integer siteHit) {
+        this.siteHit = siteHit;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -132,7 +143,8 @@ public class Site implements Serializable {
             && (this.getSiteSkin() == null ? other.getSiteSkin() == null : this.getSiteSkin().equals(other.getSiteSkin()))
             && (this.getSiteCreateTime() == null ? other.getSiteCreateTime() == null : this.getSiteCreateTime().equals(other.getSiteCreateTime()))
             && (this.getSiteStatus() == null ? other.getSiteStatus() == null : this.getSiteStatus().equals(other.getSiteStatus()))
-            && (this.getSitePic() == null ? other.getSitePic() == null : this.getSitePic().equals(other.getSitePic()));
+            && (this.getSitePic() == null ? other.getSitePic() == null : this.getSitePic().equals(other.getSitePic()))
+            && (this.getSiteHit() == null ? other.getSiteHit() == null : this.getSiteHit().equals(other.getSiteHit()));
     }
 
     @Override
@@ -148,6 +160,7 @@ public class Site implements Serializable {
         result = prime * result + ((getSiteCreateTime() == null) ? 0 : getSiteCreateTime().hashCode());
         result = prime * result + ((getSiteStatus() == null) ? 0 : getSiteStatus().hashCode());
         result = prime * result + ((getSitePic() == null) ? 0 : getSitePic().hashCode());
+        result = prime * result + ((getSiteHit() == null) ? 0 : getSiteHit().hashCode());
         return result;
     }
 
@@ -166,6 +179,7 @@ public class Site implements Serializable {
         sb.append(", siteCreateTime=").append(siteCreateTime);
         sb.append(", siteStatus=").append(siteStatus);
         sb.append(", sitePic=").append(sitePic);
+        sb.append(", siteHit=").append(siteHit);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
