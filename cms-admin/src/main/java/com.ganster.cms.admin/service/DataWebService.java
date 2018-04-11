@@ -10,13 +10,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DataWebService {
-    @Autowired
+    private final
     LogService logService;
 
-    public PageInfo<LogEntry> getLog(int page, int limit, String logLevel) {
+    @Autowired
+    public DataWebService(LogService logService) {
+        this.logService = logService;
+    }
+
+    public PageInfo<LogEntry> getLog(int page, int limit, String logType, String logLevel) {
         LogEntryExample entryExample = new LogEntryExample();
         if (logLevel != null) {
             entryExample.or().andLogLevelEqualTo(logLevel);
+        }
+        if (logType != null) {
+            entryExample.or().andLogTypeEqualTo(logType);
         }
         return PageHelper
                 .startPage(page, limit)
@@ -24,4 +32,5 @@ public class DataWebService {
                     logService.selectByExampleWithBLOBs(entryExample);
                 });
     }
+
 }
