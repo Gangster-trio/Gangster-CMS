@@ -10,4 +10,11 @@ public interface UserService extends BaseService<User, UserExample> {
     void deleteUser(Integer userId) throws UserNotFoundException, GroupNotFountException;
 
     int createUser(User user);
+
+    /**
+     * 判断用户是否是超级管理员
+     * @param userId
+     * @return
+     */
+    boolean isAdmin(Integer userId);
 }

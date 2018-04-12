@@ -44,6 +44,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Article> selectByTagName(String tag) {
         List<Integer> ids = selectArticlesIdByTagName(tag);
         if (ids == null || ids.isEmpty()) {
@@ -54,6 +55,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         return selectByExample(articleExample);
     }
 
+    @Override
     public List<Article> selectByTagNameWithBLOBs(String tag) {
         List<Integer> ids = selectArticlesIdByTagName(tag);
         if (ids == null || ids.isEmpty()) {
@@ -105,6 +107,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         }
     }
 
+    @Override
     public List<Article> selectArticleByCategoryId(Integer id) {
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleCategoryIdEqualTo(id);
@@ -119,6 +122,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         return articleMapper.selectByExample(articleExample);
     }
 
+    @Override
     public int deleteArticleWithTags(Integer articleId) {
         TagArticleExample tagArticleExample = new TagArticleExample();
         tagArticleExample.or().andArticleIdEqualTo(articleId);

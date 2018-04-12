@@ -20,8 +20,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
     GroupService groupService;
 
     @Autowired
+    private UserMapper userMapper;
+    @Autowired
     private
     UserGroupMapper userGroupMapper;
+
+    private static final String ADMIN = "admin";
 
     @Override
     public void deleteUser(Integer userId) throws UserNotFoundException {
@@ -55,4 +59,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
         userGroupMapper.insert(userGroup);
         return ret;
     }
+
+    @Override
+    public boolean isAdmin(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        return ADMIN.equals(user.getUserName());
+    }
+
 }

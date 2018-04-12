@@ -36,3 +36,7 @@ mybatis:
 management:
   security:
     enabled: false
+#cms:
+#  common:  可配置超级管理员的名称
+#    admi:
+#      name:

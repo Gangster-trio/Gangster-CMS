@@ -12,7 +12,7 @@ public class IndexController {
     @RequiresPermissions("super")
     @GetMapping("/index")
     public String index(){
-        return "/login/admin.html";
+        return "/login/admi.html";
     }
     @GetMapping("/403")
     public String error(){

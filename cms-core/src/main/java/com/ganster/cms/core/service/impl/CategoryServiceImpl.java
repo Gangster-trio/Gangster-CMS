@@ -35,8 +35,9 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
         tree.setName(category.getCategoryTitle());
         tree.setSpread(false);
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId());
-        List<Category> list = selectByExample(categoryExample);  //子栏目
+        categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId()).andCategoryStatusEqualTo(1);
+        //子栏目
+        List<Category> list = selectByExample(categoryExample);
         if (list == null || list.isEmpty()) {
             tree.setChildren(null);
             return tree;

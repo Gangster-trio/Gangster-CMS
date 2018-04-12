@@ -85,7 +85,6 @@
 <script src="/layui/layui.all.js" type="text/javascript"></script>
 </body>
 </html>
-<script></script>
 <script>
     var siteId;
     <#if siteList?size!=0>

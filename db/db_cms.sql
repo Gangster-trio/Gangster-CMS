@@ -127,7 +127,7 @@ CREATE TABLE `cms_group` (
 
 LOCK TABLES `cms_group` WRITE;
 /*!40000 ALTER TABLE `cms_group` DISABLE KEYS */;
-INSERT INTO `cms_group` VALUES (8,'admin',NULL),(31,'ccc',NULL),(32,'dddd',NULL),(38,'nnn','gbgfbfgbfgbgfb');
+INSERT INTO `cms_group` VALUES (8,'admi',NULL),(31,'ccc',NULL),(32,'dddd',NULL),(38,'nnn','gbgfbfgbfgbgfb');
 /*!40000 ALTER TABLE `cms_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,7 +155,7 @@ CREATE TABLE `cms_module` (
 
 LOCK TABLES `cms_module` WRITE;
 /*!40000 ALTER TABLE `cms_module` DISABLE KEYS */;
-INSERT INTO `cms_module` VALUES (1,'content manage','',0,NULL,'2018-01-31 01:40:05'),(2,'article manage','/listArticle.html',1,NULL,'2018-01-31 01:40:42'),(3,'column manage','/listCategory.html',1,NULL,'2018-01-31 01:42:00'),(4,'permission manage',NULL,0,NULL,'2018-01-31 01:42:26'),(5,'admin manage','/listUser.html',4,NULL,'2018-01-31 01:43:11'),(6,'group manage','/listGroup.html',4,NULL,NULL),(7,'site manage','/listSite.html',1,NULL,'2018-02-08 00:52:52');
+INSERT INTO `cms_module` VALUES (1,'content manage','',0,NULL,'2018-01-31 01:40:05'),(2,'article manage','/listArticle.html',1,NULL,'2018-01-31 01:40:42'),(3,'column manage','/listCategory.html',1,NULL,'2018-01-31 01:42:00'),(4,'permission manage',NULL,0,NULL,'2018-01-31 01:42:26'),(5,'admi manage','/listUser.html',4,NULL,'2018-01-31 01:43:11'),(6,'group manage','/listGroup.html',4,NULL,NULL),(7,'site manage','/listSite.html',1,NULL,'2018-02-08 00:52:52');
 /*!40000 ALTER TABLE `cms_module` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -318,7 +318,7 @@ CREATE TABLE `cms_user` (
 
 LOCK TABLES `cms_user` WRITE;
 /*!40000 ALTER TABLE `cms_user` DISABLE KEYS */;
-INSERT INTO `cms_user` VALUES (1,'admin','1531531','root','',NULL,'2018-01-31 05:50:14',NULL,''),(24,'aaa','','000000','',NULL,'2018-02-05 06:53:55',NULL,''),(28,'eeee','41651685185','5616515','156165156',3,'2018-02-07 07:00:18',NULL,'65165156'),(29,'qqq','','333333','',NULL,'2018-02-07 07:01:53',NULL,''),(30,'lll','15616516','165156','1351564',2,'2018-02-07 07:21:38',NULL,'scscdscds');
+INSERT INTO `cms_user` VALUES (1,'admi','1531531','root','',NULL,'2018-01-31 05:50:14',NULL,''),(24,'aaa','','000000','',NULL,'2018-02-05 06:53:55',NULL,''),(28,'eeee','41651685185','5616515','156165156',3,'2018-02-07 07:00:18',NULL,'65165156'),(29,'qqq','','333333','',NULL,'2018-02-07 07:01:53',NULL,''),(30,'lll','15616516','165156','1351564',2,'2018-02-07 07:21:38',NULL,'scscdscds');
 /*!40000 ALTER TABLE `cms_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
