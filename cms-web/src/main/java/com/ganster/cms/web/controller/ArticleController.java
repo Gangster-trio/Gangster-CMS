@@ -34,7 +34,7 @@ public class ArticleController {
 
         Article article = (Article) result.get("article");
 
-        //If skin = null, set default skin
+        //If skin = null, put default skin
         if (article.getArticleSkin() == null) {
             article.setArticleSkin(CmsConst.DEFAULT_SKIN);
         }

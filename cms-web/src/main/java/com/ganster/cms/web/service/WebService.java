@@ -6,7 +6,11 @@ import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.service.SiteService;
 import com.ganster.cms.core.service.TagService;
+import com.ganster.cms.web.cache.impl.HashMapCache;
 import com.ganster.cms.web.dto.ModelResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +21,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class WebService {
+    private final Logger logger = LoggerFactory.getLogger(WebService.class);
+
     private final
     SiteService siteService;
 
@@ -28,6 +34,10 @@ public class WebService {
 
     private final TagService tagService;
 
+    private HashMapCache<String, ModelResult> siteModelCache = new HashMapCache<>();
+    private HashMapCache<Integer, ModelResult> articleModelCache = new HashMapCache<>();
+    private HashMapCache<Integer, ModelResult> categoryModelCache = new HashMapCache<>();
+
     public WebService(SiteService siteService, ArticleService articleService, CategoryService categoryService, TagService tagService) {
         this.siteService = siteService;
         this.articleService = articleService;
@@ -36,6 +46,15 @@ public class WebService {
     }
 
     public ModelResult getSiteModel(String siteUrl) {
+
+        if (siteModelCache.containsKey(siteUrl)) {
+            ModelResult r = siteModelCache.get(siteUrl);
+            Site s = (Site) r.get("site");
+            addSiteHit(s);
+            logger.info("get SiteModel:{} from cache",siteUrl);
+            return r;
+        }
+
         ModelResult result = new ModelResult();
 
         //---------------------------------------default properties start----------------------------------------------//
@@ -114,16 +133,30 @@ public class WebService {
         result.getMap().putAll(articleService.selectByExample(articleExample).parallelStream()
                 .collect(Collectors.groupingBy(Article::getArticleType)));
 
+        addSiteHit(site);
+
+        siteModelCache.put(siteUrl, result);
+        return result;
+    }
+
+    private void addSiteHit(Site site) {
         if (site.getSiteHit() == null) {
             site.setSiteHit(0);
         }
         site.setSiteHit(site.getSiteHit() + 1);
         siteService.updateByPrimaryKey(site);
-        return result;
     }
 
 
     public ModelResult getCategoryModel(Integer id) {
+        if (categoryModelCache.containsKey(id)) {
+            ModelResult r = categoryModelCache.get(id);
+            Category c = (Category) r.get("category");
+            addCategoryHit(c);
+            logger.info("get CategoryModel:{} from cache",id);
+            return r;
+        }
+
         ModelResult result = new ModelResult();
 
         Category category = categoryService.selectByPrimaryKey(id);
@@ -155,6 +188,13 @@ public class WebService {
                 .put("category", category)
                 .put("site", site);
 
+        addCategoryHit(category);
+
+        categoryModelCache.put(id, result);
+        return result;
+    }
+
+    private void addCategoryHit(Category category) {
         Integer hit = category.getCategoryHit();
         if (hit == null) {
             category.setCategoryHit(0);
@@ -162,10 +202,17 @@ public class WebService {
         }
         category.setCategoryHit(hit + 1);
         categoryService.updateByPrimaryKey(category);
-        return result;
     }
 
     public ModelResult getArticleModel(Integer id) {
+        if (articleModelCache.containsKey(id)) {
+            ModelResult r = articleModelCache.get(id);
+            Article a = (Article) r.get("article");
+            addArticleHit(a);
+            logger.info("get ArticleModel:{} from cache",id);
+            return r;
+        }
+
         Article article = articleService.selectByPrimaryKey(id);
         ModelResult result = new ModelResult();
 
@@ -195,6 +242,13 @@ public class WebService {
                 .put("categoryTreeList", categoryTreeList)
                 .put("site", site);
 
+        addArticleHit(article);
+
+        articleModelCache.put(id, result);
+        return result;
+    }
+
+    private void addArticleHit(Article article) {
         //hit add
         if (article.getArticleHit() == null) {
             article.setArticleHit(0);
@@ -202,7 +256,14 @@ public class WebService {
 
         article.setArticleHit(article.getArticleHit() + 1);
         articleService.updateByPrimaryKeySelective(article);
+    }
 
-        return result;
+    //5分钟刷新一次缓存
+    @Scheduled(fixedDelay = 1000 * 60 * 5)
+    private void flushCache() {
+        categoryModelCache.clear();
+        articleModelCache.clear();
+        siteModelCache.clear();
+        logger.info("refresh cache");
     }
 }

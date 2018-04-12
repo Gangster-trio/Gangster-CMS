@@ -52,17 +52,17 @@ public class LogAspect {
     public void siteCountService(){
     }
 
-    @Before("countService()")
-    public void count(JoinPoint point){
-        String fileName = point.getSourceLocation().getFileName().toUpperCase();
-        if (fileName.contains("SITE")){
-
-        }else if (fileName.contains("CATEGORY")){
-
-        }else if (fileName.contains("ARTICLE")){
-
-        }
-    }
+//    @Before("countService()")
+//    public void count(JoinPoint point){
+//        String fileName = point.getSourceLocation().getFileName().toUpperCase();
+//        if (fileName.contains("SITE")){
+//
+//        }else if (fileName.contains("CATEGORY")){
+//
+//        }else if (fileName.contains("ARTICLE")){
+//
+//        }
+//    }
 
     @Before("loggerService()")
     public void doBeforeAdvice() { //获取RequestAttributes
