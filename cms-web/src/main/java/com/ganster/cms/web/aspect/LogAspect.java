@@ -6,6 +6,7 @@ import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.LogEntry;
 import com.ganster.cms.core.service.LogService;
 import com.ganster.cms.core.util.IPUtil;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -39,6 +40,30 @@ public class LogAspect {
     public void loggerService() {
     }
 
+    @Pointcut("execution(* com.ganster.cms.web.controller..*.show(..))")
+    public void countService(){
+    }
+
+    @Pointcut("execution(* com.ganster.cms.web.controller.CategoryController.show())")
+    public void categoryCountService(){
+    }
+
+    @Pointcut("execution(* com.ganster.cms.web.controller.SiteController.show())")
+    public void siteCountService(){
+    }
+
+//    @Before("countService()")
+//    public void count(JoinPoint point){
+//        String fileName = point.getSourceLocation().getFileName().toUpperCase();
+//        if (fileName.contains("SITE")){
+//
+//        }else if (fileName.contains("CATEGORY")){
+//
+//        }else if (fileName.contains("ARTICLE")){
+//
+//        }
+//    }
+
     @Before("loggerService()")
     public void doBeforeAdvice() { //获取RequestAttributes
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
@@ -68,6 +93,7 @@ public class LogAspect {
 
         logService.insert(logEntry);
     }
+
 
     private static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");

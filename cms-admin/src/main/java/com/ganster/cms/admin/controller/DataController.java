@@ -22,7 +22,8 @@ public class DataController {
     }
 
     @GetMapping("/log")
-    public AjaxData getLog(@RequestParam(value = "log_level", required = false) String logLevel
+    public AjaxData getLog(@RequestParam(value = "log_type", required = false) String logType
+            , @RequestParam(value = "log_level", required = false) String logLevel
             , @RequestParam(value = "page", defaultValue = "0") Integer page
             , @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
         PageInfo info = dataWebService.getLog(page, limit, logLevel);

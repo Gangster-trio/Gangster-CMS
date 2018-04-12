@@ -34,7 +34,7 @@ public class CategoryController {
 
         Category category = (Category) result.get("category");
 
-        //If skin = null, set default skin
+        //If skin = null, put default skin
         if (category.getCategorySkin() == null) {
             category.setCategorySkin(CmsConst.DEFAULT_SKIN);
         }

@@ -37,7 +37,7 @@ public class SiteController {
 
         Site site = (Site) result.get("site");
 
-        //If skin = null, set default skin
+        //If skin = null, put default skin
         if (site.getSiteSkin() == null) {
             site.setSiteSkin(CmsConst.DEFAULT_SKIN);
         }
