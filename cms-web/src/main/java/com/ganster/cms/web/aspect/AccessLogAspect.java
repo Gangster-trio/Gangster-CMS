@@ -7,6 +7,7 @@ import com.ganster.cms.core.pojo.LogEntry;
 import com.ganster.cms.core.service.LogService;
 import com.ganster.cms.core.util.IPUtil;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -24,60 +25,45 @@ import java.util.Map;
 
 @Component
 @Aspect
-public class LogAspect {
+public class AccessLogAspect {
 
     private Logger logger = LoggerFactory.getLogger("Access log");
+
+    private static ThreadLocal<Long> timeCount = new ThreadLocal<>();
 
     private final
     LogService logService;
 
     @Autowired
-    public LogAspect(LogService logService) {
+    public AccessLogAspect(LogService logService) {
         this.logService = logService;
     }
 
-    @Pointcut("execution(* com.ganster.cms.web.controller..*.*(..))")
+    @Pointcut("@annotation(com.ganster.cms.web.annotation.AccessLogger)")
     public void loggerService() {
     }
 
-    @Pointcut("execution(* com.ganster.cms.web.controller..*.show(..))")
-    public void countService(){
-    }
-
-    @Pointcut("execution(* com.ganster.cms.web.controller.CategoryController.show())")
-    public void categoryCountService(){
-    }
-
-    @Pointcut("execution(* com.ganster.cms.web.controller.SiteController.show())")
-    public void siteCountService(){
-    }
-
-//    @Before("countService()")
-//    public void count(JoinPoint point){
-//        String fileName = point.getSourceLocation().getFileName().toUpperCase();
-//        if (fileName.contains("SITE")){
-//
-//        }else if (fileName.contains("CATEGORY")){
-//
-//        }else if (fileName.contains("ARTICLE")){
-//
-//        }
-//    }
-
     @Before("loggerService()")
-    public void doBeforeAdvice() { //获取RequestAttributes
+    public void doBeforeAdvice() {
+        timeCount.set(Calendar.getInstance().getTimeInMillis());
+    }
+
+    @After("loggerService()")
+    public void doAfterAdvice() { //获取RequestAttributes
+        Long time = Calendar.getInstance().getTimeInMillis() - timeCount.get();
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         //从获取RequestAttributes中获取HttpServletRequest的信息
         HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String path = request.getRequestURI();
         String ip = getIpAddress(request);
 
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         Map<String, String[]> paramMap = request.getParameterMap();
         map.put("path", path);
         map.put("ip", ip);
-        map.put("param",paramMap);
+        map.put("param", paramMap);
         map.put("addr", IPUtil.getAddr(ip));
+        map.put("time", time);
 
         LogEntry logEntry = new LogEntry();
         logEntry.setLogTime(Calendar.getInstance().getTime());
@@ -85,7 +71,7 @@ public class LogAspect {
         logEntry.setLogLevel(CmsConst.LOG_INFO);
         try {
             logEntry.setLogInfo(new ObjectMapper().writeValueAsString(map));
-            logger.info(logEntry.toString());
+            logger.info(logEntry.getLogInfo());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             logger.info(e.getMessage());

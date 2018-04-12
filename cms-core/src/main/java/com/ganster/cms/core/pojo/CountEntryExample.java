@@ -244,52 +244,62 @@ public class CountEntryExample {
             return (Criteria) this;
         }
 
-        public Criteria andCountCidEqualTo(Integer value) {
+        public Criteria andCountCidEqualTo(String value) {
             addCriterion("count_cid =", value, "countCid");
             return (Criteria) this;
         }
 
-        public Criteria andCountCidNotEqualTo(Integer value) {
+        public Criteria andCountCidNotEqualTo(String value) {
             addCriterion("count_cid <>", value, "countCid");
             return (Criteria) this;
         }
 
-        public Criteria andCountCidGreaterThan(Integer value) {
+        public Criteria andCountCidGreaterThan(String value) {
             addCriterion("count_cid >", value, "countCid");
             return (Criteria) this;
         }
 
-        public Criteria andCountCidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andCountCidGreaterThanOrEqualTo(String value) {
             addCriterion("count_cid >=", value, "countCid");
             return (Criteria) this;
         }
 
-        public Criteria andCountCidLessThan(Integer value) {
+        public Criteria andCountCidLessThan(String value) {
             addCriterion("count_cid <", value, "countCid");
             return (Criteria) this;
         }
 
-        public Criteria andCountCidLessThanOrEqualTo(Integer value) {
+        public Criteria andCountCidLessThanOrEqualTo(String value) {
             addCriterion("count_cid <=", value, "countCid");
             return (Criteria) this;
         }
 
-        public Criteria andCountCidIn(List<Integer> values) {
+        public Criteria andCountCidLike(String value) {
+            addCriterion("count_cid like", value, "countCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountCidNotLike(String value) {
+            addCriterion("count_cid not like", value, "countCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountCidIn(List<String> values) {
             addCriterion("count_cid in", values, "countCid");
             return (Criteria) this;
         }
 
-        public Criteria andCountCidNotIn(List<Integer> values) {
+        public Criteria andCountCidNotIn(List<String> values) {
             addCriterion("count_cid not in", values, "countCid");
             return (Criteria) this;
         }
 
-        public Criteria andCountCidBetween(Integer value1, Integer value2) {
+        public Criteria andCountCidBetween(String value1, String value2) {
             addCriterion("count_cid between", value1, value2, "countCid");
             return (Criteria) this;
         }
 
-        public Criteria andCountCidNotBetween(Integer value1, Integer value2) {
+        public Criteria andCountCidNotBetween(String value1, String value2) {
             addCriterion("count_cid not between", value1, value2, "countCid");
             return (Criteria) this;
         }
@@ -351,6 +361,66 @@ public class CountEntryExample {
 
         public Criteria andCountPvNotBetween(Integer value1, Integer value2) {
             addCriterion("count_pv not between", value1, value2, "countPv");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalIsNull() {
+            addCriterion("count_interval is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalIsNotNull() {
+            addCriterion("count_interval is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalEqualTo(Integer value) {
+            addCriterion("count_interval =", value, "countInterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalNotEqualTo(Integer value) {
+            addCriterion("count_interval <>", value, "countInterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalGreaterThan(Integer value) {
+            addCriterion("count_interval >", value, "countInterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalGreaterThanOrEqualTo(Integer value) {
+            addCriterion("count_interval >=", value, "countInterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalLessThan(Integer value) {
+            addCriterion("count_interval <", value, "countInterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalLessThanOrEqualTo(Integer value) {
+            addCriterion("count_interval <=", value, "countInterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalIn(List<Integer> values) {
+            addCriterion("count_interval in", values, "countInterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalNotIn(List<Integer> values) {
+            addCriterion("count_interval not in", values, "countInterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalBetween(Integer value1, Integer value2) {
+            addCriterion("count_interval between", value1, value2, "countInterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountIntervalNotBetween(Integer value1, Integer value2) {
+            addCriterion("count_interval not between", value1, value2, "countInterval");
             return (Criteria) this;
         }
     }

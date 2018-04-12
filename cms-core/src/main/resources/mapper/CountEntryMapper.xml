@@ -5,16 +5,18 @@
     <constructor>
       <idArg column="count_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="count_type" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="count_cid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="count_cid" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="count_pv" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="count_interval" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.ganster.cms.core.pojo.CountEntry">
     <constructor>
       <idArg column="count_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="count_type" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="count_cid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="count_cid" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="count_pv" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="count_interval" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="count_time" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
     </constructor>
   </resultMap>
@@ -77,7 +79,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    count_id, count_type, count_cid, count_pv
+    count_id, count_type, count_cid, count_pv, count_interval
   </sql>
   <sql id="Blob_Column_List">
     count_time
@@ -132,9 +134,11 @@
   </delete>
   <insert id="insert" parameterType="com.ganster.cms.core.pojo.CountEntry">
     insert into cms_count (count_id, count_type, count_cid, 
-      count_pv, count_time)
-    values (#{countId,jdbcType=INTEGER}, #{countType,jdbcType=VARCHAR}, #{countCid,jdbcType=INTEGER}, 
-      #{countPv,jdbcType=INTEGER}, #{countTime,jdbcType=LONGVARCHAR})
+      count_pv, count_interval, count_time
+      )
+    values (#{countId,jdbcType=INTEGER}, #{countType,jdbcType=VARCHAR}, #{countCid,jdbcType=VARCHAR}, 
+      #{countPv,jdbcType=INTEGER}, #{countInterval,jdbcType=INTEGER}, #{countTime,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.CountEntry">
     insert into cms_count
@@ -151,6 +155,9 @@
       <if test="countPv != null">
         count_pv,
       </if>
+      <if test="countInterval != null">
+        count_interval,
+      </if>
       <if test="countTime != null">
         count_time,
       </if>
@@ -163,10 +170,13 @@
         #{countType,jdbcType=VARCHAR},
       </if>
       <if test="countCid != null">
-        #{countCid,jdbcType=INTEGER},
+        #{countCid,jdbcType=VARCHAR},
       </if>
       <if test="countPv != null">
         #{countPv,jdbcType=INTEGER},
+      </if>
+      <if test="countInterval != null">
+        #{countInterval,jdbcType=INTEGER},
       </if>
       <if test="countTime != null">
         #{countTime,jdbcType=LONGVARCHAR},
@@ -189,10 +199,13 @@
         count_type = #{record.countType,jdbcType=VARCHAR},
       </if>
       <if test="record.countCid != null">
-        count_cid = #{record.countCid,jdbcType=INTEGER},
+        count_cid = #{record.countCid,jdbcType=VARCHAR},
       </if>
       <if test="record.countPv != null">
         count_pv = #{record.countPv,jdbcType=INTEGER},
+      </if>
+      <if test="record.countInterval != null">
+        count_interval = #{record.countInterval,jdbcType=INTEGER},
       </if>
       <if test="record.countTime != null">
         count_time = #{record.countTime,jdbcType=LONGVARCHAR},
@@ -206,8 +219,9 @@
     update cms_count
     set count_id = #{record.countId,jdbcType=INTEGER},
       count_type = #{record.countType,jdbcType=VARCHAR},
-      count_cid = #{record.countCid,jdbcType=INTEGER},
+      count_cid = #{record.countCid,jdbcType=VARCHAR},
       count_pv = #{record.countPv,jdbcType=INTEGER},
+      count_interval = #{record.countInterval,jdbcType=INTEGER},
       count_time = #{record.countTime,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -217,8 +231,9 @@
     update cms_count
     set count_id = #{record.countId,jdbcType=INTEGER},
       count_type = #{record.countType,jdbcType=VARCHAR},
-      count_cid = #{record.countCid,jdbcType=INTEGER},
-      count_pv = #{record.countPv,jdbcType=INTEGER}
+      count_cid = #{record.countCid,jdbcType=VARCHAR},
+      count_pv = #{record.countPv,jdbcType=INTEGER},
+      count_interval = #{record.countInterval,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -230,10 +245,13 @@
         count_type = #{countType,jdbcType=VARCHAR},
       </if>
       <if test="countCid != null">
-        count_cid = #{countCid,jdbcType=INTEGER},
+        count_cid = #{countCid,jdbcType=VARCHAR},
       </if>
       <if test="countPv != null">
         count_pv = #{countPv,jdbcType=INTEGER},
+      </if>
+      <if test="countInterval != null">
+        count_interval = #{countInterval,jdbcType=INTEGER},
       </if>
       <if test="countTime != null">
         count_time = #{countTime,jdbcType=LONGVARCHAR},
@@ -244,16 +262,18 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ganster.cms.core.pojo.CountEntry">
     update cms_count
     set count_type = #{countType,jdbcType=VARCHAR},
-      count_cid = #{countCid,jdbcType=INTEGER},
+      count_cid = #{countCid,jdbcType=VARCHAR},
       count_pv = #{countPv,jdbcType=INTEGER},
+      count_interval = #{countInterval,jdbcType=INTEGER},
       count_time = #{countTime,jdbcType=LONGVARCHAR}
     where count_id = #{countId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.pojo.CountEntry">
     update cms_count
     set count_type = #{countType,jdbcType=VARCHAR},
-      count_cid = #{countCid,jdbcType=INTEGER},
-      count_pv = #{countPv,jdbcType=INTEGER}
+      count_cid = #{countCid,jdbcType=VARCHAR},
+      count_pv = #{countPv,jdbcType=INTEGER},
+      count_interval = #{countInterval,jdbcType=INTEGER}
     where count_id = #{countId,jdbcType=INTEGER}
   </update>
 </mapper>
