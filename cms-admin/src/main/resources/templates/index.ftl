@@ -9,6 +9,7 @@
     <script src="/util/util.js"></script>
     <script src="/util/jquery-editable-select.js"></script>
     <script src="/util/jquery.form.js"></script>
+    <script src="/js/echarts.js"></script>
     <link rel="stylesheet" href="/util/jquery-editable-select.css">
 </head>
 <body class="layui-layout-body">
@@ -55,18 +56,18 @@
 
 
             <#--模块选择区域-->
-        <#list moduleTreeList as tree>
-        <li class="layui-nav-item layui-nav-itemed">
-            <a href="javascript:;">${tree.module.moduleName}</a>
-            <dl class="layui-nav-child">
-                    <#list tree.list as module>
-                        <dd>
-                            <a onclick="showAtRight('/module${module.moduleUrl}')">${module.moduleName}</a>
-                        </dd>
-                    </#list>
-            </dl>
-        </li>
-        </#list>
+            <#list moduleTreeList as tree>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">${tree.module.moduleName}</a>
+                    <dl class="layui-nav-child">
+                        <#list tree.list as module>
+                            <dd>
+                                <a onclick="showAtRight('/module${module.moduleUrl}')">${module.moduleName}</a>
+                            </dd>
+                        </#list>
+                    </dl>
+                </li>
+            </#list>
 
             </ul>
         </div>
@@ -88,16 +89,27 @@
 <script>
     var siteId;
     <#if siteList?size!=0>
-        siteId = ${siteList[0].siteId};
-        init(${siteList[0].siteId}, '${siteList[0].siteName}');
+    siteId = ${siteList[0].siteId};
+    init(${siteList[0].siteId}, '${siteList[0].siteName}');
     </#if>
     var category = -1;
+    var currentSite;
 
     function init(id, name) {
         siteId = id;
         layer.msg("当前站点:" + name, {icon: 6});
         $("#choose_site_" + id).addClass("layui-this");
+        $.ajax({
+            'url': '/site/details/' + id
+            , 'success': function (data) {
+                currentSite = data;
+            }
+            , 'async': false
+            , 'dataType': 'json'
+        })
     }
+
+    showAtRight("/module/count.html");
 </script>
 
 

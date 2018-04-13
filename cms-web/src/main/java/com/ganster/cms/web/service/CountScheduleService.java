@@ -56,7 +56,7 @@ public class CountScheduleService {
         CountEntry entry = new CountEntry();
         entry.setCountType(type);
         entry.setCountCid(id);
-        entry.setCountTime(String.valueOf(Calendar.getInstance().getTimeInMillis()));
+        entry.setCountTime(Calendar.getInstance().getTimeInMillis());
         entry.setCountPv(count.get());
         entry.setCountInterval((int) countInterval);
         countService.insert(entry);

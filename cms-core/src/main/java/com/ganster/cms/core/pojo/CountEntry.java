@@ -11,27 +11,19 @@ public class CountEntry implements Serializable {
 
     private Integer countPv;
 
-    private Integer countInterval;
+    private Long countTime;
 
-    private String countTime;
+    private Integer countInterval;
 
     private static final long serialVersionUID = 1L;
 
-    public CountEntry(Integer countId, String countType, String countCid, Integer countPv, Integer countInterval) {
+    public CountEntry(Integer countId, String countType, String countCid, Integer countPv, Long countTime, Integer countInterval) {
         this.countId = countId;
         this.countType = countType;
         this.countCid = countCid;
         this.countPv = countPv;
-        this.countInterval = countInterval;
-    }
-
-    public CountEntry(Integer countId, String countType, String countCid, Integer countPv, Integer countInterval, String countTime) {
-        this.countId = countId;
-        this.countType = countType;
-        this.countCid = countCid;
-        this.countPv = countPv;
-        this.countInterval = countInterval;
         this.countTime = countTime;
+        this.countInterval = countInterval;
     }
 
     public CountEntry() {
@@ -70,20 +62,20 @@ public class CountEntry implements Serializable {
         this.countPv = countPv;
     }
 
+    public Long getCountTime() {
+        return countTime;
+    }
+
+    public void setCountTime(Long countTime) {
+        this.countTime = countTime;
+    }
+
     public Integer getCountInterval() {
         return countInterval;
     }
 
     public void setCountInterval(Integer countInterval) {
         this.countInterval = countInterval;
-    }
-
-    public String getCountTime() {
-        return countTime;
-    }
-
-    public void setCountTime(String countTime) {
-        this.countTime = countTime == null ? null : countTime.trim();
     }
 
     @Override
@@ -102,8 +94,8 @@ public class CountEntry implements Serializable {
             && (this.getCountType() == null ? other.getCountType() == null : this.getCountType().equals(other.getCountType()))
             && (this.getCountCid() == null ? other.getCountCid() == null : this.getCountCid().equals(other.getCountCid()))
             && (this.getCountPv() == null ? other.getCountPv() == null : this.getCountPv().equals(other.getCountPv()))
-            && (this.getCountInterval() == null ? other.getCountInterval() == null : this.getCountInterval().equals(other.getCountInterval()))
-            && (this.getCountTime() == null ? other.getCountTime() == null : this.getCountTime().equals(other.getCountTime()));
+            && (this.getCountTime() == null ? other.getCountTime() == null : this.getCountTime().equals(other.getCountTime()))
+            && (this.getCountInterval() == null ? other.getCountInterval() == null : this.getCountInterval().equals(other.getCountInterval()));
     }
 
     @Override
@@ -114,8 +106,8 @@ public class CountEntry implements Serializable {
         result = prime * result + ((getCountType() == null) ? 0 : getCountType().hashCode());
         result = prime * result + ((getCountCid() == null) ? 0 : getCountCid().hashCode());
         result = prime * result + ((getCountPv() == null) ? 0 : getCountPv().hashCode());
-        result = prime * result + ((getCountInterval() == null) ? 0 : getCountInterval().hashCode());
         result = prime * result + ((getCountTime() == null) ? 0 : getCountTime().hashCode());
+        result = prime * result + ((getCountInterval() == null) ? 0 : getCountInterval().hashCode());
         return result;
     }
 
@@ -129,8 +121,8 @@ public class CountEntry implements Serializable {
         sb.append(", countType=").append(countType);
         sb.append(", countCid=").append(countCid);
         sb.append(", countPv=").append(countPv);
-        sb.append(", countInterval=").append(countInterval);
         sb.append(", countTime=").append(countTime);
+        sb.append(", countInterval=").append(countInterval);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
