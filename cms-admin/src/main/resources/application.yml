@@ -21,9 +21,9 @@ spring:
       remove-abandoned: true
       filters: stat
   jackson:
-    date-format: yyyy-MM-DD
-#  thymeleaf:
-#     mode: LEGACYHTML5
+    date-format: yyyy-MM-dd
+  thymeleaf:
+    cache: false
 #  http:
 #    multipart:
 #      max-file-size: 3MB

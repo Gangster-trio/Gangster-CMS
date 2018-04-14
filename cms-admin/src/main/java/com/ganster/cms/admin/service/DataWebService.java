@@ -1,19 +1,18 @@
 package com.ganster.cms.admin.service;
 
-import com.ganster.cms.core.pojo.CountEntry;
-import com.ganster.cms.core.pojo.CountEntryExample;
-import com.ganster.cms.core.pojo.LogEntry;
-import com.ganster.cms.core.pojo.LogEntryExample;
+import com.ganster.cms.core.pojo.*;
+import com.ganster.cms.core.service.ArticleService;
+import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.service.CountService;
 import com.ganster.cms.core.service.LogService;
 import com.ganster.cms.core.util.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DataWebService {
@@ -23,10 +22,18 @@ public class DataWebService {
     private final
     CountService countService;
 
+    private final
+    ArticleService articleService;
+
+    private final
+    CategoryService categoryService;
+
     @Autowired
-    public DataWebService(LogService logService, CountService countService) {
+    public DataWebService(LogService logService, CountService countService, ArticleService articleService, CategoryService categoryService) {
         this.logService = logService;
         this.countService = countService;
+        this.articleService = articleService;
+        this.categoryService = categoryService;
     }
 
     public PageInfo<LogEntry> getLog(int page, int limit, String logType, String logLevel) {
@@ -37,6 +44,7 @@ public class DataWebService {
         if (logType != null) {
             entryExample.or().andLogTypeEqualTo(logType);
         }
+        entryExample.setOrderByClause("log_time desc");
         return PageHelper
                 .startPage(page, limit)
                 .doSelectPageInfo(() -> logService.selectByExampleWithBLOBs(entryExample));
@@ -60,7 +68,7 @@ public class DataWebService {
                 .doSelectPageInfo(() -> countService.selectByExample(entryExample));
     }
 
-    public List getMostView(String type, Long start, Long end, Integer interval, Integer limit, Integer page) {
+    private List<CountMapEntry> getMostView(String type, Long start, Long end, Integer interval, Integer limit, Integer page) {
         CountEntryExample entryExample = new CountEntryExample();
         CountEntryExample.Criteria criteria = entryExample.or();
         if (!StringUtil.isNullOrEmpty(type))
@@ -74,18 +82,83 @@ public class DataWebService {
         PageInfo<CountEntry> info = PageHelper
                 .startPage(page, limit)
                 .doSelectPageInfo(() -> countService.selectByExample(entryExample));
-        Map<String, Integer> map = new HashMap<>();
-        info.getList().forEach(entry -> {
-            String cid = entry.getCountCid();
-            Integer t = map.get(cid);
-            if (t == null) {
-                t = 0;
-            }
-            t += entry.getCountPv();
-            map.put(cid, t);
-        });
-        List<Map.Entry<String, Integer>> list = new ArrayList<>(map.entrySet());
-        list.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+        return info.getList().stream()
+                .map(e -> new CountMapEntry(e.getCountCid(), e.getCountPv()))
+                .sorted(Comparator.comparing(e -> e.pv))
+                .collect(Collectors.toList());
+    }
+
+
+    public List getArticleMostView(Long start, Long end, Integer interval, Integer limit, Integer page) {
+        List<CountMapEntry> list = getMostView("article", start, end, interval, limit, page);
+        List<Map.Entry<String, Integer>> newList = new ArrayList<>();
+
+        List<Integer> idList = list.stream()
+                .map(e -> Integer.parseInt(e.cid))
+                .collect(Collectors.toList());
+        if (idList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        ArticleExample example = new ArticleExample();
+        example.or().andArticleIdIn(idList);
+        List<Article> articles = articleService.selectByExample(example);
+
+        //文章ID与文章标题Map
+        Map<Integer, String> map = new HashMap<>();
+        articles.forEach(a -> map.put(a.getArticleId(), a.getArticleTitle()));
+
+        //将id转换为文章标题
+        list.forEach(e -> e.cid = map.get(Integer.parseInt(e.cid)));
         return list;
+    }
+
+    public List getCategoryMostView(Long start, Long end, Integer interval, Integer limit, Integer page) {
+        List<CountMapEntry> list = getMostView("category", start, end, interval, limit, page);
+
+        List<Integer> idList = list.stream()
+                .map(e -> Integer.parseInt(e.cid))
+                .collect(Collectors.toList());
+        if (idList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        CategoryExample example = new CategoryExample();
+        example.or().andCategoryIdIn(idList);
+        List<Category> articles = categoryService.selectByExample(example);
+
+        //栏目ID与栏目标题Map
+        Map<Integer, String> map = new HashMap<>();
+        articles.forEach(a -> map.put(a.getCategoryId(), a.getCategoryTitle()));
+
+        //将id转换为栏目标题
+        list.forEach(e -> e.cid = map.get(Integer.parseInt(e.cid)));
+        return list;
+    }
+
+    class CountMapEntry {
+        private String cid;
+        private Integer pv;
+
+        public String getCid() {
+            return cid;
+        }
+
+        public void setCid(String cid) {
+            this.cid = cid;
+        }
+
+        public Integer getPv() {
+            return pv;
+        }
+
+        public void setPv(Integer pv) {
+            this.pv = pv;
+        }
+
+        CountMapEntry(String cid, Integer pv) {
+            this.cid = cid;
+            this.pv = pv;
+        }
     }
 }

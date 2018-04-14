@@ -15,7 +15,7 @@
             data: {type: 'site', cid: s_url, start: start, end: end, interval: interval},
             dataType: 'json',
             success: function (data) {
-                var option = getCountOption(data,"一周内站点PV统计");
+                var option = getSiteCountOption(data, "一周内站点PV统计");
                 // 基于准备好的dom，初始化echarts实例
                 var myChart = echarts.init(document.getElementById('site_chart'));
                 myChart.setOption(option);
@@ -53,7 +53,7 @@
         })
     }
 
-    function getCountOption(dataList, title) {
+    function getSiteCountOption(dataList, title) {
         var xdata = [];
         var ydata = [];
         console.log(dataList);
@@ -70,12 +70,23 @@
                 text: title
             },
             xAxis: {
-                data: xdata
+                data: xdata,
+                type:"category",
+                axisPointer:{
+                    type:"line",
+                    show:true
+                }
+            },
+            tooltip:{
+                axisPointer:{
+                    axis:'y'
+                }
             },
             yAxis: {},
             series: [{
-                type: "bar",
-                data: ydata
+                type: "line",
+                data: ydata,
+                smooth: true
             }]
         }
     }
@@ -86,10 +97,8 @@
         console.log(list);
         $.each(list.data, function (index, entry) {
             console.log(entry);
-            $.each(entry,function (k, v) {
-                xdata.push(k);
-                ydata.push(v);
-            });
+                xdata.push(entry.cid);
+                ydata.push(entry.pv);
         });
         console.log(xdata);
         console.log(ydata);
@@ -98,9 +107,18 @@
                 text: title
             },
             xAxis: {
-                data: xdata
+                data: xdata,
+                axisPointer:{
+                    type:"line",
+                    show:true
+                }
             },
             yAxis: {},
+            tooltip:{
+                axisPointer:{
+                    axis:'y'
+                }
+            },
             series: [{
                 type: "bar",
                 data: ydata

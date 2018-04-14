@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.jvm.hotspot.utilities.Interval;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -52,10 +54,20 @@ public class DataController {
     public AjaxData mostView(@RequestParam("type") String type
             , @RequestParam(value = "start", defaultValue = "0") Long start
             , @RequestParam(value = "end", defaultValue = "0") Long end
-            , @RequestParam("interval") Integer integer
+            , @RequestParam("interval") Integer interval
             , @RequestParam(value = "limit", defaultValue = "10") Integer limit
             , @RequestParam(value = "page", defaultValue = "1") Integer page) {
-        List list = dataWebService.getMostView(type, start, end, integer, limit, page);
+        List list;
+        switch (type) {
+            case "article":
+                list = dataWebService.getArticleMostView(start, end, interval, limit, page);
+                break;
+            case "category":
+                list = dataWebService.getCategoryMostView(start, end, interval, limit, page);
+                break;
+            default:
+                return new AjaxData(1, "type参数错误", 0, null);
+        }
         return new AjaxData(0, "ok", list.size(), list);
     }
 }

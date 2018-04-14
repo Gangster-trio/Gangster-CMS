@@ -3,7 +3,6 @@ package com.ganster.cms.core.service.impl;
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
 import com.ganster.cms.core.dao.mapper.GroupPermissionMapper;
 import com.ganster.cms.core.dao.mapper.PermissionMapper;
-import com.ganster.cms.core.dao.mapper.UserGroupMapper;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.*;
@@ -16,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,6 +76,8 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
                 .distinct()
                 .collect(Collectors.toList());
         PermissionExample permissionExample = new PermissionExample();
+        if (pidSet.isEmpty())
+            return Collections.emptySet();
         permissionExample.or().andPermissionIdIn(pidSet);
         return new HashSet<>(selectByExample(permissionExample));
         //old
