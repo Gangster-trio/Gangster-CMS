@@ -20,18 +20,19 @@ public class CategoryWithParent extends Category {
 
     public CategoryWithParent(String parentName, Category category) {
         super(category.getCategoryId()
-                ,category.getCategoryTitle()
-                ,category.getCategoryCreateTime()
-                ,category.getCategoryUpdateTime()
-                ,category.getCategoryParentId()
-                ,category.getCategoryLevel()
-                ,category.getCategorySiteId()
-                ,category.getCategoryStatus()
-                ,category.getCategoryDesc()
-                ,category.getCategoryOrder()
-                ,category.getCategorySkin()
-                ,category.getCategoryType()
+                , category.getCategoryTitle()
+                , category.getCategoryCreateTime()
+                , category.getCategoryUpdateTime()
+                , category.getCategoryParentId()
+                , category.getCategoryLevel()
+                , category.getCategorySiteId()
+                , category.getCategoryStatus()
+                , category.getCategoryDesc()
+                , category.getCategoryOrder()
+                , category.getCategorySkin()
+                , category.getCategoryType()
                 , category.getCategoryInHomepage()
+                , category.getCategoryHit()
         );
         this.parentName = parentName;
     }

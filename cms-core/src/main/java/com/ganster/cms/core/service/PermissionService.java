@@ -2,35 +2,35 @@ package com.ganster.cms.core.service;
 
 import com.ganster.cms.core.base.BaseService;
 import com.ganster.cms.core.exception.GroupNotFountException;
-import com.ganster.cms.core.exception.PermissionNotFoundException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.Permission;
 import com.ganster.cms.core.pojo.PermissionExample;
 import com.ganster.cms.core.pojo.Site;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PermissionService extends BaseService<Permission,PermissionExample> {
 
-    List<Permission> selectByUserId(Integer id) throws GroupNotFountException;
+    List<Permission> selectByUserId(Integer id);
 
-    List<Permission> selectByGroupId(Integer id) throws GroupNotFountException;
+    Set<Permission> selectByGroupId(Integer id);
 
-    List<Permission> selectByGroupName(String name) throws GroupNotFountException;
+    Set<Permission> selectByGroupName(String name);
 
-    void deleteUserPermission(Integer userId, Integer sid, Integer cid, String pName) throws UserNotFoundException, GroupNotFountException, PermissionNotFoundException;
+    void deleteUserPermission(Integer userId, Integer sid, Integer cid, String pName) throws UserNotFoundException;
 
-    void deleteGroupPermission(Integer groupId, Integer sid, Integer cid, String pName) throws GroupNotFountException;
+    void deleteGroupPermission(Integer groupId, Integer sid, Integer cid, String pName);
 
     Boolean hasCategoryPermission(Integer uid, Integer sid, Integer cid, String pName);
 
     Boolean hasModulePermission(Integer uid, Integer sid, Integer moduleId, String pName);
 
-    Boolean hasSitePermission(Integer uid, Integer sid) throws GroupNotFountException;
+    Boolean hasSitePermission(Integer uid, Integer sid);
 
-    void addCategoryPermissionToUser(Integer uid, Integer sid, Integer cid, String pName) throws GroupNotFountException, UserNotFoundException;
+    void addCategoryPermissionToUser(Integer uid, Integer sid, Integer cid, String pName) throws UserNotFoundException;
 
-    void addModulePermissionToUser(Integer uid, Integer sid, Integer moduleId, String pName) throws UserNotFoundException, GroupNotFountException;
+    void addModulePermissionToUser(Integer uid, Integer sid, Integer moduleId, String pName) throws UserNotFoundException;
 
     void addCategoryPermissionToGroup(Integer gid, Integer sid, Integer cid, String pName);
 
@@ -38,11 +38,11 @@ public interface PermissionService extends BaseService<Permission,PermissionExam
 
     void addSitePermissionToGroup(Integer sid,Integer gid);
 
-    void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException, GroupNotFountException;
+    void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException;
 
-    List<Site> findAllUserSite(Integer uid) throws GroupNotFountException;
+    List<Site> findAllUserSite(Integer uid) ;
 
-    void deleteUserFromSite(Integer uid, Integer sid) throws GroupNotFountException, UserNotFoundException;
+    void deleteUserFromSite(Integer uid, Integer sid) throws UserNotFoundException;
 
     /**
      * delete permission and permission-group map

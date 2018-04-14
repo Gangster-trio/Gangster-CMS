@@ -6,14 +6,23 @@ import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.service.SiteService;
 import com.ganster.cms.core.service.TagService;
+import com.ganster.cms.web.cache.impl.HashMapCache;
 import com.ganster.cms.web.dto.ModelResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * @author bigmeng
+ */
 @Service
 public class WebService {
+    private final Logger logger = LoggerFactory.getLogger(WebService.class);
+
     private final
     SiteService siteService;
 
@@ -25,6 +34,10 @@ public class WebService {
 
     private final TagService tagService;
 
+    private HashMapCache<String, ModelResult> siteModelCache = new HashMapCache<>();
+    private HashMapCache<Integer, ModelResult> articleModelCache = new HashMapCache<>();
+    private HashMapCache<Integer, ModelResult> categoryModelCache = new HashMapCache<>();
+
     public WebService(SiteService siteService, ArticleService articleService, CategoryService categoryService, TagService tagService) {
         this.siteService = siteService;
         this.articleService = articleService;
@@ -33,6 +46,15 @@ public class WebService {
     }
 
     public ModelResult getSiteModel(String siteUrl) {
+
+        if (siteModelCache.containsKey(siteUrl)) {
+            ModelResult r = siteModelCache.get(siteUrl);
+            Site s = (Site) r.get("site");
+            addSiteHit(s);
+            logger.info("get SiteModel:{} from cache",siteUrl);
+            return r;
+        }
+
         ModelResult result = new ModelResult();
 
         //---------------------------------------default properties start----------------------------------------------//
@@ -51,10 +73,8 @@ public class WebService {
         categoryExample.or().andCategorySiteIdEqualTo(site.getSiteId()).andCategoryLevelEqualTo(0);
         List<Category> categoryList = categoryService.selectByExample(categoryExample);
         //Each level 0 category into category tree
-        List<CategoryTree> categoryTreeList = new ArrayList<>();
-        for (Category category : categoryList) {
-            categoryTreeList.add(categoryService.toTree(category));
-        }
+        List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryService::toTree).collect(Collectors.toList());
+
 
         //Get a list of categories to put on the home page (with short article info)
         categoryExample.clear();
@@ -95,16 +115,8 @@ public class WebService {
         */
         categoryExample.clear();
         categoryExample.or().andCategoryInHomepageEqualTo(true).andCategorySiteIdEqualTo(site.getSiteId());
-        List<Category> homePageCategoryList = categoryService.selectByExample(categoryExample);
-        for (Category category : homePageCategoryList) {
-            List list = (List) result.get(category.getCategoryType());
-            //put (category with article list) to (home page category list)
-            if (list == null) {
-                list = new ArrayList<>();
-                result.put(category.getCategoryType(), list);
-            }
-            list.add(category);
-        }
+        result.getMap().putAll(categoryService.selectByExample(categoryExample).stream()
+                .collect(Collectors.groupingBy(Category::getCategoryType)));
 
         /*
         The custom type article Need to pass to the home page
@@ -118,20 +130,33 @@ public class WebService {
         */
         articleExample.clear();
         articleExample.or().andArticleInHomepageEqualTo(true).andArticleSiteIdEqualTo(site.getSiteId());
-        List<Article> homePageArticleList = articleService.selectByExample(articleExample);
-        for (Article article : homePageArticleList) {
-            List list = (List) result.get(article.getArticleType());
-            if (list == null) {
-                list = new ArrayList();
-                result.put(article.getArticleType(), list);
-            }
-            list.add(article);
-        }
+        result.getMap().putAll(articleService.selectByExample(articleExample).parallelStream()
+                .collect(Collectors.groupingBy(Article::getArticleType)));
+
+        addSiteHit(site);
+
+        siteModelCache.put(siteUrl, result);
         return result;
+    }
+
+    private void addSiteHit(Site site) {
+        if (site.getSiteHit() == null) {
+            site.setSiteHit(0);
+        }
+        site.setSiteHit(site.getSiteHit() + 1);
+        siteService.updateByPrimaryKey(site);
     }
 
 
     public ModelResult getCategoryModel(Integer id) {
+        if (categoryModelCache.containsKey(id)) {
+            ModelResult r = categoryModelCache.get(id);
+            Category c = (Category) r.get("category");
+            addCategoryHit(c);
+            logger.info("get CategoryModel:{} from cache",id);
+            return r;
+        }
+
         ModelResult result = new ModelResult();
 
         Category category = categoryService.selectByPrimaryKey(id);
@@ -151,10 +176,7 @@ public class WebService {
         categoryExample.or().andCategorySiteIdEqualTo(category.getCategorySiteId()).andCategoryLevelEqualTo(0);
         List<Category> categoryList = categoryService.selectByExample(categoryExample);
         //Each level 0 category into category tree
-        List<CategoryTree> categoryTreeList = new ArrayList<>();
-        for (Category c : categoryList) {
-            categoryTreeList.add(categoryService.toTree(c));
-        }
+        List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryService::toTree).collect(Collectors.toList());
 
         //Get this category's article list (without BLOBs)
         ArticleExample articleExample = new ArticleExample();
@@ -166,10 +188,31 @@ public class WebService {
                 .put("category", category)
                 .put("site", site);
 
+        addCategoryHit(category);
+
+        categoryModelCache.put(id, result);
         return result;
     }
 
+    private void addCategoryHit(Category category) {
+        Integer hit = category.getCategoryHit();
+        if (hit == null) {
+            category.setCategoryHit(0);
+            hit = 0;
+        }
+        category.setCategoryHit(hit + 1);
+        categoryService.updateByPrimaryKey(category);
+    }
+
     public ModelResult getArticleModel(Integer id) {
+        if (articleModelCache.containsKey(id)) {
+            ModelResult r = articleModelCache.get(id);
+            Article a = (Article) r.get("article");
+            addArticleHit(a);
+            logger.info("get ArticleModel:{} from cache",id);
+            return r;
+        }
+
         Article article = articleService.selectByPrimaryKey(id);
         ModelResult result = new ModelResult();
 
@@ -191,10 +234,7 @@ public class WebService {
         categoryExample.or().andCategorySiteIdEqualTo(article.getArticleSiteId()).andCategoryLevelEqualTo(0);
         List<Category> categoryList = categoryService.selectByExample(categoryExample);
         //Each level 0 category into category tree
-        List<CategoryTree> categoryTreeList = new ArrayList<>();
-        for (Category c : categoryList) {
-            categoryTreeList.add(categoryService.toTree(c));
-        }
+        List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryService::toTree).collect(Collectors.toList());
 
         result.put("category", category)
                 .put("article", article)
@@ -202,6 +242,13 @@ public class WebService {
                 .put("categoryTreeList", categoryTreeList)
                 .put("site", site);
 
+        addArticleHit(article);
+
+        articleModelCache.put(id, result);
+        return result;
+    }
+
+    private void addArticleHit(Article article) {
         //hit add
         if (article.getArticleHit() == null) {
             article.setArticleHit(0);
@@ -209,7 +256,14 @@ public class WebService {
 
         article.setArticleHit(article.getArticleHit() + 1);
         articleService.updateByPrimaryKeySelective(article);
+    }
 
-        return result;
+    //5分钟刷新一次缓存
+    @Scheduled(fixedDelay = 1000 * 60 * 5)
+    private void flushCache() {
+        categoryModelCache.clear();
+        articleModelCache.clear();
+        siteModelCache.clear();
+        logger.info("refresh cache");
     }
 }

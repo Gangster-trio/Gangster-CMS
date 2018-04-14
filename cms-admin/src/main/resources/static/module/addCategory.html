@@ -69,7 +69,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button lay-submit class="layui-btn" lay-filter="createCategory">立即提交</button>
+                <button id="categorySubmit" lay-submit class="layui-btn" lay-filter="createCategory">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
@@ -96,9 +96,8 @@
         var form = layui.form;
         form.render();
         form.on('submit(createCategory)', function () {
-            layui.layer.alert("enter form on func");
+            $("#categorySubmit").attr('disable', true);
             submitCategory();
-            layui.layer.alert("end");
             return false;
         });
 

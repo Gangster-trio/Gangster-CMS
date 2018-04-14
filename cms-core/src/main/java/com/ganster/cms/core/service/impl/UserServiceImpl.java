@@ -16,19 +16,22 @@ import java.util.Date;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExample> implements UserService {
     @Autowired
+    private
     GroupService groupService;
 
     @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private
     UserGroupMapper userGroupMapper;
+
+    private static final String ADMIN = "admin";
 
     @Override
     public void deleteUser(Integer userId) throws UserNotFoundException {
         //delete user's own group
-        try {
-            Group group = groupService.findUserOwnGroup(userId);
-            groupService.deleteGroup(group.getGroupId());
-        } catch (GroupNotFountException ignored) {
-        }
+        Group group = groupService.findUserOwnGroup(userId);
+        groupService.deleteGroup(group.getGroupId());
         //delete user-group map
         UserGroupExample userGroupExample = new UserGroupExample();
         userGroupExample.or().andUserIdEqualTo(userId);
@@ -56,4 +59,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
         userGroupMapper.insert(userGroup);
         return ret;
     }
+
+    @Override
+    public boolean isAdmin(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        return ADMIN.equals(user.getUserName());
+    }
+
 }

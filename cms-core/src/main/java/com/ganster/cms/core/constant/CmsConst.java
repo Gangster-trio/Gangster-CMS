@@ -1,5 +1,7 @@
 package com.ganster.cms.core.constant;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
+
 public class CmsConst {
 
     //放置在主页上的目录
@@ -32,4 +34,20 @@ public class CmsConst {
     public static final String PERMISSION_READ = "READ";
 
     public static final String PERMISSION_WRITE = "WRITE";
+
+    public static final String LOG_ERR = "error";
+
+    public static final String LOG_INFO = "info";
+
+    public static final String LOG_DEBUG = "debug";
+
+    public static final String LOG_ACCESS = "access_log";
+
+    public static final String LOG_MODIFY = "modify_log";
+    // 通过
+    public static final Integer ACCESS = 1;
+    // 审核中
+    public static final Integer REVIEW = 0;
+    // 未通过
+    public static final Integer UNACCESS = 2;
 }

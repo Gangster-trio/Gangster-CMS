@@ -53,9 +53,7 @@ public class PermissionServiceImplTest {
         System.out.println(group.getGroupId());
         try {
             groupService.addUserToGroup(user.getUserId(), group.getGroupId());
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        } catch (GroupNotFountException e) {
+        } catch (UserNotFoundException | GroupNotFountException e) {
             e.printStackTrace();
         }
 
@@ -63,21 +61,13 @@ public class PermissionServiceImplTest {
             permissionService.addUserToSite(user.getUserId(), site.getSiteId());
         } catch (UserNotFoundException e) {
             e.printStackTrace();
-        } catch (GroupNotFountException e) {
-            e.printStackTrace();
         }
 
-        try {
-            List<Site> siteList = permissionService.findAllUserSite(user.getUserId());
-            System.out.println(siteList);
-        } catch (GroupNotFountException e) {
-            e.printStackTrace();
-        }
+        List<Site> siteList = permissionService.findAllUserSite(user.getUserId());
+        System.out.println(siteList);
 
         try {
             permissionService.addCategoryPermissionToUser(user.getUserId(), site.getSiteId(), 3, CmsConst.PERMISSION_READ);
-        } catch (GroupNotFountException e) {
-            e.printStackTrace();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }

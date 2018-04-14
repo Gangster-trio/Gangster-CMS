@@ -2,6 +2,10 @@ package com.ganster.cms.web.controller;
 
 import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.Site;
+import com.ganster.cms.web.annotation.AccessCount;
+import com.ganster.cms.web.annotation.AccessLogger;
+import com.ganster.cms.web.annotation.CountParam;
+import com.ganster.cms.web.annotation.CountType;
 import com.ganster.cms.web.dto.ModelResult;
 import com.ganster.cms.web.service.WebService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Optional;
 
 @Controller
 public class SiteController {
@@ -21,17 +27,23 @@ public class SiteController {
     }
 
 
+    @AccessCount(CountType.SITE)
+    @AccessLogger
     @RequestMapping("/{siteUrl}")
-    public String show(@PathVariable("siteUrl") String siteUrl, Model model) {
+    public String show(@CountParam @PathVariable("siteUrl") String siteUrl, Model model) {
 
         ModelResult result = webService.getSiteModel(siteUrl);
+
+        if (result == null) {
+            return "404";
+        }
 
         //Add result to module
         model.addAttribute("result", result);
 
         Site site = (Site) result.get("site");
 
-        //If skin = null, set default skin
+        //If skin = null, put default skin
         if (site.getSiteSkin() == null) {
             site.setSiteSkin(CmsConst.DEFAULT_SKIN);
         }

@@ -1,5 +1,7 @@
 <!--添加文章的按钮-->
-<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="batchDelete" data-type="batchDelete">批量删除</button>
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="batchDelete" data-type="batchDelete">
+    批量删除
+</button>
 <button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="article">添加文章</button>
 </div>
 <div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
@@ -47,9 +49,9 @@
                 , {field: 'articleCreateTime', width: 110, title: '创建时间', sort: true}
                 , {field: 'articleUpdateTime', width: 110, title: '更新时间', sort: true}
                 , {field: 'articleThumb', width: 150, title: 'Thumb'}
+                , {field: 'articleStatus', width: 80, title: '状态'}
                 , {title: '操作', align: 'center', toolbar: '#articleToolBar'}
             ]]//            数据渲染后回调
-            // , limit: 1
             ,
             limits: [10, 15, 20, 40, 80, 100]
             ,
@@ -78,7 +80,6 @@
                     //删除文章的权限判断及实现
                     if (layEvent === 'del') {
                         layer.confirm('真的删除行么', function (index) {
-                            console.log(data);
                             $.ajax({
                                 url: "/article/delete/" + data.articleId,
                                 type: 'get',

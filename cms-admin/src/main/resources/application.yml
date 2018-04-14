@@ -21,9 +21,9 @@ spring:
       remove-abandoned: true
       filters: stat
   jackson:
-    date-format: yyyy-MM-DD
-#  thymeleaf:
-#     mode: LEGACYHTML5
+    date-format: yyyy-MM-dd
+  thymeleaf:
+    cache: false
 #  http:
 #    multipart:
 #      max-file-size: 3MB
@@ -36,3 +36,7 @@ mybatis:
 management:
   security:
     enabled: false
+#cms:
+#  common:  可配置超级管理员的名称
+#    admi:
+#      name:

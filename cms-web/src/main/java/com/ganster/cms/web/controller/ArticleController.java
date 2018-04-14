@@ -2,6 +2,10 @@ package com.ganster.cms.web.controller;
 
 import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.Article;
+import com.ganster.cms.web.annotation.AccessCount;
+import com.ganster.cms.web.annotation.AccessLogger;
+import com.ganster.cms.web.annotation.CountParam;
+import com.ganster.cms.web.annotation.CountType;
 import com.ganster.cms.web.dto.ModelResult;
 import com.ganster.cms.web.service.WebService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +25,10 @@ public class ArticleController {
         this.webService = webService;
     }
 
+    @AccessLogger()
+    @AccessCount(value = CountType.ARTICLE)
     @RequestMapping("{id}")
-    public String show(@PathVariable("id") Integer id, Model model) {
+    public String show(@CountParam @PathVariable("id") Integer id, Model model) {
 
         ModelResult result = webService.getArticleModel(id);
 
@@ -34,7 +40,7 @@ public class ArticleController {
 
         Article article = (Article) result.get("article");
 
-        //If skin = null, set default skin
+        //If skin = null, put default skin
         if (article.getArticleSkin() == null) {
             article.setArticleSkin(CmsConst.DEFAULT_SKIN);
         }

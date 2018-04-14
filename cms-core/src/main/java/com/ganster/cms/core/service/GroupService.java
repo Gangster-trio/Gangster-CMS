@@ -17,7 +17,7 @@ public interface GroupService extends BaseService<Group,GroupExample> {
 
     List<User> selectUserByGroupName(String name) throws GroupNotFountException;
 
-    Group findUserOwnGroup(Integer userId) throws UserNotFoundException, GroupNotFountException;
+    Group findUserOwnGroup(Integer userId) throws UserNotFoundException;
 
     void addUserToGroup(Integer Uid,Integer Gid) throws UserNotFoundException, GroupNotFountException;
 

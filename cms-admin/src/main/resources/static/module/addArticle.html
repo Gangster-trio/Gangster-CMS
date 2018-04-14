@@ -97,7 +97,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button lay-submit class="layui-btn" lay-filter="createArticle">立即提交</button>
+                <button id="articleSubmit" lay-submit class="layui-btn" lay-filter="createArticle">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
@@ -111,9 +111,9 @@
         var form = layui.form, upload = layui.upload, layedit = layui.layedit;
         form.render();
         form.on('submit(createArticle)', function () {
-            layui.layer.alert("enter form on func");
+            // 设置按钮不可点击
+            $("#articleSubmit").attr('disabled', true);
             submitArticleCreate();
-            layui.layer.alert("end");
             return false;
         });
 
@@ -220,7 +220,10 @@
                     layui.layer.alert("failed. " + resp)
                 },
                 success: function (resp) {
-                    layui.layer.alert("添加成功 :" + resp);
+                    if (resp.code === 2) {
+                        layui.layer.alert(resp.msg);
+                    }
+                    layui.layer.alert("添加成功");
                     showAtRight("/module/listArticle.html");
                 }
             })

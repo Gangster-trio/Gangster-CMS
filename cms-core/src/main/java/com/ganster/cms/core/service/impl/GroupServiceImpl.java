@@ -33,9 +33,6 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper, Group, GroupE
         UserGroupExample userGroupExample = new UserGroupExample();
         userGroupExample.or().andUserIdEqualTo(id);
         List<UserGroup> userGroupList = userGroupMapper.selectByExample(userGroupExample);
-        if (userGroupList == null) {
-            return new ArrayList<>();
-        }
         List<Group> groupList = new ArrayList<>();
         for (UserGroup ug : userGroupList) {
             groupList.add(selectByPrimaryKey(ug.getGroupId()));
@@ -58,7 +55,7 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper, Group, GroupE
     }
 
     @Override
-    public Group findUserOwnGroup(Integer userId) throws UserNotFoundException, GroupNotFountException {
+    public Group findUserOwnGroup(Integer userId) throws UserNotFoundException {
         User user = userService.selectByPrimaryKey(userId);
         if (user == null) {
             throw new UserNotFoundException(userId.toString());
@@ -67,21 +64,31 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper, Group, GroupE
         UserGroupExample userGroupExample = new UserGroupExample();
         userGroupExample.or().andUserIdEqualTo(userId);
         List<UserGroup> userGroupList = userGroupMapper.selectByExample(userGroupExample);
-        if (userGroupList == null || userGroupList.isEmpty()) {
-            throw new GroupNotFountException();
+        if (userGroupList.isEmpty()) {
+            Group group = new Group();
+            group.setGroupName(user.getUserName());
+            group.setGroupDesc("用户" + user.getUserName() + "的默认组");
+            insert(group);
+            try {
+                this.addUserToGroup(userId, group.getGroupId());
+            } catch (GroupNotFountException e) {
+                //一般不会发生
+                e.printStackTrace();
+            }
+            return group;
         }
         //user's group
         for (UserGroup userGroup : userGroupList) {
             Group group = selectByPrimaryKey(userGroup.getGroupId());
             if (group == null) {
-                throw new GroupNotFountException(userGroup.getGroupId().toString());
+                continue;
             }
             if (group.getGroupName().equals(user.getUserName())) {
                 return group;
             }
         }
-        //user's group not found
-        throw new GroupNotFountException(user.getUserName());
+        //不应该发生
+        return null;
     }
 
     @Override

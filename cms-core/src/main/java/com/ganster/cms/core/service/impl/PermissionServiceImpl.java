@@ -3,7 +3,6 @@ package com.ganster.cms.core.service.impl;
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
 import com.ganster.cms.core.dao.mapper.GroupPermissionMapper;
 import com.ganster.cms.core.dao.mapper.PermissionMapper;
-import com.ganster.cms.core.dao.mapper.UserGroupMapper;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.*;
@@ -16,72 +15,100 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Permission,PermissionExample> implements PermissionService {
+public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Permission, PermissionExample> implements PermissionService {
     @Autowired
+    private
     GroupPermissionMapper groupPermissionMapper;
 
     @Autowired
+    private
     SiteService siteService;
 
     @Autowired
-    UserGroupMapper userGroupMapper;
-
-    @Autowired
+    private
     GroupService groupService;
 
     @Autowired
+    private
     UserService userService;
 
+
     @Override
-    public List<Permission> selectByUserId(Integer id) throws GroupNotFountException {
+    public List<Permission> selectByUserId(Integer id) {
         List<Group> groupList = groupService.selectByUserId(id);
-        if (groupList == null)
-            return new ArrayList<>();
-        List<Permission> pList = new ArrayList<>();
-        for (Group group : groupList) {
-            pList.addAll(selectByGroupId(group.getGroupId()));
+        if (groupList.isEmpty()) {
+            Group g = new Group();
+            g.setGroupName(userService.selectByPrimaryKey(id).getUserName());
+            g.setGroupDesc("用户 " + id + "(id) 的默认组");
+            groupService.insert(g);
+            try {
+                groupService.addUserToGroup(id, g.getGroupId());
+            } catch (UserNotFoundException | GroupNotFountException e) {
+                e.printStackTrace();
+            }
+            return Collections.emptyList();
         }
-        return pList;
+        return groupList.stream()
+                .flatMap(e -> selectByGroupId(e.getGroupId()).stream())
+                .collect(Collectors.toList());
     }
 
-    private List<Permission> selectByGroupExample(GroupExample example) throws GroupNotFountException {
+    private Set<Permission> selectByGroupExample(GroupExample example) {
         List<Group> groupList = groupService.selectByExample(example);
+
+        //new
+
+        List<Integer> pidSet = groupList.stream().flatMap(group -> {
+            GroupPermissionExample groupPermissionExample = new GroupPermissionExample();
+//            groupPermissionExample.clear();
+            groupPermissionExample.or().andGroupIdEqualTo(group.getGroupId());
+            return groupPermissionMapper.selectByExample(groupPermissionExample)
+                    .stream()
+                    .map(GroupPermission::getPermissionId);
+        })
+                .distinct()
+                .collect(Collectors.toList());
+        PermissionExample permissionExample = new PermissionExample();
+        if (pidSet.isEmpty())
+            return Collections.emptySet();
+        permissionExample.or().andPermissionIdIn(pidSet);
+        return new HashSet<>(selectByExample(permissionExample));
+        //old
+        /*
         List<Integer> pidList = new ArrayList<>();
-        if (groupList == null || groupList.size() == 0) {
-            throw new GroupNotFountException();
-        }
         for (Group group : groupList) {
             GroupPermissionExample gpExample = new GroupPermissionExample();
             gpExample.or().andGroupIdEqualTo(group.getGroupId());
             List<GroupPermission> groupPermissionList = groupPermissionMapper.selectByExample(gpExample);
-            if (groupPermissionList == null) {
-                return new ArrayList<>();
-            }
             for (GroupPermission gp : groupPermissionList) {
                 pidList.add(gp.getPermissionId());
             }
         }
         if (pidList.isEmpty()) {
-            return new ArrayList<>();
+            return Collections.emptySet();
         }
         PermissionExample permissionExample = new PermissionExample();
         permissionExample.or().andPermissionIdIn(pidList);
-        return selectByExample(permissionExample);
+        return new HashSet<>(selectByExample(permissionExample));
+        */
     }
 
     @Override
-    public List<Permission> selectByGroupId(Integer id) throws GroupNotFountException {
+    public Set<Permission> selectByGroupId(Integer id) {
         GroupExample example = new GroupExample();
         example.or().andGroupIdEqualTo(id);
         return selectByGroupExample(example);
     }
 
     @Override
-    public List<Permission> selectByGroupName(String name) throws GroupNotFountException {
+    public Set<Permission> selectByGroupName(String name) {
         GroupExample example = new GroupExample();
         example.or().andGroupNameEqualTo(name);
         return selectByGroupExample(example);
@@ -89,77 +116,90 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
 
     @Override
     @Transactional
-    public void deleteUserPermission(Integer userId, Integer sid, Integer cid, String pName) throws UserNotFoundException, GroupNotFountException {
+    public void deleteUserPermission(Integer userId, Integer sid, Integer cid, String pName) throws UserNotFoundException {
         deleteUserPermission(userId, PermissionUtil.formatCategoryPermissionName(sid, cid, pName));
     }
 
     @Override
     @Transactional
-    public void deleteGroupPermission(Integer groupId, Integer sid, Integer cid, String pName) throws GroupNotFountException {
-        deleteGroupPermission(groupId, PermissionUtil.formatCategoryPermissionName(sid, cid, pName));
+    public void deleteGroupPermission(Integer groupId, Integer sid, Integer cid, String pName) {
+        deletePermissionFromGroup(groupId, PermissionUtil.formatCategoryPermissionName(sid, cid, pName));
     }
 
-    private Boolean hasPermission(Integer userId, String pName) throws GroupNotFountException {
+    private Boolean hasPermission(Integer userId, String pName) {
         List<Permission> permissionList = selectByUserId(userId);
-        for (Permission p:permissionList){
+        for (Permission p : permissionList) {
             if (p.getPermissionName().equals(pName))
                 return true;
         }
         return false;
     }
 
-    private void deleteUserPermission(Integer userId, String pName) throws GroupNotFountException, UserNotFoundException {
+    private void deleteUserPermission(Integer userId, String pName) throws UserNotFoundException {
         Group group = groupService.findUserOwnGroup(userId);
-        deleteGroupPermission(group.getGroupId(), pName);
+        deletePermissionFromGroup(group.getGroupId(), pName);
     }
 
-    private void deleteGroupPermission(Integer groupId, String pName) throws GroupNotFountException {
+    private void deletePermissionFromGroup(Integer groupId, String pName) {
         Group group = groupService.selectByPrimaryKey(groupId);
         if (group == null) {
-            throw new GroupNotFountException(groupId.toString());
-        }
-        GroupPermissionExample groupPermissionExample = new GroupPermissionExample();
-        groupPermissionExample.or().andGroupIdEqualTo(groupId);
-        List<GroupPermission> groupPermissionList = groupPermissionMapper.selectByExample(groupPermissionExample);
-        if (groupPermissionList == null || groupPermissionList.isEmpty()) {
             return;
         }
-        for (GroupPermission groupPermission : groupPermissionList) {
-            PermissionExample permissionExample = new PermissionExample();
-            permissionExample.or().andPermissionIdEqualTo(groupPermission.getPermissionId()).andPermissionNameEqualTo(pName);
-            deleteByExample(permissionExample);
+
+        GroupPermissionExample groupPermissionExample = new GroupPermissionExample();
+        groupPermissionExample.or()
+                .andGroupIdEqualTo(groupId);
+
+        //该组所有权限的ID
+        List<Integer> pidList = groupPermissionMapper.selectByExample(groupPermissionExample)
+                .stream()
+                .map(GroupPermission::getPermissionId)
+                .collect(Collectors.toList());
+
+        PermissionExample permissionExample = new PermissionExample();
+        permissionExample.or().andPermissionNameEqualTo(pName);
+
+        //需要删除的权限ID
+        List<Integer> delList = selectByExample(permissionExample).stream()
+                .map(Permission::getPermissionId)
+                .filter(pidList::contains)
+                .collect(Collectors.toList());
+
+        if (delList.isEmpty()) {
+            return;
         }
+
+        //删除 group-permission 中间表
+        groupPermissionExample.clear();
+        groupPermissionExample.or().andPermissionIdIn(delList);
+        groupPermissionMapper.deleteByExample(groupPermissionExample);
+        //删除权限
+        permissionExample.clear();
+        permissionExample.or().andPermissionIdIn(delList);
+        deleteByExample(permissionExample);
     }
 
     @Override
     public Boolean hasCategoryPermission(Integer uid, Integer sid, Integer cid, String pName) {
         String permissionName = PermissionUtil.formatCategoryPermissionName(sid, cid, pName);
-        try {
-            return hasPermission(uid, permissionName);
-        } catch (GroupNotFountException e) {
-            return false;
-        }
+        return hasPermission(uid, permissionName);
     }
 
     @Override
     public Boolean hasModulePermission(Integer uid, Integer sid, Integer moduleId, String pName) {
-        String permissionName = PermissionUtil.formatModulePermissionName(sid,moduleId,pName);
-        try {
-            return hasPermission(uid, permissionName);
-        } catch (GroupNotFountException e) {
-            return false;
-        }
+        String permissionName = PermissionUtil.formatModulePermissionName(sid, moduleId, pName);
+        return hasPermission(uid, permissionName);
     }
 
     @Override
     @Transactional
-    public void addCategoryPermissionToUser(Integer uid, Integer sid, Integer cid, String pName) throws GroupNotFountException, UserNotFoundException {
+    public void addCategoryPermissionToUser(Integer uid, Integer sid, Integer cid, String pName) throws UserNotFoundException {
         Group group = groupService.findUserOwnGroup(uid);
         addCategoryPermissionToGroup(group.getGroupId(), sid, cid, pName);
     }
 
     @Override
-    public void addModulePermissionToUser(Integer uid, Integer sid, Integer moduleId, String pName) throws UserNotFoundException, GroupNotFountException {
+    public void addModulePermissionToUser(Integer uid, Integer sid, Integer moduleId, String pName) throws UserNotFoundException {
         Group group = groupService.findUserOwnGroup(uid);
         addModulePermissionToGroup(group.getGroupId(), sid, moduleId, pName);
     }
@@ -192,11 +232,11 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
 
     @Override
     public void addSitePermissionToGroup(Integer sid, Integer gid) {
-        Permission permission=new Permission();
+        Permission permission = new Permission();
         permission.setPermissionName(PermissionUtil.formatSitePermissionName(sid));
         insert(permission);
 
-        GroupPermission groupPermission=new GroupPermission();
+        GroupPermission groupPermission = new GroupPermission();
         groupPermission.setGroupId(gid);
         groupPermission.setPermissionId(permission.getPermissionId());
         groupPermissionMapper.insert(groupPermission);
@@ -204,7 +244,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
 
     @Override
     @Transactional
-    public void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException, GroupNotFountException {
+    public void addUserToSite(Integer uid, Integer sid) throws UserNotFoundException {
         Group group = groupService.findUserOwnGroup(uid);
         Permission permission = new Permission();
         permission.setPermissionName(PermissionUtil.formatSitePermissionName(sid));
@@ -217,29 +257,22 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
     }
 
     @Override
-    public Boolean hasSitePermission(Integer uid, Integer sid) throws GroupNotFountException {
+    public Boolean hasSitePermission(Integer uid, Integer sid) {
         return hasPermission(uid, PermissionUtil.formatSitePermissionName(sid));
     }
 
     @Override
-    public List<Site> findAllUserSite(Integer uid) throws GroupNotFountException {
+    public List<Site> findAllUserSite(Integer uid) {
         SiteExample siteExample = new SiteExample();
-        List<Site> allSite = siteService.selectByExample(siteExample);
-        if (allSite == null || allSite.isEmpty()) {
-            return new ArrayList<>();
-        }
-        List<Site> userSite = new ArrayList<>();
-        for (Site site : allSite) {
-            if (hasSitePermission(uid, site.getSiteId())) {
-                userSite.add(site);
-            }
-        }
-        return userSite;
+        return siteService.selectByExample(siteExample)
+                .stream()
+                .filter(s -> hasSitePermission(uid, s.getSiteId()))
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void deleteUserFromSite(Integer uid, Integer sid) throws GroupNotFountException, UserNotFoundException {
+    public void deleteUserFromSite(Integer uid, Integer sid) throws UserNotFoundException {
         deleteUserPermission(uid, sid.toString());
     }
 
@@ -251,10 +284,5 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper,Perm
         groupPermissionMapper.deleteByExample(groupPermissionExample);
 
         return super.deleteByPrimaryKey(pid);
-    }
-
-    @Override
-    public int deleteByPrimaryKey(Integer id) {
-        return deletePermission(id);
     }
 }

@@ -924,6 +924,66 @@ public class CategoryExample {
             addCriterion("category_in_homepage not between", value1, value2, "categoryInHomepage");
             return (Criteria) this;
         }
+
+        public Criteria andCategoryHitIsNull() {
+            addCriterion("category_hit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitIsNotNull() {
+            addCriterion("category_hit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitEqualTo(Integer value) {
+            addCriterion("category_hit =", value, "categoryHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitNotEqualTo(Integer value) {
+            addCriterion("category_hit <>", value, "categoryHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitGreaterThan(Integer value) {
+            addCriterion("category_hit >", value, "categoryHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitGreaterThanOrEqualTo(Integer value) {
+            addCriterion("category_hit >=", value, "categoryHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitLessThan(Integer value) {
+            addCriterion("category_hit <", value, "categoryHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitLessThanOrEqualTo(Integer value) {
+            addCriterion("category_hit <=", value, "categoryHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitIn(List<Integer> values) {
+            addCriterion("category_hit in", values, "categoryHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitNotIn(List<Integer> values) {
+            addCriterion("category_hit not in", values, "categoryHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitBetween(Integer value1, Integer value2) {
+            addCriterion("category_hit between", value1, value2, "categoryHit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryHitNotBetween(Integer value1, Integer value2) {
+            addCriterion("category_hit not between", value1, value2, "categoryHit");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

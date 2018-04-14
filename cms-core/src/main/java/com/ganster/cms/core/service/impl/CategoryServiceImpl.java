@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Category, CategoryExample> implements CategoryService {
@@ -34,19 +35,16 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
         tree.setName(category.getCategoryTitle());
         tree.setSpread(false);
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId());
-        List<Category> list = selectByExample(categoryExample);  //子栏目
+        categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId()).andCategoryStatusEqualTo(1);
+        //子栏目
+        List<Category> list = selectByExample(categoryExample);
         if (list == null || list.isEmpty()) {
             tree.setChildren(null);
             return tree;
         }
-        List<CategoryTree> categoryTrees = new ArrayList<>();
 
-        for (Category c : list) {
-            CategoryTree categoryTree = toTree(c);
-            categoryTrees.add(categoryTree);
-        }
-        tree.setChildren(categoryTrees);
+        tree.setChildren(list.stream().map(this::toTree).collect(Collectors.toList()));
+
         return tree;
     }
 

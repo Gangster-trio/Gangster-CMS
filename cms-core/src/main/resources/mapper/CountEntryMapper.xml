@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ganster.cms.core.dao.mapper.CountEntryMapper">
+  <resultMap id="BaseResultMap" type="com.ganster.cms.core.pojo.CountEntry">
+    <constructor>
+      <idArg column="count_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="count_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="count_cid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="count_pv" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="count_time" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="count_interval" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    count_id, count_type, count_cid, count_pv, count_time, count_interval
+  </sql>
+  <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.CountEntryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cms_count
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cms_count
+    where count_id = #{countId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cms_count
+    where count_id = #{countId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ganster.cms.core.pojo.CountEntryExample">
+    delete from cms_count
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ganster.cms.core.pojo.CountEntry">
+    insert into cms_count (count_id, count_type, count_cid, 
+      count_pv, count_time, count_interval
+      )
+    values (#{countId,jdbcType=INTEGER}, #{countType,jdbcType=VARCHAR}, #{countCid,jdbcType=VARCHAR}, 
+      #{countPv,jdbcType=INTEGER}, #{countTime,jdbcType=BIGINT}, #{countInterval,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.CountEntry">
+    insert into cms_count
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="countId != null">
+        count_id,
+      </if>
+      <if test="countType != null">
+        count_type,
+      </if>
+      <if test="countCid != null">
+        count_cid,
+      </if>
+      <if test="countPv != null">
+        count_pv,
+      </if>
+      <if test="countTime != null">
+        count_time,
+      </if>
+      <if test="countInterval != null">
+        count_interval,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="countId != null">
+        #{countId,jdbcType=INTEGER},
+      </if>
+      <if test="countType != null">
+        #{countType,jdbcType=VARCHAR},
+      </if>
+      <if test="countCid != null">
+        #{countCid,jdbcType=VARCHAR},
+      </if>
+      <if test="countPv != null">
+        #{countPv,jdbcType=INTEGER},
+      </if>
+      <if test="countTime != null">
+        #{countTime,jdbcType=BIGINT},
+      </if>
+      <if test="countInterval != null">
+        #{countInterval,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ganster.cms.core.pojo.CountEntryExample" resultType="java.lang.Long">
+    select count(*) from cms_count
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cms_count
+    <set>
+      <if test="record.countId != null">
+        count_id = #{record.countId,jdbcType=INTEGER},
+      </if>
+      <if test="record.countType != null">
+        count_type = #{record.countType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countCid != null">
+        count_cid = #{record.countCid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countPv != null">
+        count_pv = #{record.countPv,jdbcType=INTEGER},
+      </if>
+      <if test="record.countTime != null">
+        count_time = #{record.countTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.countInterval != null">
+        count_interval = #{record.countInterval,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cms_count
+    set count_id = #{record.countId,jdbcType=INTEGER},
+      count_type = #{record.countType,jdbcType=VARCHAR},
+      count_cid = #{record.countCid,jdbcType=VARCHAR},
+      count_pv = #{record.countPv,jdbcType=INTEGER},
+      count_time = #{record.countTime,jdbcType=BIGINT},
+      count_interval = #{record.countInterval,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ganster.cms.core.pojo.CountEntry">
+    update cms_count
+    <set>
+      <if test="countType != null">
+        count_type = #{countType,jdbcType=VARCHAR},
+      </if>
+      <if test="countCid != null">
+        count_cid = #{countCid,jdbcType=VARCHAR},
+      </if>
+      <if test="countPv != null">
+        count_pv = #{countPv,jdbcType=INTEGER},
+      </if>
+      <if test="countTime != null">
+        count_time = #{countTime,jdbcType=BIGINT},
+      </if>
+      <if test="countInterval != null">
+        count_interval = #{countInterval,jdbcType=INTEGER},
+      </if>
+    </set>
+    where count_id = #{countId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ganster.cms.core.pojo.CountEntry">
+    update cms_count
+    set count_type = #{countType,jdbcType=VARCHAR},
+      count_cid = #{countCid,jdbcType=VARCHAR},
+      count_pv = #{countPv,jdbcType=INTEGER},
+      count_time = #{countTime,jdbcType=BIGINT},
+      count_interval = #{countInterval,jdbcType=INTEGER}
+    where count_id = #{countId,jdbcType=INTEGER}
+  </update>
+</mapper>

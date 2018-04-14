@@ -2,6 +2,10 @@ package com.ganster.cms.web.controller;
 
 import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.Category;
+import com.ganster.cms.web.annotation.AccessCount;
+import com.ganster.cms.web.annotation.AccessLogger;
+import com.ganster.cms.web.annotation.CountParam;
+import com.ganster.cms.web.annotation.CountType;
 import com.ganster.cms.web.dto.ModelResult;
 import com.ganster.cms.web.service.WebService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +24,10 @@ public class CategoryController {
         this.webService = webService;
     }
 
+    @AccessCount(value = CountType.CATEGORY)
+    @AccessLogger
     @RequestMapping("{id}")
-    public String show(@PathVariable("id") Integer id, Model model) {
-
+    public String show(@CountParam @PathVariable("id") Integer id, Model model) {
         ModelResult result = webService.getCategoryModel(id);
 
         if (result == null) {
@@ -34,7 +39,7 @@ public class CategoryController {
 
         Category category = (Category) result.get("category");
 
-        //If skin = null, set default skin
+        //If skin = null, put default skin
         if (category.getCategorySkin() == null) {
             category.setCategorySkin(CmsConst.DEFAULT_SKIN);
         }
