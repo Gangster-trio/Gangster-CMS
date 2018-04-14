@@ -4,6 +4,7 @@ package com.ganster.cms.admin.controller;
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.GroupWithPermission;
 import com.ganster.cms.admin.dto.Message;
+import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.Group;
 import com.ganster.cms.core.pojo.GroupExample;
 import com.ganster.cms.core.pojo.Permission;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +42,7 @@ public class GroupController extends BaseController {
     @Autowired
     private static GroupController factory;
 
-<<<<<<< HEAD:cms-admin/src/main/java/com.ganster.cms.admin/controller/GroupController.java
+
     @PostConstruct
     public void init() {
         factory = this;
@@ -60,28 +62,10 @@ public class GroupController extends BaseController {
         List<GroupWithPermission> newGplist = new ArrayList<>();
         GroupExample groupExample = new GroupExample();
         List<Group> groupList = factory.groupService.selectByExample(groupExample);
-        List<Permission> permissionList = new ArrayList<>();
-=======
-    /**
-     * 用户组的查询(包含权限)
-     *
-     * @return AjaxData
-     */
-    @RequestMapping(value = "/find")
-    @ResponseBody
-    public AjaxData getGroupList() {
-        //查询所有的用户组
-        GroupExample groupExample = new GroupExample();
-        List<Group> groupList = groupService.selectByExample(groupExample);
-        List<GroupWithPermission> gpList = new ArrayList<>();
-        Set<Permission> permissionList;
->>>>>>> 2119c3e992ec29de38242b8eb26d643b82ce53fa:cms-admin/src/main/java/com/ganster/cms/admin/controller/GroupController.java
+        Set<Permission> permissionSet = new HashSet<>();
         for (Group group : groupList) {
-            try {
-                permissionList = factory.permissionService.selectByGroupId(group.getGroupId());
-            } catch (GroupNotFountException e) {
-                e.printStackTrace();
-            }
+            permissionSet = factory.permissionService.selectByGroupId(group.getGroupId());
+            List<Permission> permissionList = new ArrayList<>(permissionSet);
             List<String> permissionNameList = new ArrayList<>();
             if (permissionList != null) {
                 for (Permission permission : permissionList) {
@@ -137,7 +121,7 @@ public class GroupController extends BaseController {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Group> list = groupService.selectByUserId(userId);
         for (Group flag : list) {
-            if ("admi".equals(flag.getGroupName())) {
+            if ("admin".equals(flag.getGroupName())) {
                 int count = groupService.insert(group);
                 if (count == 0) {
                     return super.buildMessage(1, "false", null);
@@ -168,7 +152,7 @@ public class GroupController extends BaseController {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Group> list = groupService.selectByUserId(userId);
         for (Group flag : list) {
-            if ("admi".equals(flag.getGroupName())) {
+            if ("admin".equals(flag.getGroupName())) {
                 group.setGroupId(groupId);
                 int count = groupService.updateByPrimaryKeySelective(group);
                 GroupController.refresh();
@@ -199,7 +183,7 @@ public class GroupController extends BaseController {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Group> list = groupService.selectByUserId(userId);
         for (Group flag : list) {
-            if ("admi".equals(flag.getGroupName())) {
+            if ("admin".equals(flag.getGroupName())) {
                 groupService.deleteGroup(groupId);
                 GroupController.refresh();
                 break;

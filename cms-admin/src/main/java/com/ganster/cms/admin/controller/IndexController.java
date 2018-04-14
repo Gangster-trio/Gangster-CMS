@@ -2,6 +2,7 @@ package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.annotation.SystemControllerLog;
 import com.ganster.cms.admin.dto.ModuleTree;
+import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.Module;
 import com.ganster.cms.core.pojo.ModuleExample;
 import com.ganster.cms.core.pojo.User;
@@ -69,19 +70,8 @@ public class IndexController {
             moduleTree.setList(childs);
             treeList.add(moduleTree);
         }
-
-<<<<<<< HEAD:cms-admin/src/main/java/com.ganster.cms.admin/controller/IndexController.java
-        List siteList = new ArrayList();
-        try {
-            siteList = permissionService.findAllUserSite(userId);
-        } catch (GroupNotFountException e) {
-            e.printStackTrace();
-        }
         GroupController.refresh();
-=======
         List siteList = permissionService.findAllUserSite(user.getUserId());
-
->>>>>>> 2119c3e992ec29de38242b8eb26d643b82ce53fa:cms-admin/src/main/java/com/ganster/cms/admin/controller/IndexController.java
         modelAndView.addObject("moduleTreeList", treeList);
         modelAndView.addObject("siteList", siteList);
         modelAndView.addObject("user", user);
