@@ -16,11 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,33 +37,58 @@ public class GroupController extends BaseController {
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    private static GroupController factory;
 
-    /**
-     * 用户组的查询(包含权限)
-     * @return AjaxData
-     * @throws GroupNotFountException  用户组未找到
-     */
-    @RequestMapping(value = "/find")
-    @ResponseBody
-    public AjaxData getGroupList() throws GroupNotFountException {
-        //查询所有的用户组
+    @PostConstruct
+    public void init() {
+        factory = this;
+    }
+
+    private static List<GroupWithPermission> gpList = new ArrayList<>();
+
+    public static List<GroupWithPermission> getGpList() {
+        return gpList;
+    }
+
+    private static void setGpList(List<GroupWithPermission> gpList) {
+        GroupController.gpList = gpList;
+    }
+
+    public static void refresh() {
+        List<GroupWithPermission> newGplist = new ArrayList<>();
         GroupExample groupExample = new GroupExample();
-        List<Group> groupList = groupService.selectByExample(groupExample);
-        List<GroupWithPermission> gpList = new ArrayList<>();
-        List<Permission> permissionList = null;
+        List<Group> groupList = factory.groupService.selectByExample(groupExample);
+        List<Permission> permissionList = new ArrayList<>();
         for (Group group : groupList) {
-            permissionList = permissionService.selectByGroupId(group.getGroupId());
+            try {
+                permissionList = factory.permissionService.selectByGroupId(group.getGroupId());
+            } catch (GroupNotFountException e) {
+                e.printStackTrace();
+            }
             List<String> permissionNameList = new ArrayList<>();
-            if (permissionList!=null){
-                for (Permission permission :permissionList){
-//                    String permissionNames = permission.getPermissionName() + "<br/>";
+            if (permissionList != null) {
+                for (Permission permission : permissionList) {
                     String permissionNames = permission.getPermissionName();
                     permissionNameList.add(permissionNames);
                 }
             }
             GroupWithPermission groupWithPermission = new GroupWithPermission(group, permissionNameList);
-            gpList.add(groupWithPermission);
+            newGplist.add(groupWithPermission);
+            GroupController.setGpList(newGplist);
         }
+    }
+
+    /**
+     * 用户组的查询(包含权限)
+     *
+     * @return AjaxData
+     * @throws GroupNotFountException 用户组未找到
+     */
+    @GetMapping(value = "/find")
+    @ResponseBody
+    public AjaxData getGroupList() throws GroupNotFountException {
+        //查询所有的用户组
         AjaxData ajaxData = new AjaxData();
         ajaxData.setMsg("success");
         ajaxData.setCount(gpList.size());
@@ -75,11 +98,12 @@ public class GroupController extends BaseController {
 
     /**
      * 查看单个用户组
-     * @param groupId  用户组id
+     *
+     * @param groupId 用户组id
      */
-    @RequestMapping("/find/{groupId}")
+    @GetMapping("/find/{groupId}")
     @ResponseBody
-    public Group listGroupById(@PathVariable("groupId") Integer groupId){
+    public Group listGroupById(@PathVariable("groupId") Integer groupId) {
         if (groupId == null) {
             LOGGER.info("用户组id为空");
         }
@@ -91,7 +115,7 @@ public class GroupController extends BaseController {
      *
      * @param group 用户组
      */
-    @RequestMapping("/add")
+    @PostMapping("/add")
     @ResponseBody
     public Message addGroup(@RequestBody Group group) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
@@ -103,22 +127,26 @@ public class GroupController extends BaseController {
                     return super.buildMessage(1, "false", null);
                 }
                 if (count == 1) {
+                    PermissionUtil.flush(userId);
+                    GroupController.refresh();
                     return super.buildMessage(0, "success", count);
                 }
                 break;
             }
         }
         PermissionUtil.flush(userId);
+        GroupController.refresh();
         return super.buildMessage(2, "no privilege", null);
     }
 
     /**
      * 更新用户组
-     * @param groupId  用户组id
+     *
+     * @param groupId 用户组id
      * @param group   用户组对象
      * @return AjaxData
      */
-    @RequestMapping("/update/{groupId}")
+    @PostMapping("/update/{groupId}")
     @ResponseBody
     public Message updateGroup(@PathVariable("groupId") Integer groupId, @RequestBody Group group) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
@@ -127,37 +155,39 @@ public class GroupController extends BaseController {
             if (flag.getGroupName().equals("admin")) {
                 group.setGroupId(groupId);
                 int count = groupService.updateByPrimaryKeySelective(group);
+                GroupController.refresh();
                 if (count == 0) {
                     return super.buildMessage(1, "false", null);
                 }
                 if (count == 1) {
+                    PermissionUtil.flush(userId);
                     return super.buildMessage(0, "success", count);
                 }
                 break;
             }
         }
         PermissionUtil.flush(userId);
+        GroupController.refresh();
         return super.buildMessage(2, "no privilege", null);
     }
 
     /**
      * 删除用户组
-     * @param groupId   用户组id
+     *
+     * @param groupId 用户组id
      */
-    @RequestMapping("/delete/{groupId}")
+    @GetMapping("/delete/{groupId}")
     @ResponseBody
     public void deleteGroup(@PathVariable("groupId") Integer groupId) {
-
-
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Group> list = groupService.selectByUserId(userId);
         for (Group flag : list) {
             if (flag.getGroupName().equals("admin")) {
                 groupService.deleteGroup(groupId);
+                GroupController.refresh();
                 break;
             }
         }
-        LOGGER.info("++++++++++++++delete" + groupId + "+++++++++++++++");
         PermissionUtil.flush((Integer) SecurityUtils.getSubject().getSession().getAttribute("id"));
     }
 }

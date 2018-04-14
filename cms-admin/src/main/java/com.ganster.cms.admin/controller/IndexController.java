@@ -82,7 +82,7 @@ public class IndexController {
         } catch (GroupNotFountException e) {
             e.printStackTrace();
         }
-
+        GroupController.refresh();
         modelAndView.addObject("moduleTreeList", treeList);
         modelAndView.addObject("siteList", siteList);
         modelAndView.addObject("user", user);

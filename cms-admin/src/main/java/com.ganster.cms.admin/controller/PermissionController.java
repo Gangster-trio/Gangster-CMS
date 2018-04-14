@@ -143,6 +143,7 @@ public class PermissionController extends BaseController {
                     }
                 }
                 this.delectSurplusPermission(gid);
+                GroupController.refresh();
                 message.setMsg("添加权限成功");
                 message.setCode(0);
             }
@@ -193,6 +194,7 @@ public class PermissionController extends BaseController {
         Permission permission = permissionService.selectByPrimaryKey(permissionId);
         if (permission != null) {
             permissionService.deletePermission(permissionId);
+            GroupController.refresh();
             return 1;
         } else
             return 0;
@@ -217,7 +219,7 @@ public class PermissionController extends BaseController {
     /**
      * 添加权限时，查找所有栏目
      *
-     * @param siteId
+     * @param siteId  站点Id
      * @return  AjaxData 查找到的所有栏目
      */
     @GetMapping("/findcategory/{SiteId}")
