@@ -16,21 +16,15 @@ public interface CountEntryMapper {
 
     int insertSelective(CountEntry record);
 
-    List<CountEntry> selectByExampleWithBLOBs(CountEntryExample example);
-
     List<CountEntry> selectByExample(CountEntryExample example);
 
     CountEntry selectByPrimaryKey(Integer countId);
 
     int updateByExampleSelective(@Param("record") CountEntry record, @Param("example") CountEntryExample example);
 
-    int updateByExampleWithBLOBs(@Param("record") CountEntry record, @Param("example") CountEntryExample example);
-
     int updateByExample(@Param("record") CountEntry record, @Param("example") CountEntryExample example);
 
     int updateByPrimaryKeySelective(CountEntry record);
-
-    int updateByPrimaryKeyWithBLOBs(CountEntry record);
 
     int updateByPrimaryKey(CountEntry record);
 }

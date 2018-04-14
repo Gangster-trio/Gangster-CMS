@@ -9,6 +9,7 @@ import com.ganster.cms.core.pojo.Site;
 import com.ganster.cms.core.pojo.User;
 import com.ganster.cms.core.service.ModuleService;
 import com.ganster.cms.core.service.PermissionService;
+import com.ganster.cms.core.service.SiteService;
 import com.ganster.cms.core.util.PermissionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -23,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Create by Yoke on 2018/1/30
@@ -39,11 +42,15 @@ public class IndexController {
     PermissionService permissionService;
     @Autowired
     private CmsCommonBean cmsCommonBean;
+    @Autowired
+    private SiteService siteService;
 
     private static final String ADMIN = "admin";
 
     @SystemControllerLog(description = "到了主界面")
-    @GetMapping("/index")
+
+
+    @GetMapping({"/index", "/"})
     public ModelAndView index(@RequestParam(required = false) Integer id) {
 
         Subject subject = SecurityUtils.getSubject();
@@ -75,9 +82,11 @@ public class IndexController {
         }
 
 
-        List<Site> siteList = permissionService.findAllUserSite(user.getUserId());
+        List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(user.getUserId());
+        List<Site> siteList = siteIdList.stream().map(i -> siteService.selectByPrimaryKey(i)).filter(Objects::nonNull).collect(Collectors.toList());
         // 将当前登录网站为list的第一个
         cmsCommonBean.setSite(siteList.get(0));
+        GroupController.refresh();
         modelAndView.addObject("moduleTreeList", treeList);
         modelAndView.addObject("siteList", siteList);
         modelAndView.addObject("user", user);

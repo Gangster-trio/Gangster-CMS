@@ -364,6 +364,66 @@ public class CountEntryExample {
             return (Criteria) this;
         }
 
+        public Criteria andCountTimeIsNull() {
+            addCriterion("count_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeIsNotNull() {
+            addCriterion("count_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeEqualTo(Long value) {
+            addCriterion("count_time =", value, "countTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeNotEqualTo(Long value) {
+            addCriterion("count_time <>", value, "countTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeGreaterThan(Long value) {
+            addCriterion("count_time >", value, "countTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeGreaterThanOrEqualTo(Long value) {
+            addCriterion("count_time >=", value, "countTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeLessThan(Long value) {
+            addCriterion("count_time <", value, "countTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeLessThanOrEqualTo(Long value) {
+            addCriterion("count_time <=", value, "countTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeIn(List<Long> values) {
+            addCriterion("count_time in", values, "countTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeNotIn(List<Long> values) {
+            addCriterion("count_time not in", values, "countTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeBetween(Long value1, Long value2) {
+            addCriterion("count_time between", value1, value2, "countTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountTimeNotBetween(Long value1, Long value2) {
+            addCriterion("count_time not between", value1, value2, "countTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCountIntervalIsNull() {
             addCriterion("count_interval is null");
             return (Criteria) this;

@@ -2,7 +2,7 @@
 <div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
     <p>用户组管理</p>
 </div>
-<table id="group_table" lay-filter="groupListFilter"></table>
+<table id="group_table" lay-filter="groupListFilter" class="layui-table"></table>
 <script type="text/html" id="groupToolBar">
     <div class="layui-btn-group">
         <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add" value="添加权限">
@@ -19,6 +19,7 @@
         </button>
     </div>
 </script>
+<script src="../layui/layui.all.js"></script>
 <script>
     var groupId;
     layui.use('table', function () {
@@ -28,11 +29,11 @@
             elem: '#group_table'
             , url: '/groupL/find'
             , cols: [[
-                {field: 'groupId', width: 200, title: '用户组ID', sort: true}
-                , {field: 'groupName', width: 200, title: '组名'}
-                , {field: 'groupDesc', width: 200, title: '描述'}
-                , {field: 'permissionNameList', width: 430, title: '权限'}
-                , {title: '操作', width: 300, align: 'center', toolbar: '#groupToolBar'}
+                {field: 'groupId',  title: '用户组ID', sort: true}
+                , {field: 'groupName',  title: '组名',sort:true}
+                , {field: 'groupDesc',  title: '描述',sort:true}
+                , {field: 'permissionNameList', width:943, title: '权限',sort:true}
+                , {title: '操作', width:300, align: 'center', toolbar: '#groupToolBar',sort:true}
             ]]
             , limits: [10, 15, 20, 40, 80, 100]
             , done: function (res, curr, count) {

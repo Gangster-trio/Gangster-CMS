@@ -7,6 +7,7 @@ import com.ganster.cms.admin.dto.PermissionData;
 import com.ganster.cms.admin.util.AddPermissionDescUtil;
 import com.ganster.cms.admin.util.JudgeAuthUtil;
 import com.ganster.cms.core.constant.CmsConst;
+import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.*;
 import com.ganster.cms.core.util.PermissionUtil;
@@ -53,7 +54,7 @@ public class PermissionController extends BaseController {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Group> group = groupService.selectByUserId(userId);
         for (Group i : group) {
-            if ("admin".equals(i.getGroupName())) {
+            if (i.getGroupName().equals("admin")) {
                 return true;
             }
         }
@@ -66,7 +67,8 @@ public class PermissionController extends BaseController {
      * @param gid 用户组id
      */
     private void delectSurplusPermission(Integer gid) {
-        List<Permission> permissionList = new ArrayList(permissionService.selectByGroupId(gid));
+        Set<Permission> permissionSet = permissionService.selectByGroupId(gid);
+        List<Permission> permissionList = new ArrayList<>(permissionSet);
         for (int i = 0; i < permissionList.size() - 1; i++) {
             for (int j = permissionList.size() - 1; j > i; j--) {
                 if (permissionList.get(i).getPermissionName().equals(permissionList.get(j).getPermissionName())) {
@@ -97,9 +99,7 @@ public class PermissionController extends BaseController {
             Integer sid = permissionData.getSiteId();
             List<String> pName = permissionData.getPermissionName();
             Integer mid = permissionData.getMoudleId();
-            if (sid == null || pName == null) {
-                return null;
-            }
+            if (sid == null || pName == null) return null;
             if (judgeAuthUtil.judgeAuthIsNull(gid, PermissionUtil.formatSitePermissionName(sid))) {
                 permissionService.addSitePermissionToGroup(sid, gid);
                 addPermissionDescUtil.setSitePermissionDesc(sid);
@@ -141,6 +141,7 @@ public class PermissionController extends BaseController {
                     }
                 }
                 this.delectSurplusPermission(gid);
+                GroupController.refresh();
                 message.setMsg("添加权限成功");
                 message.setCode(0);
             }
@@ -164,13 +165,13 @@ public class PermissionController extends BaseController {
         if (limit == null || limit == 0) {
             limit = 10;
         }
-        Set<Permission> list;
         Integer j = 0;
-        list = permissionService.selectByGroupId(groupId);
+        Set<Permission> set= permissionService.selectByGroupId(groupId);
+        List<Permission> list = new ArrayList<>(set);
         for (int i = 0; i < list.size(); i++) {
             j++;
         }
-        return super.buildAjaxData(0, "true", j, new ArrayList(list));
+        return super.buildAjaxData(0, "true", j, list);
     }
 
     /**
@@ -187,10 +188,10 @@ public class PermissionController extends BaseController {
         Permission permission = permissionService.selectByPrimaryKey(permissionId);
         if (permission != null) {
             permissionService.deletePermission(permissionId);
+            GroupController.refresh();
             return 1;
-        } else {
+        } else
             return 0;
-        }
     }
 
     /**
@@ -212,7 +213,7 @@ public class PermissionController extends BaseController {
     /**
      * 添加权限时，查找所有栏目
      *
-     * @param siteId
+     * @param siteId  站点Id
      * @return  AjaxData 查找到的所有栏目
      */
     @GetMapping("/findcategory/{SiteId}")

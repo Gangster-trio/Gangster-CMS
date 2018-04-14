@@ -468,6 +468,6 @@ public class ContentWebService {
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }
-
+        return true;
     }
 }
