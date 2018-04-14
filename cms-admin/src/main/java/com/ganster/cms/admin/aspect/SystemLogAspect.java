@@ -77,8 +77,9 @@ public class SystemLogAspect {
             long beginTime = BEGIN_TIME_THREAD_LOCAL.get().getTime();
             long endTime = System.currentTimeMillis();
             Long logElapsedTime = endTime - beginTime;
-            map.put("ip", request.getRequestURI());
+            map.put("path", request.getRequestURI());
             map.put("userName", user.getUserName());
+            map.put("ip", request.getRemoteAddr());
             map.put("methodName", joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
             map.put("time", logElapsedTime);
             try {

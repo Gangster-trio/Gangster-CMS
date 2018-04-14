@@ -1,5 +1,6 @@
 package com.ganster.cms.admin.shiro;
 
+import com.ganster.cms.admin.web.CmsCommonBean;
 import com.ganster.cms.core.pojo.Group;
 import com.ganster.cms.core.pojo.Permission;
 import com.ganster.cms.core.pojo.User;
@@ -31,6 +32,8 @@ public class UserShiroRealm extends AuthorizingRealm {
     private PermissionService permissionService;
     @Resource
     private GroupService groupService;
+    @Resource
+    private CmsCommonBean commonBean;
 
     /**
      * 认证信息.(身份验证)
@@ -52,8 +55,9 @@ public class UserShiroRealm extends AuthorizingRealm {
             throw new IncorrectCredentialsException();
         }
         //此方法废弃
-        SecurityUtils.getSubject().getSession().setAttribute("id",user.getUserId());
-
+        SecurityUtils.getSubject().getSession().setAttribute("id", user.getUserId());
+        commonBean.setUser(user);
+        logger.info("当前登录的用户信息：" + commonBean.getUser().toString());
         return new SimpleAuthenticationInfo(user, password, getName());
     }
 

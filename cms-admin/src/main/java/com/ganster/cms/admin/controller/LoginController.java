@@ -2,11 +2,14 @@ package com.ganster.cms.admin.controller;
 
 
 import com.ganster.cms.admin.dto.Message;
+import com.ganster.cms.admin.web.CmsCommonBean;
+import com.ganster.cms.core.constant.CmsConst;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/category")
-public class CategoryController extends BaseController {
+public class CategoryControlle extends BaseController {
     @Autowired
     private CategoryService categoryService;
     @Autowired
@@ -39,7 +39,7 @@ public class CategoryController extends BaseController {
     private UserService userService;
     @Autowired
     private ModuleService moduleService;
-    private final static Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CategoryControlle.class);
 
 
     @GetMapping("/list")
@@ -63,7 +63,9 @@ public class CategoryController extends BaseController {
     @GetMapping("/list/checked")
     public AjaxData listCheck(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-
+        if (!userService.isAdmin(userId)) {
+            return super.buildAjaxData(2, "no privilege", 0, null);
+        }
 
         // 查询状态为0（未通过的）
         CategoryExample categoryExample = new CategoryExample();
@@ -114,7 +116,13 @@ public class CategoryController extends BaseController {
         //Determined whether current category article,if true,delete article and category
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         Category category = categoryService.selectByPrimaryKey(id);
-
+        // 判断当前用户是否具有写的权限
+        if (category == null) {
+            return super.buildMessage(1, "no category", null);
+        }
+        if (!permissionService.hasCategoryPermission(userId, category.getCategorySiteId(), id, CmsConst.PERMISSION_WRITE)) {
+            return super.buildMessage(2, "no permission", null);
+        }
         // 得到当前栏目所属的网站
         Integer siteId = category.getCategorySiteId();
         //删除作者对栏目的权限
@@ -145,6 +153,9 @@ public class CategoryController extends BaseController {
         }
 
 
+        if (!permissionService.hasCategoryPermission(userId, c.getCategorySiteId(), id, CmsConst.PERMISSION_WRITE)) {
+            return super.buildMessage(2, "no permission", null);
+        }
 
 
         category.setCategoryId(id);
@@ -177,7 +188,10 @@ public class CategoryController extends BaseController {
     public Message add(@RequestBody Category category) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
 
-
+        // 判断栏目内容是否为空
+        if (category == null) {
+            return super.buildMessage(1, "false", null);
+        }
         // 判断登陆用户是否具有对栏目具有写的操作
         // 查询栏目对应的modelId
         ModuleExample moduleExample = new ModuleExample();

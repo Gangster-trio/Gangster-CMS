@@ -2,8 +2,10 @@ package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.annotation.SystemControllerLog;
 import com.ganster.cms.admin.dto.ModuleTree;
+import com.ganster.cms.admin.web.CmsCommonBean;
 import com.ganster.cms.core.pojo.Module;
 import com.ganster.cms.core.pojo.ModuleExample;
+import com.ganster.cms.core.pojo.Site;
 import com.ganster.cms.core.pojo.User;
 import com.ganster.cms.core.service.ModuleService;
 import com.ganster.cms.core.service.PermissionService;
@@ -35,6 +37,8 @@ public class IndexController {
 
     @Autowired
     PermissionService permissionService;
+    @Autowired
+    private CmsCommonBean cmsCommonBean;
 
     private static final String ADMIN = "admin";
 
@@ -70,8 +74,10 @@ public class IndexController {
             treeList.add(moduleTree);
         }
 
-        List siteList = permissionService.findAllUserSite(user.getUserId());
 
+        List<Site> siteList = permissionService.findAllUserSite(user.getUserId());
+        // 将当前登录网站为list的第一个
+        cmsCommonBean.setSite(siteList.get(0));
         modelAndView.addObject("moduleTreeList", treeList);
         modelAndView.addObject("siteList", siteList);
         modelAndView.addObject("user", user);

@@ -1,4 +1,4 @@
-package com.ganster.cms.admin.controller;
+/*package com.ganster.cms.admin.controller;
 
 
 import com.ganster.cms.admin.dto.AjaxData;
@@ -26,7 +26,7 @@ public class DataController {
             , @RequestParam(value = "log_level", required = false) String logLevel
             , @RequestParam(value = "page", defaultValue = "0") Integer page
             , @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
-        PageInfo info = dataWebService.getLog(page, limit, logLevel);
+//        PageInfo info = dataWebService.getLog(page, limit, logLevel);
         return new AjaxData(0, "ok", info.getTotal(), info.getList());
     }
-}
+}*/

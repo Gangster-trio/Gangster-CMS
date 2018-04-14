@@ -19,9 +19,9 @@ public class DruidConfig {
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
         //登录查看信息的账号密码.
 
-        servletRegistrationBean.addInitParameter("loginUsername", "admi");
+        servletRegistrationBean.addInitParameter("loginUsername", "admin");
 
-        servletRegistrationBean.addInitParameter("loginPassword","123456");
+        servletRegistrationBean.addInitParameter("loginPassword", "123456");
         return servletRegistrationBean;
     }
 
