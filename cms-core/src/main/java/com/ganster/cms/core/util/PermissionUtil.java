@@ -82,6 +82,8 @@ public class PermissionUtil {
 
 
     public static List<Permission> flush(Integer uid) {
+        long s = System.currentTimeMillis();
+        logger.info("start flush permission...");
         List<Permission> permissions;
         permissions = permissionUtil.permissionService.selectByUserId(uid);
         Set<String> permissionName = new HashSet<>();
@@ -90,11 +92,12 @@ public class PermissionUtil {
         }
 
         permissionMap.put(uid, permissionName);
+        logger.info("flush succeed!  time:{}ms", System.currentTimeMillis() - s);
         return permissions;
     }
 
     private static Boolean permitted(Integer uid, String pName) {
-        if (permissionMap.get(uid)==null){
+        if (permissionMap.get(uid) == null) {
             flush(uid);
         }
         Set<String> set = permissionMap.get(uid);

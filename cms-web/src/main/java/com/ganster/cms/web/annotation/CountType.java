@@ -7,7 +7,7 @@ public enum CountType {
 
     private String val;
 
-    private CountType(String val) {
+    CountType(String val) {
         this.val = val;
     }
 
