@@ -1,6 +1,6 @@
 package com.ganster.cms.web.controller;
 
-import com.ganster.cms.core.constant.CmsConst;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Site;
 import com.ganster.cms.web.annotation.AccessCount;
 import com.ganster.cms.web.annotation.AccessLogger;
@@ -13,8 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Optional;
 
 @Controller
 public class SiteController {

@@ -1,7 +1,8 @@
 package com.ganster.cms.web.directive;
 
 import com.gangster.cms.common.pojo.Article;
-import com.ganster.cms.core.service.ArticleService;
+import com.gangster.cms.common.pojo.ArticleExample;
+import com.gangster.cms.dao.mapper.ArticleMapper;
 import com.github.pagehelper.PageHelper;
 import freemarker.core.Environment;
 import freemarker.template.*;
@@ -32,11 +33,11 @@ public class ContentListDirective implements TemplateDirectiveModel {
 
     private static final String DEFAULT_SORT = "article_create_time";
 
-    private final ArticleService articleService;
+    private final ArticleMapper articleMapper;
 
     @Autowired
-    public ContentListDirective(ArticleService articleService) {
-        this.articleService = articleService;
+    public ContentListDirective(ArticleMapper articleMapper) {
+        this.articleMapper = articleMapper;
     }
 
     @Override
@@ -62,9 +63,12 @@ public class ContentListDirective implements TemplateDirectiveModel {
             size = 0;
         }
 
-        //lambada params must be final or effect final.
-        String finalSort = sort;
-        List<Article> articleList = PageHelper.startPage(page, size).doSelectPage(() -> articleService.selectArticleByCategoryId(categoryId, finalSort));
+        ArticleExample example = new ArticleExample();
+        example.setOrderByClause(sort);
+        example.or().andArticleCategoryIdEqualTo(categoryId);
+        List<Article> articleList = PageHelper.startPage(page, size).doSelectPage(() -> {
+            articleMapper.selectByExample(example);
+        });
 
         DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());
         env.setVariable(DirectiveUtil.getRetName(PARAM_RET, params), builder.build().wrap(articleList));

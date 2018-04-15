@@ -2,7 +2,7 @@ package com.ganster.cms.web.directive;
 
 import com.gangster.cms.common.pojo.Article;
 import com.gangster.cms.common.pojo.ArticleExample;
-import com.ganster.cms.core.service.ArticleService;
+import com.gangster.cms.dao.mapper.ArticleMapper;
 import freemarker.core.Environment;
 import freemarker.template.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +17,11 @@ public class ArticleDirective implements TemplateDirectiveModel {
     private static final String PARAM_BLOB = "blob";
     private static final String PARAM_RET = "ret";
 
-    private final ArticleService articleService;
+    private final ArticleMapper articleMapper;
 
     @Autowired
-    public ArticleDirective(ArticleService articleService) {
-        this.articleService = articleService;
+    public ArticleDirective(ArticleMapper articleMapper) {
+        this.articleMapper = articleMapper;
     }
 
     @Override
@@ -41,12 +41,12 @@ public class ArticleDirective implements TemplateDirectiveModel {
         ArticleExample example = new ArticleExample();
         example.or().andArticleIdEqualTo(id);
         if (blob) {
-            List<Article> articleList = articleService.selectByExampleWithBLOBs(example);
+            List<Article> articleList = articleMapper.selectByExampleWithBLOBs(example);
             if (!articleList.isEmpty()) {
                 article = articleList.get(0);
             }
         } else {
-            List<Article> articles = articleService.selectByExample(example);
+            List<Article> articles = articleMapper.selectByExample(example);
             if (!articles.isEmpty()) {
                 article = articles.get(0);
             }

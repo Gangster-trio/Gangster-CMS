@@ -1,12 +1,11 @@
 package com.ganster.cms.web.directive;
 
-import com.ganster.cms.core.service.CategoryService;
+import com.gangster.cms.dao.mapper.CategoryMapper;
 import freemarker.core.Environment;
 import freemarker.template.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Map;
 
 @Component
@@ -16,11 +15,11 @@ public class CategoryDirective implements TemplateDirectiveModel {
     private static final String PARAM_RET = "ret";
 
     private final
-    CategoryService categoryService;
+    CategoryMapper categoryMapper;
 
     @Autowired
-    public CategoryDirective(CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public CategoryDirective(CategoryMapper categoryMapper) {
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
@@ -32,6 +31,6 @@ public class CategoryDirective implements TemplateDirectiveModel {
         }
 
         DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());
-        env.setVariable(DirectiveUtil.getRetName(PARAM_RET, params, PARAM_RET), builder.build().wrap(categoryService.selectByPrimaryKey(id)));
+        env.setVariable(DirectiveUtil.getRetName(PARAM_RET, params, PARAM_RET), builder.build().wrap(categoryMapper.selectByPrimaryKey(id)));
     }
 }

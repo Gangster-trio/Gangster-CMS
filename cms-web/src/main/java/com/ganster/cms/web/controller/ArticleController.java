@@ -1,6 +1,6 @@
 package com.ganster.cms.web.controller;
 
-import com.ganster.cms.core.constant.CmsConst;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Article;
 import com.ganster.cms.web.annotation.AccessCount;
 import com.ganster.cms.web.annotation.AccessLogger;

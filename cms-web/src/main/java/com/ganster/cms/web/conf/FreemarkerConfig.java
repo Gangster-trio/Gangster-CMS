@@ -1,7 +1,7 @@
 package com.ganster.cms.web.conf;
 
-import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.service.SettingService;
+import com.gangster.cms.common.constant.CmsConst;
+import com.gangster.cms.dao.mapper.SettingEntryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +16,18 @@ public class FreemarkerConfig extends WebMvcConfigurerAdapter {
     private static Logger LOGGER = LoggerFactory.getLogger(FreemarkerConfig.class);
 
     private final
-    SettingService settingService;
+    SettingEntryMapper settingEntryMapper;
 
     @Autowired
-    public FreemarkerConfig(SettingService settingService) {
-        this.settingService = settingService;
+    public FreemarkerConfig(SettingEntryMapper settingEntryMapper) {
+        this.settingEntryMapper = settingEntryMapper;
     }
 
     @Bean
     public FreeMarkerConfigurer loadPathConfig() {
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
-        String path = settingService.get(CmsConst.SKIN_PATH_SETTING);
+//        String path = settingService.get(CmsConst.SKIN_PATH_SETTING);
+        String path = settingEntryMapper.selectByPrimaryKey(CmsConst.SKIN_PATH_SETTING).getSysValue();
         final String DEFAULT_SKIN_PATH = "classpath:templates";
         if (!path.isEmpty()) {
             configurer.setTemplateLoaderPaths(DEFAULT_SKIN_PATH, path);

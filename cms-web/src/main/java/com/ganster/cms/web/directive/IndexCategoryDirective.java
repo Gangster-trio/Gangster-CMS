@@ -1,6 +1,6 @@
 package com.ganster.cms.web.directive;
 
-import com.ganster.cms.core.constant.CmsConst;
+import com.gangster.cms.common.constant.CmsConst;
 import freemarker.core.Environment;
 import freemarker.template.*;
 import org.springframework.stereotype.Component;

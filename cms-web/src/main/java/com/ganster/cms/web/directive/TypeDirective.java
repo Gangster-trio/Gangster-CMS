@@ -3,8 +3,8 @@ package com.ganster.cms.web.directive;
 import com.gangster.cms.common.pojo.ArticleExample;
 import com.gangster.cms.common.pojo.CategoryExample;
 import com.gangster.cms.common.pojo.Site;
-import com.ganster.cms.core.service.ArticleService;
-import com.ganster.cms.core.service.CategoryService;
+import com.gangster.cms.dao.mapper.ArticleMapper;
+import com.gangster.cms.dao.mapper.CategoryMapper;
 import com.github.pagehelper.PageHelper;
 import freemarker.core.Environment;
 import freemarker.template.*;
@@ -29,13 +29,13 @@ public class TypeDirective implements TemplateDirectiveModel {
     private static final String DEFAULT_CATE_SORT = "category_create_time";
     private static final String PARAM_RET = "ret";
 
-    private final ArticleService articleService;
-    private final CategoryService categoryService;
+    private final ArticleMapper articleMapper;
+    private final CategoryMapper categoryMapper;
 
     @Autowired
-    public TypeDirective(ArticleService articleService, CategoryService categoryService) {
-        this.articleService = articleService;
-        this.categoryService = categoryService;
+    public TypeDirective(ArticleMapper articleMapper, CategoryMapper categoryMapper) {
+        this.articleMapper = articleMapper;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
@@ -72,12 +72,12 @@ public class TypeDirective implements TemplateDirectiveModel {
             CategoryExample categoryExample = new CategoryExample();
             categoryExample.or().andCategoryTypeEqualTo(cateType).andCategorySiteIdEqualTo(site.getSiteId());
             categoryExample.setOrderByClause(sort);
-            retList = PageHelper.startPage(page, size).doSelectPage(() -> categoryService.selectByExample(categoryExample));
+            retList = PageHelper.startPage(page, size).doSelectPage(() -> categoryMapper.selectByExample(categoryExample));
         } else {
             ArticleExample articleExample = new ArticleExample();
             articleExample.or().andArticleTypeEqualTo(articleType).andArticleSiteIdEqualTo(site.getSiteId());
             articleExample.setOrderByClause(sort);
-            retList = PageHelper.startPage(page, size).doSelectPage(() -> articleService.selectByExample(articleExample));
+            retList = PageHelper.startPage(page, size).doSelectPage(() -> articleMapper.selectByExample(articleExample));
         }
 
         DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());

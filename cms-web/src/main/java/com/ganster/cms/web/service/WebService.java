@@ -1,18 +1,17 @@
 package com.ganster.cms.web.service;
 
-import com.ganster.cms.core.constant.CmsConst;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
-import com.ganster.cms.core.service.ArticleService;
-import com.ganster.cms.core.service.CategoryService;
-import com.ganster.cms.core.service.SiteService;
-import com.ganster.cms.core.service.TagService;
+import com.gangster.cms.dao.mapper.*;
 import com.ganster.cms.web.cache.impl.HashMapCache;
 import com.ganster.cms.web.dto.ModelResult;
+import com.ganster.cms.web.util.CategoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,25 +23,28 @@ public class WebService {
     private final Logger logger = LoggerFactory.getLogger(WebService.class);
 
     private final
-    SiteService siteService;
+    SiteMapper siteMapper;
 
     private final
-    ArticleService articleService;
+    ArticleMapper articleMapper;
 
     private final
-    CategoryService categoryService;
+    CategoryMapper categoryMapper;
 
-    private final TagService tagService;
+    private final TagArticleMapper tagArticleMapper;
+
+    private final TagMapper tagMapper;
 
     private HashMapCache<String, ModelResult> siteModelCache = new HashMapCache<>();
     private HashMapCache<Integer, ModelResult> articleModelCache = new HashMapCache<>();
     private HashMapCache<Integer, ModelResult> categoryModelCache = new HashMapCache<>();
 
-    public WebService(SiteService siteService, ArticleService articleService, CategoryService categoryService, TagService tagService) {
-        this.siteService = siteService;
-        this.articleService = articleService;
-        this.categoryService = categoryService;
-        this.tagService = tagService;
+    public WebService(SiteMapper siteMapper, ArticleMapper articleMapper, CategoryMapper categoryMapper, TagArticleMapper tagArticleMapper, TagMapper tagMapper) {
+        this.siteMapper = siteMapper;
+        this.articleMapper = articleMapper;
+        this.categoryMapper = categoryMapper;
+        this.tagArticleMapper = tagArticleMapper;
+        this.tagMapper = tagMapper;
     }
 
     public ModelResult getSiteModel(String siteUrl) {
@@ -51,7 +53,7 @@ public class WebService {
             ModelResult r = siteModelCache.get(siteUrl);
             Site s = (Site) r.get("site");
             addSiteHit(s);
-            logger.info("get SiteModel:{} from cache",siteUrl);
+            logger.info("get SiteModel:{} from cache", siteUrl);
             return r;
         }
 
@@ -62,7 +64,7 @@ public class WebService {
         //get Site object
         SiteExample siteExample = new SiteExample();
         siteExample.or().andSiteUrlEqualTo(siteUrl);
-        List<Site> siteList = siteService.selectByExample(siteExample);
+        List<Site> siteList = siteMapper.selectByExample(siteExample);
         if (siteList.isEmpty()) {
             return null;
         }
@@ -71,26 +73,26 @@ public class WebService {
         //Get 0 level categorise in this site (displayed above the homepage of the website)
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(site.getSiteId()).andCategoryLevelEqualTo(0);
-        List<Category> categoryList = categoryService.selectByExample(categoryExample);
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
         //Each level 0 category into category tree
-        List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryService::toTree).collect(Collectors.toList());
+        List<CategoryTree> categoryTreeList = categoryList.stream().map(CategoryUtil::toTree).collect(Collectors.toList());
 
 
         //Get a list of categories to put on the home page (with short article info)
         categoryExample.clear();
         categoryExample.or().andCategoryTypeEqualTo(CmsConst.INDEX_CATEGORY_TYPE).andCategorySiteIdEqualTo(site.getSiteId());
-        List<Category> indexCategoryList = categoryService.selectByExample(categoryExample);
+        List<Category> indexCategoryList = categoryMapper.selectByExample(categoryExample);
 
 
         //Get the list of articles to place on the homepage
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleTypeEqualTo(CmsConst.INDEX_ARTICLE_TYPE).andArticleSiteIdEqualTo(site.getSiteId());
-        List<Article> articleList = articleService.selectByExample(articleExample);
+        List<Article> articleList = articleMapper.selectByExample(articleExample);
 
         //Get the home carousel article
         articleExample.clear();
         articleExample.or().andArticleTypeEqualTo(CmsConst.CAROUSEL_ARTICLE_TYPE).andArticleSiteIdEqualTo(site.getSiteId());
-        List<Article> carouselList = articleService.selectByExample(articleExample);
+        List<Article> carouselList = articleMapper.selectByExample(articleExample);
 
         //The default template needs the data
         result.put("categoryTreeList", categoryTreeList)
@@ -115,7 +117,7 @@ public class WebService {
         */
         categoryExample.clear();
         categoryExample.or().andCategoryInHomepageEqualTo(true).andCategorySiteIdEqualTo(site.getSiteId());
-        result.getMap().putAll(categoryService.selectByExample(categoryExample).stream()
+        result.getMap().putAll(categoryMapper.selectByExample(categoryExample).stream()
                 .collect(Collectors.groupingBy(Category::getCategoryType)));
 
         /*
@@ -130,7 +132,7 @@ public class WebService {
         */
         articleExample.clear();
         articleExample.or().andArticleInHomepageEqualTo(true).andArticleSiteIdEqualTo(site.getSiteId());
-        result.getMap().putAll(articleService.selectByExample(articleExample).parallelStream()
+        result.getMap().putAll(articleMapper.selectByExample(articleExample).parallelStream()
                 .collect(Collectors.groupingBy(Article::getArticleType)));
 
         addSiteHit(site);
@@ -144,7 +146,7 @@ public class WebService {
             site.setSiteHit(0);
         }
         site.setSiteHit(site.getSiteHit() + 1);
-        siteService.updateByPrimaryKey(site);
+        siteMapper.updateByPrimaryKey(site);
     }
 
 
@@ -153,13 +155,13 @@ public class WebService {
             ModelResult r = categoryModelCache.get(id);
             Category c = (Category) r.get("category");
             addCategoryHit(c);
-            logger.info("get CategoryModel:{} from cache",id);
+            logger.info("get CategoryModel:{} from cache", id);
             return r;
         }
 
         ModelResult result = new ModelResult();
 
-        Category category = categoryService.selectByPrimaryKey(id);
+        Category category = categoryMapper.selectByPrimaryKey(id);
 
         if (category == null) {
             return null;
@@ -169,19 +171,19 @@ public class WebService {
         //---------------------------------------default properties start----------------------------------------------//
 
 
-        Site site = siteService.selectByPrimaryKey(category.getCategorySiteId());
+        Site site = siteMapper.selectByPrimaryKey(category.getCategorySiteId());
 
         //Get 0 level categorise in this site (displayed above the homepage of the website)
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(category.getCategorySiteId()).andCategoryLevelEqualTo(0);
-        List<Category> categoryList = categoryService.selectByExample(categoryExample);
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
         //Each level 0 category into category tree
-        List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryService::toTree).collect(Collectors.toList());
+        List<CategoryTree> categoryTreeList = categoryList.stream().map(CategoryUtil::toTree).collect(Collectors.toList());
 
         //Get this category's article list (without BLOBs)
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleCategoryIdEqualTo(id);
-        List<Article> articleList = articleService.selectByExample(articleExample);
+        List<Article> articleList = articleMapper.selectByExample(articleExample);
 
         result.put("categoryTreeList", categoryTreeList)
                 .put("articleList", articleList)
@@ -201,7 +203,7 @@ public class WebService {
             hit = 0;
         }
         category.setCategoryHit(hit + 1);
-        categoryService.updateByPrimaryKey(category);
+        categoryMapper.updateByPrimaryKey(category);
     }
 
     public ModelResult getArticleModel(Integer id) {
@@ -209,11 +211,11 @@ public class WebService {
             ModelResult r = articleModelCache.get(id);
             Article a = (Article) r.get("article");
             addArticleHit(a);
-            logger.info("get ArticleModel:{} from cache",id);
+            logger.info("get ArticleModel:{} from cache", id);
             return r;
         }
 
-        Article article = articleService.selectByPrimaryKey(id);
+        Article article = articleMapper.selectByPrimaryKey(id);
         ModelResult result = new ModelResult();
 
         if (article == null) {
@@ -221,20 +223,29 @@ public class WebService {
         }
 
         //Get article's site
-        Site site = siteService.selectByPrimaryKey(article.getArticleSiteId());
+        Site site = siteMapper.selectByPrimaryKey(article.getArticleSiteId());
 
         //Get article's category
-        Category category = categoryService.selectByPrimaryKey(article.getArticleCategoryId());
+        Category category = categoryMapper.selectByPrimaryKey(article.getArticleCategoryId());
 
         //Get article's tags
-        List<Tag> tagList = tagService.selectByArticleId(id);
-
+        TagArticleExample tagArticleExample = new TagArticleExample();
+        tagArticleExample.or().andArticleIdEqualTo(id);
+        List<Integer> tagIdList = tagArticleMapper.selectByExample(tagArticleExample).stream().map(TagArticle::getTagId).collect(Collectors.toList());
+        List tagList;
+        if (tagIdList.isEmpty()) {
+            tagList = Collections.EMPTY_LIST;
+        } else {
+            TagExample tagExample = new TagExample();
+            tagExample.or().andTagIdIn(tagIdList);
+            tagList = tagMapper.selectByExample(tagExample);
+        }
         //Get 0 level categorise in this site (displayed above the homepage of the website)
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(article.getArticleSiteId()).andCategoryLevelEqualTo(0);
-        List<Category> categoryList = categoryService.selectByExample(categoryExample);
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
         //Each level 0 category into category tree
-        List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryService::toTree).collect(Collectors.toList());
+        List<CategoryTree> categoryTreeList = categoryList.stream().map(CategoryUtil::toTree).collect(Collectors.toList());
 
         result.put("category", category)
                 .put("article", article)
@@ -255,7 +266,7 @@ public class WebService {
         }
 
         article.setArticleHit(article.getArticleHit() + 1);
-        articleService.updateByPrimaryKeySelective(article);
+        articleMapper.updateByPrimaryKeySelective(article);
     }
 
     //5分钟刷新一次缓存

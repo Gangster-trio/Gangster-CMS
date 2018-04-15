@@ -1,7 +1,7 @@
 package com.ganster.cms.web.service;
 
 import com.gangster.cms.common.pojo.CountEntry;
-import com.ganster.cms.core.service.CountService;
+import com.gangster.cms.dao.mapper.CountEntryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,11 @@ public class CountScheduleService {
     private static ConcurrentHashMap<String, ConcurrentHashMap<String, AtomicInteger>> PVCount = new ConcurrentHashMap<>();
 
     private final
-    CountService countService;
+    CountEntryMapper countEntryMapper;
 
     @Autowired
-    public CountScheduleService(CountService countService) {
-        this.countService = countService;
+    public CountScheduleService(CountEntryMapper countEntryMapper) {
+        this.countEntryMapper = countEntryMapper;
     }
 
     //统计粒度10分钟
@@ -59,7 +59,7 @@ public class CountScheduleService {
         entry.setCountTime(Calendar.getInstance().getTimeInMillis());
         entry.setCountPv(count.get());
         entry.setCountInterval((int) countInterval);
-        countService.insert(entry);
+        countEntryMapper.insert(entry);
         logger.debug("flush count entry:{}", entry);
     }
 }

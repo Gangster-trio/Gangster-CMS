@@ -2,11 +2,10 @@ package com.ganster.cms.web.aspect;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ganster.cms.core.constant.CmsConst;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.LogEntry;
-import com.ganster.cms.core.service.LogService;
-import com.ganster.cms.core.util.IPUtil;
-import org.aspectj.lang.JoinPoint;
+import com.gangster.cms.dao.mapper.LogEntryMapper;
+import com.ganster.cms.web.util.IPUtil;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -32,11 +31,11 @@ public class AccessLogAspect {
     private static ThreadLocal<Long> timeCount = new ThreadLocal<>();
 
     private final
-    LogService logService;
+    LogEntryMapper logEntryMapper;
 
     @Autowired
-    public AccessLogAspect(LogService logService) {
-        this.logService = logService;
+    public AccessLogAspect(LogEntryMapper logEntryMapper) {
+        this.logEntryMapper = logEntryMapper;
     }
 
     @Pointcut("@annotation(com.ganster.cms.web.annotation.AccessLogger)")
@@ -77,7 +76,7 @@ public class AccessLogAspect {
             logger.info(e.getMessage());
         }
 
-        logService.insert(logEntry);
+        logEntryMapper.insert(logEntry);
     }
 
 
