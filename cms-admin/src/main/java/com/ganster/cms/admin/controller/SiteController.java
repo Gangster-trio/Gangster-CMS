@@ -1,23 +1,15 @@
 package com.ganster.cms.admin.controller;
 
+import com.ganster.cms.admin.annotation.SystemControllerLog;
 import com.ganster.cms.admin.dto.AjaxData;
-import com.ganster.cms.admin.dto.Message;
-import com.ganster.cms.core.exception.UserNotFoundException;
+import com.ganster.cms.admin.dto.MessageDto;
+import com.ganster.cms.admin.service.ContentWebService;
+import com.ganster.cms.admin.util.CmsResultUtil;
 import com.ganster.cms.core.pojo.Site;
-import com.ganster.cms.core.pojo.SiteExample;
-import com.ganster.cms.core.pojo.User;
-import com.ganster.cms.core.service.GroupService;
-import com.ganster.cms.core.service.PermissionService;
-import com.ganster.cms.core.service.SiteService;
-import com.ganster.cms.core.service.UserService;
-import com.ganster.cms.core.util.PermissionUtil;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,89 +17,53 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/site")
-public class SiteController extends BaseController {
+public class SiteController {
+
 
     @Autowired
-    private SiteService siteService;
+    private ContentWebService contentWebService;
 
-    @Autowired
-    private GroupService groupService;
-
-    @Autowired
-    private PermissionService permissionService;
-
-    @Autowired
-    private UserService userService;
-
-    private static final String ADMIN = "admin";
-
+    @SystemControllerLog(description = "列出所有的站")
     @GetMapping("/list")
     public AjaxData list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        SiteExample siteExample = new SiteExample();
-        List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(userId);
-        if (siteIdList == null || siteIdList.isEmpty()) {
-            return super.buildAjaxData(2, "no privilege", 0, null);
+        PageInfo<Site> pageInfo = contentWebService.listSite(page, limit);
+        if (pageInfo == null) {
+            return new AjaxData(1, "false", 0, null);
         }
-        siteExample.or().andSiteIdIn(siteIdList);
-        PageInfo<Site> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> siteService.selectByExample(siteExample));
         List<Site> siteList = pageInfo.getList();
-        if (siteList == null || siteList.isEmpty()) {
-            return super.buildAjaxData(0, "success", 0, null);
-        } else {
-            return super.buildAjaxData(0, "success", pageInfo.getTotal(), siteList);
-        }
+        return new AjaxData(0, "success", pageInfo.getTotal(), siteList);
     }
 
+    @SystemControllerLog(description = "添加站")
     @PostMapping("/add")
-    public Message add(@RequestBody Site site) {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        User user = userService.selectByPrimaryKey(userId);
-        if (site == null) {
-            return super.buildMessage(1, "no data", null);
+    public MessageDto add(@RequestBody Site site) {
+        if (contentWebService.addSite(site)) {
+            return new CmsResultUtil<>().setData(null);
         }
-        site.setSiteCreateTime(new Date());
-        site.setSiteStatus(0);
-        int count = siteService.insert(site);
-
-        if (count == 0) {
-            return super.buildMessage(1, "add site failed", null);
-        }
-        try {
-            if (!ADMIN.equals(user.getUserName())) {
-                permissionService.addUserToSite(1, site.getSiteId());
-            }
-            permissionService.addUserToSite(userId, site.getSiteId());
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-            return super.buildMessage(1, "用户未找到", null);
-        }
-        PermissionUtil.flush(userId);
-        return super.buildMessage(0, "success", count);
+        return new CmsResultUtil<>().setError("添加失败");
     }
 
-    //TODO: some time no flush
+    @SystemControllerLog(description = "删除站")
     @GetMapping("/delete/{id}")
-    public Message delete(@PathVariable("id") Integer id) {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        siteService.deleteSite(id);
-        PermissionUtil.flush(userId);
-        return super.buildMessage(0, "success", "success");
+    public MessageDto delete(@PathVariable("id") Integer id) {
+        if (contentWebService.deleteSite(id)) {
+            return new CmsResultUtil<>().setData(null);
+        }
+        return new CmsResultUtil<>().setError("删除站点失败");
     }
 
+    @SystemControllerLog(description = "查看站的信息")
     @GetMapping("/details/{id}")
     public Site details(@PathVariable("id") Integer id) {
-        return siteService.selectByPrimaryKey(id);
+        return contentWebService.detailsSite(id);
     }
 
+    @SystemControllerLog(description = "更新单个站")
     @PostMapping("/update/{id}")
-    public Message update(@PathVariable("id") Integer id, @RequestBody Site site) {
-        site.setSiteId(id);
-        int count = siteService.updateByPrimaryKeySelective(site);
-        if (count == 0) {
-            return super.buildMessage(1, "false to update", null);
-        } else {
-            return super.buildMessage(0, "success", count);
+    public MessageDto update(@PathVariable("id") Integer id, @RequestBody Site site) {
+        if (contentWebService.updateSite(id, site)) {
+            return new CmsResultUtil<>().setData(null);
         }
+        return new CmsResultUtil<>().setError("更新站点失败");
     }
 }

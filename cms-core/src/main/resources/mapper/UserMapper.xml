@@ -12,6 +12,7 @@
       <arg column="user_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="user_last_login" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="user_org" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="user_is_admin" javaType="java.lang.Boolean" jdbcType="BIT" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     user_id, user_name, user_phone, user_password, user_email, user_status, user_create_time, 
-    user_last_login, user_org
+    user_last_login, user_org, user_is_admin
   </sql>
   <select id="selectByExample" parameterType="com.ganster.cms.core.pojo.UserExample" resultMap="BaseResultMap">
     select
@@ -113,10 +114,12 @@
     </selectKey>
     insert into cms_user (user_name, user_phone, user_password, 
       user_email, user_status, user_create_time, 
-      user_last_login, user_org)
+      user_last_login, user_org, user_is_admin
+      )
     values (#{userName,jdbcType=VARCHAR}, #{userPhone,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, 
       #{userEmail,jdbcType=VARCHAR}, #{userStatus,jdbcType=INTEGER}, #{userCreateTime,jdbcType=TIMESTAMP}, 
-      #{userLastLogin,jdbcType=TIMESTAMP}, #{userOrg,jdbcType=VARCHAR})
+      #{userLastLogin,jdbcType=TIMESTAMP}, #{userOrg,jdbcType=VARCHAR}, #{userIsAdmin,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ganster.cms.core.pojo.User">
     <selectKey keyProperty="userId" order="AFTER" resultType="java.lang.Integer">
@@ -148,6 +151,9 @@
       <if test="userOrg != null">
         user_org,
       </if>
+      <if test="userIsAdmin != null">
+        user_is_admin,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userName != null">
@@ -173,6 +179,9 @@
       </if>
       <if test="userOrg != null">
         #{userOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="userIsAdmin != null">
+        #{userIsAdmin,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -212,6 +221,9 @@
       <if test="record.userOrg != null">
         user_org = #{record.userOrg,jdbcType=VARCHAR},
       </if>
+      <if test="record.userIsAdmin != null">
+        user_is_admin = #{record.userIsAdmin,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -227,7 +239,8 @@
       user_status = #{record.userStatus,jdbcType=INTEGER},
       user_create_time = #{record.userCreateTime,jdbcType=TIMESTAMP},
       user_last_login = #{record.userLastLogin,jdbcType=TIMESTAMP},
-      user_org = #{record.userOrg,jdbcType=VARCHAR}
+      user_org = #{record.userOrg,jdbcType=VARCHAR},
+      user_is_admin = #{record.userIsAdmin,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -259,6 +272,9 @@
       <if test="userOrg != null">
         user_org = #{userOrg,jdbcType=VARCHAR},
       </if>
+      <if test="userIsAdmin != null">
+        user_is_admin = #{userIsAdmin,jdbcType=BIT},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
@@ -271,7 +287,8 @@
       user_status = #{userStatus,jdbcType=INTEGER},
       user_create_time = #{userCreateTime,jdbcType=TIMESTAMP},
       user_last_login = #{userLastLogin,jdbcType=TIMESTAMP},
-      user_org = #{userOrg,jdbcType=VARCHAR}
+      user_org = #{userOrg,jdbcType=VARCHAR},
+      user_is_admin = #{userIsAdmin,jdbcType=BIT}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
 </mapper>

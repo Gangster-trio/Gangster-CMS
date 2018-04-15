@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,9 @@ public class SystemLogAspect {
     public void doAfter(JoinPoint joinPoint) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Integer uid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        SystemControllerLog annotation = method.getAnnotation(SystemControllerLog.class);
         if (null != uid) {
             User user = userService.selectByPrimaryKey(uid);
             Map<String, Object> map = new HashMap<>();
@@ -77,12 +81,13 @@ public class SystemLogAspect {
             long beginTime = BEGIN_TIME_THREAD_LOCAL.get().getTime();
             long endTime = System.currentTimeMillis();
             Long logElapsedTime = endTime - beginTime;
-            map.put("ip", request.getRequestURI());
+            map.put("path", request.getRequestURI());
             map.put("userName", user.getUserName());
+            map.put("ip", request.getRemoteAddr());
             map.put("methodName", joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
             map.put("time", logElapsedTime);
             try {
-                map.put("description", getControllerMethodDescription(joinPoint));
+                map.put("description", annotation.description());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -99,31 +104,5 @@ public class SystemLogAspect {
             }
             logService.insert(logEntry);
         }
-    }
-
-
-    /**
-     * 得到Controller方法上边注解的描述
-     *
-     * @param joinPoint
-     * @return
-     */
-    private static String getControllerMethodDescription(JoinPoint joinPoint) throws Exception {
-        String targetName = joinPoint.getTarget().getClass().getName();
-        String methodName = joinPoint.getSignature().getName();
-        Object[] arguments = joinPoint.getArgs();
-        Class targetClass = Class.forName(targetName);
-        Method[] methods = targetClass.getMethods();
-        String description = "";
-        for (Method method : methods) {
-            if (method.getName().equals(methodName)) {
-                Class[] clazzs = method.getParameterTypes();
-                if (clazzs.length == arguments.length) {
-                    description = method.getAnnotation(SystemControllerLog.class).description();
-                    break;
-                }
-            }
-        }
-        return description;
     }
 }

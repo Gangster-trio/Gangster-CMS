@@ -3,8 +3,6 @@ package com.ganster.cms.auth.config.shiro;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.pojo.Group;
 import com.ganster.cms.core.pojo.Permission;
-import com.ganster.cms.core.pojo.User;
-import com.ganster.cms.core.pojo.UserExample;
 import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.UserService;
@@ -15,7 +13,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

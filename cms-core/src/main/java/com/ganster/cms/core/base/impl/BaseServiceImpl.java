@@ -98,8 +98,9 @@ public abstract class BaseServiceImpl<Mapper, Record, Example> implements BaseSe
     @Override
     public Record selectByPrimaryKey(Integer id) {
         try {
-            if (mapper==null)
+            if (mapper==null) {
                 System.out.println("MMMMMMPPPPPPPERRERERERERREERRERERERERE R FHGDFG SFDHF SJFH JA Y");
+            }
             Method method = mapper.getClass().getDeclaredMethod("selectByPrimaryKey", Integer.class);
             Object result = method.invoke(mapper, id);
             return (Record)result;

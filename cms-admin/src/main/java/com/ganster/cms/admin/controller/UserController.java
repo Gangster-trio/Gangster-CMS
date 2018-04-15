@@ -43,7 +43,7 @@ public class UserController extends BaseController {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         List<Group> group = groupService.selectByUserId(userId);
         for (Group i : group) {
-            if ("admin".equals(i.getGroupName())) {
+            if (i.getGroupName().equals("admin")) {
                 return true;
             }
         }
@@ -54,7 +54,7 @@ public class UserController extends BaseController {
     /**
      *
      * 添加用户
-     * @param user
+     * @param user  用户对象(用户信息)
      * @return   Message 添加用户是否成功
      */
 
@@ -85,8 +85,8 @@ public class UserController extends BaseController {
     /**
      * 修改用户信息
      *
-     * @param userid
-     * @param user
+     * @param userid   用户Id
+     * @param user     原始用户信息
      * @return  Message  修改用户是否成功
      */
     @PostMapping(value = "/update/{userid}")
@@ -111,7 +111,7 @@ public class UserController extends BaseController {
 
     /**
      *  删除用户
-     * @param userId
+     * @param userId   用户的Id
      * @return   int   删除用户数量
      */
     @GetMapping("/delete/{UserId}")
@@ -121,6 +121,7 @@ public class UserController extends BaseController {
             return 0;
         }
         int message = 0;
+        int delectNumber;
         if (userService.selectByPrimaryKey(userId) != null) {
             try {
                 userService.deleteUser(userId);
@@ -136,13 +137,19 @@ public class UserController extends BaseController {
 
     /**
      *  查找所有的用户
-     * @param page
-     * @param limit
+     * @param page      查找信息的页数
+     * @param limit     每页所显示的条数
      * @return  AjaxData 查找到的所有用户
      */
     @GetMapping("/find")
     @ResponseBody
-    public AjaxData findUser(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData findUser(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
+        if (page == null || page == 0) {
+            page = 1;
+        }
+        if (limit == null || limit == 0) {
+            limit = 10;
+        }
         UserExample userExample = new UserExample();
         PageInfo<User> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> userService.selectByExample(userExample));
         List<User> list = pageInfo.getList();
@@ -155,12 +162,12 @@ public class UserController extends BaseController {
 
     /**
      *  通过用户Id查找用户
-     * @param userId
+     * @param userId   用户的Id
      * @return  User 查找到的用户
      */
     @GetMapping("/find/{UserId}")
     @ResponseBody
-    public User findUserById(@PathVariable("UserId") Integer userId) {
+    public User fingUserById(@PathVariable("UserId") Integer userId) {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserIdEqualTo(userId);
         List<User> userList = userService.selectByExample(userExample);
@@ -170,9 +177,9 @@ public class UserController extends BaseController {
     /**
      * 通过用户Id，查找所属于的的用户组
      *
-     * @param userId
-     * @param page
-     * @param limit
+     * @param userId   用户的Id
+     * @param page     查找信息的页数
+     * @param limit    每页信息的条数
      * @return  AjaxData 通过用户Id，查找所属于的用户组
      */
     @GetMapping("/findgroup/{UserId}")
@@ -202,8 +209,8 @@ public class UserController extends BaseController {
     /**
      * 通过用户Id和用户组Id，将用户从用户组中移出
      *
-     * @param userId
-     * @param groupId
+     * @param userId    用户的Id
+     * @param groupId   用户组Id
      * @return int 移出用户的数量
      */
     @ResponseBody
@@ -248,8 +255,8 @@ public class UserController extends BaseController {
 
     /**
      * 通过用户Id和用户组Id，来向用户组中添加用户
-     * @param groupId
-     * @param userId
+     * @param groupId    用户组Id
+     * @param userId     用户Id
      * @return Integer 为用户添加的角色组数量
      */
     @GetMapping("/addGroupToUse/{GroupId}/{UserId}")

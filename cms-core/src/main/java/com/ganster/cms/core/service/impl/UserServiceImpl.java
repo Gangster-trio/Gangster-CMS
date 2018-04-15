@@ -3,7 +3,6 @@ package com.ganster.cms.core.service.impl;
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
 import com.ganster.cms.core.dao.mapper.UserGroupMapper;
 import com.ganster.cms.core.dao.mapper.UserMapper;
-import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.GroupService;
@@ -59,11 +58,4 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
         userGroupMapper.insert(userGroup);
         return ret;
     }
-
-    @Override
-    public boolean isAdmin(Integer userId) {
-        User user = userMapper.selectByPrimaryKey(userId);
-        return ADMIN.equals(user.getUserName());
-    }
-
 }

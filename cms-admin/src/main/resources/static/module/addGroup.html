@@ -46,7 +46,7 @@
             }),
             success: function (data) {
                 console.log(data);
-                if (data.code == 0) {
+                if (data.code === 0) {
                     layui.layer.msg("增加成功", {icon: 6});
                     showAtRight("/module/listGroup.html");
                 } else {

@@ -22,9 +22,11 @@ public class User implements Serializable {
 
     private String userOrg;
 
+    private Boolean userIsAdmin;
+
     private static final long serialVersionUID = 1L;
 
-    public User(Integer userId, String userName, String userPhone, String userPassword, String userEmail, Integer userStatus, Date userCreateTime, Date userLastLogin, String userOrg) {
+    public User(Integer userId, String userName, String userPhone, String userPassword, String userEmail, Integer userStatus, Date userCreateTime, Date userLastLogin, String userOrg, Boolean userIsAdmin) {
         this.userId = userId;
         this.userName = userName;
         this.userPhone = userPhone;
@@ -34,6 +36,7 @@ public class User implements Serializable {
         this.userCreateTime = userCreateTime;
         this.userLastLogin = userLastLogin;
         this.userOrg = userOrg;
+        this.userIsAdmin = userIsAdmin;
     }
 
     public User() {
@@ -112,6 +115,14 @@ public class User implements Serializable {
         this.userOrg = userOrg == null ? null : userOrg.trim();
     }
 
+    public Boolean getUserIsAdmin() {
+        return userIsAdmin;
+    }
+
+    public void setUserIsAdmin(Boolean userIsAdmin) {
+        this.userIsAdmin = userIsAdmin;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -132,7 +143,8 @@ public class User implements Serializable {
             && (this.getUserStatus() == null ? other.getUserStatus() == null : this.getUserStatus().equals(other.getUserStatus()))
             && (this.getUserCreateTime() == null ? other.getUserCreateTime() == null : this.getUserCreateTime().equals(other.getUserCreateTime()))
             && (this.getUserLastLogin() == null ? other.getUserLastLogin() == null : this.getUserLastLogin().equals(other.getUserLastLogin()))
-            && (this.getUserOrg() == null ? other.getUserOrg() == null : this.getUserOrg().equals(other.getUserOrg()));
+            && (this.getUserOrg() == null ? other.getUserOrg() == null : this.getUserOrg().equals(other.getUserOrg()))
+            && (this.getUserIsAdmin() == null ? other.getUserIsAdmin() == null : this.getUserIsAdmin().equals(other.getUserIsAdmin()));
     }
 
     @Override
@@ -148,6 +160,7 @@ public class User implements Serializable {
         result = prime * result + ((getUserCreateTime() == null) ? 0 : getUserCreateTime().hashCode());
         result = prime * result + ((getUserLastLogin() == null) ? 0 : getUserLastLogin().hashCode());
         result = prime * result + ((getUserOrg() == null) ? 0 : getUserOrg().hashCode());
+        result = prime * result + ((getUserIsAdmin() == null) ? 0 : getUserIsAdmin().hashCode());
         return result;
     }
 
@@ -166,6 +179,7 @@ public class User implements Serializable {
         sb.append(", userCreateTime=").append(userCreateTime);
         sb.append(", userLastLogin=").append(userLastLogin);
         sb.append(", userOrg=").append(userOrg);
+        sb.append(", userIsAdmin=").append(userIsAdmin);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

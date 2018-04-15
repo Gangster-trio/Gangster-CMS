@@ -16,5 +16,5 @@ public interface UserService extends BaseService<User, UserExample> {
      * @param userId
      * @return
      */
-    boolean isAdmin(Integer userId);
+
 }
