@@ -1,8 +1,8 @@
 package com.ganster.cms.web.directive;
 
-import com.ganster.cms.core.pojo.ArticleExample;
-import com.ganster.cms.core.pojo.CategoryExample;
-import com.ganster.cms.core.pojo.Site;
+import com.gangster.cms.common.pojo.ArticleExample;
+import com.gangster.cms.common.pojo.CategoryExample;
+import com.gangster.cms.common.pojo.Site;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
 import com.github.pagehelper.PageHelper;

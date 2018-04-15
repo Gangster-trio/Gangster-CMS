@@ -1,7 +1,7 @@
 package com.ganster.cms.web.service;
 
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.pojo.*;
+import com.gangster.cms.common.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.service.SiteService;

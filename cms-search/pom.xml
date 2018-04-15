@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ganster.cms</groupId>
+    <groupId>com.gangster.cms</groupId>
     <artifactId>cms-search</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -12,10 +12,10 @@
     <description>Demo project for Spring Boot</description>
 
     <parent>
-        <groupId>com.ganster</groupId>
+        <groupId>com.gangster</groupId>
         <artifactId>cms</artifactId>
         <version>0.1</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath>../</relativePath> <!-- lookup parent from repository -->
     </parent>
 
     <dependencies>
@@ -46,16 +46,11 @@
         </dependency>
 
         <dependency>
-            <groupId>com.ganster</groupId>
-            <artifactId>cms-core</artifactId>
+            <groupId>com.gangster</groupId>
+            <artifactId>cms-common</artifactId>
             <version>0.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>6.0.6</version>
-        </dependency>
     </dependencies>
 
     <build>

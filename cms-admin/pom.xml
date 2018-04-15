@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>cms</artifactId>
-        <groupId>com.ganster</groupId>
+        <groupId>com.gangster</groupId>
         <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,8 +13,8 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.ganster</groupId>
-            <artifactId>cms-core</artifactId>
+            <groupId>com.gangster</groupId>
+            <artifactId>cms-dao</artifactId>
             <version>0.1</version>
         </dependency>
         <dependency>

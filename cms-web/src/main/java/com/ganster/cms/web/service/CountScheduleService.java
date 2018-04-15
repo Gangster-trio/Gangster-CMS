@@ -1,6 +1,6 @@
 package com.ganster.cms.web.service;
 
-import com.ganster.cms.core.pojo.CountEntry;
+import com.gangster.cms.common.pojo.CountEntry;
 import com.ganster.cms.core.service.CountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

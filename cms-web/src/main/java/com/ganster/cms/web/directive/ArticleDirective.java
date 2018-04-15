@@ -1,7 +1,7 @@
 package com.ganster.cms.web.directive;
 
-import com.ganster.cms.core.pojo.Article;
-import com.ganster.cms.core.pojo.ArticleExample;
+import com.gangster.cms.common.pojo.Article;
+import com.gangster.cms.common.pojo.ArticleExample;
 import com.ganster.cms.core.service.ArticleService;
 import freemarker.core.Environment;
 import freemarker.template.*;

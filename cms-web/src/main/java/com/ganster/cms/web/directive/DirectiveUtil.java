@@ -1,6 +1,6 @@
 package com.ganster.cms.web.directive;
 
-import com.ganster.cms.core.pojo.Site;
+import com.gangster.cms.common.pojo.Site;
 import com.ganster.cms.web.dto.ModelResult;
 import freemarker.core.Environment;
 import freemarker.template.*;

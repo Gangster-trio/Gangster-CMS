@@ -3,7 +3,7 @@ package com.ganster.cms.core.service.impl;
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
 import com.ganster.cms.core.mapper.ArticleMapper;
 import com.ganster.cms.core.mapper.TagArticleMapper;
-import com.ganster.cms.core.pojo.*;
+import com.gangster.cms.common.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;

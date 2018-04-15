@@ -3,9 +3,9 @@ package com.ganster.cms.core.service;
 import com.ganster.cms.core.base.BaseService;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;
-import com.ganster.cms.core.pojo.Group;
-import com.ganster.cms.core.pojo.GroupExample;
-import com.ganster.cms.core.pojo.User;
+import com.gangster.cms.common.pojo.Group;
+import com.gangster.cms.common.pojo.GroupExample;
+import com.gangster.cms.common.pojo.User;
 
 import java.util.List;
 

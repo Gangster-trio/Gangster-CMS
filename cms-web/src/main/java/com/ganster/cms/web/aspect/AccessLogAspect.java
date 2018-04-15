@@ -3,7 +3,7 @@ package com.ganster.cms.web.aspect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.pojo.LogEntry;
+import com.gangster.cms.common.pojo.LogEntry;
 import com.ganster.cms.core.service.LogService;
 import com.ganster.cms.core.util.IPUtil;
 import org.aspectj.lang.JoinPoint;

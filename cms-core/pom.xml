@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>cms</artifactId>
-        <groupId>com.ganster</groupId>
+        <groupId>com.gangster</groupId>
         <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -88,7 +88,7 @@
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>1.3.6</version>
                 <configuration>
-                    <configurationFile>${basedir}/src/main/resources/MBG/cms-mbg-conf.xml</configurationFile>
+                    <configurationFile>../MBG/cms-mbg-conf.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <verbose>true</verbose>
                 </configuration>

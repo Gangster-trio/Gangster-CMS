@@ -2,8 +2,8 @@ package com.ganster.cms.core.service;
 
 
 import com.ganster.cms.core.base.BaseService;
-import com.ganster.cms.core.pojo.Tag;
-import com.ganster.cms.core.pojo.TagExample;
+import com.gangster.cms.common.pojo.Tag;
+import com.gangster.cms.common.pojo.TagExample;
 
 import java.util.List;
 

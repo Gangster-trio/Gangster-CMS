@@ -5,7 +5,7 @@ import com.ganster.cms.core.mapper.GroupPermissionMapper;
 import com.ganster.cms.core.mapper.PermissionMapper;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;
-import com.ganster.cms.core.pojo.*;
+import com.gangster.cms.common.pojo.*;
 import com.ganster.cms.core.service.GroupService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.SiteService;

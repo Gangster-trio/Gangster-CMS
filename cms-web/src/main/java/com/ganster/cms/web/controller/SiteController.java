@@ -1,7 +1,7 @@
 package com.ganster.cms.web.controller;
 
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.pojo.Site;
+import com.gangster.cms.common.pojo.Site;
 import com.ganster.cms.web.annotation.AccessCount;
 import com.ganster.cms.web.annotation.AccessLogger;
 import com.ganster.cms.web.annotation.CountParam;
