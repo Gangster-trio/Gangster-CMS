@@ -19,6 +19,8 @@
         <module>cms-admin</module>
         <module>cms-web</module>
         <module>cms-auth</module>
+        <module>cms-eureka-server</module>
+        <module>cms-search</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

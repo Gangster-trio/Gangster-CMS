@@ -1,10 +1,10 @@
-spring:
-  datasource:
-    druid:
-      url: jdbc:mysql://db_server:3306/db_cms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
-      username: root
-      password: "$%^YGR^&UHGT^&U"
-      driver-class-name: com.mysql.cj.jdbc.Driver
+#spring:
+#  datasource:
+#    druid:
+#      url: jdbc:mysql://db_server:3306/db_cms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+#      username: root
+#      password: "$%^YGR^&UHGT^&U"
+#      driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:

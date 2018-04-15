@@ -1,0 +1,26 @@
+server:
+  port: 2200
+
+spring:
+  application:
+    name: cms-search
+  data:
+    elasticsearch: #ElasticsearchProperties
+      cluster-name: elasticsearch #默认即为elasticsearch
+      cluster-nodes: 127.0.0.1:9300 #配置es节点信息，逗号分隔，如果没有指定，则启动ClientNode
+  datasource:
+    druid:
+      url: jdbc:mysql://db_server:3306/db_cms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+      username: root
+      password: "$%^YGR^&UHGT^&U"
+      driver-class-name: com.mysql.cj.jdbc.Driver
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+  client:
+    health: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
