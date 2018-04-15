@@ -1,8 +1,8 @@
 package com.ganster.cms.core.service.impl;
 
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
-import com.ganster.cms.core.dao.mapper.GroupPermissionMapper;
-import com.ganster.cms.core.dao.mapper.PermissionMapper;
+import com.ganster.cms.core.mapper.GroupPermissionMapper;
+import com.ganster.cms.core.mapper.PermissionMapper;
 import com.ganster.cms.core.exception.GroupNotFountException;
 import com.ganster.cms.core.exception.UserNotFoundException;
 import com.ganster.cms.core.pojo.*;

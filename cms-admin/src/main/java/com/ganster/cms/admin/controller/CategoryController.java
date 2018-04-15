@@ -87,7 +87,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "添加栏目")
     @PostMapping("/add")
-    public MessageDto add(@SessionAttribute User user, @RequestBody Category category) {
+    public MessageDto add(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody Category category) {
         if (!contentWebService.addCategory(user, category)) {
             LOGGER.error("添加栏目:{}失败", category.toString());
             return MessageDto.fail(1, "添加栏目失败");

@@ -1,7 +1,7 @@
 package com.ganster.cms.core.service.impl;
 
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
-import com.ganster.cms.core.dao.mapper.SiteMapper;
+import com.ganster.cms.core.mapper.SiteMapper;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;

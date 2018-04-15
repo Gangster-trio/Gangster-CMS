@@ -2,8 +2,8 @@ package com.ganster.cms.core.service.impl;
 
 
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
-import com.ganster.cms.core.dao.mapper.TagArticleMapper;
-import com.ganster.cms.core.dao.mapper.TagMapper;
+import com.ganster.cms.core.mapper.TagArticleMapper;
+import com.ganster.cms.core.mapper.TagMapper;
 import com.ganster.cms.core.pojo.Tag;
 import com.ganster.cms.core.pojo.TagArticle;
 import com.ganster.cms.core.pojo.TagArticleExample;

@@ -1,16 +1,13 @@
 package com.ganster.cms.admin.controller;
 
-import com.ganster.cms.admin.dto.Message;
+import com.ganster.cms.admin.dto.MessageDto;
 import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.User;
 import com.ganster.cms.core.service.UserService;
 import com.ganster.cms.core.util.PermissionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -18,38 +15,36 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/privilege")
-public class PrivilegeController extends BaseController {
+public class PrivilegeController {
 
     @Autowired
     private UserService userService;
 
     @GetMapping("/category")
-    public Message judgeCategory(@RequestParam Integer siteId, @RequestParam Integer categoryId) {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        User user = userService.selectByPrimaryKey(userId);
-        if (!"admin".equals(user.getUserName())) {
-            if (PermissionUtil.permittedCategory(userId, siteId, categoryId, CmsConst.PERMISSION_WRITE)) {
-                return super.buildMessage(0, "success", "yes");
+    public MessageDto judgeCategory(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId, @RequestParam Integer categoryId) {
+        if (!user.getUserIsAdmin()) {
+            if (PermissionUtil.permittedCategory(user.getUserId(), siteId, categoryId, CmsConst.PERMISSION_WRITE)) {
+                return MessageDto.success(null);
             } else {
-                return super.buildMessage(2, "no privilege", null);
+                return MessageDto.fail(2, "no privilege");
             }
         } else {
-            return super.buildMessage(0, "success", "yes");
+            return MessageDto.success(null);
         }
     }
 
     @GetMapping("/site")
-    public Message judgeSite(@RequestParam Integer siteId) {
+    public MessageDto judgeSite(@RequestParam Integer siteId) {
         Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
         User user = userService.selectByPrimaryKey(userId);
-        if (!"admin".equals(user.getUserName())) {
+        if (!user.getUserIsAdmin()) {
             if (PermissionUtil.permittedSite(userId, siteId)) {
-                return super.buildMessage(0, "success", "yes");
+                return MessageDto.success(null);
             } else {
-                return super.buildMessage(2, "no privilege", null);
+                return MessageDto.fail(2, "privilege");
             }
         } else {
-            return super.buildMessage(0, "success", "yes");
+            return MessageDto.success(null);
         }
     }
 }

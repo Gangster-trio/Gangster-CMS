@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Create by Yoke on 2018/1/30
  */
 @SpringBootApplication(scanBasePackages = "com.ganster.cms")
-@MapperScan("com.ganster.cms.core.dao.mapper")
+@MapperScan("com.ganster.cms.core.mapper")
 public class CmsAdminApplication {
 
     public static void main(String[] args) {

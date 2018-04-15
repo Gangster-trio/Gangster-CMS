@@ -20,9 +20,9 @@ public class UserApi {
     @GetMapping("/judge")
     public MessageDto judge(@SessionAttribute(CmsConst.CURRENT_USER) User user) {
         if (user.getUserIsAdmin()) {
-            return new CmsResultUtil<>().setData(true);
+            return MessageDto.success(true);
         }
-        return new CmsResultUtil<>().setData(false);
+        return MessageDto.fail(1, "审核失败");
     }
 
 }

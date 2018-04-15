@@ -9,6 +9,7 @@ import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.service.PermissionService;
 import com.ganster.cms.core.service.SiteService;
+import com.ganster.cms.core.util.PermissionUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -77,27 +78,6 @@ public class CheckPermissionAspect {
             case CATEGORY_WRITE:
 
         }
-        /*if (type.equals(CheckType.ARTICLE_READ)) {
-
-        } else if (type.equals(CheckType.ARTICLE_WRITE)) {
-            assert id != null;
-            Integer articleId = Integer.valueOf(id);
-            Article article = articleService.selectByPrimaryKey(articleId);
-            if (!user.getUserIsAdmin() || !PermissionUtil.permittedCategory(user.getUserId(), article.getArticleId(), article.getArticleCategoryId(), CmsConst.PERMISSION_WRITE)) {
-                LOGGER.info("当前用户{}没有权限访问:{}", user.getUserName(), request.getRequestURI());
-                handleNoPermission(response);
-            }
-        } else if (type.equals(CheckType.CATEGORY_READ)) {
-
-        } else if (type.equals(CheckType.CATEGORY_WRITE)) {
-            assert id != null;
-            Integer categoryId = Integer.valueOf(id);
-            Category category = categoryService.selectByPrimaryKey(categoryId);
-            if (!user.getUserIsAdmin() || !PermissionUtil.permittedCategory(user.getUserId(), category.getCategorySiteId(), categoryId, CmsConst.PERMISSION_WRITE)) {
-                LOGGER.info("当前用户{}没有权限访问{}", user.getUserName(), request.getRequestURI());
-                handleNoPermission(response);
-            }
-        }*/
 
         LOGGER.info("type:" + type + "id" + id);
 

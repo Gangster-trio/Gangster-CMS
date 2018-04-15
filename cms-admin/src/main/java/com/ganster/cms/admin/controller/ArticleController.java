@@ -44,19 +44,12 @@ public class ArticleController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    /**
-     * 列出某站点待审核的文章
-     *
-     * @param siteId
-     * @param page
-     * @param limit
-     * @return
-     */
+
     @SystemControllerLog(description = "列出待审核的文章")
     @CmsPermission(checkType = CheckType.ARTICLE_WRITE)
     @GetMapping("/list/uncheck")
-    public AjaxData listCheck(@CheckParam @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        PageInfo<Article> pageInfo = contentWebService.listCheckArticle(siteId, page, limit);
+    public AjaxData listCheck(@SessionAttribute(CmsConst.CURRENT_USER) User user, @CheckParam @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        PageInfo<Article> pageInfo = contentWebService.listCheckArticle(user, siteId, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
         }
@@ -67,7 +60,7 @@ public class ArticleController {
     @SystemControllerLog(description = "添加文章")
     @PostMapping("/save")
     public MessageDto save(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody ArticleDTO articleDTO) {
-        if (!contentWebService.addArticle(articleDTO, user)) {
+        if (!contentWebService.addArticle(articleDTO)) {
             LOGGER.error("添加文章失败");
             return MessageDto.fail(1, "添加文章失败");
         }

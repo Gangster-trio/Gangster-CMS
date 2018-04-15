@@ -1,7 +1,7 @@
 package com.ganster.cms.core.service.impl;
 
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
-import com.ganster.cms.core.dao.mapper.SettingEntryMapper;
+import com.ganster.cms.core.mapper.SettingEntryMapper;
 import com.ganster.cms.core.pojo.SettingEntry;
 import com.ganster.cms.core.pojo.SettingEntryExample;
 import com.ganster.cms.core.service.SettingService;

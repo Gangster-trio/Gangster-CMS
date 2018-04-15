@@ -103,6 +103,7 @@
             'url': '/site/details/' + id
             , 'success': function (data) {
                 currentSite = data;
+                showAtRight("/module/count.html");
             }
             , 'async': false
             , 'dataType': 'json'

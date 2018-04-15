@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(scanBasePackages = "com.ganster.cms")
-@MapperScan("com.ganster.cms.core.dao.mapper")
+@MapperScan("com.ganster.cms.core.mapper")
 @EnableScheduling
 public class CmsWebApplication {
     public static void main(String[] args) {

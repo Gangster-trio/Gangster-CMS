@@ -208,7 +208,8 @@
             layui.layedit.sync(editId);
 
             formData = $("#addArticleForm").serializeObject();
-            layui.layer.alert("format data : " + JSON.stringify(formData));
+            // layui.layer.alert("format data : " + JSON.stringify(formData));
+            // console.log(JSON.stringify(formData).split());
             $.ajax({
                 type: "POST",
                 url: "/article/save",
