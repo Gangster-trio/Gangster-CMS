@@ -11,6 +11,7 @@ import com.ganster.cms.core.util.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,14 @@ public class ContentWebService {
 
     @Autowired
     private SettingService settingService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TagService tagService;
 
+    @Autowired
+    private SiteService siteService;
     @Autowired
     private CmsCommonBean cmsCommonBean;
     @Autowired
@@ -47,6 +52,7 @@ public class ContentWebService {
     private ModuleService moduleService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
+    private static final String ADMIN = "admin";
 
     /**
      * 列出站点所有的文章
@@ -57,15 +63,18 @@ public class ContentWebService {
      * @return
      */
     public PageInfo<Article> listArticle(Integer siteId, Integer page, Integer limit) {
-        User user = cmsCommonBean.getUser();
-        List<Integer> categoryList = PermissionUtil.getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_READ);
-        if (null == categoryList || categoryList.isEmpty()) {
-            return null;
-        }
         ArticleExample articleExample = new ArticleExample();
-
-        // 查询文章条件： siteId,categoryId
-        articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleCategoryIdIn(categoryList);
+        User user = cmsCommonBean.getUser();
+        if (user.getUserIsAdmin()) {
+            articleExample.or().andArticleSiteIdEqualTo(siteId);
+        } else {
+            List<Integer> categoryList = PermissionUtil.getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_READ);
+            if (null == categoryList || categoryList.isEmpty()) {
+                return null;
+            }
+            // 查询文章条件： siteId,categoryId
+            articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleCategoryIdIn(categoryList);
+        }
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
 
@@ -250,7 +259,7 @@ public class ContentWebService {
      * @return
      */
     public boolean deleteArticles(String articleIdData) {
-        if (StringUtil.isNullOrEmpty(articleIdData)) {
+        if (!StringUtil.isNullOrEmpty(articleIdData)) {
             String[] articleIds = articleIdData.split(",");
             for (String articleId : articleIds) {
                 try {
@@ -287,33 +296,22 @@ public class ContentWebService {
 
 //    --------------------------------------------栏目部分--------------------------------------------------------------------
 
-    /**
-     * 列出某个栏目下的文章
-     *
-     * @param siteId
-     * @param page
-     * @param limit
-     * @return
-     */
     public PageInfo<Category> listCategory(Integer siteId, Integer page, Integer limit) {
+        User user = cmsCommonBean.getUser();
         CategoryExample categoryExample = new CategoryExample();
-        List<Integer> categoryIdList = PermissionUtil.getAllPermittedCategory(cmsCommonBean.getUser().getUserId(), siteId, CmsConst.PERMISSION_READ);
-        if (categoryIdList == null || categoryIdList.isEmpty()) {
-            return null;
+        if (user.getUserIsAdmin()) {
+            categoryExample.or().andCategorySiteIdEqualTo(siteId);
+        } else {
+            List<Integer> categoryIdList = PermissionUtil.getAllPermittedCategory(cmsCommonBean.getUser().getUserId(), siteId, CmsConst.PERMISSION_READ);
+            if (categoryIdList == null || categoryIdList.isEmpty()) {
+                return null;
+            }
+            categoryExample.or().andCategoryLevelNotEqualTo(-1).andCategoryIdIn(categoryIdList);
         }
-        categoryExample.or().andCategoryLevelNotEqualTo(-1).andCategoryIdIn(categoryIdList);
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
     }
 
-    /**
-     * 列出单个站点需要审核的文章
-     *
-     * @param siteId
-     * @param page
-     * @param limit
-     * @return
-     */
-    public PageInfo<Category> listCheck(Integer siteId, Integer page, Integer limit) {
+    public PageInfo<Category> listCheckCategory(Integer siteId, Integer page, Integer limit) {
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryStatusEqualTo(0);
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
@@ -364,7 +362,7 @@ public class ContentWebService {
      * @param categoryId
      * @return
      */
-    public boolean delete(Integer categoryId) {
+    public boolean deleteCategory(Integer categoryId) {
         Category category = categoryService.selectByPrimaryKey(categoryId);
         if (null == category) {
             LOGGER.info("没有找到id为{}的栏目", categoryId);
@@ -402,7 +400,7 @@ public class ContentWebService {
      * @param category
      * @return
      */
-    public boolean update(Integer categoryId, Category category) {
+    public boolean updateCategory(Integer categoryId, Category category) {
         Category c = categoryService.selectByPrimaryKey(categoryId);
         if (null == c) {
             return false;
@@ -428,7 +426,7 @@ public class ContentWebService {
      * @param categoryId
      * @return
      */
-    public CategoryWithParent details(Integer categoryId) {
+    public CategoryWithParent detailsCategory(Integer categoryId) {
         Category category = categoryService.selectByPrimaryKey(categoryId);
         if (null == category) {
             return null;
@@ -437,7 +435,7 @@ public class ContentWebService {
     }
 
 
-    public boolean add(Category category) {
+    public boolean addCategory(Category category) {
         ModuleExample moduleExample = new ModuleExample();
         moduleExample.or().andModuleNameEqualTo("栏目管理");
         Module module = moduleService.selectByExample(moduleExample).get(0);
@@ -458,15 +456,114 @@ public class ContentWebService {
         try {
             categoryService.insert(category);
         } catch (Exception e) {
+            LOGGER.error("插入栏目出错:{}", e.getMessage());
             e.printStackTrace();
+            return false;
         }
         try {
             if (!cmsCommonBean.getUser().getUserIsAdmin()) {
-                permissionService.addCategoryPermissionToUser(cmsCommonBean.getUser().getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
-                permissionService.addCategoryPermissionToUser(cmsCommonBean.getUser().getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
+                UserExample userExample = new UserExample();
+                userExample.or().andUserNameEqualTo(ADMIN);
+                User user = userService.selectByExample(userExample).get(0);
+                permissionService.addCategoryPermissionToUser(user.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
+                permissionService.addCategoryPermissionToUser(user.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
             }
+            permissionService.addCategoryPermissionToUser(cmsCommonBean.getUser().getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
+            permissionService.addCategoryPermissionToUser(cmsCommonBean.getUser().getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
         } catch (UserNotFoundException e) {
+            LOGGER.error("插入权限出错:{}", e.getMessage());
             e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean deleteCategories(String categoryIdData) {
+        if (StringUtil.isNullOrEmptyAfterTrim(categoryIdData)) {
+            return false;
+        }
+        try {
+            categoryService.deleteBatchCategoryInfo(categoryIdData, CmsConst.PERMISSION_READ);
+            categoryService.deleteBatchCategoryInfo(categoryIdData, CmsConst.PERMISSION_WRITE);
+        } catch (Exception e) {
+            LOGGER.error("删除多个栏目时候出现错误{}", e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkCategory(Integer categoryId, Integer judge) {
+        Category category = categoryService.selectByPrimaryKey(categoryId);
+        if (category == null) {
+            LOGGER.info("没有找到id为{}的栏目", categoryId);
+            return false;
+        }
+        category.setCategoryStatus(judge);
+        try {
+            categoryService.updateByPrimaryKeySelective(category);
+        } catch (Exception e) {
+            LOGGER.error("审核id为{}的栏目出现错误{}", categoryId, e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    //    ------------------------------------------------网站部分------------------------------------------------------------------
+// TODO: 2018/4/15 待修改权限
+    public PageInfo<Site> listSite(Integer page, Integer limit) {
+        User user = cmsCommonBean.getUser();
+        SiteExample siteExample = new SiteExample();
+        List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(user.getUserId());
+        if (null == siteIdList || siteIdList.isEmpty()) {
+            return null;
+        }
+        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> siteService.selectByExample(siteExample));
+    }
+
+
+    public boolean addSite(Site site) {
+        User user = cmsCommonBean.getUser();
+        site.setSiteCreateTime(new Date());
+        site.setSiteStatus(0);
+        try {
+            siteService.insert(site);
+            permissionService.addUserToSite(user.getUserId(), site.getSiteId());
+        } catch (Exception e) {
+            LOGGER.error("插入站点发生错误{}", e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        PermissionUtil.flush(user.getUserId());
+        return true;
+    }
+
+    public boolean deleteSite(Integer siteId) {
+        User user = cmsCommonBean.getUser();
+        try {
+            siteService.deleteSite(siteId);
+        } catch (Exception e) {
+            LOGGER.error("删除站点发生错误{}", e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        PermissionUtil.flush(user.getUserId());
+        return true;
+    }
+
+    public Site detailsSite(Integer siteId) {
+        return siteService.selectByPrimaryKey(siteId);
+    }
+
+    public boolean updateSite(Integer siteId, Site site) {
+        site.setSiteId(siteId);
+        try {
+            siteService.updateByPrimaryKeySelective(site);
+        } catch (Exception e) {
+            LOGGER.error("更新站点失败");
+            e.printStackTrace();
+            return false;
         }
         return true;
     }
