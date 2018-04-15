@@ -2,6 +2,7 @@ package com.ganster.cms.admin.dto;
 
 import com.ganster.cms.core.pojo.Article;
 
+// TODO: 2018/4/15 改为封装
 public class ArticleDTO extends Article {
     private String categoryName;
 

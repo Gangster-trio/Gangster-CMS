@@ -7,10 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-public class ImgConfig extends WebMvcConfigurerAdapter {
+public class ImgConfig implements WebMvcConfigurer {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImgConfig.class);
     private final
     SettingService settingService;
@@ -25,6 +26,5 @@ public class ImgConfig extends WebMvcConfigurerAdapter {
         //pic path must end with "/"
         registry.addResourceHandler("/pic/**").addResourceLocations("file:" + settingService.get(CmsConst.PIC_PATH_SETTING));
         LOGGER.info("Gangster CMS : mapped /pic/** to {}", settingService.get(CmsConst.PIC_PATH_SETTING));
-        super.addResourceHandlers(registry);
     }
 }

@@ -2,9 +2,9 @@ package com.ganster.cms.core.service.impl;
 
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.dao.mapper.CategoryMapper;
-import com.ganster.cms.core.dao.mapper.GroupPermissionMapper;
-import com.ganster.cms.core.dao.mapper.PermissionMapper;
+import com.ganster.cms.core.mapper.CategoryMapper;
+import com.ganster.cms.core.mapper.GroupPermissionMapper;
+import com.ganster.cms.core.mapper.PermissionMapper;
 import com.ganster.cms.core.pojo.*;
 import com.ganster.cms.core.service.CategoryService;
 import com.ganster.cms.core.util.PermissionUtil;

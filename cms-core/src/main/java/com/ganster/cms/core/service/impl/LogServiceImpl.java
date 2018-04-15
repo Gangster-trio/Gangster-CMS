@@ -1,7 +1,7 @@
 package com.ganster.cms.core.service.impl;
 
 import com.ganster.cms.core.base.impl.BaseServiceImpl;
-import com.ganster.cms.core.dao.mapper.LogEntryMapper;
+import com.ganster.cms.core.mapper.LogEntryMapper;
 import com.ganster.cms.core.pojo.LogEntry;
 import com.ganster.cms.core.pojo.LogEntryExample;
 import com.ganster.cms.core.service.LogService;

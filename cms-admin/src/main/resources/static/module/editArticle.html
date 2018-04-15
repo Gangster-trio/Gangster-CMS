@@ -231,7 +231,7 @@
                 layui.layer.alert("failed. " + resp)
             },
             success: function (resp) {
-                layui.layer.alert("添加成功 :" + resp);
+                layui.layer.alert(resp.data);
                 showAtRight("/module/listArticle.html");
             }
         });

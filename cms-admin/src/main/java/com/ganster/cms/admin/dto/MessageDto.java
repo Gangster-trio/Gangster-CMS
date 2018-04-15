@@ -27,6 +27,14 @@ public class MessageDto<T> {
         this.data = data;
     }
 
+    public static MessageDto<Object> success(Object data) {
+        return new MessageDto<>(0, "success", data);
+    }
+
+    public static MessageDto<Object> fail(int code, String msg) {
+        return new MessageDto<>(code, msg, null);
+    }
+
     public int getCode() {
         return code;
     }

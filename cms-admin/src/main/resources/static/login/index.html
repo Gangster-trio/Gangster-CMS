@@ -62,7 +62,7 @@
                 "password": $("#password").val()
             },
             success: function (data) {
-                if (data.code === 100) {
+                if (data.code === 0) {
                     window.location.href = "/index";
                 } else {
                     alert(data.msg);

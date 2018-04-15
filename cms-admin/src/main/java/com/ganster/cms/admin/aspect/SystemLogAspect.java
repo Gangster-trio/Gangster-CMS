@@ -8,7 +8,6 @@ import com.ganster.cms.core.pojo.LogEntry;
 import com.ganster.cms.core.pojo.User;
 import com.ganster.cms.core.service.LogService;
 import com.ganster.cms.core.service.UserService;
-import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -69,12 +68,11 @@ public class SystemLogAspect {
     @After("controllerAspect()")
     public void doAfter(JoinPoint joinPoint) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        Integer uid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
+        User user = (User) request.getSession().getAttribute(CmsConst.CURRENT_USER);
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         SystemControllerLog annotation = method.getAnnotation(SystemControllerLog.class);
-        if (null != uid) {
-            User user = userService.selectByPrimaryKey(uid);
+        if (null != user) {
             Map<String, Object> map = new HashMap<>();
             // 请求开始时间
             Date logStartTime = BEGIN_TIME_THREAD_LOCAL.get();

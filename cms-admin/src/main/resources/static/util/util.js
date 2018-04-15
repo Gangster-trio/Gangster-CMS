@@ -124,3 +124,18 @@ function judgeSitePrivilege(siteId) {
     });
     return operation;
 }
+
+function judgeadmin() {
+    var judge = true;
+    $.ajax({
+        url: '/user/api/judge',
+        dataType: 'json',
+        async: false,
+        type: 'get',
+        success: function (data) {
+            console.log("传过来的验证消息" + data);
+            judge = data.data;
+        }
+    });
+    return judge;
+}

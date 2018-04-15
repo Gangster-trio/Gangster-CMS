@@ -1,4 +1,4 @@
-package com.ganster.cms.core.dao.mapper;
+package com.ganster.cms.core.mapper;
 
 import com.ganster.cms.core.pojo.Site;
 import com.ganster.cms.core.pojo.SiteExample;

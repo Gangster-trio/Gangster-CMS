@@ -1,8 +1,10 @@
-package com.ganster.cms.core.dao.mapper;
+package com.ganster.cms.core.mapper;
 
 import com.ganster.cms.core.pojo.GroupPermission;
 import com.ganster.cms.core.pojo.GroupPermissionExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface GroupPermissionMapper {

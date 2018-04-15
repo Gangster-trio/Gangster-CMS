@@ -3,10 +3,7 @@ package com.ganster.cms.admin.aspect;
 import com.ganster.cms.admin.annotation.CheckParam;
 import com.ganster.cms.admin.annotation.CheckType;
 import com.ganster.cms.admin.annotation.CmsPermission;
-import com.ganster.cms.admin.web.CmsCommonBean;
 import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.pojo.Article;
-import com.ganster.cms.core.pojo.Category;
 import com.ganster.cms.core.pojo.User;
 import com.ganster.cms.core.service.ArticleService;
 import com.ganster.cms.core.service.CategoryService;
@@ -21,7 +18,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -29,7 +25,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
@@ -42,8 +37,6 @@ import java.lang.reflect.Method;
 public class CheckPermissionAspect {
 
 
-    @Autowired
-    private CmsCommonBean cmsCommonBean;
     @Autowired
     private PermissionService permissionService;
     @Autowired
@@ -66,7 +59,7 @@ public class CheckPermissionAspect {
         Method method = methodSignature.getMethod();
         CmsPermission annotation = method.getDeclaredAnnotation(CmsPermission.class);
 
-        String type = annotation.checkType().toString();
+        CheckType type = annotation.checkType();
         int paramCount = method.getParameterCount();
         boolean hasCountParam = false;
         Object[] args = joinPoint.getArgs();
@@ -80,27 +73,10 @@ public class CheckPermissionAspect {
                 break;
             }
         }
-        User user = cmsCommonBean.getUser();
-        if (type.equals(CheckType.ARTICLE_READ)) {
+        User user = (User) request.getSession().getAttribute(CmsConst.CURRENT_USER);
+        switch (type) {
+            case CATEGORY_WRITE:
 
-        } else if (type.equals(CheckType.ARTICLE_WRITE)) {
-            assert id != null;
-            Integer articleId = Integer.valueOf(id);
-            Article article = articleService.selectByPrimaryKey(articleId);
-            if (!user.getUserIsAdmin() || !PermissionUtil.permittedCategory(user.getUserId(), article.getArticleId(), article.getArticleCategoryId(), CmsConst.PERMISSION_WRITE)) {
-                LOGGER.info("当前用户{}没有权限访问:{}", user.getUserName(), request.getRequestURI());
-                handleNoPermission(response);
-            }
-        } else if (type.equals(CheckType.CATEGORY_READ)) {
-
-        } else if (type.equals(CheckType.CATEGORY_WRITE)) {
-            assert id != null;
-            Integer categoryId = Integer.valueOf(id);
-            Category category = categoryService.selectByPrimaryKey(categoryId);
-            if (!user.getUserIsAdmin() || !PermissionUtil.permittedCategory(user.getUserId(), category.getCategorySiteId(), categoryId, CmsConst.PERMISSION_WRITE)) {
-                LOGGER.info("当前用户{}没有权限访问{}", user.getUserName(), request.getRequestURI());
-                handleNoPermission(response);
-            }
         }
 
         LOGGER.info("type:" + type + "id" + id);
