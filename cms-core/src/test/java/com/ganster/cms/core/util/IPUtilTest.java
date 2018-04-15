@@ -13,9 +13,10 @@ import java.io.IOException;
 @SpringBootTest(classes = CoreApplication.class)
 public class IPUtilTest {
     @Test
-    public void test() throws IOException, GeoIp2Exception {
-        IPUtil.getAddr("111.13.101.208");
-        IPUtil.getAddr("101.201.172.229");
-        IPUtil.getAddr("172.217.160.78");
+    public void test() {
+        System.out.println(IPUtil.getAddr("111.13.101.208"));
+        System.out.println(IPUtil.getAddr("101.201.172.229"));
+        System.out.println(IPUtil.getAddr("172.217.160.78"));
+        System.out.println( IPUtil.getAddr("218.26.72.126"));
     }
 }

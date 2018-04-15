@@ -70,4 +70,8 @@ public class DataController {
         }
         return new AjaxData(0, "ok", list.size(), list);
     }
+
+    public void areoCount(Long start,Long end){
+
+    }
 }

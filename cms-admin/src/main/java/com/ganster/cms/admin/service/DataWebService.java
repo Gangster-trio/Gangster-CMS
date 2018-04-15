@@ -136,6 +136,25 @@ public class DataWebService {
         return list;
     }
 
+//    public void addrCount(Long start, Long end) {
+//        if (end.equals(0L)) {
+//            end = Calendar.getInstance().getTimeInMillis();
+//        }
+//        LogEntryExample entryExample = new LogEntryExample();
+//        entryExample.or().andLogTimeBetween(new Date(start), new Date(end));
+//        List<LogEntry> logEntries = logService.selectByExampleWithBLOBs(entryExample);
+//        logEntries.stream().map(e -> {
+//            try {
+//                Map map =new ObjectMapper().readValue(e.getLogInfo(), Map.class);
+//                return map.get("addr");
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//                return null;
+//            }
+//        })
+//
+//    }
+
     class CountMapEntry {
         private String cid;
         private Integer pv;
