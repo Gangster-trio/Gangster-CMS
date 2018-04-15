@@ -1,12 +1,11 @@
 package com.gangster.cms.admin.config;
 
-import com.ganster.cms.core.constant.CmsConst;
-import com.ganster.cms.core.service.SettingService;
+import com.gangster.cms.admin.service.SettingService;
+import com.gangster.cms.common.constant.CmsConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 public class ResourceConfig implements WebMvcConfigurer {

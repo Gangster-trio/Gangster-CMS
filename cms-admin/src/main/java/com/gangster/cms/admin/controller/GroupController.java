@@ -1,16 +1,16 @@
 package com.gangster.cms.admin.controller;
 
 
+import com.gangster.cms.admin.exception.GroupNotFountException;
+import com.gangster.cms.admin.service.GroupService;
+import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.GroupWithPermission;
 import com.gangster.cms.admin.dto.Message;
-import com.ganster.cms.core.exception.GroupNotFountException;
+import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.common.pojo.Group;
 import com.gangster.cms.common.pojo.GroupExample;
 import com.gangster.cms.common.pojo.Permission;
-import com.ganster.cms.core.service.GroupService;
-import com.ganster.cms.core.service.PermissionService;
-import com.ganster.cms.core.util.PermissionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -62,16 +61,14 @@ public class GroupController extends BaseController {
         List<GroupWithPermission> newGplist = new ArrayList<>();
         GroupExample groupExample = new GroupExample();
         List<Group> groupList = factory.groupService.selectByExample(groupExample);
-        Set<Permission> permissionSet = new HashSet<>();
+        Set<Permission> permissionSet;
         for (Group group : groupList) {
             permissionSet = factory.permissionService.selectByGroupId(group.getGroupId());
             List<Permission> permissionList = new ArrayList<>(permissionSet);
             List<String> permissionNameList = new ArrayList<>();
-            if (permissionList != null) {
-                for (Permission permission : permissionList) {
-                    String permissionNames = permission.getPermissionName();
-                    permissionNameList.add(permissionNames);
-                }
+            for (Permission permission : permissionList) {
+                String permissionNames = permission.getPermissionName();
+                permissionNameList.add(permissionNames);
             }
             GroupWithPermission groupWithPermission = new GroupWithPermission(group, permissionNameList);
             newGplist.add(groupWithPermission);

@@ -1,9 +1,9 @@
 package com.gangster.cms.admin.util;
 
+import com.gangster.cms.admin.service.CategoryService;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.common.pojo.Category;
 import com.gangster.cms.common.pojo.CategoryExample;
-import com.ganster.cms.core.service.CategoryService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 

@@ -1,7 +1,7 @@
 package com.gangster.cms.admin.controller;
 
 
-import com.gangster.cms.admin.service.DataWebService;
+import com.gangster.cms.admin.service.web.DataWebService;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.common.pojo.CountEntry;
 import com.github.pagehelper.PageInfo;

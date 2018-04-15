@@ -1,6 +1,6 @@
 package com.gangster.cms.admin.interceptor;
 
-import com.ganster.cms.core.constant.CmsConst;
+import com.gangster.cms.common.constant.CmsConst;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

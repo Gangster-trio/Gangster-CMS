@@ -4,8 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.LogEntry;
+<<<<<<< Updated upstream
 import com.gangster.cms.dao.mapper.LogEntryMapper;
 import com.ganster.cms.web.util.IPUtil;
+=======
+import com.ganster.cms.core.service.LogService;
+import com.ganster.cms.core.util.IPUtil;
+>>>>>>> Stashed changes
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

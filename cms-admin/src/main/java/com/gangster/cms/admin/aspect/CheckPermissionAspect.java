@@ -3,12 +3,12 @@ package com.gangster.cms.admin.aspect;
 import com.gangster.cms.admin.annotation.CheckParam;
 import com.gangster.cms.admin.annotation.CheckType;
 import com.gangster.cms.admin.annotation.CmsPermission;
-import com.ganster.cms.core.constant.CmsConst;
+import com.gangster.cms.admin.service.ArticleService;
+import com.gangster.cms.admin.service.CategoryService;
+import com.gangster.cms.admin.service.PermissionService;
+import com.gangster.cms.admin.service.SiteService;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.User;
-import com.ganster.cms.core.service.ArticleService;
-import com.ganster.cms.core.service.CategoryService;
-import com.ganster.cms.core.service.PermissionService;
-import com.ganster.cms.core.service.SiteService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * @author Yoke
@@ -52,7 +53,7 @@ public class CheckPermissionAspect {
 
     @Before("pointCut()")
     public void check(JoinPoint joinPoint) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();

@@ -39,7 +39,11 @@
 
         <dependency>
             <groupId>com.gangster</groupId>
+<<<<<<< Updated upstream
             <artifactId>cms-dao</artifactId>
+=======
+            <artifactId>cms-core</artifactId>
+>>>>>>> Stashed changes
             <version>0.1</version>
         </dependency>
 

@@ -1,12 +1,12 @@
 package com.gangster.cms.admin.controller;
 
+import com.gangster.cms.admin.service.SettingService;
 import com.gangster.cms.admin.dto.MessageDto;
-import com.ganster.cms.core.constant.CmsConst;
+import com.gangster.cms.admin.util.PermissionUtil;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.SettingEntry;
 import com.gangster.cms.common.pojo.SettingEntryExample;
 import com.gangster.cms.common.pojo.User;
-import com.ganster.cms.core.service.SettingService;
-import com.ganster.cms.core.util.PermissionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

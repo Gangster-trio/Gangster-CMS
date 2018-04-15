@@ -1,7 +1,7 @@
 package com.gangster.cms.admin.util;
 
+import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.common.pojo.Permission;
-import com.ganster.cms.core.service.PermissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

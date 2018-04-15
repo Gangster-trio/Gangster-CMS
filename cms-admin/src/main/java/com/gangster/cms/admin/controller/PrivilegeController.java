@@ -1,11 +1,10 @@
 package com.gangster.cms.admin.controller;
 
+import com.gangster.cms.admin.service.UserService;
 import com.gangster.cms.admin.dto.MessageDto;
-import com.ganster.cms.core.constant.CmsConst;
+import com.gangster.cms.admin.util.PermissionUtil;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.User;
-import com.ganster.cms.core.service.UserService;
-import com.ganster.cms.core.util.PermissionUtil;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,11 +33,9 @@ public class PrivilegeController {
     }
 
     @GetMapping("/site")
-    public MessageDto judgeSite(@RequestParam Integer siteId) {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        User user = userService.selectByPrimaryKey(userId);
+    public MessageDto judgeSite(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId) {
         if (!user.getUserIsAdmin()) {
-            if (PermissionUtil.permittedSite(userId, siteId)) {
+            if (PermissionUtil.permittedSite(user.getUserId(), siteId)) {
                 return MessageDto.success(null);
             } else {
                 return MessageDto.fail(2, "privilege");
