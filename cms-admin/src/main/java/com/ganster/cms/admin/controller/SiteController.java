@@ -4,8 +4,9 @@ import com.ganster.cms.admin.annotation.SystemControllerLog;
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.MessageDto;
 import com.ganster.cms.admin.service.ContentWebService;
-import com.ganster.cms.admin.util.CmsResultUtil;
+import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.Site;
+import com.ganster.cms.core.pojo.User;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class SiteController {
 
     @SystemControllerLog(description = "列出所有的站")
     @GetMapping("/list")
-    public AjaxData list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        PageInfo<Site> pageInfo = contentWebService.listSite(page, limit);
+    public AjaxData list(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        PageInfo<Site> pageInfo = contentWebService.listSite(user, page, limit);
         if (pageInfo == null) {
             return new AjaxData(1, "false", 0, null);
         }
@@ -36,20 +37,20 @@ public class SiteController {
 
     @SystemControllerLog(description = "添加站")
     @PostMapping("/add")
-    public MessageDto add(@RequestBody Site site) {
-        if (contentWebService.addSite(site)) {
-            return new CmsResultUtil<>().setData(null);
+    public MessageDto add(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody Site site) {
+        if (contentWebService.addSite(user, site)) {
+            return MessageDto.success(null);
         }
-        return new CmsResultUtil<>().setError("添加失败");
+        return MessageDto.fail(1, "添加站失败");
     }
 
     @SystemControllerLog(description = "删除站")
     @GetMapping("/delete/{id}")
-    public MessageDto delete(@PathVariable("id") Integer id) {
-        if (contentWebService.deleteSite(id)) {
-            return new CmsResultUtil<>().setData(null);
+    public MessageDto delete(@SessionAttribute(CmsConst.CURRENT_USER) User user, @PathVariable("id") Integer id) {
+        if (contentWebService.deleteSite(user, id)) {
+            return MessageDto.success(null);
         }
-        return new CmsResultUtil<>().setError("删除站点失败");
+        return MessageDto.fail(1, "删除站失败");
     }
 
     @SystemControllerLog(description = "查看站的信息")
@@ -62,8 +63,8 @@ public class SiteController {
     @PostMapping("/update/{id}")
     public MessageDto update(@PathVariable("id") Integer id, @RequestBody Site site) {
         if (contentWebService.updateSite(id, site)) {
-            return new CmsResultUtil<>().setData(null);
+            return MessageDto.success(null);
         }
-        return new CmsResultUtil<>().setError("更新站点失败");
+        return MessageDto.fail(1, "更新单个站失败");
     }
 }

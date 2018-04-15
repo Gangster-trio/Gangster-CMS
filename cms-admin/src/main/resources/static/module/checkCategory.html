@@ -46,41 +46,46 @@
                 categoryId = data.categoryId;   //得到当前点击的栏目id
                 //查看栏目的详细信息
                 if (layEvent === 'access') {
-                    layer.confirm('真的要通过吗?', function (index) {
-                        layer.close(index);
-                        $.ajax({
-                            type: 'get',
-                            url: '/category/check/' + data.categoryId,
-                            data: {'judge': 1},
-                            dataType: "json",
-                            success: function (data) {
-                                if (data.code === 0) {
-                                    obj.del();
-                                    layer.msg(data.msg, {icon: 6});
-                                } else if (data.code === 1) {
-                                    layer.msg(data.msg, {icon: 5});
+                    if (judgeadmin()) {
+                        layer.confirm('真的要通过吗?', function (index) {
+                            layer.close(index);
+                            $.ajax({
+                                type: 'get',
+                                url: '/category/check/' + data.categoryId,
+                                data: {'judge': 1},
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.code === 0) {
+                                        obj.del();
+                                        layer.msg(data.msg, {icon: 6});
+                                    } else if (data.code === 1) {
+                                        layer.msg(data.msg, {icon: 5});
+                                    }
                                 }
-                            }
+                            });
                         });
-                    });
-                } else if (layEvent === 'deny') {
-                    layer.confirm('确定不通过吗?', function (index) {
-                        layer.close(index);
-                        $.ajax({
-                            type: 'get',
-                            url: '/category/check/' + data.categoryId,
-                            data: {'judge': 2},
-                            dataType: "json",
-                            success: function (data) {
-                                if (data.code === 0) {
-                                    obj.del();
-                                    layer.msg(data.msg, {icon: 6});
-                                } else if (data.code === 1) {
-                                    layer.msg(data.msg, {icon: 5});
-                                }
-                            }
-                        });
-                    });
+                        if (layEvent === 'deny') {
+                            layer.confirm('确定不通过吗?', function (index) {
+                                layer.close(index);
+                                $.ajax({
+                                    type: 'get',
+                                    url: '/category/check/' + data.categoryId,
+                                    data: {'judge': 2},
+                                    dataType: "json",
+                                    success: function (data) {
+                                        if (data.code === 0) {
+                                            obj.del();
+                                            layer.msg(data.msg, {icon: 6});
+                                        } else if (data.code === 1) {
+                                            layer.msg(data.msg, {icon: 5});
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    } else {
+                        layer.msg("you not admin");
+                    }
                 }
             });
 
@@ -163,4 +168,5 @@
             }
         );
     }
+
 </script>

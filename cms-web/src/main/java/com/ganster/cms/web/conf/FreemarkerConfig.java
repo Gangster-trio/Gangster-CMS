@@ -27,7 +27,7 @@ public class FreemarkerConfig extends WebMvcConfigurerAdapter {
     public FreeMarkerConfigurer loadPathConfig() {
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
         String path = settingService.get(CmsConst.SKIN_PATH_SETTING);
-        String DEFAULT_SKIN_PATH = "classpath:templates";
+        final String DEFAULT_SKIN_PATH = "classpath:templates";
         if (!path.isEmpty()) {
             configurer.setTemplateLoaderPaths(DEFAULT_SKIN_PATH, path);
             LOGGER.info("Gangster CMS : templates path = {},{}", DEFAULT_SKIN_PATH, path);

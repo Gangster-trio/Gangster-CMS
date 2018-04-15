@@ -220,10 +220,7 @@
                     layui.layer.alert("failed. " + resp)
                 },
                 success: function (resp) {
-                    if (resp.code === 2) {
-                        layui.layer.alert(resp.msg);
-                    }
-                    layui.layer.alert("添加成功");
+                    layui.layer.alert(resp.data);
                     showAtRight("/module/listArticle.html");
                 }
             })

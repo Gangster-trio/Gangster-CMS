@@ -2,7 +2,7 @@ package com.ganster.cms.admin.controller;
 
 import com.ganster.cms.admin.annotation.SystemControllerLog;
 import com.ganster.cms.admin.dto.ModuleTree;
-import com.ganster.cms.admin.web.CmsCommonBean;
+import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.ModuleExample;
 import com.ganster.cms.core.pojo.Site;
 import com.ganster.cms.core.pojo.User;
@@ -16,9 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -36,8 +37,7 @@ public class IndexController {
 
     @Autowired
     PermissionService permissionService;
-    @Autowired
-    private CmsCommonBean cmsCommonBean;
+
     @Autowired
     private SiteService siteService;
 
@@ -47,9 +47,8 @@ public class IndexController {
 
     @SystemControllerLog(description = "到了主界面")
     @GetMapping({"/index", "/"})
-    public ModelAndView index(@RequestParam(required = false) Integer id) {
-
-        User user = cmsCommonBean.getUser();
+    public ModelAndView index(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(required = false) Integer id) {
+        // TODO: 2018/4/15 待优化
         if (id != null) {
             LOGGER.info("用户id为{},名字为{} 刷新权限", user.getUserId(), user.getUserName());
             PermissionUtil.flush(user.getUserId());
@@ -65,9 +64,8 @@ public class IndexController {
         }
 
         List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(user.getUserId());
-        List<Site> siteList = siteIdList.stream().sorted((val1, val2) -> val1 - val2).map(i -> siteService.selectByPrimaryKey(i)).filter(Objects::nonNull).collect(Collectors.toList());
+        List<Site> siteList = siteIdList.stream().sorted(Comparator.comparingInt(val -> val)).map(i -> siteService.selectByPrimaryKey(i)).filter(Objects::nonNull).collect(Collectors.toList());
         // 将当前登录网站为list的第一个
-        cmsCommonBean.setSite(siteList.get(0));
         GroupController.refresh();
         modelAndView.addObject("moduleTreeList", listModule(moduleExample));
         modelAndView.addObject("siteList", siteList);

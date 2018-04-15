@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource(value = "imgconfig.yml")
+//@PropertySource(value = "imgconfig.yml")
 @ConfigurationProperties(prefix = "html-config")
 public class HtmlResolveConfig {
     @Value("${templatePrefix}")

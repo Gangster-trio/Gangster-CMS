@@ -5,11 +5,11 @@ import com.ganster.cms.admin.annotation.SystemControllerLog;
 import com.ganster.cms.admin.dto.AjaxData;
 import com.ganster.cms.admin.dto.MessageDto;
 import com.ganster.cms.admin.service.ContentWebService;
-import com.ganster.cms.admin.util.CmsResultUtil;
+import com.ganster.cms.core.constant.CmsConst;
 import com.ganster.cms.core.pojo.Category;
 import com.ganster.cms.core.pojo.CategoryTree;
 import com.ganster.cms.core.pojo.CategoryWithParent;
-import com.ganster.cms.core.service.*;
+import com.ganster.cms.core.pojo.User;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,32 +24,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private ArticleService articleService;
 
-    @Autowired
-    private PermissionService permissionService;
-
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ModuleService moduleService;
     @Autowired
     private ContentWebService contentWebService;
     private final static Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
     @SystemControllerLog(description = "列出所有的栏目")
     @GetMapping("/list")
-    public AjaxData list(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        PageInfo<Category> pageInfo = contentWebService.listCategory(siteId, page, limit);
+    public AjaxData list(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        PageInfo<Category> pageInfo = contentWebService.listCategory(user, siteId, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
         }
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
+    // TODO: 2018/4/15 列出当前用户待审核的栏目 
     @SystemControllerLog(description = "列出待审核的栏目")
     @GetMapping("/list/uncheck")
     public AjaxData listCheck(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
@@ -69,21 +59,23 @@ public class CategoryController {
 
     @SystemControllerLog(description = "删除单个栏目")
     @GetMapping("/delete/{id}")
-    public MessageDto delete(@PathVariable("id") Integer id) {
-        if (contentWebService.deleteCategory(id)) {
-            return new CmsResultUtil<>().setData(null);
+    public MessageDto delete(@SessionAttribute(CmsConst.CURRENT_USER) User user, @PathVariable("id") Integer id) {
+        if (!contentWebService.deleteCategory(user, id)) {
+            LOGGER.error("删除栏目id:{}失败", id);
+            return MessageDto.fail(1, "删除栏目失败");
         } else {
-            return new CmsResultUtil<>().setError(null);
+            return MessageDto.success(null);
         }
     }
 
     @SystemControllerLog(description = "更新单个栏目")
     @PostMapping("/update/{id}")
     public MessageDto update(@PathVariable("id") Integer id, @RequestBody Category category) {
-        if (contentWebService.updateCategory(id, category)) {
-            return new CmsResultUtil<>().setData(null);
+        if (!contentWebService.updateCategory(id, category)) {
+            LOGGER.error("更新栏目id为{}失败", id);
+            return MessageDto.fail(1, "更新栏目失败");
         } else {
-            return new CmsResultUtil<>().setError(null);
+            return MessageDto.success(null);
         }
     }
 
@@ -95,28 +87,32 @@ public class CategoryController {
 
     @SystemControllerLog(description = "添加栏目")
     @PostMapping("/add")
-    public MessageDto add(@RequestBody Category category) {
-        if (contentWebService.addCategory(category)) {
-            return new CmsResultUtil<>().setData(null);
+    public MessageDto add(@SessionAttribute User user, @RequestBody Category category) {
+        if (!contentWebService.addCategory(user, category)) {
+            LOGGER.error("添加栏目:{}失败", category.toString());
+            return MessageDto.fail(1, "添加栏目失败");
         }
-        return new CmsResultUtil<>().setError(null);
+        return MessageDto.success(null);
     }
 
     @SystemControllerLog(description = "批量删除")
     @PostMapping("delete/batch")
     public MessageDto batchDelete(String categoryIdData) {
-        if (contentWebService.deleteCategories(categoryIdData)) {
-            return new CmsResultUtil<>().setError(null);
+        if (!contentWebService.deleteCategories(categoryIdData)) {
+            LOGGER.error("批量删除id组： {}失败", categoryIdData);
+            return MessageDto.fail(1, "批量删除栏目失败");
         }
-        return new CmsResultUtil<>().setError(null);
+        return MessageDto.success(null);
     }
 
-    @SystemControllerLog(description = "审核多个栏目")
+    @SystemControllerLog(description = "审核栏目")
     @GetMapping("/check/{categoryId}")
     public MessageDto checkCategory(@PathVariable Integer categoryId, @RequestParam Integer judge) {
-        if (contentWebService.checkCategory(categoryId, judge)) {
-            return new CmsResultUtil<>().setData(null);
+        if (!contentWebService.checkCategory(categoryId, judge)) {
+            LOGGER.error("审核栏目失败");
+            return MessageDto.fail(1, "审核栏目失败");
         }
-        return new CmsResultUtil<>().setError(null);
+        return MessageDto.success(null);
     }
+    // TODO: 2018/4/15 待添加批量审核 
 }

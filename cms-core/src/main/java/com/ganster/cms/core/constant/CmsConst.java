@@ -50,4 +50,5 @@ public class CmsConst {
     public static final Integer REVIEW = 0;
     // 未通过
     public static final Integer UNACCESS = 2;
+    public static final String CURRENT_USER = "currentUser";
 }
