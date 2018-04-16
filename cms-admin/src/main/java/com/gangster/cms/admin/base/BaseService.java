@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface BaseService<Record,Example> {
+public interface BaseService<Record, Example> {
 
     long countByExample(Example example);
 

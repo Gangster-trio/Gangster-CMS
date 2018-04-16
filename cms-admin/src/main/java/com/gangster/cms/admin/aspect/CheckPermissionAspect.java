@@ -7,7 +7,10 @@ import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.CategoryService;
 import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.admin.service.SiteService;
+import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.common.constant.CmsConst;
+import com.gangster.cms.common.pojo.Article;
+import com.gangster.cms.common.pojo.Category;
 import com.gangster.cms.common.pojo.User;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -76,7 +79,32 @@ public class CheckPermissionAspect {
         User user = (User) request.getSession().getAttribute(CmsConst.CURRENT_USER);
         switch (type) {
             case CATEGORY_WRITE:
-
+                assert id != null;
+                Integer categoryId = Integer.parseInt(id);
+                Category category = categoryService.selectByPrimaryKey(categoryId);
+                if (!user.getUserIsAdmin() || !PermissionUtil.permittedCategory(user.getUserId(), category.getCategorySiteId(), categoryId, CmsConst.PERMISSION_WRITE)) {
+                    try {
+                        assert response != null;
+                        response.sendRedirect("/module/NoPermission.html");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case ARTICLE_WRITE:
+                assert id != null;
+                Integer articleId = Integer.parseInt(id);
+                Article article = articleService.selectByPrimaryKey(articleId);
+                if (!user.getUserIsAdmin() || !PermissionUtil.permittedCategory(user.getUserId(), article.getArticleSiteId(), article.getArticleCategoryId(), CmsConst.PERMISSION_WRITE)) {
+                    try {
+                        assert response != null;
+                        response.sendRedirect("/module/NoPermission.html");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            default:
         }
 
         LOGGER.info("type:" + type + "id" + id);

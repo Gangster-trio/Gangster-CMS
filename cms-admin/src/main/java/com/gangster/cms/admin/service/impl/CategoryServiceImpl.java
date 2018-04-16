@@ -36,16 +36,14 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
         tree.setName(category.getCategoryTitle());
         tree.setSpread(false);
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId()).andCategoryStatusEqualTo(1);
+        categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId()).andCategoryStatusEqualTo(CmsConst.ACCESS);
         //子栏目
         List<Category> list = selectByExample(categoryExample);
-        if (list == null || list.isEmpty()) {
+        if (list == null) {
             tree.setChildren(null);
             return tree;
         }
-
         tree.setChildren(list.stream().map(this::toTree).collect(Collectors.toList()));
-
         return tree;
     }
 

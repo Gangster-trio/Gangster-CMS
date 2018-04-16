@@ -19,6 +19,11 @@ public class CmsConst {
     //普通文章,不放置在主页上
     public static final String NORMAL_ARTICLE_TYPE = "普通文章";
 
+    // 根栏目级别
+    public static final Integer CATEGORY_ROOT_LEVEL = -1;
+
+    public static final String CATEGORY_ROOT_NAME = "root";
+
     public static final String ARTICLE_SKIN_SUFFIX = "-article";
 
     public static final String CATEGORY_SKIN_SUFFIX = "-category";

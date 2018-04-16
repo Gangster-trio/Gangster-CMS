@@ -208,8 +208,6 @@
             layui.layedit.sync(editId);
 
             formData = $("#addArticleForm").serializeObject();
-            // layui.layer.alert("format data : " + JSON.stringify(formData));
-            // console.log(JSON.stringify(formData).split());
             $.ajax({
                 type: "POST",
                 url: "/article/save",
@@ -218,10 +216,10 @@
                 contentType: "application/json",
                 dataType: "json",
                 error: function (resp) {
-                    layui.layer.alert("failed. " + resp)
+                    layui.layer.alert("failed. " + resp.message);
                 },
                 success: function (resp) {
-                    layui.layer.alert(resp.data);
+                    layui.layer.alert(resp.message);
                     showAtRight("/module/listArticle.html");
                 }
             })

@@ -2,13 +2,13 @@ package com.gangster.cms.admin.controller;
 
 
 import com.gangster.cms.admin.annotation.SystemControllerLog;
-import com.gangster.cms.common.pojo.CategoryTree;
-import com.gangster.cms.common.pojo.CategoryWithParent;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.service.web.ContentWebService;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Category;
+import com.gangster.cms.common.pojo.CategoryTree;
+import com.gangster.cms.common.pojo.CategoryWithParent;
 import com.gangster.cms.common.pojo.User;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -39,12 +39,11 @@ public class CategoryController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    // TODO: 2018/4/15 列出当前用户待审核的栏目 
     @SystemControllerLog(description = "列出待审核的栏目")
     @GetMapping("/list/uncheck")
-    public AjaxData listCheck(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData listCheck(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
 
-        PageInfo<Category> pageInfo = contentWebService.listCheckCategory(siteId, page, limit);
+        PageInfo<Category> pageInfo = contentWebService.listCheckCategory(user, siteId, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
         }
@@ -114,5 +113,4 @@ public class CategoryController {
         }
         return MessageDto.success(null);
     }
-    // TODO: 2018/4/15 待添加批量审核 
 }
