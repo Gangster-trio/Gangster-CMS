@@ -7,6 +7,7 @@ import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
+import com.gangster.cms.common.pojo.Module;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;

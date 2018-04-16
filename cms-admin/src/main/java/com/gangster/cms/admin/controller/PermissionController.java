@@ -10,6 +10,7 @@ import com.gangster.cms.admin.util.JudgeAuthUtil;
 import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
+import com.gangster.cms.common.pojo.Module;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

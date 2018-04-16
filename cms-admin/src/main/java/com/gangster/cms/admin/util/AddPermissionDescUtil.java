@@ -6,6 +6,7 @@ import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.admin.service.SiteService;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
+import com.gangster.cms.common.pojo.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
