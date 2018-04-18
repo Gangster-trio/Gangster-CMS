@@ -1,7 +1,7 @@
-package com.ganster.cms.search.service;
+package com.gangster.cms.search.service;
 
-import com.ganster.cms.search.CmsSearchApplication;
-import com.ganster.cms.search.model.ArticleModel;
+import com.gangster.cms.search.CmsSearchApplication;
+import com.gangster.cms.search.model.ArticleModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
