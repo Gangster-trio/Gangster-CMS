@@ -1,12 +1,14 @@
 package com.gangster.cms.admin.aspect;
 
+import com.alibaba.druid.support.json.JSONUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gangster.cms.admin.annotation.CheckParam;
 import com.gangster.cms.admin.annotation.CheckType;
 import com.gangster.cms.admin.annotation.CmsPermission;
+import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.CategoryService;
-import com.gangster.cms.admin.service.PermissionService;
-import com.gangster.cms.admin.service.SiteService;
 import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Article;
@@ -28,6 +30,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
@@ -41,11 +44,7 @@ public class CheckPermissionAspect {
 
 
     @Autowired
-    private PermissionService permissionService;
-    @Autowired
     private ArticleService articleService;
-    @Autowired
-    private SiteService siteService;
     @Autowired
     private CategoryService categoryService;
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckPermissionAspect.class);
@@ -77,15 +76,38 @@ public class CheckPermissionAspect {
             }
         }
         User user = (User) request.getSession().getAttribute(CmsConst.CURRENT_USER);
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String message = null;
+        try {
+            message= objectMapper.writeValueAsString(MessageDto.fail(2, "没有权限"));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=utf-8");
+
+
         switch (type) {
             case CATEGORY_WRITE:
                 assert id != null;
                 Integer categoryId = Integer.parseInt(id);
                 Category category = categoryService.selectByPrimaryKey(categoryId);
-                if (!user.getUserIsAdmin() || !PermissionUtil.permittedCategory(user.getUserId(), category.getCategorySiteId(), categoryId, CmsConst.PERMISSION_WRITE)) {
+                if (!PermissionUtil.permittedCategory(user.getUserId(), category.getCategorySiteId(), categoryId, CmsConst.PERMISSION_WRITE)) {
                     try {
-                        assert response != null;
-                        response.sendRedirect("/module/NoPermission.html");
+                        response.getWriter().write(message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CATEGORY_READ:
+                Integer categoryReadId = Integer.parseInt(id);
+                Category readCategory = categoryService.selectByPrimaryKey(categoryReadId);
+                if (!PermissionUtil.permittedCategory(user.getUserId(), readCategory.getCategorySiteId(), categoryReadId, CmsConst.PERMISSION_READ)) {
+                    try {
+                        response.getWriter().write(message);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -95,10 +117,30 @@ public class CheckPermissionAspect {
                 assert id != null;
                 Integer articleId = Integer.parseInt(id);
                 Article article = articleService.selectByPrimaryKey(articleId);
-                if (!user.getUserIsAdmin() || !PermissionUtil.permittedCategory(user.getUserId(), article.getArticleSiteId(), article.getArticleCategoryId(), CmsConst.PERMISSION_WRITE)) {
+                if (!PermissionUtil.permittedCategory(user.getUserId(), article.getArticleSiteId(), article.getArticleCategoryId(), CmsConst.PERMISSION_WRITE)) {
                     try {
-                        assert response != null;
-                        response.sendRedirect("/module/NoPermission.html");
+                        response.getWriter().write(message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case ARTICLE_READ:
+                assert id != null;
+                Integer readArticleId = Integer.parseInt(id);
+                Article readArticle = articleService.selectByPrimaryKey(readArticleId);
+                if (!PermissionUtil.permittedCategory(user.getUserId(), readArticle.getArticleSiteId(),readArticle.getArticleCategoryId(), CmsConst.PERMISSION_READ)) {
+                    try {
+                        response.getWriter().write(message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case ADMIN_CHECK:
+                if (!user.getUserIsAdmin()) {
+                    try {
+                        response.getWriter().write(message);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -114,13 +156,4 @@ public class CheckPermissionAspect {
         }
     }
 
-    public void handleNoPermission(HttpServletResponse response) {
-        String s = "Sorry you have no permission";
-        try {
-            response.getWriter().write(s);
-            response.getWriter().flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

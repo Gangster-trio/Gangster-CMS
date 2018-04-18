@@ -53,9 +53,9 @@
                 if (layEvent === 'detail') {
                     showAtRight("/module/listCategoryArticle.html");
                 }
-                if (judgePrivilege(siteId, categoryId)) {
-                    //删除栏目信息
-                    if (layEvent === 'del') { //删除
+                //删除栏目信息
+                if (layEvent === 'del') { //删除
+                    if (judgePrivilege(siteId, categoryId)) {
                         layer.confirm('真的删除行么', function (index) {
                                 deleteCategory(categoryId);
                                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
@@ -65,17 +65,19 @@
                             }
                         )
                     }
-
-                    //编辑栏目
-                    else if (layEvent === 'edit') {
+                }
+                //编辑栏目
+                else if (layEvent === 'edit') {
+                    if (judgePrivilege(siteId, categoryId)) {
                         showAtRight("/module/editCategory.html");
                     }
-
-                    //跳转到给该栏目添加文章的界面
-                    else if (layEvent === 'add') {   //跳转到添加文章界面
+                }
+                if (layEvent === 'add') {   //跳转到添加文章界面
+                    if (judgePrivilege(siteId)) {
                         showAtRight("/module/addCategory.html");
                     }
                 }
+                //跳转到给该栏目添加文章的界面
             });
 
 
@@ -144,7 +146,7 @@
 
     //添加栏目的按钮注册事件
     $("#column").on('click', function () {
-        if (judgePrivilege(siteId, categoryId)) {
+        if (judgePrivilege(siteId)) {
             showAtRight("/module/addCategory.html");
         }
     });

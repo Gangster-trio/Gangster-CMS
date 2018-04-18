@@ -6,6 +6,9 @@ package com.gangster.cms.admin.annotation;
  */
 public enum CheckType {
     ARTICLE_WRITE,
+    ARTICLE_READ,
+    CATEGORY_READ,
     CATEGORY_WRITE,
-    SITE_wRITE;
+    ADMIN_CHECK,
+    SITE_WRITE;
 }

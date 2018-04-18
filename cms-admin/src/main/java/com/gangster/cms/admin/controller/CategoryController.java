@@ -29,6 +29,7 @@ public class CategoryController {
     private ContentWebService contentWebService;
     private final static Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
+    // 内部实现权限
     @SystemControllerLog(description = "列出所有的栏目")
     @GetMapping("/list")
     public AjaxData list(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {

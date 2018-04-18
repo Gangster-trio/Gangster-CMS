@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gangster.cms.dao.mapper.WebFileMapper">
+    <resultMap id="BaseResultMap" type="com.gangster.cms.common.pojo.WebFile">
+        <constructor>
+            <idArg column="file_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="file_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="file_created" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="file_down_count" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="file_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="file_size" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="file_article_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        </constructor>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    file_id, file_name, file_created, file_down_count, file_type, file_size, file_article_id
+  </sql>
+    <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.WebFileExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from cms_file
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cms_file
+        where file_id = #{fileId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cms_file
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.gangster.cms.common.pojo.WebFileExample">
+        delete from cms_file
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.gangster.cms.common.pojo.WebFile">
+        <selectKey keyProperty="fileId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into cms_file (file_name, file_created, file_down_count,
+        file_type, file_size, file_article_id
+        )
+        values (#{fileName,jdbcType=VARCHAR}, #{fileCreated,jdbcType=TIMESTAMP}, #{fileDownCount,jdbcType=INTEGER},
+        #{fileType,jdbcType=VARCHAR}, #{fileSize,jdbcType=VARCHAR}, #{fileArticleId,jdbcType=INTEGER}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.WebFile">
+        <selectKey keyProperty="fileId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into cms_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">
+                file_name,
+            </if>
+            <if test="fileCreated != null">
+                file_created,
+            </if>
+            <if test="fileDownCount != null">
+                file_down_count,
+            </if>
+            <if test="fileType != null">
+                file_type,
+            </if>
+            <if test="fileSize != null">
+                file_size,
+            </if>
+            <if test="fileArticleId != null">
+                file_article_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="fileCreated != null">
+                #{fileCreated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fileDownCount != null">
+                #{fileDownCount,jdbcType=INTEGER},
+            </if>
+            <if test="fileType != null">
+                #{fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="fileSize != null">
+                #{fileSize,jdbcType=VARCHAR},
+            </if>
+            <if test="fileArticleId != null">
+                #{fileArticleId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.gangster.cms.common.pojo.WebFileExample" resultType="java.lang.Long">
+        select count(*) from cms_file
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update cms_file
+        <set>
+            <if test="record.fileId != null">
+                file_id = #{record.fileId,jdbcType=INTEGER},
+            </if>
+            <if test="record.fileName != null">
+                file_name = #{record.fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.fileCreated != null">
+                file_created = #{record.fileCreated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.fileDownCount != null">
+                file_down_count = #{record.fileDownCount,jdbcType=INTEGER},
+            </if>
+            <if test="record.fileType != null">
+                file_type = #{record.fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.fileSize != null">
+                file_size = #{record.fileSize,jdbcType=VARCHAR},
+            </if>
+            <if test="record.fileArticleId != null">
+                file_article_id = #{record.fileArticleId,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update cms_file
+        set file_id = #{record.fileId,jdbcType=INTEGER},
+        file_name = #{record.fileName,jdbcType=VARCHAR},
+        file_created = #{record.fileCreated,jdbcType=TIMESTAMP},
+        file_down_count = #{record.fileDownCount,jdbcType=INTEGER},
+        file_type = #{record.fileType,jdbcType=VARCHAR},
+        file_size = #{record.fileSize,jdbcType=VARCHAR},
+        file_article_id = #{record.fileArticleId,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.gangster.cms.common.pojo.WebFile">
+        update cms_file
+        <set>
+            <if test="fileName != null">
+                file_name = #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="fileCreated != null">
+                file_created = #{fileCreated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fileDownCount != null">
+                file_down_count = #{fileDownCount,jdbcType=INTEGER},
+            </if>
+            <if test="fileType != null">
+                file_type = #{fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="fileSize != null">
+                file_size = #{fileSize,jdbcType=VARCHAR},
+            </if>
+            <if test="fileArticleId != null">
+                file_article_id = #{fileArticleId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where file_id = #{fileId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.gangster.cms.common.pojo.WebFile">
+    update cms_file
+    set file_name = #{fileName,jdbcType=VARCHAR},
+      file_created = #{fileCreated,jdbcType=TIMESTAMP},
+      file_down_count = #{fileDownCount,jdbcType=INTEGER},
+      file_type = #{fileType,jdbcType=VARCHAR},
+      file_size = #{fileSize,jdbcType=VARCHAR},
+      file_article_id = #{fileArticleId,jdbcType=INTEGER}
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </update>
+</mapper>

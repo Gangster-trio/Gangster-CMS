@@ -1,9 +1,6 @@
 package com.gangster.cms.admin.controller;
 
 
-import com.gangster.cms.admin.annotation.CheckParam;
-import com.gangster.cms.admin.annotation.CheckType;
-import com.gangster.cms.admin.annotation.CmsPermission;
 import com.gangster.cms.admin.annotation.SystemControllerLog;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.ArticleDTO;
@@ -36,7 +33,7 @@ public class ArticleController {
 
     @SystemControllerLog(description = "列出所有的文章")
     @GetMapping("/list")
-    public AjaxData list(@SessionAttribute(CmsConst.CURRENT_USER) User user, @CheckParam @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData list(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Article> pageInfo = contentWebService.listArticle(user, siteId, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
@@ -44,11 +41,9 @@ public class ArticleController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-
     @SystemControllerLog(description = "列出待审核的文章")
-    @CmsPermission(checkType = CheckType.ARTICLE_WRITE)
     @GetMapping("/list/uncheck")
-    public AjaxData listCheck(@SessionAttribute(CmsConst.CURRENT_USER) User user, @CheckParam @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData listCheck(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Article> pageInfo = contentWebService.listCheckArticle(user, siteId, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
@@ -84,15 +79,19 @@ public class ArticleController {
 
     @SystemControllerLog(description = "上传图片")
     @PostMapping("/img")
-    public MessageDto uploadImg(@Param("file") MultipartFile file) {
-        Map<String, Object> map = contentWebService.uploadImg(file);
-        return MessageDto.success(null);
+    public Map<String, Object> uploadImg(@Param("file") MultipartFile file) {
+        return contentWebService.uploadImg(file);
+    }
+
+    @PostMapping("/upload")
+    public Map<String, Object> uploadFile(@Param("file") MultipartFile file) {
+        System.out.println(file);
+        return null;
     }
 
     @SystemControllerLog(description = "删除单篇文章")
-    @CmsPermission(checkType = CheckType.ARTICLE_WRITE)
     @GetMapping("/delete/{id}")
-    public MessageDto delete(@CheckParam @PathVariable("id") Integer id) {
+    public MessageDto delete(@PathVariable("id") Integer id) {
 
         if (!contentWebService.deleteSingleArticle(id)) {
             LOGGER.error("删除文章id为{}失败", id);
@@ -104,16 +103,14 @@ public class ArticleController {
     }
 
     @SystemControllerLog(description = "查看单篇文章")
-    @CmsPermission(checkType = CheckType.ARTICLE_WRITE)
     @GetMapping("/details/{id}")
-    public ArticleDTO details(@CheckParam @PathVariable("id") Integer articleId) {
+    public ArticleDTO details(@PathVariable("id") Integer articleId) {
         return contentWebService.detailArticle(articleId);
     }
 
     @SystemControllerLog(description = "更新单篇文章")
-    @CmsPermission(checkType = CheckType.ARTICLE_WRITE)
     @PostMapping("/update/{id}")
-    public MessageDto update(@CheckParam @PathVariable("id") Integer id, @RequestBody ArticleDTO articleDTO) {
+    public MessageDto update(@PathVariable("id") Integer id, @RequestBody ArticleDTO articleDTO) {
         if (!contentWebService.updateArticle(id, articleDTO)) {
             LOGGER.error("更新单篇文章id为{}失败", id);
             return MessageDto.fail(1, "删除文章失败");

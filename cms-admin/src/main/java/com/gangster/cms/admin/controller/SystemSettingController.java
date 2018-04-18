@@ -26,15 +26,7 @@ public class SystemSettingController {
 
     @GetMapping("/list/{id}")
     public List<SettingEntry> list(@SessionAttribute(CmsConst.CURRENT_USER) User user, @PathVariable Integer id) {
-        SettingEntryExample settingEntryExample = new SettingEntryExample();
-        if (user.getUserIsAdmin()) {
-            if (PermissionUtil.permittedModule(user.getUserId(), id, 9, CmsConst.PERMISSION_READ)) {
-                return settingService.selectByExample(settingEntryExample);
-            } else {
-                return null;
-            }
-        }
-        return settingService.selectByExample(settingEntryExample);
+        return settingService.selectByExample(new SettingEntryExample());
     }
 
     @PostMapping("/update")

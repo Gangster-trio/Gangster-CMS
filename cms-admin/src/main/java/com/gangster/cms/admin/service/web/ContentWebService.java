@@ -7,7 +7,6 @@ import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
-import com.gangster.cms.common.pojo.Module;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -48,6 +47,9 @@ public class ContentWebService {
     private PermissionService permissionService;
     @Autowired
     private ModuleService moduleService;
+    @Autowired
+    private UserService userService;
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
     private static final String ADMIN = "admin";
@@ -240,7 +242,6 @@ public class ContentWebService {
 
     public PageInfo<Category> listCategory(User user, Integer siteId, Integer page, Integer limit) {
         CategoryExample categoryExample = new CategoryExample();
-//        CategoryExample.Criteria criteria = categoryExample.createCriteria();
         if (user.getUserIsAdmin()) {
             categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
         } else {
@@ -248,7 +249,7 @@ public class ContentWebService {
             if (categoryIdList.isEmpty()) {
                 return null;
             }
-            categoryExample.or().andCategoryIdIn(categoryIdList);
+            categoryExample.or().andCategoryIdIn(categoryIdList).andCategoryLevelNotEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
         }
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
     }
@@ -384,7 +385,7 @@ public class ContentWebService {
         category.setCategoryStatus(CmsConst.REVIEW);
         Category parentCategory = categoryService.selectByPrimaryKey(category.getCategoryParentId());
         Integer level = parentCategory.getCategoryLevel();
-        if (level == CmsConst.CATEGORY_ROOT_LEVEL) {
+        if (level.equals(CmsConst.CATEGORY_ROOT_LEVEL)) {
             category.setCategoryLevel(0);
         } else {
             category.setCategoryLevel(level + 1);
@@ -400,8 +401,9 @@ public class ContentWebService {
             if (!user.getUserIsAdmin()) {
                 UserExample userExample = new UserExample();
                 userExample.or().andUserNameEqualTo(ADMIN);
-                permissionService.addCategoryPermissionToUser(user.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
-                permissionService.addCategoryPermissionToUser(user.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
+                User root = userService.selectByExample(userExample).get(0);
+                permissionService.addCategoryPermissionToUser(root.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
+                permissionService.addCategoryPermissionToUser(root.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
             }
             permissionService.addCategoryPermissionToUser(user.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
             permissionService.addCategoryPermissionToUser(user.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);

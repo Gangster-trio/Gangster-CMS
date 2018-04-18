@@ -7,15 +7,15 @@
 </head>
 <body>
 <form id="uploadFile" enctype="multipart/form-data" method="post" action="/file/upload">
-    <input type="file" name="uploadFile"/>
-    <input type="submit" value="上传"/>
+    <input onchange="doUpload()" type="file" multiple name="uploadFile"/>
 </form>
 <form id="download" method="post" action="/file/download">
-    <input type="submit" value="点击下载"/>
+    <input onchange="doUpload()" type="submit" value="点击下载"/>
 </form>
 </body>
 <script>
-
+    function doUpload() {
+        $("#uploadFile").submit();
+    }
 </script>
-</body>
 </html>

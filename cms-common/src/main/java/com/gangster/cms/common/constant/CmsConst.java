@@ -22,7 +22,10 @@ public class CmsConst {
     // 根栏目级别
     public static final Integer CATEGORY_ROOT_LEVEL = -1;
 
+    public static final String SETTING_MODULE = "存储设置";
+
     public static final String CATEGORY_ROOT_NAME = "root";
+
 
     public static final String ARTICLE_SKIN_SUFFIX = "-article";
 
@@ -35,6 +38,7 @@ public class CmsConst {
     public static final String SKIN_PATH_SETTING = "skin_path";
 
     public static final String PIC_PATH_SETTING = "pic_path";
+    public static final String FILE_PATH = "file_path";
 
     public static final String PERMISSION_READ = "READ";
 
