@@ -1,0 +1,49 @@
+{
+    "index_patterns": "*",
+    "version": 50001,
+    "settings": {
+        "index.refresh_interval": "5s"
+    },
+    "mappings": {
+        "_default_": {
+            "dynamic_templates": [
+                {
+                    "message_field": {
+                        "path_match": "message",
+                        "match_mapping_type": "string",
+                        "mapping": {
+                            "type": "text",
+                            "norms": false
+                        }
+                    }
+                },
+                {
+                    "string_fields": {
+                        "match": "*",
+                        "match_mapping_type": "string",
+                        "mapping": {
+                            "type": "text",
+                            "norms": false,
+                            "analyzer": "ik_max_word",
+                            "search_analyzer": "ik_max_word",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above":256
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            "properties": {
+                "@timestamp": {
+                    "type": "date"
+                },
+                "@version": {
+                    "type": "keyword"
+                }
+            }
+        }
+    }
+}
