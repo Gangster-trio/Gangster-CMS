@@ -62,7 +62,6 @@ public class ArticleController {
         return MessageDto.success(null);
     }
 
-    // TODO: 2018/4/15 列出当前登录用户的待审核文章 
     @SystemControllerLog(description = "列出某个栏目的文章")
     @GetMapping("/list/category")
     public AjaxData listArticleByColumnId(
@@ -79,15 +78,10 @@ public class ArticleController {
 
     @SystemControllerLog(description = "上传图片")
     @PostMapping("/img")
-    public Map<String, Object> uploadImg(@Param("file") MultipartFile file) {
-        return contentWebService.uploadImg(file);
+    public MessageDto uploadImg(@Param("file") MultipartFile file) {
+        return MessageDto.success(contentWebService.uploadImg(file));
     }
 
-    @PostMapping("/upload")
-    public Map<String, Object> uploadFile(@Param("file") MultipartFile file) {
-        System.out.println(file);
-        return null;
-    }
 
     @SystemControllerLog(description = "删除单篇文章")
     @GetMapping("/delete/{id}")

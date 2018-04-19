@@ -21,12 +21,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns("/css/**", "/fonts/**", "/js/**", "/layui/**", "/login/**", "/util/**", "/pic/**", "/tag/**", "/files/**");
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns("/css/**", "/fonts/**", "/js/**", "/layui/**", "/login/**", "/util/**", "/pic/**", "/tag/**", "/file/**");
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/pic/**").addResourceLocations("file:" + settingService.get(CmsConst.PIC_PATH_SETTING)).setCachePeriod(1);
-        registry.addResourceHandler("/files/**").addResourceLocations("files:" + settingService.get(CmsConst.FILE_PATH)).setCachePeriod(1);
+        registry.addResourceHandler("/webfile/**").addResourceLocations("file:" + settingService.get(CmsConst.FILE_PATH)).setCachePeriod(1);
     }
 }

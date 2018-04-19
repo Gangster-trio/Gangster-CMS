@@ -79,9 +79,10 @@
             <i class="layui-icon"></i>
             <p>点击上传，或将文件拖拽到此处</p>
         </div>
-
-        <input id="articleFiles" class="layui-hide" name="articleFiles"/>
-        <div class="layui-upload">
+        <br/>
+        <input id="fileNames" class="layui-hide" name="fileNames"/>
+        <label style="margin-left: 25px;margin-top: 40px">附件上传</label>
+        <div style="margin-left: 110px" class="layui-upload">
             <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择文件</button>
             <button type="button" class="layui-btn" id="upload-file">开始上传</button>
         </div>
@@ -113,7 +114,7 @@
 <script type="text/javascript">
 
     var editId;
-    var str;
+    var str = "";
     layui.use(['form', 'upload', 'layedit'], function () {
         var form = layui.form, upload = layui.upload, layedit = layui.layedit;
         form.render();
@@ -161,12 +162,13 @@
             , bindAction: '#upload-file'
             , done: function (res) {
                 console.log(res);
-                str.append(res.data);
+                str = str + "," + res.data;
                 layer.closeAll();
-                alert(str);
+                $("#fileNames").val(str);
+                layer.msg("上传成功", {icon: 6});
             }
-            , success: function (res, result) {
-                console.log(res);
+            , error: function () {
+                layer.alert("上传发生错误");
             }
         });
         layedit.set({

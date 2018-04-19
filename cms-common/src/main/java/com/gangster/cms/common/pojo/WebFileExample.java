@@ -554,6 +554,126 @@ public class WebFileExample {
             addCriterion("file_article_id not between", value1, value2, "fileArticleId");
             return (Criteria) this;
         }
+
+        public Criteria andFileSiteIdIsNull() {
+            addCriterion("file_site_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdIsNotNull() {
+            addCriterion("file_site_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdEqualTo(Integer value) {
+            addCriterion("file_site_id =", value, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdNotEqualTo(Integer value) {
+            addCriterion("file_site_id <>", value, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdGreaterThan(Integer value) {
+            addCriterion("file_site_id >", value, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("file_site_id >=", value, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdLessThan(Integer value) {
+            addCriterion("file_site_id <", value, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdLessThanOrEqualTo(Integer value) {
+            addCriterion("file_site_id <=", value, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdIn(List<Integer> values) {
+            addCriterion("file_site_id in", values, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdNotIn(List<Integer> values) {
+            addCriterion("file_site_id not in", values, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdBetween(Integer value1, Integer value2) {
+            addCriterion("file_site_id between", value1, value2, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileSiteIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("file_site_id not between", value1, value2, "fileSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdIsNull() {
+            addCriterion("file_category_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdIsNotNull() {
+            addCriterion("file_category_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdEqualTo(Integer value) {
+            addCriterion("file_category_id =", value, "fileCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdNotEqualTo(Integer value) {
+            addCriterion("file_category_id <>", value, "fileCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdGreaterThan(Integer value) {
+            addCriterion("file_category_id >", value, "fileCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("file_category_id >=", value, "fileCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdLessThan(Integer value) {
+            addCriterion("file_category_id <", value, "fileCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdLessThanOrEqualTo(Integer value) {
+            addCriterion("file_category_id <=", value, "fileCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdIn(List<Integer> values) {
+            addCriterion("file_category_id in", values, "fileCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdNotIn(List<Integer> values) {
+            addCriterion("file_category_id not in", values, "fileCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdBetween(Integer value1, Integer value2) {
+            addCriterion("file_category_id between", value1, value2, "fileCategoryId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileCategoryIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("file_category_id not between", value1, value2, "fileCategoryId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
