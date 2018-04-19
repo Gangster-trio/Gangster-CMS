@@ -1,4 +1,4 @@
-package com.ganster.cms.search;
+package com.gangster.cms.search;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

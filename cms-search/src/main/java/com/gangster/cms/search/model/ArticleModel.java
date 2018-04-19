@@ -1,4 +1,4 @@
-package com.ganster.cms.search.model;
+package com.gangster.cms.search.model;
 
 
 import com.gangster.cms.common.pojo.Article;

@@ -1,4 +1,4 @@
-package com.ganster.cms.search;
+package com.gangster.cms.search;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
