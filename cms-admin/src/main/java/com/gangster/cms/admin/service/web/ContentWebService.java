@@ -49,6 +49,8 @@ public class ContentWebService {
     private ModuleService moduleService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private WebFileService webFileService;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
@@ -84,6 +86,7 @@ public class ContentWebService {
 
 
     public boolean addArticle(ArticleDTO articleDTO) {
+        System.out.println(articleDTO.toString());
         Category category = categoryService.selectByPrimaryKey(articleDTO.toArticle().getArticleCategoryId());
         Integer siteId = category.getCategorySiteId();
         Article article = articleDTO.toArticle();
@@ -91,7 +94,20 @@ public class ContentWebService {
         article.setArticleSiteId(siteId);
         article.setArticleStatus(CmsConst.REVIEW);
         try {
-            articleService.insertSelectiveWithTag(article, Arrays.asList(articleDTO.getTags().split(",")));
+            List<String> fileNames = null;
+            if (articleDTO.getFileNames() != null) {
+                fileNames = Arrays.asList(articleDTO.getFileNames().split(","));
+            }
+
+            WebFileExample webFileExample = new WebFileExample();
+            webFileExample.or().andFileNameIn(fileNames);
+            List<WebFile> files = webFileService.selectByExample(webFileExample);
+            articleService.insertSelectiveWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
+
+            for (WebFile webFile : files) {
+                webFile.setFileArticleId(article.getArticleId());
+            }
+
         } catch (Exception e) {
             LOGGER.error("添加文章{}失败,错误原因{}", articleDTO, e.getMessage());
             e.printStackTrace();
@@ -151,7 +167,7 @@ public class ContentWebService {
             return false;
         }
         try {
-            articleService.deleteArticleWithTags(articleId);
+            articleService.deleteArticleWithTagsAndFiles(articleId);
         } catch (Exception e) {
             LOGGER.error("删除id为{}的文章发生{}错误", articleId, e.getMessage());
             e.printStackTrace();
@@ -213,7 +229,7 @@ public class ContentWebService {
     public boolean deleteArticles(String articleIdData) {
         if (!StringUtil.isNullOrEmpty(articleIdData)) {
             String[] articleIds = articleIdData.split(",");
-            Arrays.stream(articleIds).map(e -> articleService.deleteArticleWithTags(Integer.parseInt(e))).collect(Collectors.toList());
+            Arrays.stream(articleIds).map(e -> articleService.deleteArticleWithTagsAndFiles(Integer.parseInt(e))).collect(Collectors.toList());
             return true;
         } else {
             return false;

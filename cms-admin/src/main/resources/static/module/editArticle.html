@@ -80,6 +80,14 @@
             <p>点击上传，或将文件拖拽到此处</p>
         </div>
 
+        <!--上传文件-->
+        <input id="fileNames" class="layui-hide" name="fileNames"/>
+        <label style="margin-left: 25px;margin-top: 40px">附件上传</label>
+        <div style="margin-left: 110px" class="layui-upload">
+            <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择文件</button>
+            <button type="button" class="layui-btn" id="upload-file">开始上传</button>
+        </div>
+
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
@@ -108,6 +116,7 @@
 
 <script type="text/javascript">
 
+    var str = "";
     $.fn.serializeObject = function () {
         var o = {};
         var a = this.serializeArray();
@@ -189,6 +198,33 @@
                 error: function () {
                     layui.layer.alert("上传失败 ");
                     layer.closeAll();
+                }
+            });
+
+
+            layui.upload.render({
+                elem: '#choose-file'
+                , url: '/file/upload/' + articleId
+                , auto: false
+                , choose: function (obj) {
+                    var files = obj.pushFile();
+                    obj.preview(function (index, file, result) {
+                        console.log(index);
+                    });
+                }
+                , accept: 'file'
+                , size: 0
+                , multiple: true
+                , bindAction: '#upload-file'
+                , done: function (res) {
+                    console.log(res);
+                    str = str + "," + res.data;
+                    layer.closeAll();
+                    $("#fileNames").val(str);
+                    layer.msg("上传成功", {icon: 6});
+                }
+                , error: function () {
+                    layer.alert("上传发生错误");
                 }
             });
 

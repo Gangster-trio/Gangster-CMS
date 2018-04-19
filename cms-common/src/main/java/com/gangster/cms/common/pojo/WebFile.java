@@ -18,9 +18,13 @@ public class WebFile implements Serializable {
 
     private Integer fileArticleId;
 
+    private Integer fileSiteId;
+
+    private Integer fileCategoryId;
+
     private static final long serialVersionUID = 1L;
 
-    public WebFile(Integer fileId, String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId) {
+    public WebFile(Integer fileId, String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId, Integer fileSiteId, Integer fileCategoryId) {
         this.fileId = fileId;
         this.fileName = fileName;
         this.fileCreated = fileCreated;
@@ -28,6 +32,8 @@ public class WebFile implements Serializable {
         this.fileType = fileType;
         this.fileSize = fileSize;
         this.fileArticleId = fileArticleId;
+        this.fileSiteId = fileSiteId;
+        this.fileCategoryId = fileCategoryId;
     }
 
     public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize) {
@@ -36,15 +42,6 @@ public class WebFile implements Serializable {
         this.fileDownCount = fileDownCount;
         this.fileType = fileType;
         this.fileSize = fileSize;
-    }
-
-    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId) {
-        this.fileName = fileName;
-        this.fileCreated = fileCreated;
-        this.fileDownCount = fileDownCount;
-        this.fileType = fileType;
-        this.fileSize = fileSize;
-        this.fileArticleId = fileArticleId;
     }
 
     public WebFile() {
@@ -107,6 +104,22 @@ public class WebFile implements Serializable {
         this.fileArticleId = fileArticleId;
     }
 
+    public Integer getFileSiteId() {
+        return fileSiteId;
+    }
+
+    public void setFileSiteId(Integer fileSiteId) {
+        this.fileSiteId = fileSiteId;
+    }
+
+    public Integer getFileCategoryId() {
+        return fileCategoryId;
+    }
+
+    public void setFileCategoryId(Integer fileCategoryId) {
+        this.fileCategoryId = fileCategoryId;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -125,7 +138,9 @@ public class WebFile implements Serializable {
             && (this.getFileDownCount() == null ? other.getFileDownCount() == null : this.getFileDownCount().equals(other.getFileDownCount()))
             && (this.getFileType() == null ? other.getFileType() == null : this.getFileType().equals(other.getFileType()))
             && (this.getFileSize() == null ? other.getFileSize() == null : this.getFileSize().equals(other.getFileSize()))
-            && (this.getFileArticleId() == null ? other.getFileArticleId() == null : this.getFileArticleId().equals(other.getFileArticleId()));
+            && (this.getFileArticleId() == null ? other.getFileArticleId() == null : this.getFileArticleId().equals(other.getFileArticleId()))
+            && (this.getFileSiteId() == null ? other.getFileSiteId() == null : this.getFileSiteId().equals(other.getFileSiteId()))
+            && (this.getFileCategoryId() == null ? other.getFileCategoryId() == null : this.getFileCategoryId().equals(other.getFileCategoryId()));
     }
 
     @Override
@@ -139,6 +154,8 @@ public class WebFile implements Serializable {
         result = prime * result + ((getFileType() == null) ? 0 : getFileType().hashCode());
         result = prime * result + ((getFileSize() == null) ? 0 : getFileSize().hashCode());
         result = prime * result + ((getFileArticleId() == null) ? 0 : getFileArticleId().hashCode());
+        result = prime * result + ((getFileSiteId() == null) ? 0 : getFileSiteId().hashCode());
+        result = prime * result + ((getFileCategoryId() == null) ? 0 : getFileCategoryId().hashCode());
         return result;
     }
 
@@ -155,6 +172,8 @@ public class WebFile implements Serializable {
         sb.append(", fileType=").append(fileType);
         sb.append(", fileSize=").append(fileSize);
         sb.append(", fileArticleId=").append(fileArticleId);
+        sb.append(", fileSiteId=").append(fileSiteId);
+        sb.append(", fileCategoryId=").append(fileCategoryId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

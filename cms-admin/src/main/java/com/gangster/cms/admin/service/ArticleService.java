@@ -3,6 +3,7 @@ package com.gangster.cms.admin.service;
 import com.gangster.cms.admin.base.BaseService;
 import com.gangster.cms.common.pojo.Article;
 import com.gangster.cms.common.pojo.ArticleExample;
+import com.gangster.cms.common.pojo.WebFile;
 
 import java.util.List;
 
@@ -15,9 +16,9 @@ public interface ArticleService extends BaseService<Article, ArticleExample> {
 
     List<Article> selectArticleByCategoryId(Integer cid, String sort);
 
-    int insertWithTag(Article article, List<String> tagNameList);
+    int insertWithTag(Article article, List<String> tagNameList, List<WebFile> fileList);
 
-    int insertSelectiveWithTag(Article article, List<String> tagNameList);
+    int insertSelectiveWithTagAndFile(Article article, List<String> tagNameList, List<WebFile> fileList);
 
     /**
      * 根据文章id删除文章。同时会删除中间表，以及tag表 如果只有tag表只关联该文章，就删除tag表，如果有多个，不删
@@ -26,4 +27,6 @@ public interface ArticleService extends BaseService<Article, ArticleExample> {
      * @return
      */
     int deleteArticleWithTags(Integer articleId);
+
+    int deleteArticleWithTagsAndFiles(Integer articleId);
 }

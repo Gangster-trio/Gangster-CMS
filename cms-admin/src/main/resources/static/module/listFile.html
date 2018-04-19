@@ -1,0 +1,102 @@
+<div class="layui-elem-quote" style="margin-bottom: 0;">
+    <p>文件管理</p>
+</div>
+<table id="file_table" class="layui-table" style="margin: 0px" lay-filter="filelist"></table>
+<form id="downloadFile" method="post">
+
+</form>
+<script>
+    var categoryId;
+
+    //栏目表格渲染
+    layui.use('table', function () {
+        var first = true;
+        var table = layui.table;
+
+        //对site进行判断，只有选择了site才有显示
+        if (siteId) {
+            table.render({
+                elem: '#file_table'
+                , url: '/file/list?siteId=' + siteId     //得到所选site的栏目
+                , page: true
+                , cols: [[ //表头
+                    {type: 'checkbox'}
+                    , {field: 'fileId', title: 'ID', width: '80', sort: true}
+                    , {field: 'fileName', title: '文件名', width: '300', align: 'center'}
+                    , {field: 'fileCreated', title: "创建时间", width: '250', align: 'center', sort: true}
+                    , {field: 'fileType', title: '类型', width: '100', align: 'center', sort: true}
+                    , {field: 'fileSize', title: '文件大小', width: '80', align: 'center', sort: true}
+                    , {field: 'fileArticleId', title: '文章id', width: '190', align: 'center'}
+                    , {filed: 'tool', title: '操作', align: 'center', toolbar: "#toolBar"}
+                ]]
+                , done: function (res, curr, count) {
+                    if (first) {
+                        layer.msg("加载完成 共" + count + "条数据");
+                        first = false;
+                    }
+                }
+            });
+
+            table.on('checkbox(filelist)', function (obj) {
+                console.log(obj);
+            });
+
+            //监听的事件
+            table.on('tool(filelist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                console.log(data);
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var fileId = data.fileId;
+
+                if (layEvent === 'del') { //删除
+                    if (judgePrivilege(data.fileSiteId, data.fileCategoryId)) {
+                        layer.confirm('真的删除行么', function (index) {
+                                $.ajax({
+                                    type: 'get',
+                                    url: '/file/delete/' + fileId,
+                                    dataType: 'json',
+                                    error: function () {
+                                        layer.msg("系统发生错误", {icon: 5});
+                                    },
+                                    success: function (data) {
+                                        switch (data.code) {
+                                            case 0:
+                                                obj.del();
+                                                layer.msg("删除成功", {icon: 6});
+
+                                                break;
+                                            case 1:
+                                                layer.msg("删除失败", {icon: 5});
+                                                break;
+                                            default:
+                                        }
+                                    }
+                                });
+                            }
+                        )
+                    }
+                }
+                else if (layEvent === 'download') {
+                    downFile(fileId);
+                }
+            });
+        }
+    });
+
+</script>
+<script>
+    function downFile(fileId) {
+        $("#downloadFile").attr("action", "/file/download/" + fileId).submit();
+    }
+</script>
+<script type="text/html" id="toolBar">
+    <div class="layui-btn-group">
+
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="download">
+            <i class="layui-icon">&#xe61e;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>

@@ -1,8 +1,10 @@
 package com.gangster.cms.admin.service.web;
 
+import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.SettingService;
 import com.gangster.cms.admin.service.WebFileService;
 import com.gangster.cms.common.constant.CmsConst;
+import com.gangster.cms.common.pojo.Article;
 import com.gangster.cms.common.pojo.WebFile;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
@@ -27,16 +29,19 @@ public class FileUploadService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadService.class);
     @Autowired
     private SettingService settingService;
-    private StringBuffer stringBuffer = new StringBuffer();
 
-    public String uploadFile(MultipartFile uploadFile) {
+    @Autowired
+    private ArticleService articleService;
+
+    public String uploadFile(Integer id, MultipartFile uploadFile) {
         String originFileName = uploadFile.getOriginalFilename();
         LOGGER.info("文件名为{}的文件开始上传", originFileName);
-        File dir = new File(settingService.get(CmsConst.PIC_PATH_SETTING));
+        File dir = new File(settingService.get(CmsConst.FILE_PATH));
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        String uploadPath = dir + File.separator + UUID.randomUUID().toString() + originFileName;
+        String uuid = UUID.randomUUID().toString();
+        String uploadPath = dir + File.separator + uuid + originFileName;
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
@@ -66,7 +71,14 @@ public class FileUploadService {
 
         long fileSize = uploadFile.getSize();
         String suffix = originFileName.substring(originFileName.lastIndexOf(".") + 1);
-        WebFile webFile = new WebFile(uploadPath, new Date(), 0, suffix, String.valueOf(fileSize));
+        String virtualPath = "/webfile/" + uuid + originFileName;
+        WebFile webFile = new WebFile(virtualPath, new Date(), 0, suffix, String.valueOf(fileSize));
+        if (id != null) {
+            Article article = articleService.selectByPrimaryKey(id);
+            webFile.setFileArticleId(id);
+            webFile.setFileSiteId(article.getArticleSiteId());
+            webFile.setFileCategoryId(article.getArticleCategoryId());
+        }
         try {
             webFileService.insert(webFile);
         } catch (Exception e) {
@@ -74,7 +86,6 @@ public class FileUploadService {
             e.printStackTrace();
         }
         LOGGER.info("文件名为{}的文件上传成功，对应新文件名：{}", originFileName, uploadPath);
-        stringBuffer.append(uploadPath);
-        return stringBuffer.toString();
+        return virtualPath;
     }
 }

@@ -18,7 +18,8 @@ public class CmsConst {
 
     //普通文章,不放置在主页上
     public static final String NORMAL_ARTICLE_TYPE = "普通文章";
-
+    // 虚拟映射
+    public static final String VIRTUAL_PATH = "/pic";
     // 根栏目级别
     public static final Integer CATEGORY_ROOT_LEVEL = -1;
 
