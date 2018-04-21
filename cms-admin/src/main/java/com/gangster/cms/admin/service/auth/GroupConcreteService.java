@@ -32,7 +32,9 @@ public class GroupConcreteService {
      * @return PageInfo<Group>
      */
     public PageInfo<Group> findUserGroup(Integer userId, Integer page, Integer limit) {
-        PageInfo<Group> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> groupService.selectByUserId(userId));
+        GroupExample groupExample=new GroupExample();
+        groupExample.or().andGroupIdGreaterThan(userId);
+        PageInfo<Group> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> groupService.selectByExample(groupExample));
         if (pageInfo==null){
             return null;
         }

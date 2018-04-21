@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController extends BaseController {
+public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserConcreteService userConcreteService;
@@ -88,9 +88,10 @@ public class UserController extends BaseController {
      * @param limit 每页所显示的条数
      * @return AjaxData 查找到的所有用户
      */
+    @SystemControllerLog(description = "查找用户")
     @GetMapping("/find")
     @ResponseBody
-    public AjaxData findUser(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData findUser(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "15") Integer limit) {
         PageInfo<User> pageInfo = userConcreteService.listAllUser(page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
@@ -104,6 +105,7 @@ public class UserController extends BaseController {
      * @param userId 用户的Id
      * @return User 查找到的用户
      */
+    @SystemControllerLog(description = "查找单个用户")
     @GetMapping("/find/{UserId}")
     @ResponseBody
     public User fingUserById(@PathVariable("UserId") Integer userId) {
@@ -118,6 +120,7 @@ public class UserController extends BaseController {
      * @param limit  每页信息的条数
      * @return AjaxData 通过用户Id，查找所属于的用户组
      */
+    @SystemControllerLog(description = "通过用户Id，查找所属于的的用户组")
     @GetMapping("/findgroup/{UserId}")
     @ResponseBody
     public AjaxData findUserGroup(@PathVariable("UserId") Integer userId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "15") Integer limit) {
@@ -125,8 +128,6 @@ public class UserController extends BaseController {
         if (pageInfo == null) {
             return new AjaxData(1, "failed", 0, null);
         }
-//        List<Group> list=pageInfo.getList();
-//        list.forEach(System.out::println);
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
@@ -137,6 +138,7 @@ public class UserController extends BaseController {
      * @param groupId 用户组Id
      * @return int 移出用户的数量
      */
+    @SystemControllerLog(description = "通过用户Id和用户组Id，将用户从用户组中移出")
     @ResponseBody
     @GetMapping("/deletegroup/{UserId}/{GroupId}")
     public int deleteUserGroup(@PathVariable("UserId") Integer userId, @PathVariable("GroupId") Integer groupId) {
@@ -151,6 +153,7 @@ public class UserController extends BaseController {
      *
      * @return AjaxData  查找到的信息
      */
+    @SystemControllerLog(description = "查找所有的用户组")
     @GetMapping("/findgroup")
     @ResponseBody
     public AjaxData findAllGroup() {
@@ -168,6 +171,7 @@ public class UserController extends BaseController {
      * @param userId  用户Id
      * @return Integer 为用户添加的角色组数量
      */
+    @SystemControllerLog(description = "通过用户Id和用户组Id，来向用户组中添加用户")
     @GetMapping("/addGroupToUse/{GroupId}/{UserId}")
     @ResponseBody
     public Integer addGroupToUser(@PathVariable("GroupId") Integer groupId, @PathVariable("UserId") Integer userId) {
