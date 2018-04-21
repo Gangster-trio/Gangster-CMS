@@ -8,17 +8,20 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.1.RELEASE</version>
+        <relativePath/>
     </parent>
 
-    <groupId>com.ganster</groupId>
+    <groupId>com.gangster</groupId>
     <artifactId>cms</artifactId>
     <packaging>pom</packaging>
     <version>0.1</version>
     <modules>
-        <module>cms-core</module>
         <module>cms-admin</module>
         <module>cms-web</module>
-        <module>cms-auth</module>
+        <module>cms-eureka-server</module>
+        <module>cms-search</module>
+        <module>cms-common</module>
+        <module>cms-dao</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,10 +46,12 @@
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
+            <url>https://repo.spring.io/libs-milestone</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
         </repository>
     </repositories>
+
+
 </project>

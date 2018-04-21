@@ -139,8 +139,17 @@
             error: function (resp) {
                 layui.layer.alert("failed: " + resp);
             },
-            success: function () {
-                layui.layer.alert("更新成功");
+            success: function (resp) {
+                switch (resp.code) {
+                    case 0:
+                    case 1:
+                        layui.layer.alert(resp.message);
+                        break;
+                    case 2:
+                        window.location.href = "/module/NoPermission.html";
+                        break;
+                    default:
+                }
                 showAtRight("/module/listCategory.html");
             }
         });

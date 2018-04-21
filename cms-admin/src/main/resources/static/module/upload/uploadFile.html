@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/util/jquery.min.js"></script>
+</head>
+<body>
+<form id="uploadFile" enctype="multipart/form-data" method="post" action="/file/upload">
+    <input onchange="doUpload()" type="file" multiple name="uploadFile"/>
+</form>
+<form id="download" method="post" action="/file/download">
+    <input onchange="doUpload()" type="submit" value="点击下载"/>
+</form>
+</body>
+<script>
+    function doUpload() {
+        $("#uploadFile").submit();
+    }
+</script>
+</html>

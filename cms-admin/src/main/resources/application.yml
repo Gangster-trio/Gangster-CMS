@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: cms-admin
   datasource:
     druid:
       url: jdbc:mysql://db_server:3306/db_cms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
@@ -24,6 +26,11 @@ spring:
     date-format: yyyy-MM-dd hh:mm
   thymeleaf:
     cache: false
+#    配置文件上传大小
+  servlet:
+    multipart:
+      max-file-size: 30Mb
+      max-request-size: 30Mb
 #  http:
 #    multipart:
 #      max-file-size: 3MB
@@ -32,10 +39,20 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     use-generated-keys: true
-  type-aliases-package: com.ganster.cms.core.dao.pojo
-management:
-  security:
-    enabled: false
+  type-aliases-package: com.gangster.cms.common.pojo
+#management:
+#  security:
+#    enabled: false
+eureka:
+  client:
+    fetch-registry: true
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+server:
+  port: 8080
+#feign:
+#  hystrix:
+#    enabled: true
 #cms:
 #  common:  可配置超级管理员的名称
 #    admi:

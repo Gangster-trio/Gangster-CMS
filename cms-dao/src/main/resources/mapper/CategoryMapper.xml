@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gangster.cms.dao.mapper.CategoryMapper">
+  <resultMap id="BaseResultMap" type="com.gangster.cms.common.pojo.Category">
+    <constructor>
+      <idArg column="category_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="category_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="category_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="category_update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="category_parent_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="category_level" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="category_site_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="category_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="category_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="category_order" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="category_skin" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="category_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="category_in_homepage" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="category_hit" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    category_id, category_title, category_create_time, category_update_time, category_parent_id, 
+    category_level, category_site_id, category_status, category_desc, category_order, 
+    category_skin, category_type, category_in_homepage, category_hit
+  </sql>
+  <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.CategoryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from cms_category
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cms_category
+    where category_id = #{categoryId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cms_category
+    where category_id = #{categoryId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.gangster.cms.common.pojo.CategoryExample">
+    delete from cms_category
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.gangster.cms.common.pojo.Category">
+    <selectKey keyProperty="categoryId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cms_category (category_title, category_create_time, 
+      category_update_time, category_parent_id, 
+      category_level, category_site_id, category_status, 
+      category_desc, category_order, category_skin, 
+      category_type, category_in_homepage, category_hit
+      )
+    values (#{categoryTitle,jdbcType=VARCHAR}, #{categoryCreateTime,jdbcType=TIMESTAMP}, 
+      #{categoryUpdateTime,jdbcType=TIMESTAMP}, #{categoryParentId,jdbcType=INTEGER}, 
+      #{categoryLevel,jdbcType=INTEGER}, #{categorySiteId,jdbcType=INTEGER}, #{categoryStatus,jdbcType=INTEGER}, 
+      #{categoryDesc,jdbcType=VARCHAR}, #{categoryOrder,jdbcType=INTEGER}, #{categorySkin,jdbcType=VARCHAR}, 
+      #{categoryType,jdbcType=VARCHAR}, #{categoryInHomepage,jdbcType=BIT}, #{categoryHit,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.Category">
+    <selectKey keyProperty="categoryId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cms_category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="categoryTitle != null">
+        category_title,
+      </if>
+      <if test="categoryCreateTime != null">
+        category_create_time,
+      </if>
+      <if test="categoryUpdateTime != null">
+        category_update_time,
+      </if>
+      <if test="categoryParentId != null">
+        category_parent_id,
+      </if>
+      <if test="categoryLevel != null">
+        category_level,
+      </if>
+      <if test="categorySiteId != null">
+        category_site_id,
+      </if>
+      <if test="categoryStatus != null">
+        category_status,
+      </if>
+      <if test="categoryDesc != null">
+        category_desc,
+      </if>
+      <if test="categoryOrder != null">
+        category_order,
+      </if>
+      <if test="categorySkin != null">
+        category_skin,
+      </if>
+      <if test="categoryType != null">
+        category_type,
+      </if>
+      <if test="categoryInHomepage != null">
+        category_in_homepage,
+      </if>
+      <if test="categoryHit != null">
+        category_hit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="categoryTitle != null">
+        #{categoryTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCreateTime != null">
+        #{categoryCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="categoryUpdateTime != null">
+        #{categoryUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="categoryParentId != null">
+        #{categoryParentId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryLevel != null">
+        #{categoryLevel,jdbcType=INTEGER},
+      </if>
+      <if test="categorySiteId != null">
+        #{categorySiteId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryStatus != null">
+        #{categoryStatus,jdbcType=INTEGER},
+      </if>
+      <if test="categoryDesc != null">
+        #{categoryDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryOrder != null">
+        #{categoryOrder,jdbcType=INTEGER},
+      </if>
+      <if test="categorySkin != null">
+        #{categorySkin,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryType != null">
+        #{categoryType,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryInHomepage != null">
+        #{categoryInHomepage,jdbcType=BIT},
+      </if>
+      <if test="categoryHit != null">
+        #{categoryHit,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.gangster.cms.common.pojo.CategoryExample" resultType="java.lang.Long">
+    select count(*) from cms_category
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cms_category
+    <set>
+      <if test="record.categoryId != null">
+        category_id = #{record.categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryTitle != null">
+        category_title = #{record.categoryTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryCreateTime != null">
+        category_create_time = #{record.categoryCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.categoryUpdateTime != null">
+        category_update_time = #{record.categoryUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.categoryParentId != null">
+        category_parent_id = #{record.categoryParentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryLevel != null">
+        category_level = #{record.categoryLevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.categorySiteId != null">
+        category_site_id = #{record.categorySiteId,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryStatus != null">
+        category_status = #{record.categoryStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryDesc != null">
+        category_desc = #{record.categoryDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryOrder != null">
+        category_order = #{record.categoryOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.categorySkin != null">
+        category_skin = #{record.categorySkin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryType != null">
+        category_type = #{record.categoryType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryInHomepage != null">
+        category_in_homepage = #{record.categoryInHomepage,jdbcType=BIT},
+      </if>
+      <if test="record.categoryHit != null">
+        category_hit = #{record.categoryHit,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cms_category
+    set category_id = #{record.categoryId,jdbcType=INTEGER},
+      category_title = #{record.categoryTitle,jdbcType=VARCHAR},
+      category_create_time = #{record.categoryCreateTime,jdbcType=TIMESTAMP},
+      category_update_time = #{record.categoryUpdateTime,jdbcType=TIMESTAMP},
+      category_parent_id = #{record.categoryParentId,jdbcType=INTEGER},
+      category_level = #{record.categoryLevel,jdbcType=INTEGER},
+      category_site_id = #{record.categorySiteId,jdbcType=INTEGER},
+      category_status = #{record.categoryStatus,jdbcType=INTEGER},
+      category_desc = #{record.categoryDesc,jdbcType=VARCHAR},
+      category_order = #{record.categoryOrder,jdbcType=INTEGER},
+      category_skin = #{record.categorySkin,jdbcType=VARCHAR},
+      category_type = #{record.categoryType,jdbcType=VARCHAR},
+      category_in_homepage = #{record.categoryInHomepage,jdbcType=BIT},
+      category_hit = #{record.categoryHit,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gangster.cms.common.pojo.Category">
+    update cms_category
+    <set>
+      <if test="categoryTitle != null">
+        category_title = #{categoryTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCreateTime != null">
+        category_create_time = #{categoryCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="categoryUpdateTime != null">
+        category_update_time = #{categoryUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="categoryParentId != null">
+        category_parent_id = #{categoryParentId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryLevel != null">
+        category_level = #{categoryLevel,jdbcType=INTEGER},
+      </if>
+      <if test="categorySiteId != null">
+        category_site_id = #{categorySiteId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryStatus != null">
+        category_status = #{categoryStatus,jdbcType=INTEGER},
+      </if>
+      <if test="categoryDesc != null">
+        category_desc = #{categoryDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryOrder != null">
+        category_order = #{categoryOrder,jdbcType=INTEGER},
+      </if>
+      <if test="categorySkin != null">
+        category_skin = #{categorySkin,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryType != null">
+        category_type = #{categoryType,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryInHomepage != null">
+        category_in_homepage = #{categoryInHomepage,jdbcType=BIT},
+      </if>
+      <if test="categoryHit != null">
+        category_hit = #{categoryHit,jdbcType=INTEGER},
+      </if>
+    </set>
+    where category_id = #{categoryId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gangster.cms.common.pojo.Category">
+    update cms_category
+    set category_title = #{categoryTitle,jdbcType=VARCHAR},
+      category_create_time = #{categoryCreateTime,jdbcType=TIMESTAMP},
+      category_update_time = #{categoryUpdateTime,jdbcType=TIMESTAMP},
+      category_parent_id = #{categoryParentId,jdbcType=INTEGER},
+      category_level = #{categoryLevel,jdbcType=INTEGER},
+      category_site_id = #{categorySiteId,jdbcType=INTEGER},
+      category_status = #{categoryStatus,jdbcType=INTEGER},
+      category_desc = #{categoryDesc,jdbcType=VARCHAR},
+      category_order = #{categoryOrder,jdbcType=INTEGER},
+      category_skin = #{categorySkin,jdbcType=VARCHAR},
+      category_type = #{categoryType,jdbcType=VARCHAR},
+      category_in_homepage = #{categoryInHomepage,jdbcType=BIT},
+      category_hit = #{categoryHit,jdbcType=INTEGER}
+    where category_id = #{categoryId,jdbcType=INTEGER}
+  </update>
+</mapper>

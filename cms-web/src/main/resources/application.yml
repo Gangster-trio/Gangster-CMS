@@ -14,7 +14,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     use-generated-keys: true
-  type-aliases-package: com.ganster.cms.core.pojo
+  type-aliases-package: com.gangster.cms.common.pojo
 pagehelper:
   reasonable: true
 server:

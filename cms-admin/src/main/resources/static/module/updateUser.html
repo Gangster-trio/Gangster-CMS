@@ -104,10 +104,10 @@
                     console.log(data);
                     if (data.code === 1) {
                         //关闭弹框
-                        layer.msg("添加成功", {icon: 6});
+                        layer.msg("添加失败", {icon: 5});
                         showAtRight("/module/listUser.html");
                     } else {
-                        layer.msg("添加失败", {icon: 5});
+                        layer.msg("添加成功", {icon: 6});
                         showAtRight("/module/listUser.html");
                     }
                 }

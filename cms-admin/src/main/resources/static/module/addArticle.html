@@ -80,6 +80,11 @@
             <p>点击上传，或将文件拖拽到此处</p>
         </div>
 
+        <input id="articleFiles" class="layui-hide" name="articleFiles"/>
+        <div class="layui-upload">
+            <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择文件</button>
+            <button type="button" class="layui-btn" id="upload-file">开始上传</button>
+        </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
@@ -102,11 +107,13 @@
             </div>
         </div>
     </form>
+
 </div>
 
 <script type="text/javascript">
 
     var editId;
+    var str;
     layui.use(['form', 'upload', 'layedit'], function () {
         var form = layui.form, upload = layui.upload, layedit = layui.layedit;
         form.render();
@@ -138,7 +145,30 @@
             }
         });
 
-
+        upload.render({
+            elem: '#choose-file'
+            , url: '/file/upload'
+            , auto: false
+            , choose: function (obj) {
+                var files = obj.pushFile();
+                obj.preview(function (index, file, result) {
+                    console.log(index);
+                });
+            }
+            , accept: 'file'
+            , size: 0
+            , multiple: true
+            , bindAction: '#upload-file'
+            , done: function (res) {
+                console.log(res);
+                str.append(res.data);
+                layer.closeAll();
+                alert(str);
+            }
+            , success: function (res, result) {
+                console.log(res);
+            }
+        });
         layedit.set({
             uploadImage: {
                 url: '/article/img' //接口url
@@ -208,8 +238,6 @@
             layui.layedit.sync(editId);
 
             formData = $("#addArticleForm").serializeObject();
-            // layui.layer.alert("format data : " + JSON.stringify(formData));
-            // console.log(JSON.stringify(formData).split());
             $.ajax({
                 type: "POST",
                 url: "/article/save",
@@ -218,14 +246,17 @@
                 contentType: "application/json",
                 dataType: "json",
                 error: function (resp) {
-                    layui.layer.alert("failed. " + resp)
+                    layui.layer.alert("failed. " + resp.message);
                 },
                 success: function (resp) {
-                    layui.layer.alert(resp.data);
+                    layui.layer.alert(resp.message);
                     showAtRight("/module/listArticle.html");
                 }
             })
         }
     });
 
+    function doUpload() {
+        $("#uploadFile").submit();
+    }
 </script>

@@ -26,6 +26,7 @@
 </script>
 <script>
 
+    var operateCategoryId;
     //文章表格渲染
     var table = layui.table;
     var first = true;
@@ -73,12 +74,13 @@
                 layEvent = obj.event; //获得 lay-event 对应的值
                 articleId = data.articleId;
                 categoryId = data.articleCategoryId;
+                operateCategoryId = data.articleCategoryId;
                 //显示文章的详细信息
                 if (layEvent === 'detail') {
                 }
-                if (judgePrivilege(siteId, categoryId)) {
-                    //删除文章的权限判断及实现
-                    if (layEvent === 'del') {
+                //删除文章的权限判断及实现
+                if (layEvent === 'del') {
+                    if (judgePrivilege(siteId, categoryId)) {
                         layer.confirm('真的删除行么', function (index) {
                             $.ajax({
                                 url: "/article/delete/" + data.articleId,
@@ -105,8 +107,10 @@
                         });
                     }
 
-                    //更新文章的权限判断及实现
-                    else if (layEvent === 'edit') {
+                }
+                //更新文章的权限判断及实现
+                if (layEvent === 'edit') {
+                    if (judgePrivilege(siteId, categoryId)) {
                         showAtRight("module/editArticle.html");
                     }
                 }
@@ -129,37 +133,40 @@
                         articleIdData += "," + data[i].articleId;
                     }
                 }
-                $.ajax({
-                    type: 'post',
-                    url: '/article/delete/batch',
-                    data: {
-                        "articleIdData": articleIdData
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        if (data.code === 0) {
-                            layer.msg("删除成功", {icon: 6});
-                            console.log("删除成功");
-                            showAtRight("module/listArticle.html");
-                        } else {
-                            layer.msg("删除失败", {icon: 5});
+                if (judgePrivilege(siteId, categoryId)) {
+                    $.ajax({
+                        type: 'post',
+                        url: '/article/delete/batch',
+                        data: {
+                            "articleIdData": articleIdData
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            if (data.code === 0) {
+                                layer.msg("删除成功", {icon: 6});
+                                console.log("删除成功");
+                                showAtRight("module/listArticle.html");
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                            }
                         }
-                    }
 
-                });
+                    });
+                }
             }
         };
         $('#batchDelete').on('click', function () { // 添加按钮点击事件
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
-
     }
 
 
     //添加文章功能
     $("#article").on('click', function () {
-        showAtRight("module/addArticle.html")
+        if (judgePrivilege(siteId)) {
+            showAtRight("module/addArticle.html")
+        }
     });
 </script>
