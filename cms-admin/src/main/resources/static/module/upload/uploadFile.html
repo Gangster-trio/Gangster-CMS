@@ -10,12 +10,16 @@
     <input onchange="doUpload()" type="file" multiple name="uploadFile"/>
 </form>
 <form id="download" method="post" action="/file/download">
-    <input onchange="doUpload()" type="submit" value="点击下载"/>
+    <input onchange="download()" type="submit" value="点击下载"/>
 </form>
 </body>
 <script>
     function doUpload() {
         $("#uploadFile").submit();
+    }
+
+    function download() {
+        $("#download").submit();
     }
 </script>
 </html>

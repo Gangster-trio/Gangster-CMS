@@ -10,6 +10,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class PermissionUtil {
@@ -28,16 +31,13 @@ public class PermissionUtil {
             }
         }
         Set<String> permissionSet = permissionMap.get(uid);
-
-        List<Integer> categoryIdList = new ArrayList<>();
-        Map<String, String> map;
-        for (String s : permissionSet) {
-            map = split(s);
-            if (map.containsKey("Category") && map.get("Permission").equals(per) && map.get("Site").equals(String.valueOf(sid))) {
-                categoryIdList.add(Integer.valueOf(map.get("Category")));
-            }
-        }
-        return categoryIdList;
+        Pattern pattern = Pattern.compile("Site\\(" + sid + "\\):Category\\((?<id>\\d+)\\):Permission\\(" + per + "\\)");
+        return permissionSet.stream()
+                .map(pattern::matcher)
+                .filter(Matcher::matches)
+                .map(matcher -> Integer.parseInt(matcher.group("id")))
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public static List<Integer> getAllPermissionSite(Integer uid) {
@@ -48,16 +48,13 @@ public class PermissionUtil {
         }
         Set<String> permissionSet = permissionMap.get(uid);
 
-        List<Integer> siteIdList = new ArrayList<>();
-
-        Map<String, String> map;
-        for (String s : permissionSet) {
-            map = split(s);
-            if (map.size() == 1 && map.containsKey("Site")) {
-                siteIdList.add(Integer.valueOf(map.get("Site")));
-            }
-        }
-        return siteIdList;
+        Pattern pattern = Pattern.compile("Site\\((?<id>\\d+)\\)");
+        return permissionSet.stream()
+                .map(pattern::matcher)
+                .filter(Matcher::matches)
+                .map(matcher -> Integer.parseInt(matcher.group("id")))
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public static List<Integer> getAllPermissionModule(Integer uid, Integer sid, String per) {
@@ -68,16 +65,13 @@ public class PermissionUtil {
         }
         Set<String> permissionSet = permissionMap.get(uid);
 
-        List<Integer> moduleIdList = new ArrayList<>();
-
-        Map<String, String> map;
-        for (String s : permissionSet) {
-            map = split(s);
-            if (map.containsKey("Module") && Integer.parseInt(map.get("Site")) == sid && map.get("Permission").equals(per)) {
-                moduleIdList.add(Integer.valueOf(map.get("Module")));
-            }
-        }
-        return moduleIdList;
+        Pattern pattern = Pattern.compile("Site\\(" + sid + "\\):Module\\((?<id>\\d+)\\):Permission\\(" + per + "\\)");
+        return permissionSet.stream()
+                .map(pattern::matcher)
+                .filter(Matcher::matches)
+                .map(matcher -> Integer.parseInt(matcher.group("id")))
+                .distinct()
+                .collect(Collectors.toList());
     }
 
 
@@ -114,17 +108,6 @@ public class PermissionUtil {
 
     public static Boolean permittedModule(Integer uid, Integer sid, Integer mid, String p) {
         return permitted(uid, formatModulePermissionName(sid, mid, p));
-    }
-
-    private static Map<String, String> split(String p) {
-        HashMap<String, String> map = new HashMap<>();
-        List<String> list = Arrays.asList(p.split(":"));
-        for (String s : list) {
-            String k = s.substring(0, s.indexOf('('));
-            String v = s.substring(s.indexOf('(') + 1, s.indexOf(')'));
-            map.put(k, v);
-        }
-        return map;
     }
 
     public static String formatCategoryPermissionName(Integer sid, Integer cid, String pName) {

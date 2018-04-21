@@ -3,9 +3,11 @@ package com.gangster.cms.admin.service.impl;
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.TagService;
+import com.gangster.cms.admin.service.WebFileService;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.ArticleMapper;
 import com.gangster.cms.dao.mapper.TagArticleMapper;
+import com.gangster.cms.dao.mapper.WebFileMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
     TagService tagService;
     @Autowired
     TagArticleMapper tagArticleMapper;
+    @Autowired
+    private WebFileMapper webFileMapper;
 
     private List<Integer> selectArticlesIdByTagName(String tag) {
         TagExample tagExample = new TagExample();
@@ -67,21 +71,21 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
 
     @Override
     @Transactional
-    public int insertWithTag(Article article, List<String> tagList) {
+    public int insertWithTag(Article article, List<String> tagList, List<WebFile> fileList) {
         int ret = insert(article);
-        insertTagArticle(article, tagList);
+        insertTagArticle(article, tagList, fileList);
         return ret;
     }
 
     @Override
     @Transactional
-    public int insertSelectiveWithTag(Article article, List<String> tagList) {
+    public int insertSelectiveWithTagAndFile(Article article, List<String> tagList, List<WebFile> fileList) {
         int ret = insertSelective(article);
-        insertTagArticle(article, tagList);
+        insertTagArticle(article, tagList, fileList);
         return ret;
     }
 
-    private void insertTagArticle(Article article, List<String> tagList) {
+    private void insertTagArticle(Article article, List<String> tagList, List<WebFile> fileList) {
         TagExample tagExample = new TagExample();
         for (String tag : tagList) {
             tagExample.or().andTagNameEqualTo(tag);
@@ -103,6 +107,12 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
                 tagArticleMapper.insert(tagArticle);
             }
             tagExample.clear();
+        }
+        for (WebFile webFile : fileList) {
+            webFile.setFileArticleId(article.getArticleId());
+            webFile.setFileCategoryId(article.getArticleCategoryId());
+            webFile.setFileSiteId(article.getArticleSiteId());
+            webFileMapper.updateByPrimaryKey(webFile);
         }
     }
 
@@ -134,6 +144,30 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
             if (count == 1) {
                 tagService.deleteByPrimaryKey(tagArticle.getTagId());
             }
+        }
+        return articleMapper.deleteByPrimaryKey(articleId);
+    }
+
+    @Override
+    public int deleteArticleWithTagsAndFiles(Integer articleId) {
+        TagArticleExample tagArticleExample = new TagArticleExample();
+        tagArticleExample.or().andArticleIdEqualTo(articleId);
+        List<TagArticle> list = tagArticleMapper.selectByExample(tagArticleExample);   //得到要删除文章的所有标签
+        tagArticleMapper.deleteByExample(tagArticleExample);   //删除中间表
+        for (TagArticle tagArticle : list) {
+            TagExample tagExample = new TagExample();
+            tagExample.or().andTagIdEqualTo(tagArticle.getTagId());
+            long count = tagService.countByExample(tagExample);
+            if (count == 1) {
+                tagService.deleteByPrimaryKey(tagArticle.getTagId());
+            }
+        }
+        // 删除文章上传的文件
+        WebFileExample webFileExample = new WebFileExample();
+        webFileExample.or().andFileArticleIdEqualTo(articleId);
+        List<WebFile> files = webFileMapper.selectByExample(webFileExample);
+        if (files != null) {
+            webFileMapper.deleteByExample(webFileExample);
         }
         return articleMapper.deleteByPrimaryKey(articleId);
     }

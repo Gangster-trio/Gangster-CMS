@@ -2,12 +2,25 @@ package com.gangster.cms.admin.dto;
 
 import com.gangster.cms.common.pojo.Article;
 
+import java.util.Date;
+
 // TODO: 2018/4/15 改为封装
 public class ArticleDTO extends Article {
     private String categoryName;
 
+    private String fileNames;
+
     public String getCategoryName() {
         return categoryName;
+    }
+
+
+    public String getFileNames() {
+        return fileNames;
+    }
+
+    public void setFileNames(String fileNames) {
+        this.fileNames = fileNames;
     }
 
     public void setCategoryName(String categoryName) {
@@ -27,6 +40,7 @@ public class ArticleDTO extends Article {
     public ArticleDTO() {
         super();
     }
+
 
     public ArticleDTO(Article article) {
         setArticleId(article.getArticleId());
