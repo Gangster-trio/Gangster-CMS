@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gangster.cms.dao.mapper.QuestionTopicMapper">
+  <resultMap id="BaseResultMap" type="com.gangster.cms.common.pojo.QuestionTopic">
+    <constructor>
+      <idArg column="topic_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="topic_question" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="topic_option" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="topic_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    topic_id, topic_question, topic_option, topic_type
+  </sql>
+  <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.QuestionTopicExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cms_question_topic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cms_question_topic
+    where topic_id = #{topicId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cms_question_topic
+    where topic_id = #{topicId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.gangster.cms.common.pojo.QuestionTopicExample">
+    delete from cms_question_topic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.gangster.cms.common.pojo.QuestionTopic">
+    insert into cms_question_topic (topic_id, topic_question, topic_option, 
+      topic_type)
+    values (#{topicId,jdbcType=INTEGER}, #{topicQuestion,jdbcType=VARCHAR}, #{topicOption,jdbcType=VARCHAR}, 
+      #{topicType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.QuestionTopic">
+    insert into cms_question_topic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="topicId != null">
+        topic_id,
+      </if>
+      <if test="topicQuestion != null">
+        topic_question,
+      </if>
+      <if test="topicOption != null">
+        topic_option,
+      </if>
+      <if test="topicType != null">
+        topic_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="topicId != null">
+        #{topicId,jdbcType=INTEGER},
+      </if>
+      <if test="topicQuestion != null">
+        #{topicQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="topicOption != null">
+        #{topicOption,jdbcType=VARCHAR},
+      </if>
+      <if test="topicType != null">
+        #{topicType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.gangster.cms.common.pojo.QuestionTopicExample" resultType="java.lang.Long">
+    select count(*) from cms_question_topic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cms_question_topic
+    <set>
+      <if test="record.topicId != null">
+        topic_id = #{record.topicId,jdbcType=INTEGER},
+      </if>
+      <if test="record.topicQuestion != null">
+        topic_question = #{record.topicQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topicOption != null">
+        topic_option = #{record.topicOption,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topicType != null">
+        topic_type = #{record.topicType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cms_question_topic
+    set topic_id = #{record.topicId,jdbcType=INTEGER},
+      topic_question = #{record.topicQuestion,jdbcType=VARCHAR},
+      topic_option = #{record.topicOption,jdbcType=VARCHAR},
+      topic_type = #{record.topicType,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gangster.cms.common.pojo.QuestionTopic">
+    update cms_question_topic
+    <set>
+      <if test="topicQuestion != null">
+        topic_question = #{topicQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="topicOption != null">
+        topic_option = #{topicOption,jdbcType=VARCHAR},
+      </if>
+      <if test="topicType != null">
+        topic_type = #{topicType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where topic_id = #{topicId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gangster.cms.common.pojo.QuestionTopic">
+    update cms_question_topic
+    set topic_question = #{topicQuestion,jdbcType=VARCHAR},
+      topic_option = #{topicOption,jdbcType=VARCHAR},
+      topic_type = #{topicType,jdbcType=VARCHAR}
+    where topic_id = #{topicId,jdbcType=INTEGER}
+  </update>
+</mapper>
