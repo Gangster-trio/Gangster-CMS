@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gangster.cms.dao.mapper.CmsMailMapper">
+  <resultMap id="BaseResultMap" type="com.gangster.cms.common.pojo.CmsMail">
+    <constructor>
+      <idArg column="mail_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="mail_in_mail" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="mail_to_mail" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="mail_sendDate" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="mail_receiveDate" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="mail_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="mail_read" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="mail_flag_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    mail_id, mail_in_mail, mail_to_mail, mail_sendDate, mail_receiveDate, mail_content, 
+    mail_read, mail_flag_status
+  </sql>
+  <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.CmsMailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cms_mail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cms_mail
+    where mail_id = #{mailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cms_mail
+    where mail_id = #{mailId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.gangster.cms.common.pojo.CmsMailExample">
+    delete from cms_mail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.gangster.cms.common.pojo.CmsMail">
+    insert into cms_mail (mail_id, mail_in_mail, mail_to_mail, 
+      mail_sendDate, mail_receiveDate, mail_content, 
+      mail_read, mail_flag_status)
+    values (#{mailId,jdbcType=INTEGER}, #{mailInMail,jdbcType=VARCHAR}, #{mailToMail,jdbcType=VARCHAR}, 
+      #{mailSenddate,jdbcType=TIMESTAMP}, #{mailReceivedate,jdbcType=TIMESTAMP}, #{mailContent,jdbcType=VARCHAR}, 
+      #{mailRead,jdbcType=INTEGER}, #{mailFlagStatus,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.CmsMail">
+    insert into cms_mail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mailId != null">
+        mail_id,
+      </if>
+      <if test="mailInMail != null">
+        mail_in_mail,
+      </if>
+      <if test="mailToMail != null">
+        mail_to_mail,
+      </if>
+      <if test="mailSenddate != null">
+        mail_sendDate,
+      </if>
+      <if test="mailReceivedate != null">
+        mail_receiveDate,
+      </if>
+      <if test="mailContent != null">
+        mail_content,
+      </if>
+      <if test="mailRead != null">
+        mail_read,
+      </if>
+      <if test="mailFlagStatus != null">
+        mail_flag_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mailId != null">
+        #{mailId,jdbcType=INTEGER},
+      </if>
+      <if test="mailInMail != null">
+        #{mailInMail,jdbcType=VARCHAR},
+      </if>
+      <if test="mailToMail != null">
+        #{mailToMail,jdbcType=VARCHAR},
+      </if>
+      <if test="mailSenddate != null">
+        #{mailSenddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mailReceivedate != null">
+        #{mailReceivedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mailContent != null">
+        #{mailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="mailRead != null">
+        #{mailRead,jdbcType=INTEGER},
+      </if>
+      <if test="mailFlagStatus != null">
+        #{mailFlagStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.gangster.cms.common.pojo.CmsMailExample" resultType="java.lang.Long">
+    select count(*) from cms_mail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cms_mail
+    <set>
+      <if test="record.mailId != null">
+        mail_id = #{record.mailId,jdbcType=INTEGER},
+      </if>
+      <if test="record.mailInMail != null">
+        mail_in_mail = #{record.mailInMail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mailToMail != null">
+        mail_to_mail = #{record.mailToMail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mailSenddate != null">
+        mail_sendDate = #{record.mailSenddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mailReceivedate != null">
+        mail_receiveDate = #{record.mailReceivedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mailContent != null">
+        mail_content = #{record.mailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mailRead != null">
+        mail_read = #{record.mailRead,jdbcType=INTEGER},
+      </if>
+      <if test="record.mailFlagStatus != null">
+        mail_flag_status = #{record.mailFlagStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cms_mail
+    set mail_id = #{record.mailId,jdbcType=INTEGER},
+      mail_in_mail = #{record.mailInMail,jdbcType=VARCHAR},
+      mail_to_mail = #{record.mailToMail,jdbcType=VARCHAR},
+      mail_sendDate = #{record.mailSenddate,jdbcType=TIMESTAMP},
+      mail_receiveDate = #{record.mailReceivedate,jdbcType=TIMESTAMP},
+      mail_content = #{record.mailContent,jdbcType=VARCHAR},
+      mail_read = #{record.mailRead,jdbcType=INTEGER},
+      mail_flag_status = #{record.mailFlagStatus,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gangster.cms.common.pojo.CmsMail">
+    update cms_mail
+    <set>
+      <if test="mailInMail != null">
+        mail_in_mail = #{mailInMail,jdbcType=VARCHAR},
+      </if>
+      <if test="mailToMail != null">
+        mail_to_mail = #{mailToMail,jdbcType=VARCHAR},
+      </if>
+      <if test="mailSenddate != null">
+        mail_sendDate = #{mailSenddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mailReceivedate != null">
+        mail_receiveDate = #{mailReceivedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mailContent != null">
+        mail_content = #{mailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="mailRead != null">
+        mail_read = #{mailRead,jdbcType=INTEGER},
+      </if>
+      <if test="mailFlagStatus != null">
+        mail_flag_status = #{mailFlagStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where mail_id = #{mailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gangster.cms.common.pojo.CmsMail">
+    update cms_mail
+    set mail_in_mail = #{mailInMail,jdbcType=VARCHAR},
+      mail_to_mail = #{mailToMail,jdbcType=VARCHAR},
+      mail_sendDate = #{mailSenddate,jdbcType=TIMESTAMP},
+      mail_receiveDate = #{mailReceivedate,jdbcType=TIMESTAMP},
+      mail_content = #{mailContent,jdbcType=VARCHAR},
+      mail_read = #{mailRead,jdbcType=INTEGER},
+      mail_flag_status = #{mailFlagStatus,jdbcType=INTEGER}
+    where mail_id = #{mailId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -2,8 +2,9 @@ package com.gangster.cms.dao.mapper;
 
 import com.gangster.cms.common.pojo.QuestionTopic;
 import com.gangster.cms.common.pojo.QuestionTopicExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface QuestionTopicMapper {
     long countByExample(QuestionTopicExample example);

@@ -373,6 +373,66 @@ public class QuestionTopicExample {
             addCriterion("topic_type not between", value1, value2, "topicType");
             return (Criteria) this;
         }
+
+        public Criteria andTopicPageIdIsNull() {
+            addCriterion("topic_page_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdIsNotNull() {
+            addCriterion("topic_page_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdEqualTo(Integer value) {
+            addCriterion("topic_page_id =", value, "topicPageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdNotEqualTo(Integer value) {
+            addCriterion("topic_page_id <>", value, "topicPageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdGreaterThan(Integer value) {
+            addCriterion("topic_page_id >", value, "topicPageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("topic_page_id >=", value, "topicPageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdLessThan(Integer value) {
+            addCriterion("topic_page_id <", value, "topicPageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdLessThanOrEqualTo(Integer value) {
+            addCriterion("topic_page_id <=", value, "topicPageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdIn(List<Integer> values) {
+            addCriterion("topic_page_id in", values, "topicPageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdNotIn(List<Integer> values) {
+            addCriterion("topic_page_id not in", values, "topicPageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdBetween(Integer value1, Integer value2) {
+            addCriterion("topic_page_id between", value1, value2, "topicPageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicPageIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("topic_page_id not between", value1, value2, "topicPageId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

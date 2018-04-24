@@ -32,7 +32,7 @@
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-        <table schema="db_cms"
+       <!-- <table schema="db_cms"
                tableName="cms_article"
                domainObjectName="Article"
                enableCountByExample="true"
@@ -201,18 +201,7 @@
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
         </table>
-        <table tableName="cms_question_topic"
-               schema="db_cms"
-               domainObjectName="QuestionTopic"
-               enableCountByExample="true"
-               enableDeleteByExample="true"
-               enableDeleteByPrimaryKey="true"
-               enableInsert="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               enableUpdateByExample="true"
-               enableUpdateByPrimaryKey="true">
-        </table>
+
         <table tableName="cms_question_answer"
                schema="db_cms"
                domainObjectName="QuestionAnswer"
@@ -225,5 +214,45 @@
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
         </table>
+
+        <table tableName="cms_outerchain"
+               schema="db_cms"
+               domainObjectName="OuterChain"
+               enableCountByExample="true"
+               enableDeleteByExample="true"
+               enableDeleteByPrimaryKey="true"
+               enableInsert="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               enableUpdateByExample="true"
+               enableUpdateByPrimaryKey="true">
+        </table>
+-->
+        <table tableName="cms_question_topic"
+               schema="db_cms"
+               domainObjectName="QuestionTopic"
+               enableCountByExample="true"
+               enableDeleteByExample="true"
+               enableDeleteByPrimaryKey="true"
+               enableInsert="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               enableUpdateByExample="true"
+               enableUpdateByPrimaryKey="true">
+        </table>
+
+        <table tableName="cms_mail"
+               schema="db_cms"
+               domainObjectName="CmsMail"
+               enableCountByExample="true"
+               enableDeleteByExample="true"
+               enableDeleteByPrimaryKey="true"
+               enableInsert="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               enableUpdateByExample="true"
+               enableUpdateByPrimaryKey="true">
+        </table>
+
     </context>
 </generatorConfiguration>

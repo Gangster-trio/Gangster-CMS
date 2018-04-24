@@ -11,13 +11,16 @@ public class QuestionTopic implements Serializable {
 
     private String topicType;
 
+    private Integer topicPageId;
+
     private static final long serialVersionUID = 1L;
 
-    public QuestionTopic(Integer topicId, String topicQuestion, String topicOption, String topicType) {
+    public QuestionTopic(Integer topicId, String topicQuestion, String topicOption, String topicType, Integer topicPageId) {
         this.topicId = topicId;
         this.topicQuestion = topicQuestion;
         this.topicOption = topicOption;
         this.topicType = topicType;
+        this.topicPageId = topicPageId;
     }
 
     public QuestionTopic() {
@@ -56,6 +59,14 @@ public class QuestionTopic implements Serializable {
         this.topicType = topicType == null ? null : topicType.trim();
     }
 
+    public Integer getTopicPageId() {
+        return topicPageId;
+    }
+
+    public void setTopicPageId(Integer topicPageId) {
+        this.topicPageId = topicPageId;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -71,7 +82,8 @@ public class QuestionTopic implements Serializable {
         return (this.getTopicId() == null ? other.getTopicId() == null : this.getTopicId().equals(other.getTopicId()))
             && (this.getTopicQuestion() == null ? other.getTopicQuestion() == null : this.getTopicQuestion().equals(other.getTopicQuestion()))
             && (this.getTopicOption() == null ? other.getTopicOption() == null : this.getTopicOption().equals(other.getTopicOption()))
-            && (this.getTopicType() == null ? other.getTopicType() == null : this.getTopicType().equals(other.getTopicType()));
+            && (this.getTopicType() == null ? other.getTopicType() == null : this.getTopicType().equals(other.getTopicType()))
+            && (this.getTopicPageId() == null ? other.getTopicPageId() == null : this.getTopicPageId().equals(other.getTopicPageId()));
     }
 
     @Override
@@ -82,6 +94,7 @@ public class QuestionTopic implements Serializable {
         result = prime * result + ((getTopicQuestion() == null) ? 0 : getTopicQuestion().hashCode());
         result = prime * result + ((getTopicOption() == null) ? 0 : getTopicOption().hashCode());
         result = prime * result + ((getTopicType() == null) ? 0 : getTopicType().hashCode());
+        result = prime * result + ((getTopicPageId() == null) ? 0 : getTopicPageId().hashCode());
         return result;
     }
 
@@ -95,6 +108,7 @@ public class QuestionTopic implements Serializable {
         sb.append(", topicQuestion=").append(topicQuestion);
         sb.append(", topicOption=").append(topicOption);
         sb.append(", topicType=").append(topicType);
+        sb.append(", topicPageId=").append(topicPageId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
