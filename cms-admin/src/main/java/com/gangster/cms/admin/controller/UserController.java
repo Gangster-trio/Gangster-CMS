@@ -1,27 +1,21 @@
 package com.gangster.cms.admin.controller;
 
 
-import com.gangster.cms.admin.exception.GroupNotFountException;
-import com.gangster.cms.admin.exception.UserNotFoundException;
+import com.gangster.cms.admin.annotation.SystemControllerLog;
+import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.service.GroupService;
-import com.gangster.cms.admin.service.UserService;
 import com.gangster.cms.admin.dto.AjaxData;
-import com.gangster.cms.admin.dto.Message;
+import com.gangster.cms.admin.service.auth.GroupConcreteService;
+import com.gangster.cms.admin.service.auth.UserConcreteService;
 import com.gangster.cms.common.pojo.Group;
-import com.gangster.cms.common.pojo.GroupExample;
 import com.gangster.cms.common.pojo.User;
-import com.gangster.cms.common.pojo.UserExample;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,257 +23,166 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController extends BaseController {
+public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
     @Autowired
-    private UserService userService;
+    private UserConcreteService userConcreteService;
+    @Autowired
+    private GroupConcreteService groupConcreteService;
     @Autowired
     private GroupService groupService;
 
-
-    public Boolean index() {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        List<Group> group = groupService.selectByUserId(userId);
-        for (Group i : group) {
-            if (i.getGroupName().equals("admin")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     /**
-     *
      * 添加用户
-     * @param user  用户对象(用户信息)
-     * @return   Message 添加用户是否成功
+     *
+     * @param user 用户对象(用户信息)
+     * @return Message 添加用户是否成功
      */
-
+    @SystemControllerLog(description = "添加用户对象")
     @PostMapping("/add")
     @ResponseBody
-    public Message addUser(@RequestBody User user) {
-        Message message = new Message();
-        if (!this.index()){
-            message.setMsg("添加权限失败");
-            return message;
+    public MessageDto addUser(@RequestBody User user) {
+        if (userConcreteService.addUser(user)) {
+            return MessageDto.success(null);
         }
-        user.setUserCreateTime(new Date());
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andUserNameEqualTo(user.getUserName());
-        List<User> userList = userService.selectByExample(userExample);
-        if (userList != null && !userList.isEmpty()) {
-            message.setMsg("用户已存在");
-            message.setCode(1);
-        } else {
-            userService.createUser(user);
-            message.setCode(0);
-            message.setMsg("成功添加");
-        }
-
-        return message;
+        return MessageDto.fail(1, "添加用户失败");
     }
 
     /**
      * 修改用户信息
      *
-     * @param userid   用户Id
-     * @param user     原始用户信息
-     * @return  Message  修改用户是否成功
+     * @param userid 用户Id
+     * @param user   原始用户信息
+     * @return Message  修改用户是否成功
      */
+    @SystemControllerLog(description = "修改用户对象")
     @PostMapping(value = "/update/{userid}")
     @ResponseBody
-    public Message updateUser(@PathVariable("userid") Integer userid, @RequestBody User user) {
-        Message message = new Message();
-        if (!this.index()){
-            message.setMsg("添加权限失败");
-            return message;
+    public MessageDto updateUser(@PathVariable("userid") Integer userid, @RequestBody User user) {
+        if (userConcreteService.updateUser(userid, user)) {
+            return MessageDto.success(null);
         }
-        int updateNumber;
-        if (userService.selectByPrimaryKey(userid) != null) {
-            updateNumber = userService.updateByPrimaryKeySelective(user);
-            message.setData(updateNumber);
-            message.setCode(1);
-            message.setMsg("success");
-        } else {
-            message.setMsg("用户不存在");
-        }
-        return message;
+        return MessageDto.fail(1, "修改用户失败");
     }
 
     /**
-     *  删除用户
-     * @param userId   用户的Id
-     * @return   int   删除用户数量
+     * 删除用户
+     *
+     * @param userId 用户的Id
+     * @return int   删除用户数量
      */
+    @SystemControllerLog(description = "删除用户对象")
     @GetMapping("/delete/{UserId}")
     @ResponseBody
-    public int deleteUser(@PathVariable("UserId") Integer userId) {
-        if (!this.index()){
-            return 0;
+    public MessageDto deleteUser(@PathVariable("UserId") Integer userId) {
+        if (userConcreteService.deleteSingleUser(userId)) {
+            return MessageDto.success(null);
         }
-        int message = 0;
-        int delectNumber;
-        if (userService.selectByPrimaryKey(userId) != null) {
-            try {
-                userService.deleteUser(userId);
-                message = 1;
-            } catch (UserNotFoundException e) {
-                logger.info("++++++++++++++++++++++++++++用户为找到+++++++++++++++++++++++++");
-            } catch (GroupNotFountException e) {
-                logger.info("++++++++++++++++++++++++++++++++++用户组为空++++++++++++++++++++++++++++++++++");
-            }
-        }
-        return message;
+        return MessageDto.fail(1, "删除对象失败");
     }
 
     /**
-     *  查找所有的用户
-     * @param page      查找信息的页数
-     * @param limit     每页所显示的条数
-     * @return  AjaxData 查找到的所有用户
+     * 查找所有的用户
+     *
+     * @param page  查找信息的页数
+     * @param limit 每页所显示的条数
+     * @return AjaxData 查找到的所有用户
      */
+    @SystemControllerLog(description = "查找用户")
     @GetMapping("/find")
     @ResponseBody
-    public AjaxData findUser(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-        if (page == null || page == 0) {
-            page = 1;
+    public AjaxData findUser(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "15") Integer limit) {
+        PageInfo<User> pageInfo = userConcreteService.listAllUser(page, limit);
+        if (null == pageInfo) {
+            return new AjaxData(1, "failed", 0, null);
         }
-        if (limit == null || limit == 0) {
-            limit = 10;
-        }
-        UserExample userExample = new UserExample();
-        PageInfo<User> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> userService.selectByExample(userExample));
-        List<User> list = pageInfo.getList();
-        if (list == null || list.isEmpty()) {
-            return super.buildAjaxData(1, "false", 0, null);
-        } else {
-            return super.buildAjaxData(0, "true", pageInfo.getTotal(), list);
-        }
+        return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
-     *  通过用户Id查找用户
-     * @param userId   用户的Id
-     * @return  User 查找到的用户
+     * 通过用户Id查找用户
+     *
+     * @param userId 用户的Id
+     * @return User 查找到的用户
      */
+    @SystemControllerLog(description = "查找单个用户")
     @GetMapping("/find/{UserId}")
     @ResponseBody
     public User fingUserById(@PathVariable("UserId") Integer userId) {
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andUserIdEqualTo(userId);
-        List<User> userList = userService.selectByExample(userExample);
-        return userList.get(0);
+        return userConcreteService.findSingleUser(userId);
     }
 
     /**
      * 通过用户Id，查找所属于的的用户组
      *
-     * @param userId   用户的Id
-     * @param page     查找信息的页数
-     * @param limit    每页信息的条数
-     * @return  AjaxData 通过用户Id，查找所属于的用户组
+     * @param userId 用户的Id
+     * @param page   查找信息的页数
+     * @param limit  每页信息的条数
+     * @return AjaxData 通过用户Id，查找所属于的用户组
      */
+    @SystemControllerLog(description = "查找用户所属于的的用户组")
     @GetMapping("/findgroup/{UserId}")
     @ResponseBody
-    public AjaxData findUserGroup(@PathVariable("UserId") Integer userId, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit) {
-        AjaxData ajaxData = new AjaxData();
-        PageInfo pageInfo;
-        int count = 0;
-        GroupExample groupExample = new GroupExample();
-        List<Group> groupList = groupService.selectByUserId(userId);
-        if (groupList != null && !groupList.isEmpty()) {
-            for (Group i : groupList) {
-                count++;
-            }
-            if (page != null && limit != null) {
-                pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> groupService.selectByExample(groupExample));
-                return super.buildAjaxData(0, "success", count, (ArrayList) groupList);
-            } else {
-                pageInfo = PageHelper.startPage(0, 0).doSelectPageInfo(() -> groupService.selectByExample(groupExample));
-                return super.buildAjaxData(0, "success", count, (ArrayList) groupList);
-            }
+    public AjaxData findUserGroup(@PathVariable("UserId") Integer userId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "15") Integer limit) {
+        PageInfo<Group> pageInfo = groupConcreteService.findUserGroup(userId, page, limit);
+        if (pageInfo == null) {
+            return new AjaxData(1, "failed", 0, null);
         }
-        ajaxData.setMsg("查找失败");
-        return ajaxData;
+        return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
      * 通过用户Id和用户组Id，将用户从用户组中移出
      *
-     * @param userId    用户的Id
-     * @param groupId   用户组Id
+     * @param userId  用户的Id
+     * @param groupId 用户组Id
      * @return int 移出用户的数量
      */
+    @SystemControllerLog(description = "将用户从用户组中移出")
     @ResponseBody
     @GetMapping("/deletegroup/{UserId}/{GroupId}")
     public int deleteUserGroup(@PathVariable("UserId") Integer userId, @PathVariable("GroupId") Integer groupId) {
-        if (!this.index()){
-            return 0;
+        if (groupConcreteService.deleteUserGroup(userId, groupId)) {
+            return 1;
         }
-        Integer message;
-        try {
-            groupService.removeUserFromGroup(userId, groupId);
-            message = 1;
-        } catch (Exception e) {
-            message = 0;
-        }
-        return message;
+        return 0;
     }
 
     /**
      * 查找所有的用户组
+     *
      * @return AjaxData  查找到的信息
      */
+    @SystemControllerLog(description = "查找所有的用户组")
     @GetMapping("/findgroup")
     @ResponseBody
     public AjaxData findAllGroup() {
-        int number = 0;
-        AjaxData ajaxData = new AjaxData();
-        GroupExample groupExample = new GroupExample();
-        groupService.selectByExample(groupExample);
-        List<Group> groupList = groupService.selectByExample(groupExample);
-        if (groupList != null && !groupList.isEmpty()) {
-            ajaxData.setData((ArrayList) groupList);
-            for (Group i : groupList) {
-                number++;
-            }
-            ajaxData.setCode(number);
-            return ajaxData;
+        List<Group> groups = groupConcreteService.findAllGroup();
+        if (groups == null) {
+            return new AjaxData(1, "failed", 0, null);
         }
-        ajaxData.setMsg("查找失败");
-        return ajaxData;
+        return new AjaxData(0, "success", groups.size(), groups);
     }
 
     /**
      * 通过用户Id和用户组Id，来向用户组中添加用户
-     * @param groupId    用户组Id
-     * @param userId     用户Id
+     *
+     * @param groupId 用户组Id
+     * @param userId  用户Id
      * @return Integer 为用户添加的角色组数量
      */
+    @SystemControllerLog(description = "向用户组中添加用户")
     @GetMapping("/addGroupToUse/{GroupId}/{UserId}")
     @ResponseBody
     public Integer addGroupToUser(@PathVariable("GroupId") Integer groupId, @PathVariable("UserId") Integer userId) {
-        if (!this.index()){
-            return 0;
-        }
-        int message;
         List<Group> groupList = groupService.selectByUserId(userId);
         for (Group i : groupList) {
             if (groupId.equals(i.getGroupId())) {
-                message = 1;
-                return message;
+                return 1;
             }
         }
-        try {
-            groupService.addUserToGroup(userId, groupId);
-            message = 1;
-            return message;
-        } catch (Exception e) {
-            logger.info("添加失败");
-            message = 0;
-        }
-        return message;
+        if (groupConcreteService.addUserToGroup(groupId, userId)) {
+            return 1;
+        } else return 0;
     }
 }

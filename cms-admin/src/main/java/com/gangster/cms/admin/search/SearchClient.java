@@ -3,7 +3,6 @@ package com.gangster.cms.admin.search;
 import com.gangster.cms.common.dto.SearchResult;
 import com.gangster.cms.common.pojo.Article;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -1,0 +1,18 @@
+SELECT article_id as articleId,
+article_title as articleTitle,
+article_author as articleAuthor,
+article_type as articleType,
+article_url as articleUrl,
+article_order as articleOrder,
+article_site_id as articleSiteId,
+article_category_id as articleCategoryId,
+article_create_time as articleCreateTime,
+article_update_time as articleUpdateTime,
+article_thumb as articleThumb,
+article_hit as articleHit,
+article_desc as articleDesc,
+article_status as articleStatus,
+article_content as articleContent,
+article_skin as articleSkin,
+article_in_homepage as articleInHomepage
+from cms_article where article_status = 1;

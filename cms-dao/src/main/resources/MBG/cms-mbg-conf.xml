@@ -189,5 +189,41 @@
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
         </table>
+        <table tableName="cms_question_page"
+               schema="db_cms"
+               domainObjectName="QuestionPage"
+               enableCountByExample="true"
+               enableDeleteByExample="true"
+               enableDeleteByPrimaryKey="true"
+               enableInsert="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               enableUpdateByExample="true"
+               enableUpdateByPrimaryKey="true">
+        </table>
+        <table tableName="cms_question_topic"
+               schema="db_cms"
+               domainObjectName="QuestionTopic"
+               enableCountByExample="true"
+               enableDeleteByExample="true"
+               enableDeleteByPrimaryKey="true"
+               enableInsert="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               enableUpdateByExample="true"
+               enableUpdateByPrimaryKey="true">
+        </table>
+        <table tableName="cms_question_answer"
+               schema="db_cms"
+               domainObjectName="QuestionAnswer"
+               enableCountByExample="true"
+               enableDeleteByExample="true"
+               enableDeleteByPrimaryKey="true"
+               enableInsert="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               enableUpdateByExample="true"
+               enableUpdateByPrimaryKey="true">
+        </table>
     </context>
 </generatorConfiguration>

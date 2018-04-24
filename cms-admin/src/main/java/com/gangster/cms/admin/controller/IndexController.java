@@ -66,7 +66,7 @@ public class IndexController {
         List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(user.getUserId());
         List<Site> siteList = siteIdList.stream().sorted(Comparator.comparingInt(val -> val)).map(i -> siteService.selectByPrimaryKey(i)).filter(Objects::nonNull).collect(Collectors.toList());
         // 将当前登录网站为list的第一个
-//        GroupController.refresh();
+        GroupController.refresh();
         modelAndView.addObject("moduleTreeList", listModule(moduleExample));
         modelAndView.addObject("siteList", siteList);
         modelAndView.addObject("user", user);
