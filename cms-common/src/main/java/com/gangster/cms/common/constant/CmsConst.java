@@ -27,6 +27,8 @@ public class CmsConst {
 
     public static final String CATEGORY_ROOT_NAME = "root";
 
+    // 超级管理员的名字
+    public static final String ADMIN = "admin";
 
     public static final String ARTICLE_SKIN_SUFFIX = "-article";
 

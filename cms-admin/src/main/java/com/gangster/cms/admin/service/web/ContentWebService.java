@@ -54,7 +54,7 @@ public class ContentWebService {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
-    private static final String ADMIN = "admin";
+//    private static final String ADMIN = "admin";
 
     public PageInfo<Article> listArticle(User user, Integer siteId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
@@ -116,7 +116,7 @@ public class ContentWebService {
         return true;
     }
 
-    // TODO: 2018/4/16 可以通切面来做
+
     public PageInfo<Article> listCategoryOfArticle(Integer categoryId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleCategoryIdEqualTo(categoryId);
@@ -154,12 +154,7 @@ public class ContentWebService {
         return map;
     }
 
-    /**
-     * 删除单篇文章
-     *
-     * @param articleId
-     * @return
-     */
+
     public boolean deleteSingleArticle(Integer articleId) {
         Article article = articleService.selectByPrimaryKey(articleId);
         if (article == null) {
@@ -197,12 +192,6 @@ public class ContentWebService {
     }
 
 
-    /**
-     * 更新单篇文章
-     *
-     * @param articleId  要更新的文章id
-     * @param articleDTO 新的文章内容
-     */
     public boolean updateArticle(Integer articleId, ArticleDTO articleDTO) {
         Article article = articleDTO.toArticle();
 
@@ -416,7 +405,7 @@ public class ContentWebService {
         try {
             if (!user.getUserIsAdmin()) {
                 UserExample userExample = new UserExample();
-                userExample.or().andUserNameEqualTo(ADMIN);
+                userExample.or().andUserNameEqualTo(CmsConst.ADMIN);
                 User root = userService.selectByExample(userExample).get(0);
                 permissionService.addCategoryPermissionToUser(root.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
                 permissionService.addCategoryPermissionToUser(root.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
@@ -464,7 +453,6 @@ public class ContentWebService {
     }
 
     //    ------------------------------------------------网站部分------------------------------------------------------------------
-// TODO: 2018/4/15 待修改权限
     public PageInfo<Site> listSite(User user, Integer page, Integer limit) {
         SiteExample siteExample = new SiteExample();
         List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(user.getUserId());

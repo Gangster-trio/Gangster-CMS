@@ -10,6 +10,7 @@
     <script src="/util/jquery-editable-select.js"></script>
     <script src="/util/jquery.form.js"></script>
     <script src="/js/echarts.js"></script>
+    <script src="../qrcode/jquery.qrcode.min.js"></script>
     <link rel="stylesheet" href="/util/jquery-editable-select.css">
 </head>
 <body class="layui-layout-body">
