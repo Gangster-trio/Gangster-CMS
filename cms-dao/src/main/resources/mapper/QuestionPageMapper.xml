@@ -7,6 +7,7 @@
       <arg column="question_page_title" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="question_page_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="question_page_end_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="question_site_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +69,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    question_page_id, question_page_title, question_page_create_time, question_page_end_time
+    question_page_id, question_page_title, question_page_create_time, question_page_end_time, 
+    question_site_id
   </sql>
   <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.QuestionPageExample" resultMap="BaseResultMap">
     select
@@ -102,11 +104,11 @@
   </delete>
   <insert id="insert" parameterType="com.gangster.cms.common.pojo.QuestionPage">
     insert into cms_question_page (question_page_id, question_page_title, 
-      question_page_create_time, question_page_end_time
-      )
+      question_page_create_time, question_page_end_time, 
+      question_site_id)
     values (#{questionPageId,jdbcType=INTEGER}, #{questionPageTitle,jdbcType=VARCHAR}, 
-      #{questionPageCreateTime,jdbcType=TIMESTAMP}, #{questionPageEndTime,jdbcType=TIMESTAMP}
-      )
+      #{questionPageCreateTime,jdbcType=TIMESTAMP}, #{questionPageEndTime,jdbcType=TIMESTAMP}, 
+      #{questionSiteId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.QuestionPage">
     insert into cms_question_page
@@ -123,6 +125,9 @@
       <if test="questionPageEndTime != null">
         question_page_end_time,
       </if>
+      <if test="questionSiteId != null">
+        question_site_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="questionPageId != null">
@@ -136,6 +141,9 @@
       </if>
       <if test="questionPageEndTime != null">
         #{questionPageEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="questionSiteId != null">
+        #{questionSiteId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -160,6 +168,9 @@
       <if test="record.questionPageEndTime != null">
         question_page_end_time = #{record.questionPageEndTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.questionSiteId != null">
+        question_site_id = #{record.questionSiteId,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -170,7 +181,8 @@
     set question_page_id = #{record.questionPageId,jdbcType=INTEGER},
       question_page_title = #{record.questionPageTitle,jdbcType=VARCHAR},
       question_page_create_time = #{record.questionPageCreateTime,jdbcType=TIMESTAMP},
-      question_page_end_time = #{record.questionPageEndTime,jdbcType=TIMESTAMP}
+      question_page_end_time = #{record.questionPageEndTime,jdbcType=TIMESTAMP},
+      question_site_id = #{record.questionSiteId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -187,6 +199,9 @@
       <if test="questionPageEndTime != null">
         question_page_end_time = #{questionPageEndTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="questionSiteId != null">
+        question_site_id = #{questionSiteId,jdbcType=INTEGER},
+      </if>
     </set>
     where question_page_id = #{questionPageId,jdbcType=INTEGER}
   </update>
@@ -194,7 +209,8 @@
     update cms_question_page
     set question_page_title = #{questionPageTitle,jdbcType=VARCHAR},
       question_page_create_time = #{questionPageCreateTime,jdbcType=TIMESTAMP},
-      question_page_end_time = #{questionPageEndTime,jdbcType=TIMESTAMP}
+      question_page_end_time = #{questionPageEndTime,jdbcType=TIMESTAMP},
+      question_site_id = #{questionSiteId,jdbcType=INTEGER}
     where question_page_id = #{questionPageId,jdbcType=INTEGER}
   </update>
 </mapper>

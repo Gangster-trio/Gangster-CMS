@@ -1,0 +1,79 @@
+<!--添加栏目-->
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="batchDelete" data-type="batchDelete">
+    批量删除
+</button>
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="questionPage">添加问卷</button>
+<div class="layui-elem-quote" style="margin-bottom: 0;">
+    <p>问卷管理</p>
+</div>
+<table id="questionPage_table" class="layui-table" style="margin: 0px" lay-filter="questionPagelist"></table>
+<script>
+
+    layui.use('table', function () {
+        var first = true;
+        var table = layui.table;
+
+        //对site进行判断，只有选择了site才有显示
+        if (siteId) {
+            table.render({
+                elem: '#questionPage_table'
+                , url: '/question/page/list?siteId=' + siteId     //得到所选site的栏目
+                , page: true
+                , cols: [[ //表头
+                    {type: 'checkbox'}
+                    , {field: 'questionPageId', title: 'ID', width: '80', sort: true}
+                    , {field: 'questionPageTitle', title: '栏目名', width: '190', align: 'center'}
+                    , {field: 'questionPageCreateTime', title: "创建时间", width: '110', align: 'center', sort: true}
+                    , {field: 'questionPageEndTime', title: '更新时间', width: '110', align: 'center', sort: true}
+                    , {field: 'questionSiteId', title: '级别', width: '80', align: 'center', sort: true}
+                    , {filed: 'tool', title: '操作', align: 'center', toolbar: "#toolBar"}
+                ]]
+                , done: function (res, curr, count) {
+                    if (first) {
+                        layer.msg("加载完成 共" + count + "条数据");
+                        first = false;
+                    }
+                }
+            });
+
+
+            //监听的事件
+            table.on('tool(questionPagelist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                //查看栏目的详细信息
+                if (layEvent === 'detail') {
+                }
+                //删除栏目信息
+                if (layEvent === 'del') { //删除
+                }
+                //编辑栏目
+                else if (layEvent === 'edit') {
+                }
+                if (layEvent === 'add') {
+                }
+            });
+        }
+    });
+</script>
+<script>
+    $("#questionPage").on('click', function () {
+            showAtRight("/module/question/addQuestionPage.html");
+    });
+</script>
+<script type="text/html" id="toolBar">
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
+            <i class="layui-icon">&#xe654;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">
+            <i class="layui-icon">&#xe705;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="edit">
+            <i class="layui-icon">&#xe642;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>

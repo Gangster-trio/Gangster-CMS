@@ -1,6 +1,5 @@
 package com.gangster.cms.web.service;
 
-import com.gangster.cms.common.pojo.QuestionPage;
 import com.gangster.cms.common.pojo.QuestionTopic;
 import com.gangster.cms.common.pojo.QuestionTopicExample;
 import com.gangster.cms.dao.mapper.QuestionAnswerMapper;
@@ -12,8 +11,6 @@ import com.gangster.cms.web.dto.ModelResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class QuestionWebService {

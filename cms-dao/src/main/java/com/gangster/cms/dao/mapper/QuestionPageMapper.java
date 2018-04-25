@@ -1,8 +1,9 @@
 package com.gangster.cms.dao.mapper;
 
+import java.util.List;
+
 import com.gangster.cms.common.pojo.QuestionPage;
 import com.gangster.cms.common.pojo.QuestionPageExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface QuestionPageMapper {

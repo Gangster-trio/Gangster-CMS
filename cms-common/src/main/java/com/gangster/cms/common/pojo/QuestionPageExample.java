@@ -354,6 +354,66 @@ public class QuestionPageExample {
             addCriterion("question_page_end_time not between", value1, value2, "questionPageEndTime");
             return (Criteria) this;
         }
+
+        public Criteria andQuestionSiteIdIsNull() {
+            addCriterion("question_site_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdIsNotNull() {
+            addCriterion("question_site_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdEqualTo(Integer value) {
+            addCriterion("question_site_id =", value, "questionSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdNotEqualTo(Integer value) {
+            addCriterion("question_site_id <>", value, "questionSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdGreaterThan(Integer value) {
+            addCriterion("question_site_id >", value, "questionSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("question_site_id >=", value, "questionSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdLessThan(Integer value) {
+            addCriterion("question_site_id <", value, "questionSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdLessThanOrEqualTo(Integer value) {
+            addCriterion("question_site_id <=", value, "questionSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdIn(List<Integer> values) {
+            addCriterion("question_site_id in", values, "questionSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdNotIn(List<Integer> values) {
+            addCriterion("question_site_id not in", values, "questionSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdBetween(Integer value1, Integer value2) {
+            addCriterion("question_site_id between", value1, value2, "questionSiteId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionSiteIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("question_site_id not between", value1, value2, "questionSiteId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

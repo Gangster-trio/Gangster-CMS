@@ -12,13 +12,16 @@ public class QuestionPage implements Serializable {
 
     private Date questionPageEndTime;
 
+    private Integer questionSiteId;
+
     private static final long serialVersionUID = 1L;
 
-    public QuestionPage(Integer questionPageId, String questionPageTitle, Date questionPageCreateTime, Date questionPageEndTime) {
+    public QuestionPage(Integer questionPageId, String questionPageTitle, Date questionPageCreateTime, Date questionPageEndTime, Integer questionSiteId) {
         this.questionPageId = questionPageId;
         this.questionPageTitle = questionPageTitle;
         this.questionPageCreateTime = questionPageCreateTime;
         this.questionPageEndTime = questionPageEndTime;
+        this.questionSiteId = questionSiteId;
     }
 
     public QuestionPage() {
@@ -57,6 +60,14 @@ public class QuestionPage implements Serializable {
         this.questionPageEndTime = questionPageEndTime;
     }
 
+    public Integer getQuestionSiteId() {
+        return questionSiteId;
+    }
+
+    public void setQuestionSiteId(Integer questionSiteId) {
+        this.questionSiteId = questionSiteId;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -72,7 +83,8 @@ public class QuestionPage implements Serializable {
         return (this.getQuestionPageId() == null ? other.getQuestionPageId() == null : this.getQuestionPageId().equals(other.getQuestionPageId()))
             && (this.getQuestionPageTitle() == null ? other.getQuestionPageTitle() == null : this.getQuestionPageTitle().equals(other.getQuestionPageTitle()))
             && (this.getQuestionPageCreateTime() == null ? other.getQuestionPageCreateTime() == null : this.getQuestionPageCreateTime().equals(other.getQuestionPageCreateTime()))
-            && (this.getQuestionPageEndTime() == null ? other.getQuestionPageEndTime() == null : this.getQuestionPageEndTime().equals(other.getQuestionPageEndTime()));
+            && (this.getQuestionPageEndTime() == null ? other.getQuestionPageEndTime() == null : this.getQuestionPageEndTime().equals(other.getQuestionPageEndTime()))
+            && (this.getQuestionSiteId() == null ? other.getQuestionSiteId() == null : this.getQuestionSiteId().equals(other.getQuestionSiteId()));
     }
 
     @Override
@@ -83,6 +95,7 @@ public class QuestionPage implements Serializable {
         result = prime * result + ((getQuestionPageTitle() == null) ? 0 : getQuestionPageTitle().hashCode());
         result = prime * result + ((getQuestionPageCreateTime() == null) ? 0 : getQuestionPageCreateTime().hashCode());
         result = prime * result + ((getQuestionPageEndTime() == null) ? 0 : getQuestionPageEndTime().hashCode());
+        result = prime * result + ((getQuestionSiteId() == null) ? 0 : getQuestionSiteId().hashCode());
         return result;
     }
 
@@ -96,6 +109,7 @@ public class QuestionPage implements Serializable {
         sb.append(", questionPageTitle=").append(questionPageTitle);
         sb.append(", questionPageCreateTime=").append(questionPageCreateTime);
         sb.append(", questionPageEndTime=").append(questionPageEndTime);
+        sb.append(", questionSiteId=").append(questionSiteId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
