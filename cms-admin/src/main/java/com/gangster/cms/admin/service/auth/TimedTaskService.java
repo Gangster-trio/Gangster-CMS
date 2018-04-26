@@ -32,7 +32,7 @@ public class TimedTaskService {
     @Autowired
     private WebFileService webFileService;
 
-    public boolean addArticleTimedTaskController(ArticleDTO articleDTO) {
+    public boolean addArticleTimedTask(ArticleDTO articleDTO) {
         Category category = categoryService.selectByPrimaryKey(articleDTO.toArticle().getArticleCategoryId());
         Integer sid = category.getCategorySiteId();
         Article article = articleDTO.toArticle();
