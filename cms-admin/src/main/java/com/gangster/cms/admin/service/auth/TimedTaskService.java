@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +31,7 @@ public class TimedTaskService {
     @Autowired
     private WebFileService webFileService;
 
-    public boolean addArticleTimedTaskController(ArticleDTO articleDTO) {
+    public boolean addArticleTimedTask(ArticleDTO articleDTO) {
         Category category = categoryService.selectByPrimaryKey(articleDTO.toArticle().getArticleCategoryId());
         Integer sid = category.getCategorySiteId();
         Article article = articleDTO.toArticle();

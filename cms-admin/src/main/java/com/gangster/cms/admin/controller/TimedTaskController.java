@@ -23,7 +23,7 @@ public class TimedTaskController {
     @SystemControllerLog(description = "定时添加文章")
     @GetMapping("/save")
     public MessageDto timeTaskSaveArticle(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody ArticleDTO articleDTO) {
-        if (!timedTaskService.addArticleTimedTaskController(articleDTO)) {
+        if (!timedTaskService.addArticleTimedTask(articleDTO)) {
             logger.error("添加文章失败");
             return MessageDto.fail(1, "添加文章失败");
         }
