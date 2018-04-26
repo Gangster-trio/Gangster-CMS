@@ -10,6 +10,7 @@
     <script src="/util/jquery-editable-select.js"></script>
     <script src="/util/jquery.form.js"></script>
     <script src="/js/echarts.js"></script>
+    <script src="../qrcode/jquery.qrcode.min.js"></script>
     <link rel="stylesheet" href="/util/jquery-editable-select.css">
 </head>
 <body class="layui-layout-body">
@@ -46,6 +47,8 @@
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
+            <li class="layui-nav-item"><a href="/logout">最新邮件<span
+                    class="layui-badge">${mailTotalNum!'0'}</span></a></li>
             <li class="layui-nav-item"><a href="/logout">退了</a></li>
         </ul>
     </div>

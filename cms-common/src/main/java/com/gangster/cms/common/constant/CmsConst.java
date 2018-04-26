@@ -1,7 +1,5 @@
 package com.gangster.cms.common.constant;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
 public class CmsConst {
 
     //放置在主页上的目录
@@ -27,6 +25,8 @@ public class CmsConst {
 
     public static final String CATEGORY_ROOT_NAME = "root";
 
+    // 超级管理员的名字
+    public static final String ADMIN = "admin";
 
     public static final String ARTICLE_SKIN_SUFFIX = "-article";
 
@@ -61,4 +61,22 @@ public class CmsConst {
     // 未通过
     public static final Integer UNACCESS = 2;
     public static final String CURRENT_USER = "currentUser";
+
+    //  未读邮件状态
+    public static final Integer MAIIL_READ_TOREAD = 0;
+
+    // 已读邮件状态
+    public static final Integer MAIIL_READ_READED = 1;
+
+    // 邮件已经删除状态
+    public static final Integer MAIL_READ_DELETED = 2;
+
+    //已经发送状态
+    public static final Integer MAIL_FLAG_SENDED = 0;
+    // 发送失败
+    public static final Integer MAIL_FLAG_FAILED = 1;
+    //存为 草稿
+    public static final Integer MAIL_FLAG_DRAFT = 2;
+
+
 }

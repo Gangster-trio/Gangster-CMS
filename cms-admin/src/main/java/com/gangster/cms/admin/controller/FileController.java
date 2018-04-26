@@ -44,11 +44,19 @@ public class FileController {
     private SettingService settingService;
 
     @SystemControllerLog(description = "添加文件")
-    @PostMapping("/upload/{id}")
+    @PostMapping({"/upload/{id}", "/upload"})
     public MessageDto uploadFile(@PathVariable(required = false) Integer id, @Param("file") MultipartFile file) {
         String s = fileUploadService.uploadFile(id, file);
         return MessageDto.success(s);
     }
+
+/*
+    @PostMapping("/upload")
+    public MessageDto upload(@Param("file") MultipartFile file) {
+        String s = fileUploadService.uploadFile(null, file);
+        return MessageDto.success(s);
+    }
+*/
 
     @SystemControllerLog(description = "下载文件")
     @PostMapping("/download/{id}")

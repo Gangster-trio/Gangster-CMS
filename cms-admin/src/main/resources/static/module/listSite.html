@@ -9,6 +9,10 @@
         <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">
             <i class="layui-icon">&#xe705;</i>
         </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="share">
+            <i class="layui-icon">&#xe641;</i>
+        </button>
+
         <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="edit">
             <i class="layui-icon">&#xe642;</i>
         </button>
@@ -19,7 +23,6 @@
 </script>
 
 <script>
-
     //站点表格渲染
     layui.use('table', function () {
         var first = true;
@@ -55,6 +58,7 @@
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             siteId = data.siteId;
+            url = data.siteUrl;
             //查看栏目的详细信息
             if (layEvent === 'detail') {
                 showAtRight("/module/listCategory");
@@ -79,6 +83,21 @@
                 //跳转到给该栏目添加文章的界面
                 else if (layEvent === 'add') {   //跳转到添加文章界面
                     showAtRight("/module/addSite.html");
+                } else if (layEvent === 'share') {
+                    $.get('/module/showQr.html?url=' + data.siteUrl, {}, function (str) {
+                        layer.open({
+                            type: 1,
+                            title: '选择栏目',
+                            skin: 'layui-layer-rim',
+                            closeBtn: 1,
+                            anim: 5,
+                            // area: ['300px', '350px'],
+                            content: str,
+                            success: function (layero, index) {
+                                console.log(layero, index);
+                            }
+                        });
+                    });
                 }
             }
         });

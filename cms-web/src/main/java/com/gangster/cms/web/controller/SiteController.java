@@ -7,7 +7,7 @@ import com.gangster.cms.web.annotation.AccessLogger;
 import com.gangster.cms.web.annotation.CountParam;
 import com.gangster.cms.web.annotation.CountType;
 import com.gangster.cms.web.dto.ModelResult;
-import com.gangster.cms.web.service.WebService;
+import com.gangster.cms.web.service.SiteWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class SiteController {
 
-    private final WebService webService;
+    private final SiteWebService webService;
 
     @Autowired
-    public SiteController(WebService webService) {
+    public SiteController(SiteWebService webService) {
         this.webService = webService;
     }
 

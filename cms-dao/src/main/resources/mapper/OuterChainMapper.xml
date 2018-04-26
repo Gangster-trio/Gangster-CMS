@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gangster.cms.dao.mapper.OuterChainMapper">
+  <resultMap id="BaseResultMap" type="com.gangster.cms.common.pojo.OuterChain">
+    <constructor>
+      <idArg column="outerchain_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="outerchain_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="outerchain_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="outerchain_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="outerchain_site_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="outerchain_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="outerchain_update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    outerchain_id, outerchain_url, outerchain_create_time, outerchain_desc, outerchain_site_id, 
+    outerchain_name, outerchain_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.OuterChainExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from cms_outerchain
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cms_outerchain
+    where outerchain_id = #{outerchainId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cms_outerchain
+    where outerchain_id = #{outerchainId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.gangster.cms.common.pojo.OuterChainExample">
+    delete from cms_outerchain
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.gangster.cms.common.pojo.OuterChain">
+    insert into cms_outerchain (outerchain_id, outerchain_url, outerchain_create_time, 
+      outerchain_desc, outerchain_site_id, outerchain_name, 
+      outerchain_update_time)
+    values (#{outerchainId,jdbcType=INTEGER}, #{outerchainUrl,jdbcType=VARCHAR}, #{outerchainCreateTime,jdbcType=TIMESTAMP}, 
+      #{outerchainDesc,jdbcType=VARCHAR}, #{outerchainSiteId,jdbcType=INTEGER}, #{outerchainName,jdbcType=VARCHAR}, 
+      #{outerchainUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.OuterChain">
+    insert into cms_outerchain
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="outerchainId != null">
+        outerchain_id,
+      </if>
+      <if test="outerchainUrl != null">
+        outerchain_url,
+      </if>
+      <if test="outerchainCreateTime != null">
+        outerchain_create_time,
+      </if>
+      <if test="outerchainDesc != null">
+        outerchain_desc,
+      </if>
+      <if test="outerchainSiteId != null">
+        outerchain_site_id,
+      </if>
+      <if test="outerchainName != null">
+        outerchain_name,
+      </if>
+      <if test="outerchainUpdateTime != null">
+        outerchain_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="outerchainId != null">
+        #{outerchainId,jdbcType=INTEGER},
+      </if>
+      <if test="outerchainUrl != null">
+        #{outerchainUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="outerchainCreateTime != null">
+        #{outerchainCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outerchainDesc != null">
+        #{outerchainDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="outerchainSiteId != null">
+        #{outerchainSiteId,jdbcType=INTEGER},
+      </if>
+      <if test="outerchainName != null">
+        #{outerchainName,jdbcType=VARCHAR},
+      </if>
+      <if test="outerchainUpdateTime != null">
+        #{outerchainUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.gangster.cms.common.pojo.OuterChainExample" resultType="java.lang.Long">
+    select count(*) from cms_outerchain
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cms_outerchain
+    <set>
+      <if test="record.outerchainId != null">
+        outerchain_id = #{record.outerchainId,jdbcType=INTEGER},
+      </if>
+      <if test="record.outerchainUrl != null">
+        outerchain_url = #{record.outerchainUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outerchainCreateTime != null">
+        outerchain_create_time = #{record.outerchainCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.outerchainDesc != null">
+        outerchain_desc = #{record.outerchainDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outerchainSiteId != null">
+        outerchain_site_id = #{record.outerchainSiteId,jdbcType=INTEGER},
+      </if>
+      <if test="record.outerchainName != null">
+        outerchain_name = #{record.outerchainName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outerchainUpdateTime != null">
+        outerchain_update_time = #{record.outerchainUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cms_outerchain
+    set outerchain_id = #{record.outerchainId,jdbcType=INTEGER},
+      outerchain_url = #{record.outerchainUrl,jdbcType=VARCHAR},
+      outerchain_create_time = #{record.outerchainCreateTime,jdbcType=TIMESTAMP},
+      outerchain_desc = #{record.outerchainDesc,jdbcType=VARCHAR},
+      outerchain_site_id = #{record.outerchainSiteId,jdbcType=INTEGER},
+      outerchain_name = #{record.outerchainName,jdbcType=VARCHAR},
+      outerchain_update_time = #{record.outerchainUpdateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gangster.cms.common.pojo.OuterChain">
+    update cms_outerchain
+    <set>
+      <if test="outerchainUrl != null">
+        outerchain_url = #{outerchainUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="outerchainCreateTime != null">
+        outerchain_create_time = #{outerchainCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outerchainDesc != null">
+        outerchain_desc = #{outerchainDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="outerchainSiteId != null">
+        outerchain_site_id = #{outerchainSiteId,jdbcType=INTEGER},
+      </if>
+      <if test="outerchainName != null">
+        outerchain_name = #{outerchainName,jdbcType=VARCHAR},
+      </if>
+      <if test="outerchainUpdateTime != null">
+        outerchain_update_time = #{outerchainUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where outerchain_id = #{outerchainId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gangster.cms.common.pojo.OuterChain">
+    update cms_outerchain
+    set outerchain_url = #{outerchainUrl,jdbcType=VARCHAR},
+      outerchain_create_time = #{outerchainCreateTime,jdbcType=TIMESTAMP},
+      outerchain_desc = #{outerchainDesc,jdbcType=VARCHAR},
+      outerchain_site_id = #{outerchainSiteId,jdbcType=INTEGER},
+      outerchain_name = #{outerchainName,jdbcType=VARCHAR},
+      outerchain_update_time = #{outerchainUpdateTime,jdbcType=TIMESTAMP}
+    where outerchain_id = #{outerchainId,jdbcType=INTEGER}
+  </update>
+</mapper>

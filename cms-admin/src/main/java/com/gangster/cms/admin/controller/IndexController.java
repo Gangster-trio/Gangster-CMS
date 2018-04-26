@@ -1,15 +1,14 @@
 package com.gangster.cms.admin.controller;
 
 import com.gangster.cms.admin.annotation.SystemControllerLog;
+import com.gangster.cms.admin.dto.ModuleTree;
+import com.gangster.cms.admin.service.CmsMailService;
 import com.gangster.cms.admin.service.ModuleService;
 import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.admin.service.SiteService;
-import com.gangster.cms.admin.dto.ModuleTree;
 import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.common.constant.CmsConst;
-import com.gangster.cms.common.pojo.ModuleExample;
-import com.gangster.cms.common.pojo.Site;
-import com.gangster.cms.common.pojo.User;
+import com.gangster.cms.common.pojo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,8 @@ public class IndexController {
 
     @Autowired
     private SiteService siteService;
+    @Autowired
+    private CmsMailService cmsMailService;
 
     private static final String PERMISSION_MANAGER = "权限管理";
 
@@ -65,9 +66,16 @@ public class IndexController {
 
         List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(user.getUserId());
         List<Site> siteList = siteIdList.stream().sorted(Comparator.comparingInt(val -> val)).map(i -> siteService.selectByPrimaryKey(i)).filter(Objects::nonNull).collect(Collectors.toList());
+
+        // 列出当前的登陆用户未读的邮件
+        CmsMailExample cmsMailExample = new CmsMailExample();
+        cmsMailExample.or().andMailToMailEqualTo(user.getUserEmail()).andMailReadEqualTo(CmsConst.MAIIL_READ_TOREAD).andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED);
+
+        List<CmsMail> mailList = cmsMailService.selectByExample(cmsMailExample);
         // 将当前登录网站为list的第一个
         GroupController.refresh();
         modelAndView.addObject("moduleTreeList", listModule(moduleExample));
+        modelAndView.addObject("mailTotalNum", mailList.size());
         modelAndView.addObject("siteList", siteList);
         modelAndView.addObject("user", user);
         return modelAndView;
