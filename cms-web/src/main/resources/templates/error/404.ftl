@@ -1,0 +1,9 @@
+<html>
+<body>
+<div>
+    <h1>404</h1>
+    <p>这是404页面</p>
+    <p>请求的URL未找到</p>
+</div>
+</body>
+</html>

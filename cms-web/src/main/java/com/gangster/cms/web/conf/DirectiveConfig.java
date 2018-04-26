@@ -2,7 +2,6 @@ package com.gangster.cms.web.conf;
 
 import com.gangster.cms.web.directive.*;
 import freemarker.template.Configuration;
-import freemarker.template.TemplateModelException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +17,10 @@ public class DirectiveConfig {
     private final IndexCategoryDirective indexCategoryDirective;
     private final ArticleDirective articleDirective;
     private final CategoryDirective categoryDirective;
+    private final QuestionPageDirective questionPageDirective;
 
     @Autowired
-    public DirectiveConfig(Configuration configuration, ContentListDirective contentListDirective, TypeDirective typeDirective, IndexArticleDirective indexArticleDirective, IndexCategoryDirective indexCategoryDirective, ArticleDirective articleDirective, CategoryDirective categoryDirective) {
+    public DirectiveConfig(Configuration configuration, ContentListDirective contentListDirective, TypeDirective typeDirective, IndexArticleDirective indexArticleDirective, IndexCategoryDirective indexCategoryDirective, ArticleDirective articleDirective, CategoryDirective categoryDirective, QuestionPageDirective questionPageDirective) {
         this.configuration = configuration;
         this.contentListDirective = contentListDirective;
         this.typeDirective = typeDirective;
@@ -28,6 +28,7 @@ public class DirectiveConfig {
         this.indexCategoryDirective = indexCategoryDirective;
         this.articleDirective = articleDirective;
         this.categoryDirective = categoryDirective;
+        this.questionPageDirective = questionPageDirective;
     }
 
     @PostConstruct
@@ -38,5 +39,6 @@ public class DirectiveConfig {
         configuration.setSharedVariable("cms_index_category", indexCategoryDirective);
         configuration.setSharedVariable("cms_article", articleDirective);
         configuration.setSharedVariable("cms_category", categoryDirective);
+        configuration.setSharedVariable("cms_question",questionPageDirective);
     }
 }

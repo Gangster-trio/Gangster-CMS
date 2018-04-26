@@ -2,9 +2,6 @@ package com.gangster.cms.admin.service.impl;
 
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.QuestionAnswerService;
-import com.gangster.cms.common.pojo.QuestionAnswer;
-import com.gangster.cms.common.pojo.QuestionAnswerExample;
-import com.gangster.cms.dao.mapper.QuestionAnswerMapper;
 
 /**
  * @author Yoke

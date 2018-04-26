@@ -1,8 +1,6 @@
 package com.gangster.cms.admin.service;
 
 import com.gangster.cms.admin.base.BaseService;
-import com.gangster.cms.common.pojo.QuestionAnswer;
-import com.gangster.cms.common.pojo.QuestionAnswerExample;
 
 /**
  * @author Yoke

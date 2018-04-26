@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gangster.cms.dao.mapper.QuestionTopicMapper">
-  <resultMap id="BaseResultMap" type="com.gangster.cms.common.pojo.QuestionTopic">
+<mapper namespace="com.gangster.cms.dao.mapper.SurveyTopicMapper">
+  <resultMap id="BaseResultMap" type="com.gangster.cms.common.pojo.SurveyTopic">
     <constructor>
       <idArg column="topic_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="topic_question" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="topic_option" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="topic_type" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="topic_page_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
@@ -69,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    topic_id, topic_question, topic_option, topic_type, topic_page_id
+    topic_id, topic_question, topic_type, topic_page_id
   </sql>
-  <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.QuestionTopicExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.SurveyTopicExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from cms_question_topic
+    from cms_survey_topic
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,36 +87,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from cms_question_topic
+    from cms_survey_topic
     where topic_id = #{topicId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from cms_question_topic
+    delete from cms_survey_topic
     where topic_id = #{topicId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.gangster.cms.common.pojo.QuestionTopicExample">
-    delete from cms_question_topic
+  <delete id="deleteByExample" parameterType="com.gangster.cms.common.pojo.SurveyTopicExample">
+    delete from cms_survey_topic
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.gangster.cms.common.pojo.QuestionTopic">
-    insert into cms_question_topic (topic_id, topic_question, topic_option, 
-      topic_type, topic_page_id)
-    values (#{topicId,jdbcType=INTEGER}, #{topicQuestion,jdbcType=VARCHAR}, #{topicOption,jdbcType=VARCHAR}, 
-      #{topicType,jdbcType=VARCHAR}, #{topicPageId,jdbcType=INTEGER})
+  <insert id="insert" parameterType="com.gangster.cms.common.pojo.SurveyTopic">
+    insert into cms_survey_topic (topic_id, topic_question, topic_type, 
+      topic_page_id)
+    values (#{topicId,jdbcType=INTEGER}, #{topicQuestion,jdbcType=VARCHAR}, #{topicType,jdbcType=VARCHAR}, 
+      #{topicPageId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.QuestionTopic">
-    insert into cms_question_topic
+  <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.SurveyTopic">
+    insert into cms_survey_topic
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="topicId != null">
         topic_id,
       </if>
       <if test="topicQuestion != null">
         topic_question,
-      </if>
-      <if test="topicOption != null">
-        topic_option,
       </if>
       <if test="topicType != null">
         topic_type,
@@ -133,9 +129,6 @@
       <if test="topicQuestion != null">
         #{topicQuestion,jdbcType=VARCHAR},
       </if>
-      <if test="topicOption != null">
-        #{topicOption,jdbcType=VARCHAR},
-      </if>
       <if test="topicType != null">
         #{topicType,jdbcType=VARCHAR},
       </if>
@@ -144,23 +137,20 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.gangster.cms.common.pojo.QuestionTopicExample" resultType="java.lang.Long">
-    select count(*) from cms_question_topic
+  <select id="countByExample" parameterType="com.gangster.cms.common.pojo.SurveyTopicExample" resultType="java.lang.Long">
+    select count(*) from cms_survey_topic
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update cms_question_topic
+    update cms_survey_topic
     <set>
       <if test="record.topicId != null">
         topic_id = #{record.topicId,jdbcType=INTEGER},
       </if>
       <if test="record.topicQuestion != null">
         topic_question = #{record.topicQuestion,jdbcType=VARCHAR},
-      </if>
-      <if test="record.topicOption != null">
-        topic_option = #{record.topicOption,jdbcType=VARCHAR},
       </if>
       <if test="record.topicType != null">
         topic_type = #{record.topicType,jdbcType=VARCHAR},
@@ -174,24 +164,20 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update cms_question_topic
+    update cms_survey_topic
     set topic_id = #{record.topicId,jdbcType=INTEGER},
       topic_question = #{record.topicQuestion,jdbcType=VARCHAR},
-      topic_option = #{record.topicOption,jdbcType=VARCHAR},
       topic_type = #{record.topicType,jdbcType=VARCHAR},
       topic_page_id = #{record.topicPageId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.gangster.cms.common.pojo.QuestionTopic">
-    update cms_question_topic
+  <update id="updateByPrimaryKeySelective" parameterType="com.gangster.cms.common.pojo.SurveyTopic">
+    update cms_survey_topic
     <set>
       <if test="topicQuestion != null">
         topic_question = #{topicQuestion,jdbcType=VARCHAR},
-      </if>
-      <if test="topicOption != null">
-        topic_option = #{topicOption,jdbcType=VARCHAR},
       </if>
       <if test="topicType != null">
         topic_type = #{topicType,jdbcType=VARCHAR},
@@ -202,10 +188,9 @@
     </set>
     where topic_id = #{topicId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.gangster.cms.common.pojo.QuestionTopic">
-    update cms_question_topic
+  <update id="updateByPrimaryKey" parameterType="com.gangster.cms.common.pojo.SurveyTopic">
+    update cms_survey_topic
     set topic_question = #{topicQuestion,jdbcType=VARCHAR},
-      topic_option = #{topicOption,jdbcType=VARCHAR},
       topic_type = #{topicType,jdbcType=VARCHAR},
       topic_page_id = #{topicPageId,jdbcType=INTEGER}
     where topic_id = #{topicId,jdbcType=INTEGER}

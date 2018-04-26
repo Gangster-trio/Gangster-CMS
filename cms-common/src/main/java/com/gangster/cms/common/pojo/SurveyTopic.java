@@ -2,12 +2,10 @@ package com.gangster.cms.common.pojo;
 
 import java.io.Serializable;
 
-public class QuestionTopic implements Serializable {
+public class SurveyTopic implements Serializable {
     private Integer topicId;
 
     private String topicQuestion;
-
-    private String topicOption;
 
     private String topicType;
 
@@ -15,15 +13,14 @@ public class QuestionTopic implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public QuestionTopic(Integer topicId, String topicQuestion, String topicOption, String topicType, Integer topicPageId) {
+    public SurveyTopic(Integer topicId, String topicQuestion, String topicType, Integer topicPageId) {
         this.topicId = topicId;
         this.topicQuestion = topicQuestion;
-        this.topicOption = topicOption;
         this.topicType = topicType;
         this.topicPageId = topicPageId;
     }
 
-    public QuestionTopic() {
+    public SurveyTopic() {
         super();
     }
 
@@ -41,14 +38,6 @@ public class QuestionTopic implements Serializable {
 
     public void setTopicQuestion(String topicQuestion) {
         this.topicQuestion = topicQuestion == null ? null : topicQuestion.trim();
-    }
-
-    public String getTopicOption() {
-        return topicOption;
-    }
-
-    public void setTopicOption(String topicOption) {
-        this.topicOption = topicOption == null ? null : topicOption.trim();
     }
 
     public String getTopicType() {
@@ -78,10 +67,9 @@ public class QuestionTopic implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        QuestionTopic other = (QuestionTopic) that;
+        SurveyTopic other = (SurveyTopic) that;
         return (this.getTopicId() == null ? other.getTopicId() == null : this.getTopicId().equals(other.getTopicId()))
             && (this.getTopicQuestion() == null ? other.getTopicQuestion() == null : this.getTopicQuestion().equals(other.getTopicQuestion()))
-            && (this.getTopicOption() == null ? other.getTopicOption() == null : this.getTopicOption().equals(other.getTopicOption()))
             && (this.getTopicType() == null ? other.getTopicType() == null : this.getTopicType().equals(other.getTopicType()))
             && (this.getTopicPageId() == null ? other.getTopicPageId() == null : this.getTopicPageId().equals(other.getTopicPageId()));
     }
@@ -92,7 +80,6 @@ public class QuestionTopic implements Serializable {
         int result = 1;
         result = prime * result + ((getTopicId() == null) ? 0 : getTopicId().hashCode());
         result = prime * result + ((getTopicQuestion() == null) ? 0 : getTopicQuestion().hashCode());
-        result = prime * result + ((getTopicOption() == null) ? 0 : getTopicOption().hashCode());
         result = prime * result + ((getTopicType() == null) ? 0 : getTopicType().hashCode());
         result = prime * result + ((getTopicPageId() == null) ? 0 : getTopicPageId().hashCode());
         return result;
@@ -106,7 +93,6 @@ public class QuestionTopic implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", topicId=").append(topicId);
         sb.append(", topicQuestion=").append(topicQuestion);
-        sb.append(", topicOption=").append(topicOption);
         sb.append(", topicType=").append(topicType);
         sb.append(", topicPageId=").append(topicPageId);
         sb.append(", serialVersionUID=").append(serialVersionUID);

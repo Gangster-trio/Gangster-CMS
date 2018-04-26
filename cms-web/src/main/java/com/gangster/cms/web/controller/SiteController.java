@@ -33,7 +33,7 @@ public class SiteController {
         ModelResult result = webService.getSiteModel(siteUrl);
 
         if (result == null) {
-            return "404";
+            return "/error/404";
         }
 
         //Add result to module

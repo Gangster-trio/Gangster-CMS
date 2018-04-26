@@ -11,9 +11,8 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <meta http-equiv="x-rim-auto-match" content="none">
-    <title>问卷调查</title>
+    <title>result.page.questionPageTitle</title>
     <link href="css/question.css" rel="stylesheet" type="text/css">
-    <script src="question/jquery1.8.3.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <style type="text/css">
         h2 {

@@ -32,179 +32,166 @@
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-       <!-- <table schema="db_cms"
-               tableName="cms_article"
-               domainObjectName="Article"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-            <generatedKey column="article_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
-        <table tableName="cms_category"
+      <!--<table schema="db_cms"-->
+               <!--tableName="cms_article"-->
+               <!--domainObjectName="Article"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="article_id" sqlStatement="MySql" identity="true" type="post"/>-->
+        <!--</table>-->
+        <!--<table tableName="cms_category"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="Category"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="category_id" sqlStatement="MySql" identity="true" type="post"/>-->
+        <!--</table>-->
+        <!--<table tableName="cms_group"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="Group"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="group_id" sqlStatement="MySql" identity="true" type="post"/>-->
+        <!--</table>-->
+        <!--<table tableName="cms_module"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="Module"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="module_id" sqlStatement="MySql" identity="true" type="post"/>-->
+        <!--</table>-->
+        <!--<table tableName="cms_permission"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="Permission"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="permission_id" sqlStatement="MySql" identity="true" type="post"/>-->
+        <!--</table>-->
+        <!--<table tableName="cms_site"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="Site"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="site_id" sqlStatement="MySql" identity="true" type="post"/>-->
+        <!--</table>-->
+        <!--<table tableName="cms_tag"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="Tag"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="tag_id" sqlStatement="MySql" identity="true" type="post"/>-->
+        <!--</table>-->
+        <!--<table tableName="cms_user"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="User"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="user_id" sqlStatement="MySql" identity="true" type="post"/>-->
+        <!--</table>-->
+        <!--<table tableName="group_permission"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="GroupPermission"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+        <!--</table>-->
+        <!--<table tableName="tag_article"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="TagArticle"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+        <!--</table>-->
+        <!--<table tableName="user_group"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="UserGroup"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--selectByExampleQueryId="true">-->
+        <!--</table>-->
+        <!--<table tableName="cms_sys"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="SettingEntry"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true"-->
+               <!--enableInsert="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableSelectByPrimaryKey="true">-->
+        <!--</table>-->
+        <!--<table tableName="cms_skin"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="Skin"-->
+               <!--enableCountByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableUpdateByPrimaryKey="true"-->
+               <!--enableInsert="true">-->
+        <!--</table>-->
+        <!--<table tableName="cms_log"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="LogEntry"-->
+               <!--enableCountByExample="true"-->
+               <!--enableInsert="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true">-->
+        <!--</table>-->
+        <!--<table tableName="cms_count"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="CountEntry"-->
+               <!--enableCountByExample="true"-->
+               <!--enableInsert="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true">-->
+        <!--</table>-->
+        <table tableName="cms_survey_page"
                schema="db_cms"
-               domainObjectName="Category"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-            <generatedKey column="category_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
-        <table tableName="cms_group"
-               schema="db_cms"
-               domainObjectName="Group"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-            <generatedKey column="group_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
-        <table tableName="cms_module"
-               schema="db_cms"
-               domainObjectName="Module"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-            <generatedKey column="module_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
-        <table tableName="cms_permission"
-               schema="db_cms"
-               domainObjectName="Permission"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-            <generatedKey column="permission_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
-        <table tableName="cms_site"
-               schema="db_cms"
-               domainObjectName="Site"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-            <generatedKey column="site_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
-        <table tableName="cms_tag"
-               schema="db_cms"
-               domainObjectName="Tag"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-            <generatedKey column="tag_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
-        <table tableName="cms_user"
-               schema="db_cms"
-               domainObjectName="User"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-            <generatedKey column="user_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
-        <table tableName="group_permission"
-               schema="db_cms"
-               domainObjectName="GroupPermission"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-        </table>
-        <table tableName="tag_article"
-               schema="db_cms"
-               domainObjectName="TagArticle"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-        </table>
-        <table tableName="user_group"
-               schema="db_cms"
-               domainObjectName="UserGroup"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-        </table>
-        <table tableName="cms_sys"
-               schema="db_cms"
-               domainObjectName="SettingEntry"
-               enableCountByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableInsert="true"
-               enableDeleteByPrimaryKey="true"
-               enableSelectByPrimaryKey="true">
-        </table>
-        <table tableName="cms_skin"
-               schema="db_cms"
-               domainObjectName="Skin"
-               enableCountByExample="true"
-               enableSelectByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableUpdateByPrimaryKey="true"
-               enableInsert="true">
-        </table>
-        <table tableName="cms_log"
-               schema="db_cms"
-               domainObjectName="LogEntry"
-               enableCountByExample="true"
-               enableInsert="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true">
-        </table>
-        <table tableName="cms_count"
-               schema="db_cms"
-               domainObjectName="CountEntry"
-               enableCountByExample="true"
-               enableInsert="true"
-               enableDeleteByExample="true"
-               enableDeleteByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               enableUpdateByExample="true"
-               enableUpdateByPrimaryKey="true">
-        </table>
-        <table tableName="cms_question_page"
-               schema="db_cms"
-               domainObjectName="QuestionPage"
-               enableCountByExample="true"
-               enableDeleteByExample="true"
-               enableDeleteByPrimaryKey="true"
-               enableInsert="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               enableUpdateByExample="true"
-               enableUpdateByPrimaryKey="true">
-        </table>
-
-        <table tableName="cms_question_answer"
-               schema="db_cms"
-               domainObjectName="QuestionAnswer"
+               domainObjectName="SurveyPage"
                enableCountByExample="true"
                enableDeleteByExample="true"
                enableDeleteByPrimaryKey="true"
@@ -215,22 +202,9 @@
                enableUpdateByPrimaryKey="true">
         </table>
 
-        <table tableName="cms_outerchain"
+        <table tableName="cms_survey_option"
                schema="db_cms"
-               domainObjectName="OuterChain"
-               enableCountByExample="true"
-               enableDeleteByExample="true"
-               enableDeleteByPrimaryKey="true"
-               enableInsert="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               enableUpdateByExample="true"
-               enableUpdateByPrimaryKey="true">
-        </table>
--->
-        <table tableName="cms_question_topic"
-               schema="db_cms"
-               domainObjectName="QuestionTopic"
+               domainObjectName="SurveyOption"
                enableCountByExample="true"
                enableDeleteByExample="true"
                enableDeleteByPrimaryKey="true"
@@ -241,9 +215,9 @@
                enableUpdateByPrimaryKey="true">
         </table>
 
-        <table tableName="cms_mail"
+        <table tableName="cms_survey_topic"
                schema="db_cms"
-               domainObjectName="CmsMail"
+               domainObjectName="SurveyTopic"
                enableCountByExample="true"
                enableDeleteByExample="true"
                enableDeleteByPrimaryKey="true"
@@ -253,6 +227,32 @@
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
         </table>
+
+        <!--<table tableName="cms_outerchain"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="OuterChain"-->
+               <!--enableCountByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableInsert="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true">-->
+        <!--</table>-->
+
+        <!--<table tableName="cms_mail"-->
+               <!--schema="db_cms"-->
+               <!--domainObjectName="CmsMail"-->
+               <!--enableCountByExample="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableInsert="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--enableUpdateByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true">-->
+        <!--</table>-->
 
     </context>
 </generatorConfiguration>

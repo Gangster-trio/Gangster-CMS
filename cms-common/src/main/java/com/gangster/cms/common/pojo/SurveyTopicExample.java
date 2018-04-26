@@ -3,14 +3,14 @@ package com.gangster.cms.common.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionTopicExample {
+public class SurveyTopicExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public QuestionTopicExample() {
+    public SurveyTopicExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -231,76 +231,6 @@ public class QuestionTopicExample {
 
         public Criteria andTopicQuestionNotBetween(String value1, String value2) {
             addCriterion("topic_question not between", value1, value2, "topicQuestion");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionIsNull() {
-            addCriterion("topic_option is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionIsNotNull() {
-            addCriterion("topic_option is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionEqualTo(String value) {
-            addCriterion("topic_option =", value, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionNotEqualTo(String value) {
-            addCriterion("topic_option <>", value, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionGreaterThan(String value) {
-            addCriterion("topic_option >", value, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionGreaterThanOrEqualTo(String value) {
-            addCriterion("topic_option >=", value, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionLessThan(String value) {
-            addCriterion("topic_option <", value, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionLessThanOrEqualTo(String value) {
-            addCriterion("topic_option <=", value, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionLike(String value) {
-            addCriterion("topic_option like", value, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionNotLike(String value) {
-            addCriterion("topic_option not like", value, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionIn(List<String> values) {
-            addCriterion("topic_option in", values, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionNotIn(List<String> values) {
-            addCriterion("topic_option not in", values, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionBetween(String value1, String value2) {
-            addCriterion("topic_option between", value1, value2, "topicOption");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopicOptionNotBetween(String value1, String value2) {
-            addCriterion("topic_option not between", value1, value2, "topicOption");
             return (Criteria) this;
         }
 
