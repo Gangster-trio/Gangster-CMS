@@ -2,11 +2,11 @@
 <button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="batchDelete" data-type="batchDelete">
     批量删除
 </button>
-<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="questionPage">添加问卷</button>
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="surveyPage">添加问卷</button>
 <div class="layui-elem-quote" style="margin-bottom: 0;">
     <p>问卷管理</p>
 </div>
-<table id="questionPage_table" class="layui-table" style="margin: 0px" lay-filter="questionPagelist"></table>
+<table id="surveyPage_table" class="layui-table" style="margin: 0px" lay-filter="surveyPagelist"></table>
 <script>
 
     layui.use('table', function () {
@@ -16,16 +16,16 @@
         //对site进行判断，只有选择了site才有显示
         if (siteId) {
             table.render({
-                elem: '#questionPage_table'
-                , url: '/question/page/list?siteId=' + siteId     //得到所选site的栏目
+                elem: '#surveyPage_table'
+                , url: '/survey/page/list?siteId=' + siteId     //得到所选site的栏目
                 , page: true
                 , cols: [[ //表头
                     {type: 'checkbox'}
-                    , {field: 'questionPageId', title: 'ID', width: '80', sort: true}
-                    , {field: 'questionPageTitle', title: '栏目名', width: '190', align: 'center'}
-                    , {field: 'questionPageCreateTime', title: "创建时间", width: '110', align: 'center', sort: true}
-                    , {field: 'questionPageEndTime', title: '更新时间', width: '110', align: 'center', sort: true}
-                    , {field: 'questionSiteId', title: '级别', width: '80', align: 'center', sort: true}
+                    , {field: 'pageId', title: 'ID', width: '80', sort: true}
+                    , {field: 'pageTitle', title: '栏目名', width: '190', align: 'center'}
+                    , {field: 'pageCreateTime', title: "创建时间", width: '110', align: 'center', sort: true}
+                    , {field: 'pageEndTime', title: '更新时间', width: '110', align: 'center', sort: true}
+                    , {field: 'pageSiteId', title: '级别', width: '80', align: 'center', sort: true}
                     , {filed: 'tool', title: '操作', align: 'center', toolbar: "#toolBar"}
                 ]]
                 , done: function (res, curr, count) {
@@ -38,7 +38,7 @@
 
 
             //监听的事件
-            table.on('tool(questionPagelist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(surveyPagelist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 //查看栏目的详细信息
@@ -57,8 +57,8 @@
     });
 </script>
 <script>
-    $("#questionPage").on('click', function () {
-            showAtRight("/module/question/addQuestionPage.html");
+    $("#surveyPage").on('click', function () {
+            showAtRight("/module/survey/addSurveyPage.html");
     });
 </script>
 <script type="text/html" id="toolBar">

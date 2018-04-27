@@ -398,7 +398,7 @@
 
 <script type="text/javascript">
     new Vue({
-        el: '.question',
+        el: '.survey',
         data: {
             checkedNames: []
         }
@@ -425,12 +425,12 @@
     }
 
     /*判断单选框选中状态，并且父级添加active*/
-    $(".question ul .que_ra label").click(function () {
+    $(".survey ul .que_ra label").click(function () {
         $(this).addClass("icon_raa").siblings().removeClass("icon_raa");
         $(this).parent().addClass("active");
     });
     /*判断复选框选中状态，并且父级添加删除active*/
-    $(".question ul .que_chex label").click(function () {
+    $(".survey ul .que_chex label").click(function () {
         if ($(this).hasClass("icon_chexa")) {
             $(this).removeClass("icon_chexa");
         } else {
