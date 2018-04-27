@@ -74,6 +74,24 @@ public class SurveyWebService {
         return survey;
     }
 
+    public void submitCheck(List<Integer> idList){
+        idList.forEach(id->{
+            SurveyOption option = optionMapper.selectByPrimaryKey(id);
+            int count = option.getOptionCount();
+            option.setOptionCount(count+  1);
+            optionMapper.updateByPrimaryKeySelective(option);
+        });
+    }
+
+    public void submitText(Map<String ,String > map){
+        map.forEach((topicId,content)->{
+            SurveyOption option = new SurveyOption();
+            option.setOptionContent(content);
+            option.setTopicId(Integer.parseInt(topicId));
+            optionMapper.insertSelective(option);
+        });
+    }
+
     @Scheduled(fixedDelay = 1000 * 60 * 5)
     private void flushCache() {
         cache.clear();
