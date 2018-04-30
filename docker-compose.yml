@@ -1,0 +1,75 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: cms-web
+    environment:
+      DB_SERVER: db
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - db
+    ports:
+      - "8090:8090"
+
+  admin:
+    build:
+     context: cms-admin
+    environment:
+      DB_SERVER: db
+      DB_PASSWORD: ${DB_PASSWORD}
+      EUREKA_SERVER: eureka
+    depends_on:
+      - db
+      - eureka
+    ports:
+      - "8080:8080"
+
+  search:
+    build:
+      context: cms-search
+    environment:
+      DB_SERVER: db
+      DB_PASSWORD: ${DB_PASSWORD}
+      ES_SERVER: es
+      EUREKA_SERVER: eureka
+      ES_NAME: docker-es
+    depends_on:
+      - eureka
+      - es
+  es:
+    build:
+      context: cms-search/src/main/resources/es-ik
+    environment:
+      - cluster.name=docker-es
+      - bootstrap.memory_lock=true
+      #破服务器就改成128吧
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+#  logstash:
+#    build:
+#      context: cms-search/src/main/resources/logstash-config
+#    environment:
+#      DB_SERVER: db
+#      DB_PASSWORD: ${DB_PASSWORD}
+#      ES_SERVER: es
+#    depends_on:
+#      - db
+#      - es
+  db:
+    image: mysql:5
+    volumes:
+      - db_vol:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+  eureka:
+    build:
+      context: cms-eureka-server
+    ports:
+      - "8761:8761"
+volumes:
+  db_vol:
+    external: true
