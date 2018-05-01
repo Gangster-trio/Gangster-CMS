@@ -18,6 +18,10 @@ public class TopicWithOptionWrapper extends SurveyTopic {
         this.optionList = optionList;
     }
 
+    public SurveyTopic getTopic() {
+        return topic;
+    }
+
     @Override
     public Integer getTopicId() {
         return topic.getTopicId();
@@ -63,6 +67,17 @@ public class TopicWithOptionWrapper extends SurveyTopic {
     }
 
     public void setOptionList(List<SurveyOption> optionList) {
+        this.optionList = optionList;
+    }
+
+    public TopicWithOptionWrapper(Integer topicId, String topicQuestion, String topicType, Integer topicPageId, SurveyTopic topic) {
+        super(topicId, topicQuestion, topicType, topicPageId);
+        this.topic = topic;
+    }
+
+    public TopicWithOptionWrapper(Integer topicId, String topicQuestion, String topicType, Integer topicPageId, SurveyTopic topic, List<SurveyOption> optionList) {
+        super(topicId, topicQuestion, topicType, topicPageId);
+        this.topic = topic;
         this.optionList = optionList;
     }
 }

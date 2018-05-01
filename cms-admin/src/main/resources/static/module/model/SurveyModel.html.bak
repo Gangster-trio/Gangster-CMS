@@ -1,0 +1,106 @@
+<form id="addQuestionForm" class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-inline">
+            <input type="text" name="surveyTitle" id="surveyTitle" required="" lay-verify="required"
+                   placeholder="请输入标题" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div id="testsd" class="layui-inline">
+        <label class="layui-form-label">有效期</label>
+        <div class="layui-input-inline">
+            <input type="text" style="width: 100%" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+
+    <!--选择题-->
+    <div id="firstChoice" style="background-color: rgba(117,166,255,0.21);padding: 20px 0 20px 0;margin-top: 10px">
+        <div id="firstSingleChoice">
+            <div class="layui-form-item">
+                <label class="layui-form-label">问题标题</label>
+                <div class="layui-input-block">
+                    <input type="text" style="width: 60%" name="title" lay-verify="title" autocomplete="off"
+                           placeholder="请输入问题的标题" class="layui-input">
+                </div>
+
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">问题类型</label>
+                <div style="width: 55%" class="layui-input-block">
+                    <select style="width: 60%" name="city" lay-verify="required">
+                        <option value=""></option>
+                        <option value="0">单选</option>
+                        <option value="1">多选</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="firstOption" class="layui-form-item">
+                <label class="layui-form-label">选项：</label>
+                <br/>
+                <div id="divTest" class="layui-input-block">
+                    <input class="layui-input" type="text" style="width: 60%" name="title" lay-verify="title"
+                           autocomplete="off"
+                           placeholder="请输入标题">
+                    <button onclick="deleteChoiceOption(this)"
+                            class="layui-btn layui-btn-primary layui-btn-sm"><i
+                            class="layui-icon">&#xe640;</i></button>
+                </div>
+            </div>
+        </div>
+
+        <!--添加选项-->
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button onclick="addChoiceOption(this)" id="addSingleOption"
+                        class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe608;</i>
+                </button>
+            </div>
+        </div>
+
+        <!--删除题目-->
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button onclick="deleteChoice(this)" class="layui-btn">删除题目
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!--问答题-->
+    <div id="firstQA+" style="background-color: rgba(117,166,255,0.21);padding: 20px 0 20px 0;margin-top: 10px">
+        <div id="firstQA">
+            <div class="layui-form-item">
+                <label class="layui-form-label">问题标题</label>
+                <div class="layui-input-block">
+                    <input type="text" style="width: 60%" name="title" lay-verify="title" autocomplete="off"
+                           placeholder="请输入问题的标题" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">问题类型</label>
+                <div style="width: 55%" class="layui-input-block">
+                    <select name="city" lay-verify="required">
+                        <option value="1">问答题</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!--删除题目-->
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn">删除题目
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

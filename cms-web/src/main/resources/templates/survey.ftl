@@ -53,7 +53,7 @@
         console.log(upload_check);
         var check_arr = [];
         upload_check.each(function (i, e) {
-            check_arr.push($(this).val());
+            check_arr.push($(this).val())
         });
         var text_map = {};
         upload_text.each(function (i, e) {
@@ -66,16 +66,16 @@
         // $.post(CHECK_SUBMIT_URL,check_json);
         // $.post(TEXT_SUBMIT_URL,text_json);
         $.ajax({
-            type:"post",
-            url:CHECK_SUBMIT_URL,
-            data:check_json,
-            contentType:"application/json"
+            type: "post",
+            url: CHECK_SUBMIT_URL,
+            data: check_json,
+            contentType: "application/json"
         });
         $.ajax({
-            type:"post",
-            url:TEXT_SUBMIT_URL,
-            data:text_json,
-            contentType:"application/json"
+            type: "post",
+            url: TEXT_SUBMIT_URL,
+            data: text_json,
+            contentType: "application/json"
         });
         alert("Okay.")
     }

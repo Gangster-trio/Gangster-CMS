@@ -8,12 +8,12 @@
 </div>
 <table id="surveyPage_table" class="layui-table" style="margin: 0px" lay-filter="surveyPagelist"></table>
 <script>
+    var pageId;
 
     layui.use('table', function () {
         var first = true;
         var table = layui.table;
 
-        //对site进行判断，只有选择了site才有显示
         if (siteId) {
             table.render({
                 elem: '#surveyPage_table'
@@ -40,17 +40,39 @@
             //监听的事件
             table.on('tool(surveyPagelist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
+                pageId = data.pageId;
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 //查看栏目的详细信息
                 if (layEvent === 'detail') {
                 }
                 //删除栏目信息
                 if (layEvent === 'del') { //删除
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/survey/page/delete/" + pageId,
+                        contentType: "application/json",
+                        dataType: 'json',
+                        error: function () {
+                            layui.layer.alert("failed " + resp);
+                        },
+                        success: function (resp) {
+                            console.log(resp);
+                            switch (resp.code) {
+                                case 0:
+                                    layer.msg(resp.message, {icon: 6});
+                                    break;
+                                case 1:
+                                    layer.msg("更新失败", {icon: 5});
+                                    break;
+                                default:
+                            }
+                            showAtRight("/module/survey/listSurveyPage.html");
+                        }
+                    });
                 }
                 //编辑栏目
                 else if (layEvent === 'edit') {
-                }
-                if (layEvent === 'add') {
+                    showAtRight("/module/survey/updateSurveyPage.html");
                 }
             });
         }
@@ -58,14 +80,11 @@
 </script>
 <script>
     $("#surveyPage").on('click', function () {
-            showAtRight("/module/survey/addSurveyPage.html");
+        showAtRight("/module/survey/addSurveyPage.html");
     });
 </script>
 <script type="text/html" id="toolBar">
     <div class="layui-btn-group">
-        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
-            <i class="layui-icon">&#xe654;</i>
-        </button>
         <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">
             <i class="layui-icon">&#xe705;</i>
         </button>

@@ -101,17 +101,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.gangster.cms.common.pojo.SurveyTopic">
-    insert into cms_survey_topic (topic_id, topic_question, topic_type, 
-      topic_page_id)
-    values (#{topicId,jdbcType=INTEGER}, #{topicQuestion,jdbcType=VARCHAR}, #{topicType,jdbcType=VARCHAR}, 
-      #{topicPageId,jdbcType=INTEGER})
+    <selectKey keyProperty="topicId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cms_survey_topic (topic_question, topic_type, topic_page_id
+      )
+    values (#{topicQuestion,jdbcType=VARCHAR}, #{topicType,jdbcType=VARCHAR}, #{topicPageId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.SurveyTopic">
+    <selectKey keyProperty="topicId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into cms_survey_topic
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="topicId != null">
-        topic_id,
-      </if>
       <if test="topicQuestion != null">
         topic_question,
       </if>
@@ -123,9 +126,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="topicId != null">
-        #{topicId,jdbcType=INTEGER},
-      </if>
       <if test="topicQuestion != null">
         #{topicQuestion,jdbcType=VARCHAR},
       </if>
