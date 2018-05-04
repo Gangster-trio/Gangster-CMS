@@ -48,7 +48,7 @@ var choiceStr = "    <div  class='choice'>\n" +
     "            <!--添加选项-->\n" +
     "            <div class=\"layui-form-item\">\n" +
     "                <div class=\"layui-input-block\">\n" +
-    "                    <button onclick=\"addChoiceOption(this)\" id=\"addSingleOption\"\n" +
+    "                    <button type='button' onclick=\"addChoiceOption(this)\" \"\n" +
     "                            class=\"layui-btn layui-btn-primary layui-btn-sm\"><i class=\"layui-icon\">&#xe608;</i>\n" +
     "                    </button>\n" +
     "                </div>\n" +
@@ -111,56 +111,124 @@ function deleteChoiceOption(ele) {
 
 
 // 添加选择题
-function addChoice() {
-    $("#addQuestionForm").append(choiceStr);
+function addChoice(str) {
+    if (str === undefined) {
+        $("#addQuestionForm").append(choiceStr);
+    } else {
+        $("#addQuestionForm").append(str);
+    }
     form.render();
 }
 
 // 添加问答题
-function addQA() {
-    $("#addQuestionForm").append(qAStr);
+function addQA(str) {
+    if (str === undefined) {
+        $("#addQuestionForm").append(qAStr);
+    } else {
+        $("#addQuestionForm").append(str);
+    }
     form.render();
 }
 
 // 删除问题
 function deleteQuestion(ele) {
-    // var deleteId = $(ele).parent().parent().parent().attr('id');
-    // $("#" + deleteId + "").remove();
     $(ele).parent().parent().parent().remove();
 }
 
-function submitData() {
-    var submit_data = {};
-    var question_arr = [];
+
+function generateData() {
+
+    // page的数据
+    var page = {};
     var survey_title = $("#surveyTitle").val();
     var valid_date = $("#validDate").val();
+    var valid_dates = valid_date.split(" ~ ");
     var site_id = siteId;
+    if (pageId === undefined) {
+        page["pageId"] = "";
+    } else {
+        page["pageId"] = pageId;
+    }
+    page["pageTitle"] = survey_title;
+    page["pageCreateTime"] = valid_dates[0];
+    page["pageEndTime"] = valid_dates[1];
+    page["pageSiteId"] = site_id;
+
+    // topicList的数据
+    var topic_list = [];
     var choice_question = $(".choice");
-    // 遍历每个题
     choice_question.each(function (i, e) {
-        var question_map = {};
         var topic_question = $(this).find("input[name='topicQuestion']").val();
         var topic_type = $(this).find("select[name='topicType']").val();
+        var topicId = $(this).find("input[name='topicId']").val();
+        if (topicId === undefined) {
+            topicId = "";
+        }
+        var topic = {
+            "topicId": topicId,
+            "topicQuestion": topic_question,
+            "topicType": topic_type,
+            "topicPageId": pageId
+        };
+
         var options = $(this).find("input[name='optionContent']");
-        var options_arr = [];
+        var options_List = [];
         options.each(function (i, e) {
-            options_arr.push($(this).val());
+            var optionId;
+            var nextName = $(this).next().get(0).tagName;
+            if (nextName === 'INPUT') {
+                optionId = $(this).next().val();
+            } else {
+                optionId = "";
+            }
+
+            var option = {"optionId": optionId, "optionContent": $(this).val(), "topicId": topicId, "optionCount": 0};
+            options_List.push(option);
         });
-        question_map["topicQuestion"] = topic_question;
-        question_map['topicType'] = topic_type;
-        question_map['options'] = options_arr;
-        question_arr.push(question_map);
+
+        var single_topic = {"topic": topic, "optionList": options_List};
+        topic_list.push(single_topic);
     });
-    submit_data["pageTitle"] = survey_title;
-    submit_data["validDate"] = valid_date;
-    submit_data["siteId"] = site_id;
-    submit_data["questions"] = question_arr;
-    var submit_data_json = JSON.stringify(submit_data);
-    console.log(submit_data_json);
+
+    return JSON.stringify({"page": page, "topicList": topic_list});
+
+}
+
+function addPage() {
+
+    console.log(generateData());
     $.ajax({
         type: 'POST',
         url: '/survey/page/add',
-        data: submit_data_json,
+        data: generateData(),
+        async: false,
+        contentType: 'application/json',
+        dataType: 'json',
+        error: function (resp) {
+            layui.layer.alert("failed " + resp);
+        },
+        success: function (resp) {
+            switch (resp.code) {
+                case 0:
+                    layer.msg(resp.message, {icon: 6});
+                    break;
+                case 1:
+                    layer.msg("添加失败", {icon: 5});
+                    break;
+                default:
+            }
+            showAtRight("/module/survey/listSurveyPage.html");
+        }
+    });
+}
+
+function updatePage() {
+
+    console.log(generateData());
+    $.ajax({
+        type: 'POST',
+        url: '/survey/page/update',
+        data: generateData(),
         async: false,
         contentType: 'application/json',
         dataType: 'json',

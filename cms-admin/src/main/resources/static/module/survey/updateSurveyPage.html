@@ -3,7 +3,7 @@
 </fieldset>
 
 <div class="site-text site-block">
-    <form id="updateQuestionForm" class="layui-form">
+    <form id="addQuestionForm" class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">标题</label>
             <div class="layui-input-inline">
@@ -12,7 +12,6 @@
                        class="layui-input">
             </div>
         </div>
-
         <div id="updateDate" class="layui-inline">
             <label class="layui-form-label">有效期</label>
             <div class="layui-input-inline">
@@ -38,7 +37,7 @@
 
     <div style="margin-top: 20px" class="layui-form-item">
         <div class="layui-input-block">
-            <button onclick="submitData()" class="layui-btn" lay-filter="submitForm">立即提交
+            <button onclick="updatePage()" class="layui-btn" lay-filter="submitForm">立即提交
             </button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
@@ -69,31 +68,125 @@
         });
     });
 
-
     $.ajax({
         type: 'get',
         url: '/survey/page/details/' + pageId,
         async: false,
         success: function (data) {
             var obj = data.data;
-            $("#surveyTitle").val(obj.pageTitle);
-            $("#validDate").val(obj.validDate);
-            for (var i = 0; i < obj.questions.length; i++) {
-                switch (i.topicType) {
+
+            // page部分
+            var page = obj.page;
+            $("#surveyTitle").val(page.pageTitle);
+            var valid_date = page.pageCreateTime + " ~ " + page.pageEndTime;
+            $("#validDate").val(valid_date);
+            // 问题部分
+            var topic_list = obj.topicList;
+            for (var i = 0; i < topic_list.length; i++) {
+
+                var topic = topic_list[i].topic;
+                console.log(topic.topicQuestion);
+                var option_list = topic_list[i].optionList;
+                console.log(option_list);
+                var optionsStr = "";
+                for (var j = 0; j < option_list.length; j++) {
+                    var option = option_list[j];
+                    console.log(option);
+                    optionsStr = optionsStr.concat("  <div  class=\"layui-form-item\">\n" +
+                        "                <label class=\"layui-form-label\">选项：</label>\n" +
+                        "                <br/>\n" +
+                        "                <div id=\"divTest\" class=\"layui-input-block\">\n" +
+                        "                    <input class=\"layui-input\" type=\"text\" style=\"width: 60%\" value=" + option.optionContent + " name=\"optionContent\" lay-verify=\"title\"\n" +
+                        "                           autocomplete=\"off\"\n" +
+                        "                           placeholder=\"请输入标题\">\n" +
+                        "<input name='optionId' value=" + option.optionId + " type='hidden'/>" +
+                        "                    <button onclick=\"deleteChoiceOption(this)\"\n" +
+                        "                            class=\"layui-btn layui-btn-primary layui-btn-sm\"><i\n" +
+                        "                            class=\"layui-icon\">&#xe640;</i></button>\n" +
+                        "                </div>\n" +
+                        "            </div>");
+                }
+
+
+                var choiceStr = "    <div  class='choice'>\n" +
+                    "            <div>\n" +
+                    "                <div class=\"layui-form-item\">\n" +
+                    "                    <label class=\"layui-form-label\">问题标题</label>\n" +
+                    "                    <div class=\"layui-input-block\">\n" +
+                    "                        <input style='width: 60%' type=\"text\" value=" + topic.topicQuestion + " name=\"topicQuestion\" lay-verify=\"title\" autocomplete=\"off\"\n" +
+                    "                               placeholder=\"请输入问题的标题\" class=\"layui-input\">\n" +
+                    "                    </div>\n" +
+                    "<input name='topicId' value=" + topic.topicId + " type='hidden'/>" +
+                    "                </div>";
+
+                switch (topic.topicType) {
                     case "单选":
-                        
+                        choiceStr = choiceStr + "     <div class=\"layui-form-item\">\n" +
+                            "                    <label class=\"layui-form-label\">问题类型</label>\n" +
+                            "                    <div style='width: 55%' class=\"layui-input-block\">\n" +
+                            "                        <select style=\"width: 60%\" name=\"topicType\" lay-verify=\"required\">\n" +
+                            "                            <option selected='selected' value=\"单选\">单选</option>\n" +
+                            "                            <option  value=\"多选\">多选</option>\n" +
+                            "                        </select>\n" +
+                            "                    </div>\n" +
+                            "                </div>\n" + "            <div class=\"layui-form-item\">\n" +
+                            "                <div class=\"layui-input-block\">\n" +
+                            "                    <button class='layui-btn layui-btn-primary layui-btn-sm' type='button' onclick=\"addChoiceOption(this)\" >" +
+                            "                          <i class=\"layui-icon\">&#xe608;</i>\n" +
+                            "                    </button>\n" +
+                            "                </div>\n" +
+                            "            </div>\n";
                         break;
                     case "多选":
+                        choiceStr = choiceStr + "     <div class=\"layui-form-item\">\n" +
+                            "                    <label class=\"layui-form-label\">问题类型</label>\n" +
+                            "                    <div style='width: 55%' class=\"layui-input-block\">\n" +
+                            "                        <select style=\"width: 60%\" name=\"topicType\" lay-verify=\"required\">\n" +
+                            "                            <option value=\"单选\">单选</option>\n" +
+                            "                            <option selected='selected' value=\"多选\">多选</option>\n" +
+                            "                        </select>\n" +
+                            "                    </div>\n" +
+                            "                </div>\n" + "            <div class=\"layui-form-item\">\n" +
+                            "                <div class=\"layui-input-block\">\n" +
+                            "                    <button class='layui-btn layui-btn-primary layui-btn-sm' type='button' onclick=\"addChoiceOption(this)\" >" +
+                            "                          <i class=\"layui-icon\">&#xe608;</i>\n" +
+                            "                    </button>\n" +
+                            "                </div>\n" +
+                            "            </div>\n";
                         break;
-                    case "问答题":
+                    case "问答":
+                        choiceStr = choiceStr + "     <div class=\"layui-form-item\">\n" +
+                            "                    <label class=\"layui-form-label\">问题类型</label>\n" +
+                            "                    <div style='width: 55%' class=\"layui-input-block\">\n" +
+                            "                        <select style=\"width: 60%\" name=\"topicType\" lay-verify=\"required\">\n" +
+                            "                            <option selected='selected' value=\"问答\">问答</option>\n" +
+                            "                        </select>\n" +
+                            "                    </div>\n" +
+                            "                </div>\n";
                         break;
                     default:
                 }
-            }
+                choiceStr = choiceStr + optionsStr +
+                    "            <!--删除题目-->\n" +
+                    "            <div class=\"layui-form-item\">\n" +
+                    "                <div class=\"layui-input-block\">\n" +
+                    "                    <button  class=\"layui-btn\" onclick='deleteQuestion(this)'>删除题目\n" +
+                    "                    </button>\n" +
+                    "                </div>\n" +
+                    "            </div>\n" +
+                    "        </div>\n";
 
+                addChoice(choiceStr);
+                form.render();
+            }
         },
-        error: function (resp) {
-            layui.layer.alert("failed: " + resp);
-        }
-    });
+        error:
+
+            function (resp) {
+                layui.layer.alert("failed: " + resp);
+            }
+    })
+    ;
+
 </script>
+
