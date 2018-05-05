@@ -6,8 +6,8 @@
       <idArg column="mail_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="mail_in_mail" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="mail_to_mail" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="mail_sendDate" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="mail_receiveDate" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="mail_send_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="mail_receive_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="mail_content" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="mail_read" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="mail_flag_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    mail_id, mail_in_mail, mail_to_mail, mail_sendDate, mail_receiveDate, mail_content, 
+    mail_id, mail_in_mail, mail_to_mail, mail_send_date, mail_receive_date, mail_content, 
     mail_read, mail_flag_status
   </sql>
   <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.CmsMailExample" resultMap="BaseResultMap">
@@ -106,30 +106,33 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.gangster.cms.common.pojo.CmsMail">
-    insert into cms_mail (mail_id, mail_in_mail, mail_to_mail, 
-      mail_sendDate, mail_receiveDate, mail_content, 
-      mail_read, mail_flag_status)
-    values (#{mailId,jdbcType=INTEGER}, #{mailInMail,jdbcType=VARCHAR}, #{mailToMail,jdbcType=VARCHAR}, 
-      #{mailSenddate,jdbcType=TIMESTAMP}, #{mailReceivedate,jdbcType=TIMESTAMP}, #{mailContent,jdbcType=VARCHAR}, 
-      #{mailRead,jdbcType=INTEGER}, #{mailFlagStatus,jdbcType=INTEGER})
+    <selectKey keyProperty="mailId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cms_mail (mail_in_mail, mail_to_mail, mail_send_date, 
+      mail_receive_date, mail_content, mail_read, 
+      mail_flag_status)
+    values (#{mailInMail,jdbcType=VARCHAR}, #{mailToMail,jdbcType=VARCHAR}, #{mailSendDate,jdbcType=TIMESTAMP}, 
+      #{mailReceiveDate,jdbcType=TIMESTAMP}, #{mailContent,jdbcType=VARCHAR}, #{mailRead,jdbcType=INTEGER}, 
+      #{mailFlagStatus,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.CmsMail">
+    <selectKey keyProperty="mailId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into cms_mail
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="mailId != null">
-        mail_id,
-      </if>
       <if test="mailInMail != null">
         mail_in_mail,
       </if>
       <if test="mailToMail != null">
         mail_to_mail,
       </if>
-      <if test="mailSenddate != null">
-        mail_sendDate,
+      <if test="mailSendDate != null">
+        mail_send_date,
       </if>
-      <if test="mailReceivedate != null">
-        mail_receiveDate,
+      <if test="mailReceiveDate != null">
+        mail_receive_date,
       </if>
       <if test="mailContent != null">
         mail_content,
@@ -142,20 +145,17 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="mailId != null">
-        #{mailId,jdbcType=INTEGER},
-      </if>
       <if test="mailInMail != null">
         #{mailInMail,jdbcType=VARCHAR},
       </if>
       <if test="mailToMail != null">
         #{mailToMail,jdbcType=VARCHAR},
       </if>
-      <if test="mailSenddate != null">
-        #{mailSenddate,jdbcType=TIMESTAMP},
+      <if test="mailSendDate != null">
+        #{mailSendDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="mailReceivedate != null">
-        #{mailReceivedate,jdbcType=TIMESTAMP},
+      <if test="mailReceiveDate != null">
+        #{mailReceiveDate,jdbcType=TIMESTAMP},
       </if>
       <if test="mailContent != null">
         #{mailContent,jdbcType=VARCHAR},
@@ -186,11 +186,11 @@
       <if test="record.mailToMail != null">
         mail_to_mail = #{record.mailToMail,jdbcType=VARCHAR},
       </if>
-      <if test="record.mailSenddate != null">
-        mail_sendDate = #{record.mailSenddate,jdbcType=TIMESTAMP},
+      <if test="record.mailSendDate != null">
+        mail_send_date = #{record.mailSendDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.mailReceivedate != null">
-        mail_receiveDate = #{record.mailReceivedate,jdbcType=TIMESTAMP},
+      <if test="record.mailReceiveDate != null">
+        mail_receive_date = #{record.mailReceiveDate,jdbcType=TIMESTAMP},
       </if>
       <if test="record.mailContent != null">
         mail_content = #{record.mailContent,jdbcType=VARCHAR},
@@ -211,8 +211,8 @@
     set mail_id = #{record.mailId,jdbcType=INTEGER},
       mail_in_mail = #{record.mailInMail,jdbcType=VARCHAR},
       mail_to_mail = #{record.mailToMail,jdbcType=VARCHAR},
-      mail_sendDate = #{record.mailSenddate,jdbcType=TIMESTAMP},
-      mail_receiveDate = #{record.mailReceivedate,jdbcType=TIMESTAMP},
+      mail_send_date = #{record.mailSendDate,jdbcType=TIMESTAMP},
+      mail_receive_date = #{record.mailReceiveDate,jdbcType=TIMESTAMP},
       mail_content = #{record.mailContent,jdbcType=VARCHAR},
       mail_read = #{record.mailRead,jdbcType=INTEGER},
       mail_flag_status = #{record.mailFlagStatus,jdbcType=INTEGER}
@@ -229,11 +229,11 @@
       <if test="mailToMail != null">
         mail_to_mail = #{mailToMail,jdbcType=VARCHAR},
       </if>
-      <if test="mailSenddate != null">
-        mail_sendDate = #{mailSenddate,jdbcType=TIMESTAMP},
+      <if test="mailSendDate != null">
+        mail_send_date = #{mailSendDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="mailReceivedate != null">
-        mail_receiveDate = #{mailReceivedate,jdbcType=TIMESTAMP},
+      <if test="mailReceiveDate != null">
+        mail_receive_date = #{mailReceiveDate,jdbcType=TIMESTAMP},
       </if>
       <if test="mailContent != null">
         mail_content = #{mailContent,jdbcType=VARCHAR},
@@ -251,8 +251,8 @@
     update cms_mail
     set mail_in_mail = #{mailInMail,jdbcType=VARCHAR},
       mail_to_mail = #{mailToMail,jdbcType=VARCHAR},
-      mail_sendDate = #{mailSenddate,jdbcType=TIMESTAMP},
-      mail_receiveDate = #{mailReceivedate,jdbcType=TIMESTAMP},
+      mail_send_date = #{mailSendDate,jdbcType=TIMESTAMP},
+      mail_receive_date = #{mailReceiveDate,jdbcType=TIMESTAMP},
       mail_content = #{mailContent,jdbcType=VARCHAR},
       mail_read = #{mailRead,jdbcType=INTEGER},
       mail_flag_status = #{mailFlagStatus,jdbcType=INTEGER}

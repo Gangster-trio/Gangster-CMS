@@ -1,6 +1,7 @@
 package com.gangster.cms.admin.controller;
 
 import com.gangster.cms.admin.dto.AjaxData;
+import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.service.web.MailWbeService;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.CmsMail;
@@ -53,5 +54,19 @@ public class CmsMailController {
             return new AjaxData(1, "failed", 0, null);
         }
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    @GetMapping("/list/sended")
+    public AjaxData listSended(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        PageInfo<CmsMail> pageInfo = mailWbeService.listSended(user, page, limit);
+        if (null == pageInfo) {
+            return new AjaxData(1, "failed", 0, null);
+        }
+        return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    @GetMapping("/details/{id}")
+    public MessageDto detailsMail(@PathVariable("id") Integer id) {
+        return MessageDto.success(mailWbeService.detailsMail(id));
     }
 }

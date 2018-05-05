@@ -2,11 +2,12 @@
     <legend>单封邮件</legend>
 </fieldset>
 <div class="site-text site-block">
-    <form id="addArticleForm" class="layui-form">
+    <form class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">发件人</label>
             <div class="layui-input-inline">
-                <input type="text" name="" id="" required="" lay-verify="required"
+                <input type="text" readonly="readonly" name="mailInMail" id="mailInMail" required="required"
+                       lay-verify="required"
                        placeholder="发件人" autocomplete="off"
                        class="layui-input">
             </div>
@@ -15,7 +16,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">时间</label>
             <div class="layui-input-inline">
-                <input type="text" name="" required="" lay-verify="required|number"
+                <input type="text" name="mailSendDate" id="mailSendDate" readonly="readonly" required="required"
+                       lay-verify="required|number"
                        placeholder="时间" autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -23,16 +25,58 @@
         <div class="layui-form-item">
             <label class="layui-form-label">收件人</label>
             <div class="layui-input-inline">
-                <input type="text" name="" required="" lay-verify="required|number"
+                <input type="text" name="mailToMail" id="mailToMail" readonly="readonly" required=""
+                       lay-verify="required|number"
                        placeholder="收件人" autocomplete="off" class="layui-input">
             </div>
         </div>
 
-        <div class="layui-form-item layui-form-text">
+        <div id="message_text" class="layui-form-item layui-form-text">
             <label class="layui-form-label">Content</label>
             <div class="layui-input-block">
-                <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                <textarea name="mailContent" id="mailContent" readonly="readonly" placeholder="请输入内容"
+                          class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" onclick="reply()" class="layui-btn layui-btn-sm layui-btn-normal">快捷回复</button>
             </div>
         </div>
     </form>
 </div>
+<script>
+    $.ajax({
+        type: "get",
+        url: "/list",
+        contentType: "application/json",
+        dataType: "json",
+        success: function (resp) {
+            var mail = resp.data;
+            $("#mailInMail").val(mail.mailInMail);
+            $("#mailToMail").val(mail.mailToMail);
+            $("#mailSendDate").val(mail.mailSendDate);
+            $("#mailContent").val(mail.mailContent);
+        },
+        error: function () {
+            layui.layer.alert("failed " + resp);
+        }
+    });
+
+
+    function reply() {
+        $("#message_text").after("<div class=\"layui-form-item layui-form-text\">\n" +
+            "            <label class=\"layui-form-label\">Content</label>\n" +
+            "            <div class=\"layui-input-block\">\n" +
+            "                <textarea name=\"desc\" placeholder=\"请输入内容\" class=\"layui-textarea\"></textarea>\n" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "       <div class=\"layui-form-item\">\n" +
+            "            <div class=\"layui-input-block\">\n" +
+            "                <button type=\"button\"  class=\"layui-btn layui-btn-sm layui-btn-normal\">发送</button>\n" +
+            "            </div>\n" +
+            "        </div>");
+    }
+
+</script>

@@ -2,9 +2,8 @@ package com.gangster.cms.dao.mapper;
 
 import com.gangster.cms.common.pojo.CmsMail;
 import com.gangster.cms.common.pojo.CmsMailExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface CmsMailMapper {
     long countByExample(CmsMailExample example);

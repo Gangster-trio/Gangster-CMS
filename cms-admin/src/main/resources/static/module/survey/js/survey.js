@@ -77,7 +77,7 @@ var qAStr = "     <div  class='choice' \">\n" +
     "                    <label class=\"layui-form-label\">问题类型</label>\n" +
     "                    <div style=\"width: 55%\" class=\"layui-input-block\">\n" +
     "                        <select name=\"topicType\" lay-verify=\"required\">\n" +
-    "                            <option value=\"问答题\">问答题</option>\n" +
+    "                            <option value=\"问答\">问答</option>\n" +
     "                        </select>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -95,17 +95,12 @@ var qAStr = "     <div  class='choice' \">\n" +
 // 添加单项选项
 function addChoiceOption(ele) {
     // 获取到父亲的父亲的上一个兄弟节点的id
-    // var operationId = $(ele).parent().parent().prev().attr('id');
-    // $("#" + operationId + "").append(choiceOptionStr);
-    // $(ele).parent().parent().prev().append(choiceOptionStr);
     $(ele).parent().parent().prev().append(choiceOptionStr);
 }
 
 
 // 删除单选项
 function deleteChoiceOption(ele) {
-    // var parentId = $(ele).parent().parent().attr('id');
-    // $("#" + parentId + "").remove();
     $(ele).parent().parent().remove();
 }
 
