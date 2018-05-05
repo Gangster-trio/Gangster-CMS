@@ -75,7 +75,7 @@ public class IndexController {
         // 将当前登录网站为list的第一个
         GroupController.refresh();
         modelAndView.addObject("moduleTreeList", listModule(moduleExample));
-        modelAndView.addObject("mailTotalNum", mailList.size());
+        modelAndView.addObject("mailTotalNum", mailList == null ? 0 : mailList.size());
         modelAndView.addObject("siteList", siteList);
         modelAndView.addObject("user", user);
         return modelAndView;

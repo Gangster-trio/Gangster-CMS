@@ -119,6 +119,7 @@
                     "<input name='topicId' value=" + topic.topicId + " type='hidden'/>" +
                     "                </div>";
 
+
                 switch (topic.topicType) {
                     case "单选":
                         choiceStr = choiceStr + "     <div class=\"layui-form-item\">\n" +
@@ -155,6 +156,7 @@
                             "            </div>\n";
                         break;
                     case "问答":
+                        judgeTopicType = 1;
                         choiceStr = choiceStr + "     <div class=\"layui-form-item\">\n" +
                             "                    <label class=\"layui-form-label\">问题类型</label>\n" +
                             "                    <div style='width: 55%' class=\"layui-input-block\">\n" +
@@ -181,7 +183,6 @@
             }
         },
         error:
-
             function (resp) {
                 layui.layer.alert("failed: " + resp);
             }
