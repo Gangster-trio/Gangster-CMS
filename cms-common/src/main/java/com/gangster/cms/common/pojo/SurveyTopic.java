@@ -13,6 +13,11 @@ public class SurveyTopic implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public SurveyTopic(String topicQuestion, String topicType) {
+        this.topicQuestion = topicQuestion;
+        this.topicType = topicType;
+    }
+
     public SurveyTopic(Integer topicId, String topicQuestion, String topicType, Integer topicPageId) {
         this.topicId = topicId;
         this.topicQuestion = topicQuestion;

@@ -5,13 +5,18 @@ spring:
     name: es
   data:
     elasticsearch: #ElasticsearchProperties
-      cluster-name: elasticsearch #默认即为elasticsearch
-      cluster-nodes: 127.0.0.1:9300 #配置es节点信息，逗号分隔，如果没有指定，则启动ClientNode
+      cluster-name: ${es_name} #默认即为elasticsearch
+      cluster-nodes: ${es_server}:${es_port} #配置es节点信息，逗号分隔，如果没有指定，则启动ClientNode
 eureka:
   instance:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 15
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://${eureka_server}:${eureka_port}/eureka/
     fetch-registry: true
+eureka_server: localhost
+eureka_port: 8761
+es_server: localhost
+es_port: 9300
+es_name: elasticsearch

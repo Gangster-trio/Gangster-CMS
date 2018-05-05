@@ -3,83 +3,69 @@
 </fieldset>
 
 <div class="site-text site-block">
-    <form id="addCategoryForm" class="layui-form">
+    <form id="addQuestionForm" class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">标题</label>
             <div class="layui-input-inline">
-                <input type="text" name="categoryTitle" id="categoryTitle" required="" lay-verify="required"
+                <input type="text" name="pageTitle" id="surveyTitle" required="" lay-verify="required"
                        placeholder="请输入标题" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
 
-        <div id="testsd" class="layui-inline">
+        <div id="addDate" class="layui-inline">
             <label class="layui-form-label">有效期</label>
             <div class="layui-input-inline">
-                <input type="text" style="width: 60%" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+                <input type="text" style="width: 100%" name="validDate" id="validDate" lay-verify="date"
+                       placeholder="yyyy-MM-dd"
                        autocomplete="off"
                        class="layui-input">
             </div>
         </div>
 
-        <!--选择题-->
-        <div style="background-color: rgba(117,166,255,0.21);padding: 20px 0 20px 0">
-            <div class="layui-form-item">
-                <label class="layui-form-label">问题标题</label>
-                <div class="layui-input-block">
-                    <input type="text" style="width: 60%" name="title" lay-verify="title" autocomplete="off"
-                           placeholder="请输入问题的标题" class="layui-input">
-                </div>
 
-            </div>
-
-            <div id="singleOption0" class="layui-form-item">
-                <label class="layui-form-label">选项：</label>
-                <br/>
-                <div class="layui-input-block">
-                    <input class="layui-input" type="text" style="width: 60%" name="title" lay-verify="title"
-                           autocomplete="off"
-                           placeholder="请输入标题">
-                    <button class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe640;</i></button>
-                </div>
-            </div>
-
-
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button id="addSingleOption" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe608;</i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <div style="background-color: rgba(117,166,255,0.21);margin-top: 20px; padding: 20px 0 10px 0">
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button id="addSingleQ" class="layui-btn layui-btn-sm layui-btn-primary">添加单项选择</button>
-                    <button id="addMutiQ" class="layui-btn layui-btn-sm layui-btn-primary">添加多选</button>
-                    <button id="addQA" class="layui-btn layui-btn-sm layui-btn-primary">添加问答</button>
-                </div>
-            </div>
-        </div>
     </form>
+    <div style="background-color: rgba(117,166,255,0.21);margin-top: 20px; padding: 20px 0 10px 0">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="addChoiceQ" onclick="addChoice()" class="layui-btn layui-btn-sm layui-btn-primary">
+                    添加选择题
+                </button>
+                <button id="addQA" onclick="addQA()" class="layui-btn layui-btn-sm layui-btn-primary">添加问答</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px" class="layui-form-item">
+        <div class="layui-input-block">
+            <button onclick="addPage()" class="layui-btn" lay-filter="submitForm">立即提交
+            </button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
 </div>
+<style>
+    .choice {
+        background-color: rgba(117, 166, 255, 0.21);
+        padding: 20px 0 20px 0;
+        margin-top: 10px
+    }
+</style>
+<script src="/module/survey/js/survey.js"></script>
 <script>
-    layui.use('laydate', function () {
+
+    var form;
+    layui.use(['laydate', 'form'], function () {
         var laydate = layui.laydate;
 
+        form = layui.form;
+        form.render();
         //执行一个laydate实例
         laydate.render({
-            elem: '#date',
+            elem: '#validDate',
             type: 'datetime',
-            range: true,
-            theme: '#393D49',
-            done: function (value, date, endDate) {
-                console.log(value);
-                console.log(date);
-                console.log(endDate);
-            }
+            range: '~',
+            theme: '#393D49'
         });
     });
 </script>

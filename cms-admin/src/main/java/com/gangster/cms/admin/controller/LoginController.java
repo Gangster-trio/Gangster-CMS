@@ -1,8 +1,8 @@
 package com.gangster.cms.admin.controller;
 
 
-import com.gangster.cms.admin.service.UserService;
 import com.gangster.cms.admin.dto.MessageDto;
+import com.gangster.cms.admin.service.UserService;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.User;
 import com.gangster.cms.common.pojo.UserExample;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -30,8 +31,9 @@ public class LoginController {
         logger.info("用户" + userName + "进行登录");
         UserExample userExample = new UserExample();
         userExample.or().andUserNameEqualTo(userName).andUserPasswordEqualTo(password);
-        User user = userService.selectByExample(userExample).get(0);
-        if (user != null) {
+        List<User> users = userService.selectByExample(userExample);
+        if (users != null) {
+            User user = userService.selectByExample(userExample).get(0);
             logger.info("用户:" + userName + "登录成功");
             request.getSession().setAttribute(CmsConst.CURRENT_USER, user);
             return MessageDto.success(null);

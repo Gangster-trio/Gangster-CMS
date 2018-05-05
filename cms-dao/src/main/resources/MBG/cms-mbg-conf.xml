@@ -200,6 +200,7 @@
                enableSelectByPrimaryKey="true"
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
+            <generatedKey column="page_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
         <table tableName="cms_survey_option"
                schema="db_cms"
@@ -212,6 +213,7 @@
                enableSelectByPrimaryKey="true"
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
+            <generatedKey column="option_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
 
         <table tableName="cms_survey_topic"
@@ -225,6 +227,7 @@
                enableSelectByPrimaryKey="true"
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
+            <generatedKey column="topic_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
 
         <table tableName="cms_outerchain"
@@ -253,18 +256,5 @@
                enableUpdateByPrimaryKey="true">
         </table>
 
-
-        <table tableName="cms_mail"
-               schema="db_cms"
-               domainObjectName="CmsMail"
-               enableCountByExample="true"
-               enableDeleteByExample="true"
-               enableDeleteByPrimaryKey="true"
-               enableInsert="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               enableUpdateByExample="true"
-               enableUpdateByPrimaryKey="true">
-        </table>
     </context>
 </generatorConfiguration>
