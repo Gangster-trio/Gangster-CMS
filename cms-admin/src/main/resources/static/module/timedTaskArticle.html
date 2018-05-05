@@ -238,11 +238,10 @@
 
         function submitArticleCreate() {
             layui.layedit.sync(editId);
-
             formData = $("#addArticleForm").serializeObject();
             $.ajax({
                 type: "POST",
-                url: "/timetask／save",
+                url: "/task/addtask",
                 data: JSON.stringify(formData),
                 async: false,
                 contentType: "application/json",

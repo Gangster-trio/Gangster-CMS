@@ -1,5 +1,6 @@
 package com.gangster.cms.admin.controller;
 
+import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.ArticleDTO;
 import com.gangster.cms.admin.task.AddTaskArticle;
 import org.quartz.*;
@@ -20,15 +21,18 @@ public class TaskController {
     private Scheduler scheduler;
 
     @PostMapping(value = "/addtask")
-    public void addtask(
-            @RequestParam(value = "articleDTO") ArticleDTO articleDTO,
-            @RequestParam(value = "jobGroupName") String jobGroupName,
-            @RequestParam(value = "cronExpression") String cronExpression
+    public AjaxData addtask(
+            @RequestBody  ArticleDTO articleDTO,
+            @RequestParam(defaultValue = "root") String jobGroupName,
+            @RequestParam(defaultValue = "0 * 10 5 5 ?") String cronExpression
     ) {
         try {
-            addTask(articleDTO, jobGroupName, "0 26 21 26 4 ?");
+            addTask(articleDTO, jobGroupName, cronExpression);
+            logger.info("success+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            return new AjaxData(0, "success", 0, null);
         } catch (Exception e) {
             logger.info("添加失败");
+            return new AjaxData(1, "fail", 0, null);
         }
     }
 

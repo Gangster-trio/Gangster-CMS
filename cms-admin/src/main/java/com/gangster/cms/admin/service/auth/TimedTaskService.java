@@ -32,22 +32,33 @@ public class TimedTaskService {
     private WebFileService webFileService;
 
     public boolean addArticleTimedTask(ArticleDTO articleDTO) {
+        System.out.println("++++++++++++++++++++++++++++++++++++++++");
         Category category = categoryService.selectByPrimaryKey(articleDTO.toArticle().getArticleCategoryId());
-        Integer sid = category.getCategorySiteId();
+        Integer siteId = category.getCategorySiteId();
         Article article = articleDTO.toArticle();
         article.setArticleCreateTime(new Date());
-        article.setArticleSiteId(sid);
+        article.setArticleSiteId(siteId);
         article.setArticleStatus(CmsConst.REVIEW);
-        List<String> fileNames = null;
-        if (articleDTO.getFileNames() != null) {
-            fileNames = Arrays.asList(articleDTO.getFileNames().split(","));
-        }
-        WebFileExample webFileExample = new WebFileExample();
-        webFileExample.or().andFileNameIn(fileNames);
-        List<WebFile> files = webFileService.selectByExample(webFileExample);
-        articleService.insertSelectiveWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
-        for (WebFile webFile : files) {
-            webFile.setFileArticleId(article.getArticleId());
+        logger.info(article.getArticleTitle());
+        try {
+            List<String> fileNames = null;
+            if (articleDTO.getFileNames() != null) {
+                fileNames = Arrays.asList(articleDTO.getFileNames().split(","));
+            }
+
+            WebFileExample webFileExample = new WebFileExample();
+            webFileExample.or().andFileNameIn(fileNames);
+            List<WebFile> files = webFileService.selectByExample(webFileExample);
+            articleService.insertSelectiveWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
+
+            for (WebFile webFile : files) {
+                webFile.setFileArticleId(article.getArticleId());
+            }
+
+        } catch (Exception e) {
+            logger.error("添加文章{}失败,错误原因{}", articleDTO, e.getMessage());
+            e.printStackTrace();
+            return false;
         }
         return true;
     }
