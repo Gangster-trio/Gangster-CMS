@@ -18,7 +18,7 @@ public class AddTaskArticle implements BaseTask {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        ArticleDTO articleDTO = (ArticleDTO) jobExecutionContext.getJobDetail().getJobDataMap().get("articleDTO");
+        ArticleDTO articleDTO = (ArticleDTO) jobExecutionContext.getJobDetail().getJobDataMap().get("taskArticle");
         Boolean addTaskArticle=timedTaskService.addArticleTimedTask(articleDTO);
         if (!addTaskArticle){
             logger.info("添加失败");

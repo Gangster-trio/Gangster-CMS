@@ -12,15 +12,15 @@
             <label class="layui-form-label">文章标题</label>
             <div class="layui-input-inline">
                 <input type="text" name="articleTitle" id="articleTitle" required="" lay-verify="required"
-                       placeholder="请输入文章标题" autocomplete="off"
+                       placeholder="请输入文章标题"
                        class="layui-input">
             </div>
         </div>
         <div  id="addTask" class="layui-inline">
             <label class="layui-form-label">发布时间</label>
             <div class="layui-input-inline">
-                <input type="text" style="width: 100%" name="taskTime" id="taskTime" lay-verify="date"
-                       placeholder="yyyy-MM-dd"
+                <input type="date"  name="taskTime" id="taskTime" lay-verify="datetime"
+                       placeholder="yyyy-MM-dd HH:mm:ss"
                        autocomplete="off"
                        class="layui-input">
             </div>
@@ -137,10 +137,7 @@
         });
         laydate.render({
             elem:'#taskTime',
-            eventElem:'#taskTime',
-            type:'datatime',
-            trigger:'click',
-            range: '~',
+            type:'datetime',
             theme: '#393D49'
         });
         layui.upload.render({
@@ -249,16 +246,16 @@
                     }
                 });
             });
-
         });
 
 
         function submitArticleCreate() {
             layui.layedit.sync(editId);
+            var time=$("#taskTime").val().getTime();
             formData = $("#addArticleForm").serializeObject();
             $.ajax({
                 type: "POST",
-                url: "/task/addtask",
+                url: "/task/addtask/"+time,
                 data: JSON.stringify(formData),
                 async: false,
                 contentType: "application/json",

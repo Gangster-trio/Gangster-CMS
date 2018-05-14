@@ -2,13 +2,17 @@ package com.gangster.cms.admin.controller;
 
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.ArticleDTO;
+import com.gangster.cms.admin.dto.TaskArticle;
 import com.gangster.cms.admin.task.job.AddTaskArticle;
+import com.gangster.cms.admin.util.DateUtil;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 
 @RestController
@@ -20,13 +24,16 @@ public class TaskController {
     @Qualifier("Scheduler")
     private Scheduler scheduler;
 
-    @PostMapping(value = "/addtask")
+    @PostMapping(value = "/addtask/{releasetime}")
     public AjaxData addtask(
-            @RequestBody  ArticleDTO articleDTO,
+            @RequestBody ArticleDTO articleDTO,
             @RequestParam(defaultValue = "root") String jobGroupName,
-            @RequestParam(defaultValue = "0 * 3 6 5 ?") String cronExpression
+            @PathVariable("releasetime") Date releasetime
+//            @RequestParam(defaultValue = "0 * 3 6 5 ?") String cronExpression
     ) {
         try {
+            String cronExpression=DateUtil.getCron(releasetime);
+            logger.info(articleDTO.toString());
             addTask(articleDTO, jobGroupName, cronExpression);
             logger.info("success+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             return new AjaxData(0, "success", 0, null);
@@ -61,10 +68,10 @@ public class TaskController {
         scheduler.pauseJob(JobKey.jobKey(jobClassName, jobGroupName));
     }
 
-    private void addTask(ArticleDTO articleDTO, String jobGroupName, String cronExpression) throws Exception {
+    private void addTask(ArticleDTO taskArticle, String jobGroupName, String cronExpression) throws Exception {
         scheduler.start();
         JobDetail jobDetail = JobBuilder.newJob(AddTaskArticle.class).withIdentity("AddTaskArticle", jobGroupName).build();
-        jobDetail.getJobDataMap().put("articleDTO", articleDTO);
+        jobDetail.getJobDataMap().put("taskArticle", taskArticle);
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
         CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity("AddTaskArticle", jobGroupName).withSchedule(scheduleBuilder).build();
         scheduler.scheduleJob(jobDetail, trigger);
