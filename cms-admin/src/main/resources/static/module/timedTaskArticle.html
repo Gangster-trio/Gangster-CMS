@@ -16,7 +16,15 @@
                        class="layui-input">
             </div>
         </div>
-
+        <div  id="addTask" class="layui-inline">
+            <label class="layui-form-label">发布时间</label>
+            <div class="layui-input-inline">
+                <input type="text" style="width: 100%" name="taskTime" id="taskTime" lay-verify="date"
+                       placeholder="yyyy-MM-dd"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">自定义顺序</label>
             <div class="layui-input-inline">
@@ -110,13 +118,16 @@
     </form>
 
 </div>
-
 <script type="text/javascript">
 
     var editId;
     var str = "";
-    layui.use(['form', 'upload', 'layedit'], function () {
-        var form = layui.form, upload = layui.upload, layedit = layui.layedit;
+    layui.use(['form', 'upload', 'layedit','laydate'], function () {
+        var form = layui.form,
+            upload = layui.upload,
+            layedit = layui.layedit,
+            $=layui.$,
+            laydate=layui.laydate;
         form.render();
         form.on('submit(createArticle)', function () {
             // 设置按钮不可点击
@@ -124,8 +135,14 @@
             submitArticleCreate();
             return false;
         });
-
-
+        laydate.render({
+            elem:'#taskTime',
+            eventElem:'#taskTime',
+            type:'datatime',
+            trigger:'click',
+            range: '~',
+            theme: '#393D49'
+        });
         layui.upload.render({
             elem: '#uploadImg',
             url: '/article/img',

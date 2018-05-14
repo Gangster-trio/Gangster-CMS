@@ -5,6 +5,7 @@ import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.CategoryService;
 import com.gangster.cms.admin.service.TagService;
 import com.gangster.cms.admin.service.WebFileService;
+import com.gangster.cms.admin.service.impl.WebFileServiceImpl;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Article;
 import com.gangster.cms.common.pojo.Category;

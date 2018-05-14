@@ -2,7 +2,7 @@ package com.gangster.cms.admin.controller;
 
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.ArticleDTO;
-import com.gangster.cms.admin.task.AddTaskArticle;
+import com.gangster.cms.admin.task.job.AddTaskArticle;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class TaskController {
     public AjaxData addtask(
             @RequestBody  ArticleDTO articleDTO,
             @RequestParam(defaultValue = "root") String jobGroupName,
-            @RequestParam(defaultValue = "0 * 10 5 5 ?") String cronExpression
+            @RequestParam(defaultValue = "0 * 3 6 5 ?") String cronExpression
     ) {
         try {
             addTask(articleDTO, jobGroupName, cronExpression);
