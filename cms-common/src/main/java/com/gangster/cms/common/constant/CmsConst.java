@@ -11,6 +11,8 @@ public class CmsConst {
     //轮播图
     public static final String CAROUSEL_ARTICLE_TYPE = "轮播图";
 
+    public static final String VIDEO = "视频";
+
     //主页文章
     public static final String INDEX_ARTICLE_TYPE = "主页文章";
 
