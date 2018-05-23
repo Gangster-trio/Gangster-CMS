@@ -6,9 +6,11 @@
 </body>
 </html>
 <script type="text/javascript">
+    var arId = 0;
+    var siteId = getCookie("siteId");
     $.ajax({
         type: "get",
-        url: "/category/select",
+        url: "/category/select/" + siteId,
         async: false,
         dataType: 'json',
         success: function (d) {

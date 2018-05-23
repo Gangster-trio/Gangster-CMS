@@ -27,6 +27,11 @@ public class CmsConst {
 
     public static final String CATEGORY_ROOT_NAME = "root";
 
+    public static final String topic_type_1 = "单选";
+    public static final String topic_type_2 = "多选";
+    public static final String topic_type_3 = "问答";
+    public static final String RESOURCE_PATH = "resource_path";
+
     // 超级管理员的名字
     public static final String ADMIN = "admin";
 

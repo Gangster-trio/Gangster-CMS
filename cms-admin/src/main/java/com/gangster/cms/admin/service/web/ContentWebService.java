@@ -55,18 +55,15 @@ public class ContentWebService {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
-//    private static final String ADMIN = "admin";
 
     public PageInfo<Article> listArticle(User user, Integer siteId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
         ArticleExample.Criteria criteria = articleExample.createCriteria();
         if (user.getUserIsAdmin()) {
             criteria.andArticleSiteIdEqualTo(siteId);
-//            articleExample.or().andArticleSiteIdEqualTo(siteId);
         } else {
             List<Integer> categoryList = getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_READ);
             criteria.andArticleCategoryIdIn(categoryList);
-//            articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleCategoryIdIn(categoryList);
         }
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
@@ -76,12 +73,10 @@ public class ContentWebService {
         ArticleExample articleExample = new ArticleExample();
         if (user.getUserIsAdmin()) {
             articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleStatusEqualTo(CmsConst.REVIEW);
-//            articleExample.or().andArticleSiteIdEqualTo(siteId);
         } else {
             List<Integer> categoryList = PermissionUtil.getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_READ);
             articleExample.or().andArticleIdIn(categoryList).andArticleStatusEqualTo(CmsConst.REVIEW);
         }
-        List<Article> list = articleService.selectByExample(articleExample);
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
 
@@ -130,7 +125,7 @@ public class ContentWebService {
         String originalFileName = file.getOriginalFilename();
         LOGGER.info(originalFileName);
         String uuid = UUID.randomUUID().toString();
-        String newName = uuid + originalFileName.substring(originalFileName.lastIndexOf("."));
+        String newName = uuid + originalFileName.substring(Objects.requireNonNull(originalFileName).lastIndexOf("."));
         File dir = new File(settingService.get(CmsConst.PIC_PATH_SETTING));
         if (!dir.exists()) {
             dir.mkdirs();
@@ -274,18 +269,16 @@ public class ContentWebService {
     }
 
 
-    // TODO: 2018/4/15 待显示有权限的栏目
-    public List<CategoryTree> select() {
+    public List<CategoryTree> select(Integer siteId) {
         List<CategoryTree> treeList = new ArrayList<>();
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.or().andCategoryLevelEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
+        categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
         List<Category> list = categoryService.selectByExample(categoryExample);
         // 如果list为空，就创建以CATEGORY_ROOT_LEVEL为根节点的栏目树
-        if (list == null) {
-            Category category = new Category();
-            category.setCategoryLevel(CmsConst.CATEGORY_ROOT_LEVEL);
-            category.setCategoryTitle(CmsConst.CATEGORY_ROOT_NAME);
+        if (list.size() == 0) {
+            Category category = new Category(CmsConst.CATEGORY_ROOT_NAME, new Date(), CmsConst.CATEGORY_ROOT_LEVEL, siteId, CmsConst.ACCESS, "root Category");
             categoryService.insert(category);
+            LOGGER.info("在网站id为:{}下添加栏目:{}", siteId, category);
             CategoryTree tree = new CategoryTree();
             tree.setId(1);
             tree.setName(CmsConst.CATEGORY_ROOT_NAME);
@@ -293,12 +286,9 @@ public class ContentWebService {
             treeList.add(tree);
             return treeList;
         } else {
-            CategoryExample categoryExample1 = new CategoryExample();
-            categoryExample1.or().andCategoryLevelEqualTo(CmsConst.CATEGORY_ROOT_LEVEL).andCategoryStatusEqualTo(CmsConst.ACCESS);
-            List<Category> list1 = categoryService.selectByExample(categoryExample1);
-            Category category = list1.get(0);
+            Category category = list.get(0);
             CategoryTree tree = categoryService.toTree(category);
-            categoryExample.or().andCategoryParentIdEqualTo(1).andCategoryStatusEqualTo(CmsConst.ACCESS);
+            categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId()).andCategoryStatusEqualTo(CmsConst.ACCESS);
             List<Category> list2 = categoryService.selectByExample(categoryExample);
             if (list2.size() > 0) {
                 for (Category c : list) {
@@ -365,9 +355,6 @@ public class ContentWebService {
 
     /**
      * 查看栏目的详细信息
-     *
-     * @param categoryId
-     * @return
      */
     public CategoryWithParent detailsCategory(Integer categoryId) {
         Category category = categoryService.selectByPrimaryKey(categoryId);
@@ -382,7 +369,7 @@ public class ContentWebService {
         ModuleExample moduleExample = new ModuleExample();
         moduleExample.or().andModuleNameEqualTo("栏目管理");
         Module module = moduleService.selectByExample(moduleExample).get(0);
-        if (!permissionService.hasModulePermission(user.getUserId(), category.getCategorySiteId(), module.getModuleId(), CmsConst.PERMISSION_WRITE)) {
+        if (!(user.getUserIsAdmin() || PermissionUtil.permittedModule(user.getUserId(), category.getCategorySiteId(), module.getModuleId(), CmsConst.PERMISSION_WRITE))) {
             return false;
         }
 

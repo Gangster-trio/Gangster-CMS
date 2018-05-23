@@ -33,6 +33,13 @@
             </div>
         </div>
 
+        <label style="margin-left: 25px;margin-top: 40px">上传主题tar.gz包</label>
+        <div style="margin-left: 110px" class="layui-upload">
+            <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择主题包</button>
+            <button type="button" class="layui-btn" id="upload-file">开始上传</button>
+        </div>
+
+
         <input id="sitePic" class="layui-hide" name="sitePic">
         <label class="layui-form-label">缩略图上传</label>
         <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
@@ -48,6 +55,7 @@
             </div>
         </div>
 
+        <input id="tar_gz_file" type="hidden"/>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button id="siteSubmit" lay-submit class="layui-btn" lay-filter="createSite">立即提交</button>
@@ -122,5 +130,31 @@
                 }
             });
         }
+
+        upload.render({
+            elem: '#choose-file'
+            , url: '/file/upload'
+            , auto: false
+            , choose: function (obj) {
+                var files = obj.pushFile();
+                obj.preview(function (index, file, result) {
+                    console.log(index);
+                });
+            }
+            , accept: 'file'
+            , size: 0
+            , multiple: true
+            , bindAction: '#upload-file'
+            , done: function (res) {
+                layer.closeAll();
+                // $("#tar_gz_file").val(str);
+                layer.msg("上传成功", {icon: 6});
+            }
+            , error: function () {
+                layer.alert("上传发生错误");
+            }
+        });
+
+
     });
 </script>

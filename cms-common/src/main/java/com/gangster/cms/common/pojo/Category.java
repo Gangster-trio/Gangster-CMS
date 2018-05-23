@@ -34,6 +34,15 @@ public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Category(String categoryTitle, Date categoryCreateTime, Integer categoryLevel, Integer categorySiteId, Integer categoryStatus, String categoryDesc) {
+        this.categoryTitle = categoryTitle;
+        this.categoryCreateTime = categoryCreateTime;
+        this.categoryLevel = categoryLevel;
+        this.categorySiteId = categorySiteId;
+        this.categoryStatus = categoryStatus;
+        this.categoryDesc = categoryDesc;
+    }
+
     public Category(Integer categoryId, String categoryTitle, Date categoryCreateTime, Date categoryUpdateTime, Integer categoryParentId, Integer categoryLevel, Integer categorySiteId, Integer categoryStatus, String categoryDesc, Integer categoryOrder, String categorySkin, String categoryType, Boolean categoryInHomepage, Integer categoryHit) {
         this.categoryId = categoryId;
         this.categoryTitle = categoryTitle;

@@ -10,7 +10,6 @@ import com.gangster.cms.common.pojo.Category;
 import com.gangster.cms.common.pojo.CategoryTree;
 import com.gangster.cms.common.pojo.CategoryWithParent;
 import com.gangster.cms.common.pojo.User;
-import com.gangster.cms.dao.mapper.CategoryMapper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,9 +52,9 @@ public class CategoryController {
     }
 
     @SystemControllerLog(description = "选择栏目")
-    @GetMapping("/select")
-    public List<CategoryTree> select() {
-        return contentWebService.select();
+    @GetMapping("/select/{siteId}")
+    public List<CategoryTree> select(@PathVariable("siteId") Integer siteId) {
+        return contentWebService.select(siteId);
     }
 
     @SystemControllerLog(description = "删除单个栏目")
