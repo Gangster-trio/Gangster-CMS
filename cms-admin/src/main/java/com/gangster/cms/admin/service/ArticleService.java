@@ -26,7 +26,7 @@ public interface ArticleService extends BaseService<Article, ArticleExample> {
      * @param articleId 文章id
      * @return
      */
-    int deleteArticleWithTags(Integer articleId);
+//    int deleteArticleWithTags(Integer articleId);
 
     int deleteArticleWithTagsAndFiles(Integer articleId);
 }

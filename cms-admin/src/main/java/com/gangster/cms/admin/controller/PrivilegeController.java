@@ -1,11 +1,9 @@
 package com.gangster.cms.admin.controller;
 
-import com.gangster.cms.admin.service.UserService;
 import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -15,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/privilege")
 public class PrivilegeController {
-
-    @Autowired
-    private UserService userService;
 
     @GetMapping("/category")
     public MessageDto judgeCategory(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId, @RequestParam Integer categoryId) {
@@ -38,7 +33,7 @@ public class PrivilegeController {
             if (PermissionUtil.permittedSite(user.getUserId(), siteId)) {
                 return MessageDto.success(null);
             } else {
-                return MessageDto.fail(2, "privilege");
+                return MessageDto.fail(2, "no privilege");
             }
         } else {
             return MessageDto.success(null);

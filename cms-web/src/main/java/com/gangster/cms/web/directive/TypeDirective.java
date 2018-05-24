@@ -22,8 +22,8 @@ import java.util.Map;
 public class TypeDirective implements TemplateDirectiveModel {
     private static final String PARAM_CATEGORY_TYPE = "cate_type";
     private static final String PARAM_ARTICLE_TYPE = "article_type";
-    private static final String PARAM_SIZE = "size";
-    private static final String PARAM_PAGE = "page";
+    private static final String PARAM_SIZE = "size";    //default 5
+    private static final String PARAM_PAGE = "page";    //default 0
     private static final String PARAM_SORT = "sort";
     private static final String DEFAULT_ARTICLE_SORT = "article_create_time";
     private static final String DEFAULT_CATE_SORT = "category_create_time";
@@ -57,7 +57,7 @@ public class TypeDirective implements TemplateDirectiveModel {
         }
 
         if (size == null) {
-            size = 0;
+            size = 5;
         }
         if (page == null) {
             page = 0;

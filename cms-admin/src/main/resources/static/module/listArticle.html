@@ -165,7 +165,7 @@
 
     //添加文章功能
     $("#article").on('click', function () {
-        if (judgePrivilege(siteId)) {
+        if (judgeSitePrivilege(siteId)) {
             showAtRight("module/addArticle.html")
         }
     });

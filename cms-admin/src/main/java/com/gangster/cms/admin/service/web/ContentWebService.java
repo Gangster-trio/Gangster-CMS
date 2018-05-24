@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.gangster.cms.admin.util.PermissionUtil.getAllPermittedCategory;
 
@@ -211,10 +212,10 @@ public class ContentWebService {
     }
 
 
-    public boolean deleteArticles(String articleIdData) {
-        if (!StringUtil.isNullOrEmpty(articleIdData)) {
-            String[] articleIds = articleIdData.split(",");
-            Arrays.stream(articleIds).map(e -> articleService.deleteArticleWithTagsAndFiles(Integer.parseInt(e))).collect(Collectors.toList());
+    public boolean deleteArticles(String articleIdList) {
+        if (!StringUtil.isNullOrEmpty(articleIdList)) {
+            String[] articleIds = articleIdList.split(",");
+            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagsAndFiles(Integer.parseInt(e)));
             return true;
         } else {
             return false;
@@ -312,16 +313,11 @@ public class ContentWebService {
 
         try {
             // 删除权限表信息
-            categoryService.deleteCategoryInfo(siteId, categoryId, CmsConst.PERMISSION_READ);
-            categoryService.deleteCategoryInfo(siteId, categoryId, CmsConst.PERMISSION_WRITE);
+            categoryService.deleteCategoryInfo(siteId, categoryId);
             // 删除栏目下面的文章
             ArticleExample articleExample = new ArticleExample();
             articleExample.or().andArticleCategoryIdEqualTo(category.getCategoryId());
-            articleService.selectArticleByCategoryId(categoryId).stream().map(e -> articleService.deleteArticleWithTags(e.getArticleId())).collect(Collectors.toList());
-//            List<Article> articleList = articleService.selectArticleByCategoryId(category.getCategoryId());
-           /* for (Article article : articleList) {
-                articleService.deleteArticleWithTags(article.getArticleId());
-            }*/
+            articleService.selectArticleByCategoryId(categoryId).stream().map(e -> articleService.deleteArticleWithTagsAndFiles(e.getArticleId())).collect(Collectors.toList());
         } catch (Exception e) {
             LOGGER.error("删除栏目为{}发生{}错误", categoryId, e.getMessage());
             e.printStackTrace();
@@ -408,13 +404,12 @@ public class ContentWebService {
         return true;
     }
 
-    public boolean deleteCategories(String categoryIdData) {
-        if (StringUtil.isNullOrEmptyAfterTrim(categoryIdData)) {
+    public boolean deleteCategories(String categoryIdList) {
+        if (StringUtil.isNullOrEmptyAfterTrim(categoryIdList)) {
             return false;
         }
         try {
-            categoryService.deleteBatchCategoryInfo(categoryIdData, CmsConst.PERMISSION_READ);
-            categoryService.deleteBatchCategoryInfo(categoryIdData, CmsConst.PERMISSION_WRITE);
+            categoryService.deleteBatchCategoryInfo(categoryIdList);
         } catch (Exception e) {
             LOGGER.error("删除多个栏目时候出现错误{}", e.getMessage());
             e.printStackTrace();

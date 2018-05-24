@@ -124,7 +124,7 @@
 
     function submitCategory() {
         $("#siteId").val(siteId);
-        formData = $("#addCategoryForm").serializeObject();
+        var formData = $("#addCategoryForm").serializeObject();
         $.ajax({
             type: "POST",
             url: '/category/add',

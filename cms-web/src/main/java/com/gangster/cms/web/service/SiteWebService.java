@@ -122,9 +122,12 @@ public class SiteWebService {
                  >
         */
         articleExample.clear();
-        articleExample.or().andArticleInHomepageEqualTo(true).andArticleSiteIdEqualTo(site.getSiteId());
-        result.getMap().putAll(articleMapper.selectByExample(articleExample).parallelStream()
-                .collect(Collectors.groupingBy(Article::getArticleType)));
+        articleExample.or()
+                .andArticleInHomepageEqualTo(true)
+                .andArticleSiteIdEqualTo(site.getSiteId());
+        result.getMap()
+                .putAll(articleMapper.selectByExample(articleExample).parallelStream()
+                        .collect(Collectors.groupingBy(Article::getArticleType)));
 
         addSiteHit(site);
 
