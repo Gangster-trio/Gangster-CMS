@@ -32,7 +32,7 @@
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-<!--        <table schema="db_cms"
+        <table schema="db_cms"
                tableName="cms_article"
                domainObjectName="Article"
                enableCountByExample="true"
@@ -43,7 +43,7 @@
                selectByExampleQueryId="true">
             <generatedKey column="article_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
-        <table tableName="cms_category"
+     <!--   <table tableName="cms_category"
                schema="db_cms"
                domainObjectName="Category"
                enableCountByExample="true"
@@ -241,7 +241,7 @@
                enableSelectByPrimaryKey="true"
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
-        </table>-->
+        </table>
 
         <table tableName="cms_mail"
                schema="db_cms"
@@ -255,7 +255,7 @@
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
             <generatedKey column="mail_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
+        </table>-->
 
     </context>
 </generatorConfiguration>

@@ -19,16 +19,15 @@
         <div  id="addTask" class="layui-inline">
             <label class="layui-form-label">发布时间</label>
             <div class="layui-input-inline">
-                <input type="date"  name="taskTime" id="taskTime" lay-verify="datetime"
+                <input type="text"  name="taskTime" id="taskTime" lay-verify="datetime"
                        placeholder="yyyy-MM-dd HH:mm:ss"
-                       autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">自定义顺序</label>
             <div class="layui-input-inline">
-                <input type="text" name="articleOrder" required="" lay-verify="required|number"
+                <input type="text" name="articleOrder" id="articleOrder" required="" lay-verify="required|number"
                        placeholder="自定义顺序" autocomplete="off" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">辅助文字</div>
@@ -47,7 +46,7 @@
             <div class="layui-input-block">
                 <!--<input type="radio" name="sex" value="女" title="女" checked>-->
                 <!--单选框name 为控件名，value是提交到服务器的值-->
-                <input type="radio" name="articleSkin" value="default" title="默认" checked="checked">
+                <input type="radio" name="articleSkin"  id="articleSkin" value="default" title="默认" checked="checked">
             </div>
         </div>
 
@@ -251,12 +250,24 @@
 
         function submitArticleCreate() {
             layui.layedit.sync(editId);
-            var time=$("#taskTime").val().getTime();
-            formData = $("#addArticleForm").serializeObject();
             $.ajax({
-                type: "POST",
-                url: "/task/addtask/"+time,
-                data: JSON.stringify(formData),
+                type: "post",
+                url: "/task/addtask",
+                data: JSON.stringify({
+                    "articleTitle":$("#articleTitle").val(),
+                    "articleType":$("#articleType").val(),
+                    "articleAuthor":$("#author").val(),
+                    "articleOrder":$("#articleOrder").val(),
+                    "articleCategoryId":$("#category_id").val(),
+                    "articleThumb":$("#articleThumb").val(),
+                    "articleDesc":$("#description").val(),
+                    "articleSkin":$("#articleSkin").val(),
+                    "articleContent":$("#articleContent").val(),
+                    "fileNames":$("#fileNames").val(),
+                    "tags":$("#tags").val(),
+                    "releasetime":$("#taskTime").val(),
+                    "releaseStatus":false
+                }),
                 async: false,
                 contentType: "application/json",
                 dataType: "json",
@@ -265,7 +276,7 @@
                 },
                 success: function (resp) {
                     layui.layer.alert(resp.message);
-                    showAtRight("/module/listArticle.html");
+                    showAtRight("/module/listTimedTask.html");
                 }
             })
         }

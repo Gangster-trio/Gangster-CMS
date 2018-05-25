@@ -3,7 +3,6 @@ package com.gangster.cms.admin.service.impl;
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.TagService;
-import com.gangster.cms.admin.service.WebFileService;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.ArticleMapper;
 import com.gangster.cms.dao.mapper.TagArticleMapper;
@@ -128,6 +127,13 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleCategoryIdEqualTo(cid);
         articleExample.setOrderByClause(sort);
+        return articleMapper.selectByExample(articleExample);
+    }
+
+    @Override
+    public List<Article> selectArticleByReleaseStatus(Boolean releaseStatus) {
+        ArticleExample articleExample = new ArticleExample();
+        articleExample.or().andArticleReleaseStatusEqualTo(releaseStatus);
         return articleMapper.selectByExample(articleExample);
     }
 

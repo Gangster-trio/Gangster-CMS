@@ -1,7 +1,6 @@
 package com.gangster.cms.search.model;
 
 
-import com.gangster.cms.common.pojo.Article;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
