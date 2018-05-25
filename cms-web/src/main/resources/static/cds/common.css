@@ -1,0 +1,73 @@
+body, h1, h2, h3, h4, h5, h6, hr, p,
+blockquote, /* structural elements 结构元素 */
+dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+pre, /* text formatting elements 文本格式元素 */
+form, fieldset, legend, button, input, textarea, /* form elements 表单元素 */
+th, td, /* table elements 表格元素 */
+img/* img elements 图片元素 */{
+	border:medium none;
+	margin: 0;
+	padding: 0;
+}
+html, body {
+    min-height: 100%;
+}
+/** 设置默认字体 **/
+body,button, input, select, textarea {
+	font: 14px/1.5 "Microsoft YaHei",tahoma, Srial, helvetica, sans-serif;
+}
+ul,ol {
+    list-style: none;
+}
+img {
+    display: block;
+    border: none;
+    vertical-align: middle;
+}
+a {
+    text-decoration: none;
+    color:#333;
+}
+input, textarea {
+    outline: none;
+    border: none;
+    background: none;
+}
+.clearfix {
+    *zoom: 1;
+}
+.clearfix:after {
+    content: "";
+    height: 0;
+    visibility: hidden;
+    display: block;
+    clear: both;
+    overflow:hidden;
+}
+
+.oneLineOverflowSolution{
+    /*单行文本溢出解决方案*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.twoLineOverflowSolution{
+    /*定行文本溢出解决方案       （2行）*/
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.6em;
+    height: 3.0em;
+}
+.threeLineOverflowSolution{
+    /*定行文本溢出解决方案       （3行）*/
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-height: 1.6em;
+    height: 4.8em;
+}

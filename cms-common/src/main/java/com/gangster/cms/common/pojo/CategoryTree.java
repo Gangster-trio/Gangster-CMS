@@ -1,4 +1,5 @@
 package com.gangster.cms.common.pojo;
+
 import java.util.List;
 
 /**

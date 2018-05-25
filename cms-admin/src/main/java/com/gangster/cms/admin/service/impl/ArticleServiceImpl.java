@@ -131,6 +131,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
     }
 
     @Override
+<<<<<<< HEAD
     public List<Article> selectArticleByReleaseStatus(Boolean releaseStatus) {
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleReleaseStatusEqualTo(releaseStatus);
@@ -155,6 +156,8 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
     }
 
     @Override
+=======
+>>>>>>> 2284a3dbad539f3bd5ea1d2b92c46d1c9a905a63
     public int deleteArticleWithTagsAndFiles(Integer articleId) {
         TagArticleExample tagArticleExample = new TagArticleExample();
         tagArticleExample.or().andArticleIdEqualTo(articleId);

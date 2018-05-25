@@ -73,7 +73,7 @@
                     }
                 }
                 if (layEvent === 'add') {   //跳转到添加文章界面
-                    if (judgePrivilege(siteId)) {
+                    if (judgeSitePrivilege(siteId)) {
                         showAtRight("/module/addCategory.html");
                     }
                 }
@@ -146,7 +146,7 @@
 
     //添加栏目的按钮注册事件
     $("#column").on('click', function () {
-        if (judgePrivilege(siteId)) {
+        if (judgeSitePrivilege(siteId)) {
             showAtRight("/module/addCategory.html");
         }
     });

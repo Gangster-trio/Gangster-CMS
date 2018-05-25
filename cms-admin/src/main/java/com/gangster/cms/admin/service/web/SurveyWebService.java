@@ -1,5 +1,6 @@
 package com.gangster.cms.admin.service.web;
 
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.dto.SurveyWithTopicWrapper;
 import com.gangster.cms.common.dto.TopicWithOptionWrapper;
 import com.gangster.cms.common.pojo.*;
@@ -98,8 +99,13 @@ public class SurveyWebService {
     }
 
     public SurveyWithTopicWrapper detailsPage(Integer surveyPageId) {
-        return detailsPageMethod(surveyPageId);
+        return detailsPageMethod(true, surveyPageId);
     }
+
+    public SurveyWithTopicWrapper countPage(Integer surveyPageId) {
+        return detailsPageMethod(false, surveyPageId);
+    }
+
 
     // -----------------------------------------------SurveyPage方法------------------------------------------------------------------
 
@@ -148,10 +154,14 @@ public class SurveyWebService {
         return true;
     }
 
-    private SurveyWithTopicWrapper detailsPageMethod(Integer surveyPageId) {
+    private SurveyWithTopicWrapper detailsPageMethod(boolean showAll, Integer surveyPageId) {
         SurveyPage surveyPage = surveyPageMapper.selectByPrimaryKey(surveyPageId);
         SurveyTopicExample surveyTopicExample = new SurveyTopicExample();
-        surveyTopicExample.or().andTopicPageIdEqualTo(surveyPageId);
+        if (showAll) {
+            surveyTopicExample.or().andTopicPageIdEqualTo(surveyPageId);
+        } else {
+            surveyTopicExample.or().andTopicPageIdEqualTo(surveyPageId).andTopicTypeNotEqualTo(CmsConst.topic_type_3);
+        }
         SurveyOptionExample surveyOptionExample = new SurveyOptionExample();
         List<TopicWithOptionWrapper> topicWithOptionWrappers = surveyTopicMapper.selectByExample(surveyTopicExample).stream().map(e -> {
             surveyOptionExample.clear();

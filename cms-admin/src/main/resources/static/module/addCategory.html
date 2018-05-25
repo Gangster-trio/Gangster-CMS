@@ -38,6 +38,7 @@
             <div class="layui-input-block">
                 <!--<input type="radio" name="sex" value="女" title="女" checked>-->
                 <!--单选框name 为控件名，value是提交到服务器的值-->
+                <!--TODO: 此处完善皮肤选择功能.    @Yoke-->
                 <input type="radio" name="categorySkin" value="default" title="默认" checked="checked">
             </div>
         </div>
@@ -69,6 +70,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
+                <!--TODO:此按钮会触发三次提交，需修改. @Yoke-->
                 <button id="categorySubmit" lay-submit class="layui-btn" lay-filter="createCategory">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
@@ -124,7 +126,7 @@
 
     function submitCategory() {
         $("#siteId").val(siteId);
-        formData = $("#addCategoryForm").serializeObject();
+        var formData = $("#addCategoryForm").serializeObject();
         $.ajax({
             type: "POST",
             url: '/category/add',

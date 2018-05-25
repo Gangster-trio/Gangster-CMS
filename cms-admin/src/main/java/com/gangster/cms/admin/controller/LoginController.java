@@ -32,7 +32,7 @@ public class LoginController {
         UserExample userExample = new UserExample();
         userExample.or().andUserNameEqualTo(userName).andUserPasswordEqualTo(password);
         List<User> users = userService.selectByExample(userExample);
-        if (users != null) {
+        if (!users.isEmpty()) {
             User user = userService.selectByExample(userExample).get(0);
             logger.info("用户:" + userName + "登录成功");
             request.getSession().setAttribute(CmsConst.CURRENT_USER, user);

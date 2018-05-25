@@ -52,9 +52,9 @@ public class CategoryController {
     }
 
     @SystemControllerLog(description = "选择栏目")
-    @GetMapping("/select")
-    public List<CategoryTree> select() {
-        return contentWebService.select();
+    @GetMapping("/select/{siteId}")
+    public List<CategoryTree> select(@PathVariable("siteId") Integer siteId) {
+        return contentWebService.select(siteId);
     }
 
     @SystemControllerLog(description = "删除单个栏目")
@@ -86,6 +86,7 @@ public class CategoryController {
     }
 
     @SystemControllerLog(description = "添加栏目")
+    //TODO: 一会save,一会add,搞不清.需修改 @Yoke
     @PostMapping("/add")
     public MessageDto add(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody Category category) {
         if (!contentWebService.addCategory(user, category)) {
@@ -114,4 +115,5 @@ public class CategoryController {
         }
         return MessageDto.success(null);
     }
+
 }

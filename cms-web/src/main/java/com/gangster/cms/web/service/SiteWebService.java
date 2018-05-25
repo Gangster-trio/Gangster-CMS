@@ -122,9 +122,12 @@ public class SiteWebService {
                  >
         */
         articleExample.clear();
-        articleExample.or().andArticleInHomepageEqualTo(true).andArticleSiteIdEqualTo(site.getSiteId());
-        result.getMap().putAll(articleMapper.selectByExample(articleExample).parallelStream()
-                .collect(Collectors.groupingBy(Article::getArticleType)));
+        articleExample.or()
+                .andArticleInHomepageEqualTo(true)
+                .andArticleSiteIdEqualTo(site.getSiteId());
+        result.getMap()
+                .putAll(articleMapper.selectByExample(articleExample).parallelStream()
+                        .collect(Collectors.groupingBy(Article::getArticleType)));
 
         addSiteHit(site);
 
@@ -141,7 +144,7 @@ public class SiteWebService {
     }
 
     @Scheduled(fixedDelay = 1000 * 60 * 5)
-    private void flushCache() {
+    public void flushCache() {
         siteModelCache.clear();
         logger.info("refresh site cache");
     }

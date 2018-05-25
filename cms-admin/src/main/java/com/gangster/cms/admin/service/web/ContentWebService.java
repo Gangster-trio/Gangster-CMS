@@ -7,6 +7,7 @@ import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
+import com.gangster.cms.common.pojo.Module;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.gangster.cms.admin.util.PermissionUtil.getAllPermittedCategory;
 
@@ -29,43 +31,44 @@ import static com.gangster.cms.admin.util.PermissionUtil.getAllPermittedCategory
  */
 @Service
 public class ContentWebService {
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private ArticleService articleService;
+    private final CategoryService categoryService;
+    private final ArticleService articleService;
 
-    @Autowired
-    private SettingService settingService;
+    private final SettingService settingService;
 
-    @Autowired
-    private TagService tagService;
+    private final TagService tagService;
 
-    @Autowired
-    private SiteService siteService;
+    private final SiteService siteService;
 
-    @Autowired
-    private PermissionService permissionService;
-    @Autowired
-    private ModuleService moduleService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private WebFileService webFileService;
+    private final PermissionService permissionService;
+    private final ModuleService moduleService;
+    private final UserService userService;
+    private final WebFileService webFileService;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
-//    private static final String ADMIN = "admin";
+
+    @Autowired
+    public ContentWebService(CategoryService categoryService, ArticleService articleService, SettingService settingService, TagService tagService, SiteService siteService, PermissionService permissionService, ModuleService moduleService, UserService userService, WebFileService webFileService) {
+        this.categoryService = categoryService;
+        this.articleService = articleService;
+        this.settingService = settingService;
+        this.tagService = tagService;
+        this.siteService = siteService;
+        this.permissionService = permissionService;
+        this.moduleService = moduleService;
+        this.userService = userService;
+        this.webFileService = webFileService;
+    }
 
     public PageInfo<Article> listArticle(User user, Integer siteId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
         ArticleExample.Criteria criteria = articleExample.createCriteria();
         if (user.getUserIsAdmin()) {
             criteria.andArticleSiteIdEqualTo(siteId);
-//            articleExample.or().andArticleSiteIdEqualTo(siteId);
         } else {
             List<Integer> categoryList = getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_READ);
             criteria.andArticleCategoryIdIn(categoryList);
-//            articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleCategoryIdIn(categoryList);
         }
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
@@ -75,24 +78,30 @@ public class ContentWebService {
         ArticleExample articleExample = new ArticleExample();
         if (user.getUserIsAdmin()) {
             articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleStatusEqualTo(CmsConst.REVIEW);
-//            articleExample.or().andArticleSiteIdEqualTo(siteId);
         } else {
             List<Integer> categoryList = PermissionUtil.getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_READ);
             articleExample.or().andArticleIdIn(categoryList).andArticleStatusEqualTo(CmsConst.REVIEW);
         }
-        List<Article> list = articleService.selectByExample(articleExample);
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
 
 
     public boolean addArticle(ArticleDTO articleDTO) {
-        System.out.println(articleDTO.toString());
         Category category = categoryService.selectByPrimaryKey(articleDTO.toArticle().getArticleCategoryId());
         Integer siteId = category.getCategorySiteId();
+
+        Site site = siteService.selectByPrimaryKey(siteId);
+
         Article article = articleDTO.toArticle();
         article.setArticleCreateTime(new Date());
         article.setArticleSiteId(siteId);
         article.setArticleStatus(CmsConst.REVIEW);
+
+        //如果文章没有设置皮肤,默认为站点的皮肤.  @Bigmeng.
+        if (article.getArticleSkin().isEmpty()) {
+            article.setArticleSkin(site.getSiteSkin());
+        }
+
         try {
             List<String> fileNames = null;
             if (articleDTO.getFileNames() != null) {
@@ -129,7 +138,7 @@ public class ContentWebService {
         String originalFileName = file.getOriginalFilename();
         LOGGER.info(originalFileName);
         String uuid = UUID.randomUUID().toString();
-        String newName = uuid + originalFileName.substring(originalFileName.lastIndexOf("."));
+        String newName = uuid + originalFileName.substring(Objects.requireNonNull(originalFileName).lastIndexOf("."));
         File dir = new File(settingService.get(CmsConst.PIC_PATH_SETTING));
         if (!dir.exists()) {
             dir.mkdirs();
@@ -215,10 +224,10 @@ public class ContentWebService {
     }
 
 
-    public boolean deleteArticles(String articleIdData) {
-        if (!StringUtil.isNullOrEmpty(articleIdData)) {
-            String[] articleIds = articleIdData.split(",");
-            Arrays.stream(articleIds).map(e -> articleService.deleteArticleWithTagsAndFiles(Integer.parseInt(e))).collect(Collectors.toList());
+    public boolean deleteArticles(String articleIdList) {
+        if (!StringUtil.isNullOrEmpty(articleIdList)) {
+            String[] articleIds = articleIdList.split(",");
+            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagsAndFiles(Integer.parseInt(e)));
             return true;
         } else {
             return false;
@@ -273,18 +282,16 @@ public class ContentWebService {
     }
 
 
-    // TODO: 2018/4/15 待显示有权限的栏目
-    public List<CategoryTree> select() {
+    public List<CategoryTree> select(Integer siteId) {
         List<CategoryTree> treeList = new ArrayList<>();
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.or().andCategoryLevelEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
+        categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
         List<Category> list = categoryService.selectByExample(categoryExample);
         // 如果list为空，就创建以CATEGORY_ROOT_LEVEL为根节点的栏目树
-        if (list == null) {
-            Category category = new Category();
-            category.setCategoryLevel(CmsConst.CATEGORY_ROOT_LEVEL);
-            category.setCategoryTitle(CmsConst.CATEGORY_ROOT_NAME);
+        if (list.size() == 0) {
+            Category category = new Category(CmsConst.CATEGORY_ROOT_NAME, new Date(), CmsConst.CATEGORY_ROOT_LEVEL, siteId, CmsConst.ACCESS, "root Category");
             categoryService.insert(category);
+            LOGGER.info("在网站id为:{}下添加栏目:{}", siteId, category);
             CategoryTree tree = new CategoryTree();
             tree.setId(1);
             tree.setName(CmsConst.CATEGORY_ROOT_NAME);
@@ -292,12 +299,9 @@ public class ContentWebService {
             treeList.add(tree);
             return treeList;
         } else {
-            CategoryExample categoryExample1 = new CategoryExample();
-            categoryExample1.or().andCategoryLevelEqualTo(CmsConst.CATEGORY_ROOT_LEVEL).andCategoryStatusEqualTo(CmsConst.ACCESS);
-            List<Category> list1 = categoryService.selectByExample(categoryExample1);
-            Category category = list1.get(0);
+            Category category = list.get(0);
             CategoryTree tree = categoryService.toTree(category);
-            categoryExample.or().andCategoryParentIdEqualTo(1).andCategoryStatusEqualTo(CmsConst.ACCESS);
+            categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId()).andCategoryStatusEqualTo(CmsConst.ACCESS);
             List<Category> list2 = categoryService.selectByExample(categoryExample);
             if (list2.size() > 0) {
                 for (Category c : list) {
@@ -310,6 +314,7 @@ public class ContentWebService {
     }
 
 
+    //TODO:该方法耗时过长(3986ms),需修改    @Yoke
     public boolean deleteCategory(User user, Integer categoryId) {
         Category category = categoryService.selectByPrimaryKey(categoryId);
         if (null == category) {
@@ -321,16 +326,11 @@ public class ContentWebService {
 
         try {
             // 删除权限表信息
-            categoryService.deleteCategoryInfo(siteId, categoryId, CmsConst.PERMISSION_READ);
-            categoryService.deleteCategoryInfo(siteId, categoryId, CmsConst.PERMISSION_WRITE);
+            categoryService.deleteCategoryInfo(siteId, categoryId);
             // 删除栏目下面的文章
             ArticleExample articleExample = new ArticleExample();
             articleExample.or().andArticleCategoryIdEqualTo(category.getCategoryId());
-            articleService.selectArticleByCategoryId(categoryId).stream().map(e -> articleService.deleteArticleWithTags(e.getArticleId())).collect(Collectors.toList());
-//            List<Article> articleList = articleService.selectArticleByCategoryId(category.getCategoryId());
-           /* for (Article article : articleList) {
-                articleService.deleteArticleWithTags(article.getArticleId());
-            }*/
+            articleService.selectArticleByCategoryId(categoryId).forEach(e -> articleService.deleteArticleWithTagsAndFiles(e.getArticleId()));
         } catch (Exception e) {
             LOGGER.error("删除栏目为{}发生{}错误", categoryId, e.getMessage());
             e.printStackTrace();
@@ -364,9 +364,6 @@ public class ContentWebService {
 
     /**
      * 查看栏目的详细信息
-     *
-     * @param categoryId
-     * @return
      */
     public CategoryWithParent detailsCategory(Integer categoryId) {
         Category category = categoryService.selectByPrimaryKey(categoryId);
@@ -377,16 +374,22 @@ public class ContentWebService {
     }
 
 
+    //TODO: 添加文章权限在controller中判断， 添加目录又在service中判断权限，需修改 @Yoke
     public boolean addCategory(User user, Category category) {
         ModuleExample moduleExample = new ModuleExample();
         moduleExample.or().andModuleNameEqualTo("栏目管理");
         Module module = moduleService.selectByExample(moduleExample).get(0);
-        if (!permissionService.hasModulePermission(user.getUserId(), category.getCategorySiteId(), module.getModuleId(), CmsConst.PERMISSION_WRITE)) {
+        if (!(user.getUserIsAdmin() || PermissionUtil.permittedModule(user.getUserId(), category.getCategorySiteId(), module.getModuleId(), CmsConst.PERMISSION_WRITE))) {
             return false;
         }
 
         category.setCategoryCreateTime(new Date());
-        category.setCategorySkin("default");
+
+        //默认为站点的皮肤
+        Site site = siteService.selectByPrimaryKey(category.getCategorySiteId());
+        if (category.getCategorySkin().isEmpty()){
+            category.setCategorySkin(site.getSiteSkin());
+        }
         category.setCategoryStatus(CmsConst.REVIEW);
         Category parentCategory = categoryService.selectByPrimaryKey(category.getCategoryParentId());
         Integer level = parentCategory.getCategoryLevel();
@@ -420,13 +423,12 @@ public class ContentWebService {
         return true;
     }
 
-    public boolean deleteCategories(String categoryIdData) {
-        if (StringUtil.isNullOrEmptyAfterTrim(categoryIdData)) {
+    public boolean deleteCategories(String categoryIdList) {
+        if (StringUtil.isNullOrEmptyAfterTrim(categoryIdList)) {
             return false;
         }
         try {
-            categoryService.deleteBatchCategoryInfo(categoryIdData, CmsConst.PERMISSION_READ);
-            categoryService.deleteBatchCategoryInfo(categoryIdData, CmsConst.PERMISSION_WRITE);
+            categoryService.deleteBatchCategoryInfo(categoryIdList);
         } catch (Exception e) {
             LOGGER.error("删除多个栏目时候出现错误{}", e.getMessage());
             e.printStackTrace();

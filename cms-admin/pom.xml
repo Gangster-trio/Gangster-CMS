@@ -52,8 +52,18 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+<<<<<<< HEAD
             <artifactId>spring-boot-starter-web</artifactId>
 
+=======
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-reactor-netty</artifactId>
+                </exclusion>
+            </exclusions>
+>>>>>>> 2284a3dbad539f3bd5ea1d2b92c46d1c9a905a63
         </dependency>
 
         <dependency>
@@ -147,6 +157,11 @@
             <version>4.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.9.6</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,0 +1,78 @@
+<meta charset="UTF-8">
+<script src="/js/echarts.js"></script>
+<div id="charts">
+
+</div>
+<div id="main" style="width: 600px; height: 400px;">
+</div>
+<script>
+
+    var count = 0;
+    getSurveyData(currentSurveyPage);
+
+    function getSurveyData(cur_id) {
+        $.ajax({
+            type: 'GET',
+            url: '/survey/page/count/' + cur_id,
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (msg) {
+                $.each(msg.data.topicList, function (index, ele) {
+                    console.log(ele);
+                    initSurveyQuestion(ele);
+                })
+            }
+        });
+    }
+
+
+    function initSurveyQuestion(question) {
+        $("#charts").append("<div id=question" + count + " style=\"width: 600px; height: 400px;\">\n" +
+            "</div>");
+        var mychart = echarts.init(document.getElementById("question" + count), 'light');
+        count++;
+        var options = question.optionList;
+        var optionTitle = [];
+        var questionText = question.topic.topicQuestion;
+        var optionCount = [];
+        $.each(options, function (index, ele) {
+            optionTitle.push(ele.optionContent);
+            optionCount.push(ele.optionCount);
+        });
+        option = {
+            title: {
+                text: questionText
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {},
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: optionTitle
+            },
+            series: [
+                {
+                    name: questionText,
+                    type: 'bar',
+                    data: optionCount,
+                    lineStyle: 10
+                }
+            ]
+        };
+        mychart.setOption(option);
+    }
+</script>

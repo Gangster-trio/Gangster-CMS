@@ -33,8 +33,6 @@ import java.io.IOException;
 @RequestMapping("/file")
 public class FileController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
-
     @Autowired
     private FileUploadService fileUploadService;
 

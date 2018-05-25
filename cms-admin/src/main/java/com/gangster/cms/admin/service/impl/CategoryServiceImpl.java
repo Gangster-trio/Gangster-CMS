@@ -1,6 +1,9 @@
 package com.gangster.cms.admin.service.impl;
 
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
+import com.gangster.cms.admin.service.ArticleService;
+import com.gangster.cms.admin.service.GroupService;
+import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.common.pojo.CategoryTree;
 import com.gangster.cms.admin.service.CategoryService;
 import com.gangster.cms.admin.util.PermissionUtil;
@@ -24,9 +27,11 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
     @Autowired
     private CategoryMapper categoryMapper;
     @Autowired
-    private PermissionMapper permissionMapper;
+    private PermissionService permissionService;
     @Autowired
-    private GroupPermissionMapper groupPermissionMapper;
+    private GroupService groupService;
+    @Autowired
+    private ArticleService articleService;
 
     @Override
     public CategoryTree toTree(Category category) {
@@ -48,28 +53,25 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
     }
 
     @Override
-    public int deleteCategoryInfo(Integer siteId, Integer categoryId, String permission) {
+    public int deleteCategoryInfo(Integer siteId, Integer categoryId) {
         int count = 0;
-        // 根据permision名字查询permisison数据表
-        String deleteString = PermissionUtil.formatCategoryPermissionName(siteId, categoryId, permission);
-        PermissionExample permissionExample = new PermissionExample();
-        permissionExample.or().andPermissionNameEqualTo(deleteString);
-        Permission p = permissionMapper.selectByExample(permissionExample).get(0);
-        // 根据权限id查询组和权限的关联表的信息
-        GroupPermissionExample groupPermissionExample = new GroupPermissionExample();
-        groupPermissionExample.or().andPermissionIdEqualTo(p.getPermissionId());
-        // 删除组和权限表的信息
-        count += groupPermissionMapper.deleteByExample(groupPermissionExample);
-        // 删除权限表的信息
-        count += permissionMapper.deleteByExample(permissionExample);
-        if (permission.equals(CmsConst.PERMISSION_WRITE)) {
-            count += categoryMapper.deleteByPrimaryKey(categoryId);
-        }
+        // 权限无法级联删除
+        List<Group> groups = groupService.selectByExample(new GroupExample());
+        groups.forEach(g -> {
+            permissionService.deleteGroupPermission(g.getGroupId(), siteId, categoryId, CmsConst.PERMISSION_READ);
+            permissionService.deleteGroupPermission(g.getGroupId(), siteId, categoryId, CmsConst.PERMISSION_WRITE);
+        });
+        // 数据库级联删除，以下代码可忽略
+        articleService
+                .selectArticleByCategoryId(categoryId)
+                .forEach(a -> articleService.deleteArticleWithTagsAndFiles(a.getArticleId()));
+
+        count += categoryMapper.deleteByPrimaryKey(categoryId);
         return count;
     }
 
     @Override
-    public int deleteBatchCategoryInfo(String categoryIdStr, String permission) {
+    public int deleteBatchCategoryInfo(String categoryIdStr) {
         String[] categoryIds = categoryIdStr.split(",");
         int count = 0;
 
@@ -82,12 +84,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
         Integer siteId = selectByPrimaryKey(categoryIdList.get(0)).getCategorySiteId();
         try {
             for (Integer categoryId : categoryIdList) {
-                count += deleteCategoryInfo(siteId, categoryId, permission);
-            }
-            if (permission.equals(CmsConst.PERMISSION_WRITE)) {
-                CategoryExample categoryExample = new CategoryExample();
-                categoryExample.or().andCategoryIdIn(categoryIdList);
-                count += categoryMapper.deleteByExample(categoryExample);
+                count += deleteCategoryInfo(siteId, categoryId);
             }
         } catch (Exception e) {
             LOGGER.info("批量删除栏目时发生错误");

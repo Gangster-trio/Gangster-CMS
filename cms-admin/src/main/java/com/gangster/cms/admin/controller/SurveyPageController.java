@@ -91,6 +91,11 @@ public class SurveyPageController {
         return MessageDto.success(surveyPageWebService.detailsPage(id));
     }
 
+    @SystemControllerLog(description = "问卷的统计信息")
+    @GetMapping("/count/{id}")
+    public MessageDto count(@PathVariable("id") Integer id) {
+        return MessageDto.success(surveyPageWebService.countPage(id));
+    }
 
     private SurveyWithTopicWrapper transformToPOJO(HttpServletRequest request) {
         BufferedReader br = null;

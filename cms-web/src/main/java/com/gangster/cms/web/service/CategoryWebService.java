@@ -113,7 +113,7 @@ public class CategoryWebService {
     }
 
     @Scheduled(fixedDelay = 1000 * 60 * 5)
-    private void flushCache() {
+    public void flushCache() {
         categoryModelCache.clear();
         logger.info("refresh category cache");
     }

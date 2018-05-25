@@ -13,28 +13,28 @@
 
 <body>
 <div>
-    <#list result.page.topicList as topic>
+    <#list result.page.topicList as topicWithOption>
         <table>
             <tr>
-                <td>${topic.topicQuestion}<br></td>
+                <td>${topicWithOption.topic.topicQuestion}<br></td>
             </tr>
             <tr>
                 <td>
-                     <#if topic.topicType == "单选">
-                         <#list topic.optionList as option>
-                            <label><input class="survey_check" name="${topic.topicId}" type="radio"
+                     <#if topicWithOption.topic.topicType == "单选">
+                         <#list topicWithOption.optionList as option>
+                            <label><input class="survey_check" name="${topicWithOption.topic.topicId}" type="radio"
                                           value="${option.optionId}"/>${option.optionContent}</label>
                          </#list>
                      </#if>
-                     <#if topic.topicType =="多选">
-                         <#list topic.optionList as option>
-                            <label><input class="survey_check" name="${topic.topicId}" type="checkbox"
+                     <#if topicWithOption.topic.topicType =="多选">
+                         <#list topicWithOption.optionList as option>
+                            <label><input class="survey_check" name="${topicWithOption.topic.topicId}" type="checkbox"
                                           value="${option.optionId}"/>${option.optionContent}</label>
                          </#list>
                      </#if>
-                    <#if topic.topicType == "问答">
+                    <#if topicWithOption.topic.topicType == "问答">
                     <label>
-                        <input class="survey_text" name="${topic.topicId}"/>
+                        <input class="survey_text" name="${topicWithOption.topic.topicId}"/>
                     </label>
                     </#if>
                 </td>

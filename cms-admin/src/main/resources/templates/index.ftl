@@ -11,6 +11,7 @@
     <script src="/util/jquery.form.js"></script>
     <script src="/js/echarts.js"></script>
     <script src="../qrcode/jquery.qrcode.min.js"></script>
+    <script src="/js/cookie.js"></script>
     <link rel="stylesheet" href="/util/jquery-editable-select.css">
 </head>
 <body class="layui-layout-body">
@@ -47,7 +48,11 @@
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
+<<<<<<< HEAD
             <li class="layui-nav-item"><a href="/logout">最新邮件<span
+=======
+            <li class="layui-nav-item"><a onclick="showAtRight('/module/mail/listToReadMail.html')">最新邮件<span
+>>>>>>> 2284a3dbad539f3bd5ea1d2b92c46d1c9a905a63
                     class="layui-badge">${mailTotalNum!'0'}</span></a></li>
             <li class="layui-nav-item"><a href="/logout">退了</a></li>
         </ul>
@@ -99,7 +104,11 @@
     var currentSite;
 
     function init(id, name) {
+        if (getCookie("siteId") != null) {
+            delCookie("siteId");
+        }
         siteId = id;
+        setCookie("siteId", siteId);
         layer.msg("当前站点:" + name, {icon: 6});
         $("#choose_site_" + id).addClass("layui-this");
         $.ajax({

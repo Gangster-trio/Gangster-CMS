@@ -11,6 +11,8 @@ public class CmsConst {
     //轮播图
     public static final String CAROUSEL_ARTICLE_TYPE = "轮播图";
 
+    public static final String VIDEO = "视频";
+
     //主页文章
     public static final String INDEX_ARTICLE_TYPE = "主页文章";
 
@@ -24,6 +26,11 @@ public class CmsConst {
     public static final String SETTING_MODULE = "存储设置";
 
     public static final String CATEGORY_ROOT_NAME = "root";
+
+    public static final String topic_type_1 = "单选";
+    public static final String topic_type_2 = "多选";
+    public static final String topic_type_3 = "问答";
+    public static final String RESOURCE_PATH = "resource_path";
 
     // 超级管理员的名字
     public static final String ADMIN = "admin";

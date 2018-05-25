@@ -16,7 +16,7 @@ import java.util.Map;
  * 参数:<br>
  * {@link ContentListDirective#PARAM_CID}:指定目录ID<br>
  * {@link ContentListDirective#PARAM_PAGE}:页数 默认为0<br>
- * {@link ContentListDirective#PARAM_SIZE}:返回的条目数，未指定时返回该目录下所有文章<br>
+ * {@link ContentListDirective#PARAM_SIZE}:返回的条目数<br>
  * {@link ContentListDirective#PARAM_SORT}:返回文章的排序方式 默认按创建时间排序({@link ContentListDirective#DEFAULT_SORT})，该参数为数据库字段名(支持asc升序,desc降序)<br>
  * {@link ContentListDirective#PARAM_RET}:返回的model名称，默认为{@link ContentListDirective#PARAM_RET}<br>
  */

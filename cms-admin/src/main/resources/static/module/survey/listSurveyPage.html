@@ -9,6 +9,7 @@
 <table id="surveyPage_table" class="layui-table" style="margin: 0px" lay-filter="surveyPagelist"></table>
 <script>
     var pageId;
+    var currentSurveyPage;
 
     layui.use('table', function () {
         var first = true;
@@ -44,6 +45,8 @@
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 //查看栏目的详细信息
                 if (layEvent === 'detail') {
+                    currentSurveyPage = data.pageId;
+                    showAtRight("/module/survey/countSurveyPage.html");
                 }
                 //删除栏目信息
                 if (layEvent === 'del') { //删除
