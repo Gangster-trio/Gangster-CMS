@@ -144,7 +144,7 @@ public class SiteWebService {
     }
 
     @Scheduled(fixedDelay = 1000 * 60 * 5)
-    private void flushCache() {
+    public void flushCache() {
         siteModelCache.clear();
         logger.info("refresh site cache");
     }

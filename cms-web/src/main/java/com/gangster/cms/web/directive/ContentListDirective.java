@@ -60,7 +60,7 @@ public class ContentListDirective implements TemplateDirectiveModel {
         }
 
         if (size == null) {
-            size = 5;
+            size = 0;
         }
 
         ArticleExample example = new ArticleExample();

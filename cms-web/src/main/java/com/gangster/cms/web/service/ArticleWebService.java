@@ -109,7 +109,7 @@ public class ArticleWebService {
     }
 
     @Scheduled(fixedDelay = 1000 * 60 * 5)
-    private void flushCache() {
+    public void flushCache() {
         articleModelCache.clear();
         logger.info("refresh article cache");
     }

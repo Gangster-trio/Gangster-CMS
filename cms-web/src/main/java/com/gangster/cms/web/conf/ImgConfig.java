@@ -23,7 +23,7 @@ public class ImgConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //pic path must end with "/"
-        registry.addResourceHandler("/pic/**").addResourceLocations("file:" + settingEntryMapper.selectByPrimaryKey(CmsConst.PIC_PATH_SETTING).getSysValue());
+        registry.addResourceHandler("/pic/**").addResourceLocations("file:" + settingEntryMapper.selectByPrimaryKey(CmsConst.PIC_PATH_SETTING).getSysValue()).setCachePeriod(5);
         LOGGER.info("Gangster CMS : mapped /pic/** to {}", settingEntryMapper.selectByPrimaryKey(CmsConst.PIC_PATH_SETTING).getSysValue());
     }
 }

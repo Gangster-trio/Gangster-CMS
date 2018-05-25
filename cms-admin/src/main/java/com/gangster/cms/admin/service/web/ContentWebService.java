@@ -31,31 +31,35 @@ import static com.gangster.cms.admin.util.PermissionUtil.getAllPermittedCategory
  */
 @Service
 public class ContentWebService {
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private ArticleService articleService;
+    private final CategoryService categoryService;
+    private final ArticleService articleService;
 
-    @Autowired
-    private SettingService settingService;
+    private final SettingService settingService;
 
-    @Autowired
-    private TagService tagService;
+    private final TagService tagService;
 
-    @Autowired
-    private SiteService siteService;
+    private final SiteService siteService;
 
-    @Autowired
-    private PermissionService permissionService;
-    @Autowired
-    private ModuleService moduleService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private WebFileService webFileService;
+    private final PermissionService permissionService;
+    private final ModuleService moduleService;
+    private final UserService userService;
+    private final WebFileService webFileService;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
+
+    @Autowired
+    public ContentWebService(CategoryService categoryService, ArticleService articleService, SettingService settingService, TagService tagService, SiteService siteService, PermissionService permissionService, ModuleService moduleService, UserService userService, WebFileService webFileService) {
+        this.categoryService = categoryService;
+        this.articleService = articleService;
+        this.settingService = settingService;
+        this.tagService = tagService;
+        this.siteService = siteService;
+        this.permissionService = permissionService;
+        this.moduleService = moduleService;
+        this.userService = userService;
+        this.webFileService = webFileService;
+    }
 
     public PageInfo<Article> listArticle(User user, Integer siteId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
@@ -83,13 +87,21 @@ public class ContentWebService {
 
 
     public boolean addArticle(ArticleDTO articleDTO) {
-        System.out.println(articleDTO.toString());
         Category category = categoryService.selectByPrimaryKey(articleDTO.toArticle().getArticleCategoryId());
         Integer siteId = category.getCategorySiteId();
+
+        Site site = siteService.selectByPrimaryKey(siteId);
+
         Article article = articleDTO.toArticle();
         article.setArticleCreateTime(new Date());
         article.setArticleSiteId(siteId);
         article.setArticleStatus(CmsConst.REVIEW);
+
+        //如果文章没有设置皮肤,默认为站点的皮肤.  @Bigmeng.
+        if (article.getArticleSkin().isEmpty()) {
+            article.setArticleSkin(site.getSiteSkin());
+        }
+
         try {
             List<String> fileNames = null;
             if (articleDTO.getFileNames() != null) {
@@ -302,6 +314,7 @@ public class ContentWebService {
     }
 
 
+    //TODO:该方法耗时过长(3986ms),需修改    @Yoke
     public boolean deleteCategory(User user, Integer categoryId) {
         Category category = categoryService.selectByPrimaryKey(categoryId);
         if (null == category) {
@@ -317,7 +330,7 @@ public class ContentWebService {
             // 删除栏目下面的文章
             ArticleExample articleExample = new ArticleExample();
             articleExample.or().andArticleCategoryIdEqualTo(category.getCategoryId());
-            articleService.selectArticleByCategoryId(categoryId).stream().map(e -> articleService.deleteArticleWithTagsAndFiles(e.getArticleId())).collect(Collectors.toList());
+            articleService.selectArticleByCategoryId(categoryId).forEach(e -> articleService.deleteArticleWithTagsAndFiles(e.getArticleId()));
         } catch (Exception e) {
             LOGGER.error("删除栏目为{}发生{}错误", categoryId, e.getMessage());
             e.printStackTrace();
@@ -361,6 +374,7 @@ public class ContentWebService {
     }
 
 
+    //TODO: 添加文章权限在controller中判断， 添加目录又在service中判断权限，需修改 @Yoke
     public boolean addCategory(User user, Category category) {
         ModuleExample moduleExample = new ModuleExample();
         moduleExample.or().andModuleNameEqualTo("栏目管理");
@@ -370,7 +384,12 @@ public class ContentWebService {
         }
 
         category.setCategoryCreateTime(new Date());
-        category.setCategorySkin("default");
+
+        //默认为站点的皮肤
+        Site site = siteService.selectByPrimaryKey(category.getCategorySiteId());
+        if (category.getCategorySkin().isEmpty()){
+            category.setCategorySkin(site.getSiteSkin());
+        }
         category.setCategoryStatus(CmsConst.REVIEW);
         Category parentCategory = categoryService.selectByPrimaryKey(category.getCategoryParentId());
         Integer level = parentCategory.getCategoryLevel();

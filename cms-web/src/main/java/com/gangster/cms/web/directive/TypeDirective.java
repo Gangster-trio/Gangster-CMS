@@ -22,7 +22,7 @@ import java.util.Map;
 public class TypeDirective implements TemplateDirectiveModel {
     private static final String PARAM_CATEGORY_TYPE = "cate_type";
     private static final String PARAM_ARTICLE_TYPE = "article_type";
-    private static final String PARAM_SIZE = "size";    //default 5
+    private static final String PARAM_SIZE = "size";    //default 0, show all.
     private static final String PARAM_PAGE = "page";    //default 0
     private static final String PARAM_SORT = "sort";
     private static final String DEFAULT_ARTICLE_SORT = "article_create_time";
@@ -53,11 +53,11 @@ public class TypeDirective implements TemplateDirectiveModel {
 
         //异或非运算 有且仅有一个不为null
         if ((cateType == null) == (articleType == null)) {
-            throw new TemplateException(PARAM_ARTICLE_TYPE + " and " + PARAM_CATEGORY_TYPE + " only one must be specified.", env);
+            throw new TemplateException(PARAM_ARTICLE_TYPE + " or " + PARAM_CATEGORY_TYPE + " must be specified one.", env);
         }
 
         if (size == null) {
-            size = 5;
+            size = 0;
         }
         if (page == null) {
             page = 0;

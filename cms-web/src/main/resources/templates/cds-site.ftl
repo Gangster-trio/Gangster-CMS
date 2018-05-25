@@ -52,7 +52,7 @@
                 </a>
             </li>
         </ul>
-        //TODO: search
+    <#--TODO: search-->
         <div class="search2">
             <form id="searchDataForm" action="http://cds.tyut.edu.cn/cms/9/search.do" method="post">
                 <input type="hidden" name="categoryId" value="159" label="栏目编号">
@@ -81,7 +81,7 @@
             <div class="main-canvas-intro">
                 <!-- <h1>新科技引领未来，大数据开创时代</h1>-->
                 <h1>${result.site.siteDesc}</h1>
-                <p>${result.site.SiteName}</p>
+                <p>${result.site.siteName}</p>
             </div>
         </div>
     </div>
@@ -89,18 +89,31 @@
     <div class="container">
 
         <!--首页主导航-->
-                <#macro showTree Tree>
-                    <#if Tree.children??>
-                        <li class="dropdown">
-                            <a href="/view/category/${Tree.id}" <span>${Tree.name}</span>
-                            </a>
-                        </li>
-                    </#if>
-                </#macro>
+        <#macro showTopBar categoryList>
+            <#if categoryList??>
+                <#list categoryList as cate>
+                <li class="dropdown">
+                    <a href="/view/category/${cate.categoryId}"> <span>${cate.categoryTitle}</span></a>
+                    <@cms_content_list categoryId=cate.categoryId>
+                    <ul class="dropdown-content">
+                        <a href="/view/category/${cate.categoryId}"></a>
+                        <#list ret as article>
+                            <li>
+                                <a href="/view/article/${article.articleId}">${article.articleTitle}</a>
+                            </li>
+                        </#list>
+                    </ul>
+                    </@cms_content_list>
+                </li>
+                </#list>
+            </#if>
+
+        </#macro>
 
         <ul class="nav">
-                    <@showTree Tree=categoryTreeList>
-                    </@showTree>
+            <#if result.topBar??>
+                    <@showTopBar categoryList=result.topBar/>
+            </#if>
         </ul>
 
         <div class="index_sideSlip_mask sideSlip_mask_off"></div>
@@ -110,7 +123,7 @@
 <div class="main2">
     <div class="container clearfix">
 
-        //TODO: 轮播图或者文章
+    <#--TODO: 轮播图或者文章-->
         <div class="main2-left">
             <img src="cds/1524103175491.png">
             <a href="http://cds.tyut.edu.cn/html/1/159/191/210/519.html"
@@ -123,14 +136,32 @@
 
         <div class="main2-right">
             <div class="main3-card main3-card1">
-                <h2>
-                    <i class="icon iconfont"></i>
-                    学院新闻
-                </h2>
-                <a href="http://cds.tyut.edu.cn/html/1/159/191/index.html" class="more">
-                    更多
-                    <i class="icon iconfont"></i>
-                </a>
+                <@cms_type_list cate_type="news">
+                    <#list ret as category>
+                    <div class="main3-card_title clearfix">
+                        <h2>
+                            <i class="icon iconfont"></i>
+                            ${category.categoryTitle}
+                        </h2>
+                        <a href="/view/category/${category.categoryId}" class="more">
+                            更多
+                            <i class="icon iconfont"></i>
+                        </a>
+                    </div>
+                        <@cms_content_list categoryId=category.categoryId>
+                            <#list ret as article>
+                                <#--<#if article??>-->
+                                   <a href="/view/article/${article.articleId}" class="main2-right-item clearfix">
+                                      <span class="main2-right-item-title oneLineOverflowSolution">
+                                          ${article.articleTitle}
+                                      </span>
+                                       <span class="main2-right-item-time">${article.articleCreateTime?date}</span>
+                                   </a>
+                                <#--</#if>-->
+                            </#list>
+                        </@cms_content_list>
+                    </#list>
+                </@cms_type_list>
             </div>
         </div>
     </div>
@@ -153,14 +184,14 @@
                          </a>
                      </div>
                      <ul class="main3-card_ul">
-                         <@cms_content_list categoryid=category.categoryId>
+                         <@cms_content_list categoryId=category.categoryId>
                              <#list ret as article>
                                  <li>
                                      <a href="/view/article/${article.articleId}">
                                          <div class="rili shortTime">
-                                             <span>${article.articleCreateTime}</span>
+                                             <span>${article.articleCreateTime?date}</span>
                                              <!-- TODO: 月份 -->
-                                             <p>05</p>
+                                             <p>${article.articleCreateTime?string("MM")}</p>
                                          </div>
                                          <div class="main3-card_ul_infos">
                                              <h3>${article.articleTitle}</h3>
@@ -178,61 +209,7 @@
     </div>
 </div>
 <!--main3 结束-->
-<div class="main4 clearfix">
-    <!-- slide -->
-    <div> --> --> --arfix">
-        <div id="cont">
-            <div class="container">
-                <div id="iview" style="height: 350px;">
-                    <div class="iviewSlider"
-                         style="position: relative; transform-origin: 0px 0px 0px; transform: scale(1); background-image: url(&quot;/upload/1/article/1512462943790.jpg&quot;);">
 
-                        <div data-iview:image="/upload/1/article/1512462943790.jpg"
-                             style="display: block; width: 1524px; height: 350px;">
-                            <a href="http://cds.tyut.edu.cn/html/1/159/222/index.html"
-                               style="display: block;width: 100%;height: 100%">
-                                <div class="iview-caption caption1" id="item1" data-x="150" data-y="239"
-                                     data-transition="expandDown"
-                                     style="height: 12px; left: 150px; top: 239px; opacity: 1; overflow: hidden; width: 20px;">
-                                    <div class="caption-contain"
-                                         style="opacity: 1; position: relative; width: 20px; height: 12px; top: 0px; left: 0px;"></div>
-                                </div>
-                            </a>
-                        </div>
-
-                    </div>
-                    <div id="iview-timer"
-                         style="opacity: 0.5; width: 50%; height: 7px; border: 0px solid rgb(238, 238, 238); padding: 0px; background: rgb(0, 0, 0); bottom: 10px; right: 10px; display: block;"
-                         class="paused" title="Play">
-                        <div style="width: 0px; height: 7px; background: rgb(255, 255, 255); float: left;"></div>
-                    </div>
-                    <div class="iview-directionNav" style="opacity: 0;">
-                        <a class="iview-prevNav" title="Previous">Previous</a>
-                        <a class="iview-nextNav" title="Next">Next</a>
-                    </div>
-                    <div class="iview-controlNav" style="opacity: 0.6;">
-                        <div class="iview-items">
-                            <ul>
-                                <li>
-                                    <a class="iview-control active" rel="0"></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="iview-tooltip">
-                        <div class="holder">
-                            <div class="container">
-                                <div rel="0">
-                                    <img src="cds/1512462943790.jpg">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!--main4 结束-->
 <a href="http://cds.tyut.edu.cn/html/1/159/193/index.html" class="main5">
     <img src="cds/main5-teacher2.png" class="main5-teacher2">
@@ -354,11 +331,11 @@
             };
         }
 
-        var noticeP = document.getElementsByClassName("main3-card_ul")[0].getElementsByTagName("p");
-        for (var i = 0; i < noticeP.length; i++) {
-            var pValue = noticeP[i].innerHTML;
-            noticeP[i].innerHTML = pValue.substring(5, 7);
-        }
+        // var noticeP = document.getElementsByClassName("main3-card_ul")[0].getElementsByTagName("p");
+        // for (var i = 0; i < noticeP.length; i++) {
+        //     var pValue = noticeP[i].innerHTML;
+        //     noticeP[i].innerHTML = pValue.substring(5, 7);
+        // }
 
         //      首页粒子图
         $('#particles').particleground();
