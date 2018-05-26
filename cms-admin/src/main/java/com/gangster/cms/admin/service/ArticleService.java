@@ -16,6 +16,8 @@ public interface ArticleService extends BaseService<Article, ArticleExample> {
 
     List<Article> selectArticleByCategoryId(Integer cid, String sort);
 
+    List<Article> selectArticleByReleaseStatus(Boolean releaseStatus);
+
     int insertWithTag(Article article, List<String> tagNameList, List<WebFile> fileList);
 
     int insertSelectiveWithTagAndFile(Article article, List<String> tagNameList, List<WebFile> fileList);

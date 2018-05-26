@@ -1,10 +1,9 @@
-<button style="float: right;margin: 5px" onclick="showAtRight('/module/mail/addSingleMail.html')" class="layui-btn layui-btn-normal" id="column">写邮件</button>
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="column">写邮件</button>
 <div class="layui-elem-quote" style="margin-bottom: 0;">
     <p>已读邮件</p>
 </div>
 <table id="readedMail_table" class="layui-table" style="margin: 0px" lay-filter="readedMaillist"></table>
 <script>
-    var mailId;
     layui.use('table', function () {
         var first = true;
         var table = layui.table;
@@ -15,9 +14,10 @@
             , url: '/mail/list/readed'
             , page: true
             , cols: [[ //表头
-                {field: 'mailId', title: 'ID', width: '80', sort: true}
+                {type: 'checkbox'}
+                , {field: 'mailId', title: 'ID', width: '80', sort: true}
                 , {field: 'mailInMail', title: '发送者', width: '190', align: 'center'}
-                , {field: 'mailReceiveDate', title: "接收时间", width: '250', align: 'center', sort: true}
+                , {field: 'mailReceivedate', title: "接收时间", width: '250', align: 'center', sort: true}
                 , {field: 'mailContent', title: '邮件的内容', width: '300', align: 'center', sort: true}
                 , {filed: 'tool', title: '操作', align: 'center', toolbar: "#toolBar"}
             ]]
@@ -28,34 +28,16 @@
                 }
             }
         });
+
         //监听的事件
         table.on('tool(readedMaillist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-            mailId = data.mailId;
             //查看栏目的详细信息
             if (layEvent === 'detail') {
                 showAtRight("/module/mail/listSingleMail.html");
             } else if (layEvent === 'del') {
-                $.ajax({
-                        url: "/mail/delete/" + mailId,
-                        dataType: "json",
-                        type: "DELETE",
-                        timeout: "3000",
-                        error: function () {
-                            layer.msg("server no response : " + url);
-                        },
-                        success: function (data) {
-                            if (data.code === 0) {
-                                layer.msg("delete success.");
-                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                showAtRight("/module/mail/listReadedMail.html");
-                            } else if (data.code === 1) {
-                                layer.msg("delete false");
-                            }
-                        }
-                    }
-                );
+                showAtRight("/module/mail/listReadedMail");
             }
         });
     });

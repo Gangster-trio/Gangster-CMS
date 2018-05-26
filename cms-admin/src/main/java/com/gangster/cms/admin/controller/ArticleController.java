@@ -1,6 +1,7 @@
 package com.gangster.cms.admin.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.gangster.cms.admin.annotation.SystemControllerLog;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.ArticleDTO;
@@ -17,7 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * Create by Yoke on 2018/1/30
@@ -54,13 +58,15 @@ public class ArticleController {
 
     @SystemControllerLog(description = "添加文章")
     @PostMapping("/add")
-    public MessageDto save(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody ArticleDTO articleDTO) {
+    public MessageDto add(HttpServletRequest request) {
+        ArticleDTO articleDTO = transformPOJO(request);
         if (!contentWebService.addArticle(articleDTO)) {
             LOGGER.error("添加文章失败");
             return MessageDto.fail(1, "添加文章失败");
         }
         return MessageDto.success(null);
     }
+
 
     @SystemControllerLog(description = "列出某个栏目的文章")
     @GetMapping("/list/category")
@@ -104,7 +110,8 @@ public class ArticleController {
 
     @SystemControllerLog(description = "更新单篇文章")
     @PostMapping("/update/{id}")
-    public MessageDto update(@PathVariable("id") Integer id, @RequestBody ArticleDTO articleDTO) {
+    public MessageDto update(@PathVariable("id") Integer id, HttpServletRequest request) {
+        ArticleDTO articleDTO = transformPOJO(request);
         if (!contentWebService.updateArticle(id, articleDTO)) {
             LOGGER.error("更新单篇文章id为{}失败", id);
             return MessageDto.fail(1, "删除文章失败");
@@ -130,5 +137,37 @@ public class ArticleController {
             return MessageDto.fail(1, "审核失败");
         }
         return MessageDto.success(null);
+    }
+
+    private static ArticleDTO transformPOJO(HttpServletRequest request) {
+        BufferedReader br = null;
+        ArticleDTO articleDTO;
+        try {
+            br = new BufferedReader(new InputStreamReader(request.getInputStream(), "utf-8"));
+            StringBuilder sb = new StringBuilder();
+            String temp;
+            while ((temp = br.readLine()) != null) {
+                sb.append(temp);
+            }
+            articleDTO = JSONObject.parseObject(sb.toString(), ArticleDTO.class);
+        } catch (IOException e) {
+            LOGGER.error("转换出错,错误信息：{}", e.getMessage());
+            e.printStackTrace();
+            return null;
+        } finally {
+            closeResource(br, LOGGER);
+        }
+        return articleDTO;
+    }
+
+    public static void closeResource(BufferedReader br, Logger logger) {
+        if (br != null) {
+            try {
+                br.close();
+            } catch (IOException e) {
+                logger.error("关闭流出错");
+                e.printStackTrace();
+            }
+        }
     }
 }

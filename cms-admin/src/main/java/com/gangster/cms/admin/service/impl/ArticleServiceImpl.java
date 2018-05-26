@@ -107,12 +107,14 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
             }
             tagExample.clear();
         }
-        fileList.forEach(webFile -> {
-            webFile.setFileArticleId(article.getArticleId());
-            webFile.setFileCategoryId(article.getArticleCategoryId());
-            webFile.setFileSiteId(article.getArticleSiteId());
-            webFileMapper.updateByPrimaryKey(webFile);
-        });
+        if (fileList != null) {
+            fileList.forEach(webFile -> {
+                webFile.setFileArticleId(article.getArticleId());
+                webFile.setFileCategoryId(article.getArticleCategoryId());
+                webFile.setFileSiteId(article.getArticleSiteId());
+                webFileMapper.updateByPrimaryKey(webFile);
+            });
+        }
     }
 
     @Override
@@ -129,6 +131,30 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         articleExample.setOrderByClause(sort);
         return articleMapper.selectByExample(articleExample);
     }
+
+    @Override
+    public List<Article> selectArticleByReleaseStatus(Boolean releaseStatus) {
+        ArticleExample articleExample = new ArticleExample();
+        articleExample.or().andArticleReleaseStatusEqualTo(releaseStatus);
+        return articleMapper.selectByExample(articleExample);
+    }
+
+//    @Override
+//    public int deleteArticleWithTags(Integer articleId) {
+//        TagArticleExample tagArticleExample = new TagArticleExample();
+//        tagArticleExample.or().andArticleIdEqualTo(articleId);
+//        List<TagArticle> list = tagArticleMapper.selectByExample(tagArticleExample);   //得到要删除文章的所有标签
+//        tagArticleMapper.deleteByExample(tagArticleExample);   //删除中间表
+//        for (TagArticle tagArticle : list) {
+//            TagExample tagExample = new TagExample();
+//            tagExample.or().andTagIdEqualTo(tagArticle.getTagId());
+//            long count = tagService.countByExample(tagExample);
+//            if (count == 1) {
+//                tagService.deleteByPrimaryKey(tagArticle.getTagId());
+//            }
+//        }
+//        return articleMapper.deleteByPrimaryKey(articleId);
+//    }
 
     @Override
     public int deleteArticleWithTagsAndFiles(Integer articleId) {

@@ -19,6 +19,8 @@
       <arg column="article_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="article_skin" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="article_in_homepage" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="article_release_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="article_release_status" javaType="java.lang.Boolean" jdbcType="BIT" />
     </constructor>
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.gangster.cms.common.pojo.Article">
@@ -39,6 +41,8 @@
       <arg column="article_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="article_skin" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="article_in_homepage" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="article_release_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="article_release_status" javaType="java.lang.Boolean" jdbcType="BIT" />
       <arg column="article_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
     </constructor>
   </resultMap>
@@ -103,7 +107,8 @@
   <sql id="Base_Column_List">
     article_id, article_title, article_type, article_author, article_url, article_order, 
     article_site_id, article_category_id, article_create_time, article_update_time, article_thumb, 
-    article_hit, article_desc, article_status, article_skin, article_in_homepage
+    article_hit, article_desc, article_status, article_skin, article_in_homepage, article_release_time, 
+    article_release_status
   </sql>
   <sql id="Blob_Column_List">
     article_content
@@ -167,13 +172,15 @@
       article_category_id, article_create_time, 
       article_update_time, article_thumb, article_hit, 
       article_desc, article_status, article_skin, 
-      article_in_homepage, article_content)
+      article_in_homepage, article_release_time, article_release_status, 
+      article_content)
     values (#{articleTitle,jdbcType=VARCHAR}, #{articleType,jdbcType=VARCHAR}, #{articleAuthor,jdbcType=VARCHAR}, 
       #{articleUrl,jdbcType=VARCHAR}, #{articleOrder,jdbcType=INTEGER}, #{articleSiteId,jdbcType=INTEGER}, 
       #{articleCategoryId,jdbcType=INTEGER}, #{articleCreateTime,jdbcType=TIMESTAMP}, 
       #{articleUpdateTime,jdbcType=TIMESTAMP}, #{articleThumb,jdbcType=VARCHAR}, #{articleHit,jdbcType=INTEGER}, 
       #{articleDesc,jdbcType=VARCHAR}, #{articleStatus,jdbcType=INTEGER}, #{articleSkin,jdbcType=VARCHAR}, 
-      #{articleInHomepage,jdbcType=BIT}, #{articleContent,jdbcType=LONGVARCHAR})
+      #{articleInHomepage,jdbcType=BIT}, #{articleReleaseTime,jdbcType=TIMESTAMP}, #{articleReleaseStatus,jdbcType=BIT}, 
+      #{articleContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.Article">
     <selectKey keyProperty="articleId" order="AFTER" resultType="java.lang.Integer">
@@ -226,6 +233,12 @@
       <if test="articleInHomepage != null">
         article_in_homepage,
       </if>
+      <if test="articleReleaseTime != null">
+        article_release_time,
+      </if>
+      <if test="articleReleaseStatus != null">
+        article_release_status,
+      </if>
       <if test="articleContent != null">
         article_content,
       </if>
@@ -275,6 +288,12 @@
       </if>
       <if test="articleInHomepage != null">
         #{articleInHomepage,jdbcType=BIT},
+      </if>
+      <if test="articleReleaseTime != null">
+        #{articleReleaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleReleaseStatus != null">
+        #{articleReleaseStatus,jdbcType=BIT},
       </if>
       <if test="articleContent != null">
         #{articleContent,jdbcType=LONGVARCHAR},
@@ -338,6 +357,12 @@
       <if test="record.articleInHomepage != null">
         article_in_homepage = #{record.articleInHomepage,jdbcType=BIT},
       </if>
+      <if test="record.articleReleaseTime != null">
+        article_release_time = #{record.articleReleaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.articleReleaseStatus != null">
+        article_release_status = #{record.articleReleaseStatus,jdbcType=BIT},
+      </if>
       <if test="record.articleContent != null">
         article_content = #{record.articleContent,jdbcType=LONGVARCHAR},
       </if>
@@ -364,6 +389,8 @@
       article_status = #{record.articleStatus,jdbcType=INTEGER},
       article_skin = #{record.articleSkin,jdbcType=VARCHAR},
       article_in_homepage = #{record.articleInHomepage,jdbcType=BIT},
+      article_release_time = #{record.articleReleaseTime,jdbcType=TIMESTAMP},
+      article_release_status = #{record.articleReleaseStatus,jdbcType=BIT},
       article_content = #{record.articleContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -386,7 +413,9 @@
       article_desc = #{record.articleDesc,jdbcType=VARCHAR},
       article_status = #{record.articleStatus,jdbcType=INTEGER},
       article_skin = #{record.articleSkin,jdbcType=VARCHAR},
-      article_in_homepage = #{record.articleInHomepage,jdbcType=BIT}
+      article_in_homepage = #{record.articleInHomepage,jdbcType=BIT},
+      article_release_time = #{record.articleReleaseTime,jdbcType=TIMESTAMP},
+      article_release_status = #{record.articleReleaseStatus,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -439,6 +468,12 @@
       <if test="articleInHomepage != null">
         article_in_homepage = #{articleInHomepage,jdbcType=BIT},
       </if>
+      <if test="articleReleaseTime != null">
+        article_release_time = #{articleReleaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleReleaseStatus != null">
+        article_release_status = #{articleReleaseStatus,jdbcType=BIT},
+      </if>
       <if test="articleContent != null">
         article_content = #{articleContent,jdbcType=LONGVARCHAR},
       </if>
@@ -462,6 +497,8 @@
       article_status = #{articleStatus,jdbcType=INTEGER},
       article_skin = #{articleSkin,jdbcType=VARCHAR},
       article_in_homepage = #{articleInHomepage,jdbcType=BIT},
+      article_release_time = #{articleReleaseTime,jdbcType=TIMESTAMP},
+      article_release_status = #{articleReleaseStatus,jdbcType=BIT},
       article_content = #{articleContent,jdbcType=LONGVARCHAR}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
@@ -481,7 +518,9 @@
       article_desc = #{articleDesc,jdbcType=VARCHAR},
       article_status = #{articleStatus,jdbcType=INTEGER},
       article_skin = #{articleSkin,jdbcType=VARCHAR},
-      article_in_homepage = #{articleInHomepage,jdbcType=BIT}
+      article_in_homepage = #{articleInHomepage,jdbcType=BIT},
+      article_release_time = #{articleReleaseTime,jdbcType=TIMESTAMP},
+      article_release_status = #{articleReleaseStatus,jdbcType=BIT}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
 </mapper>

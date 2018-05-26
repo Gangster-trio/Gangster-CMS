@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 @Document(indexName = "article")
-public class ArticleModel extends Article{
+public class ArticleModel extends Article {
     @Id
     private Integer articleId;
 

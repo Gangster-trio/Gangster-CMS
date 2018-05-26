@@ -87,31 +87,31 @@ public class ContentWebService {
 
 
     public boolean addArticle(ArticleDTO articleDTO) {
-        Category category = categoryService.selectByPrimaryKey(articleDTO.toArticle().getArticleCategoryId());
-        Integer siteId = category.getCategorySiteId();
-
+//        Category category = categoryService.selectByPrimaryKey(articleDTO.getArticle().getArticleCategoryId());
+//        Integer siteId = category.getCategorySiteId();
+        Article article = articleDTO.getArticle();
+        Integer siteId = article.getArticleSiteId();
         Site site = siteService.selectByPrimaryKey(siteId);
 
-        Article article = articleDTO.toArticle();
-        article.setArticleCreateTime(new Date());
-        article.setArticleSiteId(siteId);
-        article.setArticleStatus(CmsConst.REVIEW);
+//        article.setArticleCreateTime(new Date());
+//        article.setArticleSiteId(siteId);
+//        article.setArticleStatus(CmsConst.REVIEW);
 
         //如果文章没有设置皮肤,默认为站点的皮肤.  @Bigmeng.
-        if (article.getArticleSkin().isEmpty()) {
+        if (article.getArticleSkin() == null) {
             article.setArticleSkin(site.getSiteSkin());
         }
 
         try {
             // 添加文章附件
-            List<String> fileNames = null;
-            if (articleDTO.getFileNames() != null) {
-                fileNames = Arrays.asList(articleDTO.getFileNames().split(","));
+            List<String> fileNames;
+            List<WebFile> files = null;
+            if (!articleDTO.getFiles().equals("")) {
+                fileNames = Arrays.asList(articleDTO.getFiles().split(","));
+                WebFileExample webFileExample = new WebFileExample();
+                webFileExample.or().andFileNameIn(fileNames);
+                files = webFileService.selectByExample(webFileExample);
             }
-
-            WebFileExample webFileExample = new WebFileExample();
-            webFileExample.or().andFileNameIn(fileNames);
-            List<WebFile> files = webFileService.selectByExample(webFileExample);
             articleService.insertSelectiveWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
         } catch (Exception e) {
             LOGGER.error("添加文章{}失败,错误原因{}", articleDTO, e.getMessage());
@@ -190,15 +190,12 @@ public class ContentWebService {
         List<String> tagNameList
                 = list.stream().map(Tag::getTagName).collect(Collectors.toList());
         String tags = String.join(",", tagNameList);
-        ArticleDTO articleDTO = new ArticleDTO(article);
-        articleDTO.setCategoryName(category.getCategoryTitle());
-        articleDTO.setTags(tags);
-        return articleDTO;
+        return new ArticleDTO(article, category.getCategoryTitle(), tags);
     }
 
 
     public boolean updateArticle(Integer articleId, ArticleDTO articleDTO) {
-        Article article = articleDTO.toArticle();
+        Article article = articleDTO.getArticle();
 
         Article oldArticle = articleService.selectByPrimaryKey(articleId);
         if (null == oldArticle) {
@@ -362,7 +359,8 @@ public class ContentWebService {
         if (null == category) {
             return null;
         }
-        return new CategoryWithParent(category.getCategoryTitle(), category);
+        Category categoryParent = categoryService.selectByPrimaryKey(category.getCategoryParentId());
+        return new CategoryWithParent(categoryParent.getCategoryTitle(), category);
     }
 
 
@@ -375,7 +373,8 @@ public class ContentWebService {
             return false;
         }
 
-        category.setCategoryCreateTime(new Date());
+//         前端设置了
+//         category.setCategoryCreateTime(new Date());
 
         //默认为站点的皮肤
         Site site = siteService.selectByPrimaryKey(category.getCategorySiteId());

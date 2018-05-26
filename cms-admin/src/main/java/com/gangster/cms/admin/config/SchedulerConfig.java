@@ -1,7 +1,9 @@
 package com.gangster.cms.admin.config;
 
+import com.gangster.cms.admin.task.MyJobFactory;
 import org.quartz.Scheduler;
 import org.quartz.ee.servlet.QuartzInitializerListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +15,13 @@ import java.util.Properties;
 
 @Configuration
 public class SchedulerConfig {
+    @Autowired
+    private MyJobFactory myJobFactory;
+
     @Bean(name = "SchedulerFactory")
     public SchedulerFactoryBean schedulerFactoryBean() throws IOException {
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
+        factoryBean.setJobFactory(myJobFactory);
         factoryBean.setQuartzProperties(quartzProperties());
         return factoryBean;
     }

@@ -1,7 +1,6 @@
 package com.gangster.cms.web.controller;
 
 import com.gangster.cms.common.constant.CmsConst;
-import com.gangster.cms.common.pojo.Article;
 import com.gangster.cms.web.annotation.AccessCount;
 import com.gangster.cms.web.annotation.AccessLogger;
 import com.gangster.cms.web.annotation.CountParam;

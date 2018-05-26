@@ -1,8 +1,5 @@
 package com.gangster.cms.web.directive;
 
-import com.gangster.cms.common.pojo.Article;
-import com.gangster.cms.common.pojo.ArticleExample;
-import com.gangster.cms.dao.mapper.ArticleMapper;
 import com.github.pagehelper.PageHelper;
 import freemarker.core.Environment;
 import freemarker.template.*;
