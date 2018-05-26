@@ -103,6 +103,7 @@ public class ContentWebService {
         }
 
         try {
+            // 添加文章附件
             List<String> fileNames = null;
             if (articleDTO.getFileNames() != null) {
                 fileNames = Arrays.asList(articleDTO.getFileNames().split(","));
@@ -112,11 +113,6 @@ public class ContentWebService {
             webFileExample.or().andFileNameIn(fileNames);
             List<WebFile> files = webFileService.selectByExample(webFileExample);
             articleService.insertSelectiveWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
-
-            for (WebFile webFile : files) {
-                webFile.setFileArticleId(article.getArticleId());
-            }
-
         } catch (Exception e) {
             LOGGER.error("添加文章{}失败,错误原因{}", articleDTO, e.getMessage());
             e.printStackTrace();
@@ -327,10 +323,6 @@ public class ContentWebService {
         try {
             // 删除权限表信息
             categoryService.deleteCategoryInfo(siteId, categoryId);
-            // 删除栏目下面的文章
-            ArticleExample articleExample = new ArticleExample();
-            articleExample.or().andArticleCategoryIdEqualTo(category.getCategoryId());
-            articleService.selectArticleByCategoryId(categoryId).forEach(e -> articleService.deleteArticleWithTagsAndFiles(e.getArticleId()));
         } catch (Exception e) {
             LOGGER.error("删除栏目为{}发生{}错误", categoryId, e.getMessage());
             e.printStackTrace();
@@ -387,7 +379,7 @@ public class ContentWebService {
 
         //默认为站点的皮肤
         Site site = siteService.selectByPrimaryKey(category.getCategorySiteId());
-        if (category.getCategorySkin().isEmpty()){
+        if (category.getCategorySkin().isEmpty()) {
             category.setCategorySkin(site.getSiteSkin());
         }
         category.setCategoryStatus(CmsConst.REVIEW);

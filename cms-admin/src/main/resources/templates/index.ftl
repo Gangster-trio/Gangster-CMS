@@ -34,7 +34,7 @@
                 </dl>
             </li>
             <button class="layui-btn">
-                <a class="layui-icon" href="/index?id=1">刷新权限</a>
+                <a class="layui-icon" href="/index?flush=yes">刷新权限</a>
             </button>
         </ul>
         <ul class="layui-nav layui-layout-right">
@@ -100,11 +100,10 @@
     var currentSite;
 
     function init(id, name) {
-        if (getCookie("siteId") != null) {
-            delCookie("siteId");
-        }
         siteId = id;
+        alert(siteId);
         setCookie("siteId", siteId);
+        alert(getCookie("siteId"));
         layer.msg("当前站点:" + name, {icon: 6});
         $("#choose_site_" + id).addClass("layui-this");
         $.ajax({
@@ -120,5 +119,3 @@
 
     showAtRight("/module/count.html");
 </script>
-
-

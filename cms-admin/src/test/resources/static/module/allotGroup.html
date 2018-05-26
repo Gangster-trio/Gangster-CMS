@@ -1,0 +1,135 @@
+<script src="/util/jquery-editable-select.js"></script>
+<link rel="stylesheet" href="/util/jquery-editable-select.css">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>添加用户组</legend>
+</fieldset>
+
+<table id="group_table" lay-filter="groupListFilter"></table>
+<form class="layui-form">
+    <div class="layui-inline">
+        <label class="layui-form-label">添加用户组:</label>
+        <div class="layui-input-inline">
+            <select id="groups" name="groups" required lay-verify="required" lay-search
+                    lay-filter="groups">
+                <option value="">请选择用户组</option>
+            </select>
+        </div>
+    </div>
+</form>
+<input type="button" value="提交信息" id="btn" class="layui-btn" style="margin-left:10%;margin-top:20px;"
+       onclick="addGroup()"/>
+
+<script type="text/html" id="userToolBar">
+    <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>
+<script>
+    layui.use(['table', 'form'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        form.render();
+        var first = true;
+        table.render({
+            elem: '#group_table'
+            , url: '/user/findgroup/' + userId
+            , page: true //开启分页
+            , cols: [[ //表头
+                {field: 'groupId', title: 'ID', width: 60, sort: true, fixed: 'left'}
+                , {field: 'groupName', width: 250, title: '角色组名'}
+                , {field: 'groupDesc', width: 900, title: '角色简介'}
+                , {title: '操作', align: 'center', toolbar: '#userToolBar'}
+            ]]//            数据渲染后回调
+//            , limit: 1
+            , limits: [10, 15, 20, 40, 80, 100]
+            , done: function (res, curr, count) {
+                if (first) {
+                    layer.msg("加载完成 共" + count + "条数据");
+                    first = false;
+                }
+            }
+        });
+        table.on('tool(groupListFilter)', function (obj) { //注：tool是工具条事件名，articleListFilter是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            console.log(data);
+            layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    console.log(data);
+                    $.ajax({
+                        url: "/user/deletegroup/" + userId + "/" + data.groupId,
+                        type: 'get',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            if (data === 1) {
+                                //删除这一行
+                                obj.del();
+                                //关闭弹框
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 6});
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                                location.reload();
+                            }
+                        },
+                        end: function () {
+                            showAtRight('/user/findgroup/');
+                        }
+                    });
+                });
+            }
+        });
+        form.on('submit')
+    })
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        var form = layui.form;
+        var optionstring = "";
+        $.ajax({
+            url: "/user/findgroup",
+            type: 'get',
+            dataType: 'json',
+            success: function (ajaxdata) {
+                for (var i = 0; i < ajaxdata.code; i++) {
+                    optionstring += "<option value=" + ajaxdata.data[i].groupId + ">" + ajaxdata.data[i].groupName + "</option>";
+                }
+                $("#groups").append(optionstring);
+                form.render('select');
+            }
+        });
+    })
+    //    }
+</script>
+<script>
+    function addGroup() {
+        var value = $("#groups").val();
+        console.log(value);
+        layer.confirm('确定添加？', function (index) {
+            $.ajax({
+                url: "/user/addGroupToUse/" + value + "/" + userId,
+                type: 'get',
+                dataType: 'json',
+                success: function (data, index) {
+                    console.log(data);
+                    if (data === 1) {
+                        layer.close(index);
+                        layer.msg("添加成功", {icon: 6});
+                        showAtRight("/module/allotGroup.html");
+                    } else {
+                        layer.close(index);
+                        layer.msg("添加失败", {icon: 6});
+                        showAtRight("/module/allotGroup.html");
+                    }
+                }
+            })
+        })
+    }
+</script>
+

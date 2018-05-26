@@ -18,8 +18,8 @@
                height="264px"
                poster="http://vjs.zencdn.net/v/oceans.png" data-setup="{}">
             <#list files as file>
-                <source src="http://vjs.zencdn.net/v/oceans.mp4" type='video/mp4'/>
-            <#--<source src="${file.fileName}" type='video/mp4'>-->
+                <#--<source src="http://vjs.zencdn.net/v/oceans.mp4" type='video/mp4'/>-->
+            <source src="${file.fileName}" type='video/mp4'>
             </#list>
 
             <p class="vjs-no-js">

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ public class ViewController {
     public String showOneArticle(@PathVariable("id") Integer id, Model model) {
 
         Article article = articleMapper.selectByPrimaryKey(id);
-        // TODO: 18-5-15 待补充
+        // TODO: 视频播放目前只支持mp3,mp4格式
         List<String> fileType = Arrays.asList("mp3", "mp4");
         WebFileExample webFileExample = new WebFileExample();
         webFileExample.or().andFileArticleIdEqualTo(article.getArticleId()).andFileTypeIn(fileType);

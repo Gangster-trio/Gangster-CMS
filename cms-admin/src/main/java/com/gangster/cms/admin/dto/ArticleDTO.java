@@ -2,9 +2,6 @@ package com.gangster.cms.admin.dto;
 
 import com.gangster.cms.common.pojo.Article;
 
-import java.util.Date;
-
-// TODO: 2018/4/15 改为封装
 public class ArticleDTO extends Article {
     private String categoryName;
 

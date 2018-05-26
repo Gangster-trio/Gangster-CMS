@@ -1,0 +1,59 @@
+<script src="/layui/layui.all.js" type="text/javascript"></script>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>添加用户组</legend>
+</fieldset>
+<div>
+    <form class="layui-form" id="addGroup">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户组名:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="groupName" name="groupName" required lay-verify="required" placeholder="用户组名"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户组描述:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="groupDesc" name="groupDesc" required lay-verify="required" placeholder="用户组描述"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button lay-submit class="layui-btn" lay-filter="btn">立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    var form = layui.form;
+    form.render();
+    form.on('submit(btn)', function () {
+        var groupName = document.getElementById("groupName").value;
+        var groupDesc = document.getElementById("groupDesc").value;
+        console.log(groupName);
+        $.ajax({
+            url: "/groupL/add",
+            type: 'post',
+            async: false,
+            datatype: 'json',
+            contentType: "application/json",
+            data: JSON.stringify({
+                "groupName": groupName,
+                "groupDesc": groupDesc
+            }),
+            success: function (data) {
+                console.log(data);
+                if (data.code === 0) {
+                    layui.layer.msg("增加成功", {icon: 6});
+                    showAtRight("/module/listGroup.html");
+                } else {
+                    layui.layer.msg("增加失败", {icon: 5});
+                    showAtRight("/module/listGroup.html");
+                }
+            }
+        });
+    });
+</script>

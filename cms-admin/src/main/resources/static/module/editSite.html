@@ -14,15 +14,15 @@
             </div>
         </div>
 
-        <!--TODO: skin choose-->
         <div class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
-            <div class="layui-input-block">
-                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-                <!--单选框name 为控件名，value是提交到服务器的值-->
-                <input type="radio" name="siteSkin" value="default" title="默认" checked="checked">
+            <div class="layui-input-inline">
+                <input type="text" name="siteSkin" id="siteSkin" required="required" lay-verify="required"
+                       placeholder="请输入皮肤名称" autocomplete="off"
+                       class="layui-input">
             </div>
         </div>
+
 
         <div id="show" class="layui-form-item">
             <label class="layui-form-label">站点网址</label>
@@ -106,6 +106,7 @@
             async: false,
             success: function (data) {
                 $("#siteName").val(data.siteName);
+                $("#siteSkin").val(data.siteSkin);
                 $("#siteUrl").val(data.siteUrl);
                 $("#siteDesc").val(data.siteDesc);
             }

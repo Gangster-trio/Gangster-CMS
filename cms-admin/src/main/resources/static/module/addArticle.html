@@ -242,7 +242,7 @@
             formData = $("#addArticleForm").serializeObject();
             $.ajax({
                 type: "POST",
-                url: "/article/save",
+                url: "/article/add",
                 data: JSON.stringify(formData),
                 async: false,
                 contentType: "application/json",

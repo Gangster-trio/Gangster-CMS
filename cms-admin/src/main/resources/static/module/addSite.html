@@ -12,14 +12,12 @@
                        class="layui-input">
             </div>
         </div>
-
-        <!--TODO: skin choose-->
         <div class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
-            <div class="layui-input-block">
-                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-                <!--单选框name 为控件名，value是提交到服务器的值-->
-                <input type="radio" name="siteSkin" value="default" title="默认" checked="checked">
+            <div class="layui-input-inline">
+                <input type="text" name="siteSkin" id="siteSkin" required="required" lay-verify="required"
+                       placeholder="请输入皮肤名称" autocomplete="off"
+                       class="layui-input">
             </div>
         </div>
 
@@ -33,7 +31,7 @@
             </div>
         </div>
 
-        <label style="margin-left: 25px;margin-top: 40px">上传主题tar.gz包</label>
+        <label style="margin-left: 25px;margin-top: 40px">上传主题</label>
         <div style="margin-left: 110px" class="layui-upload">
             <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择主题包</button>
             <button type="button" class="layui-btn" id="upload-file">开始上传</button>

@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -40,7 +42,55 @@ public class FileUploadService {
     @Autowired
     private SkinMapper skinMapper;
 
-    public String uploadFile(Integer id, MultipartFile uploadFile) {
+
+    /**
+     * 保存文章的文件
+     */
+    public String saveArticleFile(Integer articleId, MultipartFile file) {
+        Map<String, Object> map = uploadFile(file);
+        Article article = articleService.selectByPrimaryKey(articleId);
+        String virtualPath = (String) map.get("virtualPath");
+        WebFile webFile = new WebFile(virtualPath, new Date(), 0, (String) map.get("suffix"), (String) map.get("fileSize"), articleId, article.getArticleSiteId(), article.getArticleCategoryId());
+        try {
+            webFileService.insert(webFile);
+        } catch (Exception e) {
+            LOGGER.error("插入数据库时失败");
+            e.printStackTrace();
+        }
+        return virtualPath;
+    }
+
+    public String saveOtherFile(MultipartFile file) {
+        Map<String, Object> map = uploadFile(file);
+        String virtualPath = (String) map.get("virtualPath");
+        WebFile webFile = new WebFile(virtualPath, new Date(), 0, (String) map.get("suffix"), (String) map.get("fileSize"));
+        try {
+            webFileService.insert(webFile);
+        } catch (Exception e) {
+            LOGGER.error("插入数据库时失败");
+            e.printStackTrace();
+        }
+        return virtualPath;
+    }
+
+    /**
+     * 解压zip包
+     */
+    private void decompressionZIP(String zipPath) {
+        String resourcePath = settingService.get(CmsConst.RESOURCE_PATH);
+        try {
+            String skinName = ZipUtils.unZip(zipPath, resourcePath);
+            skinMapper.insert(new Skin(skinName, new Date(), null));
+            LOGGER.info("添加皮肤:{}", skinName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 通用的上传文件方法
+     */
+    private Map<String, Object> uploadFile(MultipartFile uploadFile) {
         String originFileName = uploadFile.getOriginalFilename();
         LOGGER.info("文件名为{}的文件开始上传", originFileName);
         File dir = new File(settingService.get(CmsConst.FILE_PATH));
@@ -75,41 +125,14 @@ public class FileUploadService {
                 }
             }
         }
-
-        long fileSize = uploadFile.getSize();
+        LOGGER.info("上传文件{}成功", uploadPath);
+        String fileSize = String.valueOf(uploadFile.getSize());
         String suffix = originFileName.substring(originFileName.lastIndexOf(".") + 1);
         String virtualPath = "/webfile/" + uuid + originFileName;
-        WebFile webFile = new WebFile(virtualPath, new Date(), 0, suffix, String.valueOf(fileSize));
-        if (id != null) {
-            Article article = articleService.selectByPrimaryKey(id);
-            webFile.setFileArticleId(id);
-            webFile.setFileSiteId(article.getArticleSiteId());
-            webFile.setFileCategoryId(article.getArticleCategoryId());
-        }
-        try {
-            webFileService.insert(webFile);
-        } catch (Exception e) {
-            LOGGER.error("插入数据库时失败");
-            e.printStackTrace();
-        }
-        LOGGER.info("文件名为{}的文件上传成功，对应新文件名：{}", originFileName, uploadPath);
-        if (suffix.equals("zip")) {
-            decompressionZIP(uploadPath);
-        }
-        return virtualPath;
-    }
-
-    /**
-     * 解压zip包
-     */
-    private void decompressionZIP(String zipPath) {
-        String resourcePath = settingService.get(CmsConst.RESOURCE_PATH);
-        try {
-            String skinName = ZipUtils.unZip(zipPath, resourcePath);
-            skinMapper.insert(new Skin(skinName, new Date(), null));
-            LOGGER.info("添加皮肤:{}", skinName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("virtualPath", virtualPath);
+        map.put("suffix", suffix);
+        map.put("fileSize", fileSize);
+        return map;
     }
 }

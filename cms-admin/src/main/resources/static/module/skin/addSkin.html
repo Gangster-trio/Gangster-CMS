@@ -1,0 +1,43 @@
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>添加皮肤</legend>
+</fieldset>
+
+<div class="site-text site-block">
+    <form class="layui-form">
+        <label style="margin-left: 25px;margin-top: 40px">上传主题</label>
+        <div style="margin-left: 110px" class="layui-upload">
+            <button type="button" class="layui-btn layui-btn-normal" id="choose-skin">选择主题包</button>
+            <button type="button" class="layui-btn" id="upload-skin">开始上传</button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use('upload', function () {
+        var upload = layui.upload;
+
+        upload.render({
+            elem: '#choose-skin'
+            , url: '/file/upload'
+            , auto: false
+            , choose: function (obj) {
+                var files = obj.pushFile();
+                obj.preview(function (index, file, result) {
+                    console.log(index);
+                });
+            }
+            , accept: 'file'
+            , size: 0
+            , multiple: true
+            , bindAction: '#upload-skin'
+            , success: function (res) {
+                layer.closeAll();
+                layer.msg("上传成功", {icon: 6});
+                showAtRight("/module/skin/listSkin.html");
+            }
+            , error: function () {
+                layer.alert("上传发生错误");
+            }
+        });
+
+    });
+</script>

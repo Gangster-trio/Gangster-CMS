@@ -3,7 +3,6 @@ package com.gangster.cms.admin.service.impl;
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.TagService;
-import com.gangster.cms.admin.service.WebFileService;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.ArticleMapper;
 import com.gangster.cms.dao.mapper.TagArticleMapper;
@@ -108,12 +107,12 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
             }
             tagExample.clear();
         }
-        for (WebFile webFile : fileList) {
+        fileList.forEach(webFile -> {
             webFile.setFileArticleId(article.getArticleId());
             webFile.setFileCategoryId(article.getArticleCategoryId());
             webFile.setFileSiteId(article.getArticleSiteId());
             webFileMapper.updateByPrimaryKey(webFile);
-        }
+        });
     }
 
     @Override
@@ -149,7 +148,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         WebFileExample webFileExample = new WebFileExample();
         webFileExample.or().andFileArticleIdEqualTo(articleId);
         List<WebFile> files = webFileMapper.selectByExample(webFileExample);
-        if (files != null) {
+        if (files.size() != 0) {
             webFileMapper.deleteByExample(webFileExample);
         }
         return articleMapper.deleteByPrimaryKey(articleId);

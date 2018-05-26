@@ -1,0 +1,156 @@
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="site_chart" style="width: 400px;height:300px;float: left"></div>
+<div id="article_chart" style="width: 400px;height:300px;float: left"></div>
+<div id="category_chart" style="width: 400px;height:300px;float: left"></div>
+<script type="text/javascript">
+
+    var min_count_interval = 1000 * 60 * 10;
+    const URL_COUNT = '/data/count';
+    const URL_MOST_VIEW = "/data/most_view";
+
+    function renderSiteChart(s_url, start, end, interval) {
+        $.ajax({
+            type: 'get',
+            url: URL_COUNT,
+            data: {type: 'site', cid: s_url, start: start, end: end, interval: interval},
+            dataType: 'json',
+            success: function (data) {
+                var option = getSiteCountOption(data, "一周内站点PV统计");
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('site_chart'));
+                myChart.setOption(option);
+            }
+        })
+    }
+
+    function renderArticleChart(start, end, page, limit, interval) {
+        $.ajax({
+            type: 'get',
+            url: URL_MOST_VIEW,
+            data: {type: 'article', start: start, end: end, interval: interval, page: page, limit: limit},
+            dataType: 'json',
+            success: function (data) {
+                var option = getMostViewOption(data, "一周内最常访问文章");
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('article_chart'));
+                myChart.setOption(option);
+            }
+        })
+    }
+
+    function renderCategoryChart(start, end, page, limit, interval) {
+        $.ajax({
+            type: 'get',
+            url: URL_MOST_VIEW,
+            data: {type: 'category', start: start, end: end, interval: interval, page: page, limit: limit},
+            dataType: 'json',
+            success: function (data) {
+                var option = getMostViewOption(data, "一周内最常访问目录");
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('category_chart'));
+                myChart.setOption(option);
+            }
+        })
+    }
+
+    function getSiteCountOption(dataList, title) {
+        var xdata = [];
+        var ydata = [];
+        console.log(dataList);
+        $.each(dataList.data, function (index, entry) {
+//            console.log(entry);
+            var date = new Date(entry.countTime);
+            xdata.push(date.getHours() + ":" + date.getMinutes());
+            ydata.push(entry.countPv)
+        });
+        console.log(xdata);
+        console.log(ydata);
+        return {
+            title: {
+                text: title
+            },
+            xAxis: {
+                data: xdata,
+                type:"category",
+                axisPointer:{
+                    type:"line",
+                    show:true
+                }
+            },
+            tooltip:{
+                axisPointer:{
+                    axis:'y'
+                }
+            },
+            yAxis: {},
+            series: [{
+                type: "line",
+                data: ydata,
+                smooth: true
+            }]
+        }
+    }
+
+    function getMostViewOption(list, title) {
+        var xdata = [];
+        var ydata = [];
+        console.log(list);
+        $.each(list.data, function (index, entry) {
+            console.log(entry);
+                xdata.push(entry.cid);
+                ydata.push(entry.pv);
+        });
+        console.log(xdata);
+        console.log(ydata);
+        return {
+            title: {
+                text: title
+            },
+            xAxis: {
+                data: xdata,
+                axisPointer:{
+                    type:"line",
+                    show:true
+                }
+            },
+            yAxis: {},
+            tooltip:{
+                axisPointer:{
+                    axis:'y'
+                }
+            },
+            series: [{
+                type: "bar",
+                data: ydata
+            }]
+        }
+    }
+
+    weekago = new Date().getTime() - 1000 * 60 * 60 * 24 * 7;
+    renderSiteChart(currentSite.siteUrl, weekago, 0, min_count_interval);
+    renderArticleChart(weekago, 0, 1, 10, min_count_interval);
+    renderCategoryChart(weekago, 0, 1, 10, min_count_interval);
+
+    // 指定图表的配置项和数据
+    //    var option = {
+    //        title: {
+    //            text: 'ECharts'
+    //        },
+    //        tooltip: {},
+    //        legend: {
+    //            data: ['销量']
+    //        },
+    //        xAxis: {
+    //            data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+    //        },
+    //        yAxis: {},
+    //        series: [{
+    //            name: '销量',
+    //            type: 'bar',
+    //            data: [5, 20, 36, 10, 10, 20]
+    //        }]
+    //    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    //    myChart.setOption(option);
+</script>

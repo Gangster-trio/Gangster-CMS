@@ -86,7 +86,7 @@ public class CategoryController {
     }
 
     @SystemControllerLog(description = "添加栏目")
-    //TODO: 一会save,一会add,搞不清.需修改 @Yoke
+    //TODO: 一会save,一会add,搞不清.需修改 @Yoke  200 已改
     @PostMapping("/add")
     public MessageDto add(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody Category category) {
         if (!contentWebService.addCategory(user, category)) {
@@ -97,7 +97,7 @@ public class CategoryController {
     }
 
     @SystemControllerLog(description = "批量删除")
-    @PostMapping("delete/batch")
+    @PostMapping("/delete/batch")
     public MessageDto batchDelete(String categoryIdData) {
         if (!contentWebService.deleteCategories(categoryIdData)) {
             LOGGER.error("批量删除id组： {}失败", categoryIdData);
@@ -115,5 +115,4 @@ public class CategoryController {
         }
         return MessageDto.success(null);
     }
-
 }
