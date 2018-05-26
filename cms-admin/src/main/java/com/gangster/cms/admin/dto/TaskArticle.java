@@ -70,6 +70,9 @@ public class TaskArticle implements Serializable {
     }
 
     public TaskArticle(Article article) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = format.format(article.getArticleReleaseTime());
+        setReleasetime(date);
         setArticleId(article.getArticleId());
         setArticleTitle(article.getArticleTitle());
         setArticleType(article.getArticleType());

@@ -97,6 +97,7 @@ public class ContentWebService {
 //        article.setArticleSiteId(siteId);
 //        article.setArticleStatus(CmsConst.REVIEW);
 
+
         //如果文章没有设置皮肤,默认为站点的皮肤.  @Bigmeng.
         if (article.getArticleSkin() == null) {
             article.setArticleSkin(site.getSiteSkin());

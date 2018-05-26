@@ -1,4 +1,6 @@
 <button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="add">定时发布文章</button>
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="batchDelete" data-type="batchDelete">批量删除
+</button>
 <div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
     <p>定时发布文章</p>
 </div>
@@ -54,6 +56,44 @@
             if (judgePrivilege(siteId)) {
                 showAtRight('/module/addTimedTaskArticle.html')
             }
+        });
+
+        var $ = layui.$, active = {
+            batchDelete: function () { // 获取选中的数据
+                var checkStatus = table.checkStatus('article_table')
+                    , data = checkStatus.data;
+                var articleIdData = "";
+                var boo = 0;
+                for (var i = 0, len = data.length; i < len; i++) {
+                    if (boo === 0) {
+                        articleIdData += data[i].articleId;
+                        boo = 1;
+                    } else {
+                        articleIdData += "," + data[i].articleId;
+                    }
+                }
+                $.ajax({
+                    type: 'post',
+                    url: '/task/batchDeleting',
+                    data: {
+                        "articleIdData": articleIdData
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code === 0) {
+                            layer.msg("删除成功", {icon: 6});
+                            console.log("删除成功");
+                            showAtRight("module/listTimedTask.html");
+                        } else if (data.code === 1) {
+                            layer.msg("删除失败", {icon: 5});
+                        }
+                    }
+                });
+            }
+        };
+        $('#batchDelete').on('click', function () { // 添加按钮点击事件
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
         });
 
         //给文章添加基本的事件
