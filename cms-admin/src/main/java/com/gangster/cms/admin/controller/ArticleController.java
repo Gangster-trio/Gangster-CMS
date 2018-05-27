@@ -7,9 +7,7 @@ import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.ArticleDTO;
 import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.service.web.ContentWebService;
-import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Article;
-import com.gangster.cms.common.pojo.User;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
@@ -37,8 +35,8 @@ public class ArticleController {
 
     @SystemControllerLog(description = "列出所有的文章")
     @GetMapping("/list")
-    public AjaxData list(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        PageInfo<Article> pageInfo = contentWebService.listArticle(user, siteId, page, limit);
+    public AjaxData list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        PageInfo<Article> pageInfo = contentWebService.listArticle(page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
         }
@@ -47,8 +45,8 @@ public class ArticleController {
 
     @SystemControllerLog(description = "列出待审核的文章")
     @GetMapping("/list/uncheck")
-    public AjaxData listCheck(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        PageInfo<Article> pageInfo = contentWebService.listCheckArticle(user, siteId, page, limit);
+    public AjaxData listCheck(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        PageInfo<Article> pageInfo = contentWebService.listCheckArticle(siteId, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
         }

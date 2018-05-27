@@ -1,9 +1,8 @@
 package com.gangster.cms.dao.mapper;
 
-import java.util.List;
-
 import com.gangster.cms.common.pojo.SurveyTopic;
 import com.gangster.cms.common.pojo.SurveyTopicExample;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface SurveyTopicMapper {

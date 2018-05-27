@@ -24,13 +24,6 @@ public class SurveyPage implements Serializable {
         this.pageSiteId = pageSiteId;
     }
 
-    public SurveyPage(String pageTitle, Date pageCreateTime, Date pageEndTime, Integer pageSiteId) {
-        this.pageTitle = pageTitle;
-        this.pageCreateTime = pageCreateTime;
-        this.pageEndTime = pageEndTime;
-        this.pageSiteId = pageSiteId;
-    }
-
     public SurveyPage() {
         super();
     }

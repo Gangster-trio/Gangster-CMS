@@ -29,8 +29,6 @@ public class UserController {
     private UserConcreteService userConcreteService;
     @Autowired
     private GroupConcreteService groupConcreteService;
-    @Autowired
-    private GroupService groupService;
 
     /**
      * 添加用户
@@ -174,6 +172,7 @@ public class UserController {
     @SystemControllerLog(description = "向用户组中添加用户")
     @GetMapping("/addGroupToUse/{GroupId}/{UserId}")
     @ResponseBody
+    // TODO: 5/27/18 sdsdf
     public Integer addGroupToUser(@PathVariable("GroupId") Integer groupId, @PathVariable("UserId") Integer userId) {
         List<Group> groupList = groupService.selectByUserId(userId);
         for (Group i : groupList) {

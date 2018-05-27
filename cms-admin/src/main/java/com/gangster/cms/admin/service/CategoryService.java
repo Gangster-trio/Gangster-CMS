@@ -1,7 +1,7 @@
 package com.gangster.cms.admin.service;
 
 import com.gangster.cms.admin.base.BaseService;
-import com.gangster.cms.common.pojo.CategoryTree;
+import com.gangster.cms.common.dto.CategoryTree;
 import com.gangster.cms.common.pojo.Category;
 import com.gangster.cms.common.pojo.CategoryExample;
 

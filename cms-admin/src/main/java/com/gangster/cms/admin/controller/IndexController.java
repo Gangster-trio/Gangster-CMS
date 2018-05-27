@@ -73,7 +73,6 @@ public class IndexController {
 
         List<CmsMail> mailList = cmsMailService.selectByExample(cmsMailExample);
         // 将当前登录网站为list的第一个
-        GroupController.refresh();
         modelAndView.addObject("moduleTreeList", listModule(moduleExample));
         modelAndView.addObject("mailTotalNum", mailList == null ? 0 : mailList.size());
         modelAndView.addObject("siteList", siteList);

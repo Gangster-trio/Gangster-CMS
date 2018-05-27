@@ -28,10 +28,12 @@
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
+
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.gangster.cms.dao.mapper"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
+
         <table schema="db_cms"
                tableName="cms_article"
                domainObjectName="Article"
@@ -43,7 +45,8 @@
                selectByExampleQueryId="true">
             <generatedKey column="article_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
-     <!--   <table tableName="cms_category"
+
+        <table tableName="cms_category"
                schema="db_cms"
                domainObjectName="Category"
                enableCountByExample="true"
@@ -54,6 +57,7 @@
                selectByExampleQueryId="true">
             <generatedKey column="category_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
+
         <table tableName="cms_group"
                schema="db_cms"
                domainObjectName="Group"
@@ -65,6 +69,7 @@
                selectByExampleQueryId="true">
             <generatedKey column="group_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
+
         <table tableName="cms_module"
                schema="db_cms"
                domainObjectName="Module"
@@ -76,6 +81,7 @@
                selectByExampleQueryId="true">
             <generatedKey column="module_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
+
         <table tableName="cms_permission"
                schema="db_cms"
                domainObjectName="Permission"
@@ -87,6 +93,7 @@
                selectByExampleQueryId="true">
             <generatedKey column="permission_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
+
         <table tableName="cms_site"
                schema="db_cms"
                domainObjectName="Site"
@@ -98,6 +105,7 @@
                selectByExampleQueryId="true">
             <generatedKey column="site_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
+
         <table tableName="cms_tag"
                schema="db_cms"
                domainObjectName="Tag"
@@ -109,6 +117,7 @@
                selectByExampleQueryId="true">
             <generatedKey column="tag_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
+
         <table tableName="cms_user"
                schema="db_cms"
                domainObjectName="User"
@@ -120,16 +129,7 @@
                selectByExampleQueryId="true">
             <generatedKey column="user_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
-        <table tableName="group_permission"
-               schema="db_cms"
-               domainObjectName="GroupPermission"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-        </table>
+
         <table tableName="tag_article"
                schema="db_cms"
                domainObjectName="TagArticle"
@@ -140,16 +140,7 @@
                enableSelectByPrimaryKey="true"
                selectByExampleQueryId="true">
         </table>
-        <table tableName="user_group"
-               schema="db_cms"
-               domainObjectName="UserGroup"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-        </table>
+
         <table tableName="cms_sys"
                schema="db_cms"
                domainObjectName="SettingEntry"
@@ -159,6 +150,7 @@
                enableDeleteByPrimaryKey="true"
                enableSelectByPrimaryKey="true">
         </table>
+
         <table tableName="cms_skin"
                schema="db_cms"
                domainObjectName="Skin"
@@ -168,6 +160,7 @@
                enableUpdateByPrimaryKey="true"
                enableInsert="true">
         </table>
+
         <table tableName="cms_log"
                schema="db_cms"
                domainObjectName="LogEntry"
@@ -177,6 +170,7 @@
                enableDeleteByExample="true"
                enableSelectByExample="true">
         </table>
+
         <table tableName="cms_count"
                schema="db_cms"
                domainObjectName="CountEntry"
@@ -189,6 +183,7 @@
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
         </table>
+
         <table tableName="cms_survey_page"
                schema="db_cms"
                domainObjectName="SurveyPage"
@@ -202,6 +197,7 @@
                enableUpdateByPrimaryKey="true">
             <generatedKey column="page_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
+
         <table tableName="cms_survey_option"
                schema="db_cms"
                domainObjectName="SurveyOption"
@@ -255,7 +251,21 @@
                enableUpdateByExample="true"
                enableUpdateByPrimaryKey="true">
             <generatedKey column="mail_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>-->
+        </table>
+
+        <table tableName="cms_file"
+               schema="db_cms"
+               domainObjectName="WebFile"
+               enableCountByExample="true"
+               enableDeleteByExample="true"
+               enableDeleteByPrimaryKey="true"
+               enableInsert="true"
+               enableSelectByExample="true"
+               enableSelectByPrimaryKey="true"
+               enableUpdateByExample="true"
+               enableUpdateByPrimaryKey="true">
+            <generatedKey column="file_id" sqlStatement="Mysql" identity="true" type="post"/>
+        </table>
 
     </context>
 </generatorConfiguration>

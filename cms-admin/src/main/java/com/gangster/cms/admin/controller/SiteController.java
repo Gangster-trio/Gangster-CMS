@@ -37,8 +37,8 @@ public class SiteController {
 
     @SystemControllerLog(description = "添加站")
     @PostMapping("/add")
-    public MessageDto add(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody Site site) {
-        if (contentWebService.addSite(user, site)) {
+    public MessageDto add(@RequestBody Site site) {
+        if (contentWebService.addSite(site)) {
             return MessageDto.success(null);
         }
         return MessageDto.fail(1, "添加站失败");

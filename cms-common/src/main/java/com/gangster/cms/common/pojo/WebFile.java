@@ -36,25 +36,6 @@ public class WebFile implements Serializable {
         this.fileCategoryId = fileCategoryId;
     }
 
-    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId, Integer fileSiteId, Integer fileCategoryId) {
-        this.fileName = fileName;
-        this.fileCreated = fileCreated;
-        this.fileDownCount = fileDownCount;
-        this.fileType = fileType;
-        this.fileSize = fileSize;
-        this.fileArticleId = fileArticleId;
-        this.fileSiteId = fileSiteId;
-        this.fileCategoryId = fileCategoryId;
-    }
-
-    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize) {
-        this.fileName = fileName;
-        this.fileCreated = fileCreated;
-        this.fileDownCount = fileDownCount;
-        this.fileType = fileType;
-        this.fileSize = fileSize;
-    }
-
     public WebFile() {
         super();
     }

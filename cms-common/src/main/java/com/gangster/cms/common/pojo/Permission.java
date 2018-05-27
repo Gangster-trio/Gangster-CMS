@@ -5,16 +5,19 @@ import java.io.Serializable;
 public class Permission implements Serializable {
     private Integer permissionId;
 
-    private String permissionName;
+    private Integer moduleId;
 
-    private String permissionDesc;
+    private Integer siteId;
+
+    private Integer userId;
 
     private static final long serialVersionUID = 1L;
 
-    public Permission(Integer permissionId, String permissionName, String permissionDesc) {
+    public Permission(Integer permissionId, Integer moduleId, Integer siteId, Integer userId) {
         this.permissionId = permissionId;
-        this.permissionName = permissionName;
-        this.permissionDesc = permissionDesc;
+        this.moduleId = moduleId;
+        this.siteId = siteId;
+        this.userId = userId;
     }
 
     public Permission() {
@@ -29,20 +32,28 @@ public class Permission implements Serializable {
         this.permissionId = permissionId;
     }
 
-    public String getPermissionName() {
-        return permissionName;
+    public Integer getModuleId() {
+        return moduleId;
     }
 
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName == null ? null : permissionName.trim();
+    public void setModuleId(Integer moduleId) {
+        this.moduleId = moduleId;
     }
 
-    public String getPermissionDesc() {
-        return permissionDesc;
+    public Integer getSiteId() {
+        return siteId;
     }
 
-    public void setPermissionDesc(String permissionDesc) {
-        this.permissionDesc = permissionDesc == null ? null : permissionDesc.trim();
+    public void setSiteId(Integer siteId) {
+        this.siteId = siteId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -58,8 +69,9 @@ public class Permission implements Serializable {
         }
         Permission other = (Permission) that;
         return (this.getPermissionId() == null ? other.getPermissionId() == null : this.getPermissionId().equals(other.getPermissionId()))
-            && (this.getPermissionName() == null ? other.getPermissionName() == null : this.getPermissionName().equals(other.getPermissionName()))
-            && (this.getPermissionDesc() == null ? other.getPermissionDesc() == null : this.getPermissionDesc().equals(other.getPermissionDesc()));
+            && (this.getModuleId() == null ? other.getModuleId() == null : this.getModuleId().equals(other.getModuleId()))
+            && (this.getSiteId() == null ? other.getSiteId() == null : this.getSiteId().equals(other.getSiteId()))
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()));
     }
 
     @Override
@@ -67,8 +79,9 @@ public class Permission implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getPermissionId() == null) ? 0 : getPermissionId().hashCode());
-        result = prime * result + ((getPermissionName() == null) ? 0 : getPermissionName().hashCode());
-        result = prime * result + ((getPermissionDesc() == null) ? 0 : getPermissionDesc().hashCode());
+        result = prime * result + ((getModuleId() == null) ? 0 : getModuleId().hashCode());
+        result = prime * result + ((getSiteId() == null) ? 0 : getSiteId().hashCode());
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
         return result;
     }
 
@@ -79,8 +92,9 @@ public class Permission implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", permissionId=").append(permissionId);
-        sb.append(", permissionName=").append(permissionName);
-        sb.append(", permissionDesc=").append(permissionDesc);
+        sb.append(", moduleId=").append(moduleId);
+        sb.append(", siteId=").append(siteId);
+        sb.append(", userId=").append(userId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

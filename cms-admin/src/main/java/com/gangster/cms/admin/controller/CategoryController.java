@@ -7,8 +7,8 @@ import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.service.web.ContentWebService;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Category;
-import com.gangster.cms.common.pojo.CategoryTree;
-import com.gangster.cms.common.pojo.CategoryWithParent;
+import com.gangster.cms.common.dto.CategoryTree;
+import com.gangster.cms.common.dto.CategoryWithParent;
 import com.gangster.cms.common.pojo.User;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -81,6 +81,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "查看单个栏目信息")
     @GetMapping("/details/{id}")
+//    TODO:WTF
     public CategoryWithParent details(@PathVariable("id") Integer id) {
         return contentWebService.detailsCategory(id);
     }

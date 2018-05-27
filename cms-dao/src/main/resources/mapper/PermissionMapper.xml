@@ -4,8 +4,9 @@
   <resultMap id="BaseResultMap" type="com.gangster.cms.common.pojo.Permission">
     <constructor>
       <idArg column="permission_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="permission_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="permission_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="module_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="site_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    permission_id, permission_name, permission_desc
+    permission_id, module_id, site_id, user_id
   </sql>
   <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.PermissionExample" resultMap="BaseResultMap">
     select
@@ -104,8 +105,10 @@
     <selectKey keyProperty="permissionId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into cms_permission (permission_name, permission_desc)
-    values (#{permissionName,jdbcType=VARCHAR}, #{permissionDesc,jdbcType=VARCHAR})
+    insert into cms_permission (module_id, site_id, user_id
+      )
+    values (#{moduleId,jdbcType=INTEGER}, #{siteId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.Permission">
     <selectKey keyProperty="permissionId" order="AFTER" resultType="java.lang.Integer">
@@ -113,19 +116,25 @@
     </selectKey>
     insert into cms_permission
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="permissionName != null">
-        permission_name,
+      <if test="moduleId != null">
+        module_id,
       </if>
-      <if test="permissionDesc != null">
-        permission_desc,
+      <if test="siteId != null">
+        site_id,
+      </if>
+      <if test="userId != null">
+        user_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="permissionName != null">
-        #{permissionName,jdbcType=VARCHAR},
+      <if test="moduleId != null">
+        #{moduleId,jdbcType=INTEGER},
       </if>
-      <if test="permissionDesc != null">
-        #{permissionDesc,jdbcType=VARCHAR},
+      <if test="siteId != null">
+        #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -141,11 +150,14 @@
       <if test="record.permissionId != null">
         permission_id = #{record.permissionId,jdbcType=INTEGER},
       </if>
-      <if test="record.permissionName != null">
-        permission_name = #{record.permissionName,jdbcType=VARCHAR},
+      <if test="record.moduleId != null">
+        module_id = #{record.moduleId,jdbcType=INTEGER},
       </if>
-      <if test="record.permissionDesc != null">
-        permission_desc = #{record.permissionDesc,jdbcType=VARCHAR},
+      <if test="record.siteId != null">
+        site_id = #{record.siteId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -155,8 +167,9 @@
   <update id="updateByExample" parameterType="map">
     update cms_permission
     set permission_id = #{record.permissionId,jdbcType=INTEGER},
-      permission_name = #{record.permissionName,jdbcType=VARCHAR},
-      permission_desc = #{record.permissionDesc,jdbcType=VARCHAR}
+      module_id = #{record.moduleId,jdbcType=INTEGER},
+      site_id = #{record.siteId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -164,19 +177,23 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.gangster.cms.common.pojo.Permission">
     update cms_permission
     <set>
-      <if test="permissionName != null">
-        permission_name = #{permissionName,jdbcType=VARCHAR},
+      <if test="moduleId != null">
+        module_id = #{moduleId,jdbcType=INTEGER},
       </if>
-      <if test="permissionDesc != null">
-        permission_desc = #{permissionDesc,jdbcType=VARCHAR},
+      <if test="siteId != null">
+        site_id = #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
       </if>
     </set>
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.gangster.cms.common.pojo.Permission">
     update cms_permission
-    set permission_name = #{permissionName,jdbcType=VARCHAR},
-      permission_desc = #{permissionDesc,jdbcType=VARCHAR}
+    set module_id = #{moduleId,jdbcType=INTEGER},
+      site_id = #{siteId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER}
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </update>
 </mapper>

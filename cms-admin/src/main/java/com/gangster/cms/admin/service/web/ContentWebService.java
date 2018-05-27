@@ -1,13 +1,12 @@
 package com.gangster.cms.admin.service.web;
 
 import com.gangster.cms.admin.dto.ArticleDTO;
-import com.gangster.cms.admin.exception.UserNotFoundException;
 import com.gangster.cms.admin.service.*;
 import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
-import com.gangster.cms.common.pojo.Module;
+import com.gangster.cms.common.dto.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -23,7 +22,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.gangster.cms.admin.util.PermissionUtil.getAllPermittedCategory;
 
 /**
  * @author Yoke
@@ -40,65 +38,45 @@ public class ContentWebService {
 
     private final SiteService siteService;
 
-    private final PermissionService permissionService;
-    private final ModuleService moduleService;
-    private final UserService userService;
     private final WebFileService webFileService;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
 
     @Autowired
-    public ContentWebService(CategoryService categoryService, ArticleService articleService, SettingService settingService, TagService tagService, SiteService siteService, PermissionService permissionService, ModuleService moduleService, UserService userService, WebFileService webFileService) {
+    public ContentWebService(CategoryService categoryService
+            , ArticleService articleService
+            , SettingService settingService
+            , TagService tagService
+            , SiteService siteService
+            , WebFileService webFileService) {
         this.categoryService = categoryService;
         this.articleService = articleService;
         this.settingService = settingService;
         this.tagService = tagService;
         this.siteService = siteService;
-        this.permissionService = permissionService;
-        this.moduleService = moduleService;
-        this.userService = userService;
         this.webFileService = webFileService;
     }
 
-    public PageInfo<Article> listArticle(User user, Integer siteId, Integer page, Integer limit) {
+    public PageInfo<Article> listArticle(Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
-        ArticleExample.Criteria criteria = articleExample.createCriteria();
-        if (user.getUserIsAdmin()) {
-            criteria.andArticleSiteIdEqualTo(siteId);
-        } else {
-            List<Integer> categoryList = getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_READ);
-            criteria.andArticleCategoryIdIn(categoryList);
-        }
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
 
 
-    public PageInfo<Article> listCheckArticle(User user, Integer siteId, Integer page, Integer limit) {
+    public PageInfo<Article> listCheckArticle(Integer siteId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
-        if (user.getUserIsAdmin()) {
-            articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleStatusEqualTo(CmsConst.REVIEW);
-        } else {
-            List<Integer> categoryList = PermissionUtil.getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_READ);
-            articleExample.or().andArticleIdIn(categoryList).andArticleStatusEqualTo(CmsConst.REVIEW);
-        }
+        articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleStatusEqualTo(CmsConst.REVIEW);
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
 
 
     public boolean addArticle(ArticleDTO articleDTO) {
-//        Category category = categoryService.selectByPrimaryKey(articleDTO.getArticle().getArticleCategoryId());
-//        Integer siteId = category.getCategorySiteId();
         Article article = articleDTO.getArticle();
         Integer siteId = article.getArticleSiteId();
         Site site = siteService.selectByPrimaryKey(siteId);
 
-//        article.setArticleCreateTime(new Date());
-//        article.setArticleSiteId(siteId);
-//        article.setArticleStatus(CmsConst.REVIEW);
-
-
-        //如果文章没有设置皮肤,默认为站点的皮肤.  @Bigmeng.
+        // 如果文章没有设置皮肤,默认为站点的皮肤.
         if (article.getArticleSkin() == null) {
             article.setArticleSkin(site.getSiteSkin());
         }
@@ -250,28 +228,16 @@ public class ContentWebService {
 
     public PageInfo<Category> listCategory(User user, Integer siteId, Integer page, Integer limit) {
         CategoryExample categoryExample = new CategoryExample();
-        if (user.getUserIsAdmin()) {
-            categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
-        } else {
-            List<Integer> categoryIdList = getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_READ);
-            if (categoryIdList.isEmpty()) {
-                return null;
-            }
-            categoryExample.or().andCategoryIdIn(categoryIdList).andCategoryLevelNotEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
-        }
+        categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
     }
 
     public PageInfo<Category> listCheckCategory(User user, Integer siteId, Integer page, Integer limit) {
         CategoryExample categoryExample = new CategoryExample();
-        CategoryExample.Criteria criteria = categoryExample.createCriteria();
-        if (!user.getUserIsAdmin()) {
-            List<Integer> categoryIds = PermissionUtil.getAllPermittedCategory(user.getUserId(), siteId, CmsConst.PERMISSION_WRITE);
-            criteria.andCategoryIdIn(categoryIds);
-        }
-        criteria.andCategorySiteIdEqualTo(siteId).andCategoryStatusEqualTo(CmsConst.REVIEW);
+        categoryExample.or()
+                .andCategorySiteIdEqualTo(siteId)
+                .andCategoryStatusEqualTo(CmsConst.REVIEW);
 
-//        categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryStatusEqualTo(CmsConst.REVIEW);
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
     }
 
@@ -283,7 +249,14 @@ public class ContentWebService {
         List<Category> list = categoryService.selectByExample(categoryExample);
         // 如果list为空，就创建以CATEGORY_ROOT_LEVEL为根节点的栏目树
         if (list.size() == 0) {
-            Category category = new Category(CmsConst.CATEGORY_ROOT_NAME, new Date(), CmsConst.CATEGORY_ROOT_LEVEL, siteId, CmsConst.ACCESS, "root Category");
+            Category category = new Category();
+            category.setCategoryTitle(CmsConst.CATEGORY_ROOT_NAME);
+            category.setCategoryCreateTime(new Date());
+            category.setCategoryLevel(CmsConst.CATEGORY_ROOT_LEVEL);
+            category.setCategorySiteId(siteId);
+            category.setCategoryStatus(CmsConst.ACCESS);
+            category.setCategoryDesc("root Category");
+
             categoryService.insert(category);
             LOGGER.info("在网站id为:{}下添加栏目:{}", siteId, category);
             CategoryTree tree = new CategoryTree();
@@ -361,6 +334,7 @@ public class ContentWebService {
             return null;
         }
         Category categoryParent = categoryService.selectByPrimaryKey(category.getCategoryParentId());
+        //TODO: rewrite
         return new CategoryWithParent(categoryParent.getCategoryTitle(), category);
     }
 
@@ -369,13 +343,6 @@ public class ContentWebService {
     public boolean addCategory(User user, Category category) {
         ModuleExample moduleExample = new ModuleExample();
         moduleExample.or().andModuleNameEqualTo("栏目管理");
-        Module module = moduleService.selectByExample(moduleExample).get(0);
-        if (!(user.getUserIsAdmin() || PermissionUtil.permittedModule(user.getUserId(), category.getCategorySiteId(), module.getModuleId(), CmsConst.PERMISSION_WRITE))) {
-            return false;
-        }
-
-//         前端设置了
-//         category.setCategoryCreateTime(new Date());
 
         //默认为站点的皮肤
         Site site = siteService.selectByPrimaryKey(category.getCategorySiteId());
@@ -397,21 +364,7 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
-        try {
-            if (!user.getUserIsAdmin()) {
-                UserExample userExample = new UserExample();
-                userExample.or().andUserNameEqualTo(CmsConst.ADMIN);
-                User root = userService.selectByExample(userExample).get(0);
-                permissionService.addCategoryPermissionToUser(root.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
-                permissionService.addCategoryPermissionToUser(root.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
-            }
-            permissionService.addCategoryPermissionToUser(user.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_READ);
-            permissionService.addCategoryPermissionToUser(user.getUserId(), category.getCategorySiteId(), category.getCategoryId(), CmsConst.PERMISSION_WRITE);
-        } catch (UserNotFoundException e) {
-            LOGGER.error("插入权限出错:{}", e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
+
         return true;
     }
 
@@ -458,18 +411,9 @@ public class ContentWebService {
     }
 
 
-    public boolean addSite(User user, Site site) {
+    public boolean addSite(Site site) {
         site.setSiteCreateTime(new Date());
         site.setSiteStatus(CmsConst.REVIEW);
-        try {
-            siteService.insert(site);
-            permissionService.addUserToSite(user.getUserId(), site.getSiteId());
-        } catch (Exception e) {
-            LOGGER.error("插入站点发生错误{}", e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-        PermissionUtil.flush(user.getUserId());
         return true;
     }
 

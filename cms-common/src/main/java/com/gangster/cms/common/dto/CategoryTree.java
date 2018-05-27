@@ -1,10 +1,7 @@
-package com.gangster.cms.common.pojo;
+package com.gangster.cms.common.dto;
 
 import java.util.List;
 
-/**
- * Create by Yoke on 2018/1/30
- */
 public class CategoryTree {
     private Integer id;
     private String name;
@@ -53,4 +50,3 @@ public class CategoryTree {
         this.children = children;
     }
 }
-

@@ -13,15 +13,6 @@ public class SurveyOption implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public SurveyOption(String optionContent, Integer topicId) {
-        this.optionContent = optionContent;
-        this.topicId = topicId;
-    }
-
-    public SurveyOption(String optionContent) {
-        this.optionContent = optionContent;
-    }
-
     public SurveyOption(Integer optionId, String optionContent, Integer topicId, Integer optionCount) {
         this.optionId = optionId;
         this.optionContent = optionContent;

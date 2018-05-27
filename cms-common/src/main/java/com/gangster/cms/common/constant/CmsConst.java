@@ -46,11 +46,8 @@ public class CmsConst {
     public static final String SKIN_PATH_SETTING = "skin_path";
 
     public static final String PIC_PATH_SETTING = "pic_path";
+
     public static final String FILE_PATH = "file_path";
-
-    public static final String PERMISSION_READ = "READ";
-
-    public static final String PERMISSION_WRITE = "WRITE";
 
     public static final String LOG_ERR = "error";
 
