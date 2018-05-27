@@ -6,10 +6,15 @@ import com.gangster.cms.common.pojo.UserExample;
 
 public interface UserService extends BaseService<User, UserExample> {
 <<<<<<< HEAD
+<<<<<<< HEAD
 //    void deleteUser(Integer userId) throws UserNotFoundException, GroupNotFountException;
 =======
     void deleteUser(Integer userId) ;
 >>>>>>> b4033db... delete Group
+=======
+
+    void deleteUser(Integer userId);
+>>>>>>> 58ba39c7549c4cfa3c6dc85cffc5a02d20f11881
 
     int createUser(User user);
 
