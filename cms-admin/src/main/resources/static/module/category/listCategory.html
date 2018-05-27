@@ -60,7 +60,6 @@
                                 deleteCategory(categoryId);
                                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                                 layer.close(index);
-                                console.log("删除成功");
                                 showAtRight("/module/category/listCategory.html");
                             }
                         )
@@ -163,6 +162,7 @@
                 },
                 success: function (data) {
                     if (data.code === 0) {
+                        alert("成功");
                         layer.msg("delete success.")
                     } else if (data.code === 1) {
                         layer.msg("delete false");

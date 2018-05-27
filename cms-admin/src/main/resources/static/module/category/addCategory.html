@@ -15,12 +15,11 @@
         <div class="layui-form-item">
             <label class="layui-form-label">自定义顺序</label>
             <div class="layui-input-inline">
-                <input type="text" name="categoryOrder" required="" lay-verify="required|number"
+                <input type="text" id="categoryOrder" name="categoryOrder" required="" lay-verify="required|number"
                        placeholder="自定义顺序" autocomplete="off" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">辅助文字</div>
         </div>
-
         <label class="layui-form-label">栏目类型</label>
         <select id="categoryType" name="categoryType" lay-ignore style="margin-left:0px;width:166px;height:36px">
             <option style="padding-left: 50px" value="主页目录">主页目录</option>
@@ -47,6 +46,7 @@
                        class="layui-input" readonly="readonly"/>
             </div>
         </div>
+        <!--todo 是否放到主页上,没有效果-->
         <div class="layui-form-item">
             <label class="layui-form-label">是否放到首页</label>
             <div class="layui-input-block">

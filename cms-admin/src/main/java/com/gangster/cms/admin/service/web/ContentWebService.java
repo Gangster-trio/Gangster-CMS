@@ -7,7 +7,6 @@ import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
-import com.gangster.cms.common.pojo.Module;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -92,12 +91,6 @@ public class ContentWebService {
         Article article = articleDTO.getArticle();
         Integer siteId = article.getArticleSiteId();
         Site site = siteService.selectByPrimaryKey(siteId);
-
-//        article.setArticleCreateTime(new Date());
-//        article.setArticleSiteId(siteId);
-//        article.setArticleStatus(CmsConst.REVIEW);
-
-
         //如果文章没有设置皮肤,默认为站点的皮肤.  @Bigmeng.
         if (article.getArticleSkin() == null) {
             article.setArticleSkin(site.getSiteSkin());
@@ -114,6 +107,7 @@ public class ContentWebService {
                 files = webFileService.selectByExample(webFileExample);
             }
             articleService.insertSelectiveWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
+            LOGGER.info("添加文章{}成功", article);
         } catch (Exception e) {
             LOGGER.error("添加文章{}失败,错误原因{}", articleDTO, e.getMessage());
             e.printStackTrace();
@@ -168,7 +162,7 @@ public class ContentWebService {
             return false;
         }
         try {
-            articleService.deleteArticleWithTagsAndFiles(articleId);
+            articleService.deleteArticleWithTagAndFile(articleId);
         } catch (Exception e) {
             LOGGER.error("删除id为{}的文章发生{}错误", articleId, e.getMessage());
             e.printStackTrace();
@@ -196,19 +190,21 @@ public class ContentWebService {
 
 
     public boolean updateArticle(Integer articleId, ArticleDTO articleDTO) {
-        Article article = articleDTO.getArticle();
-
         Article oldArticle = articleService.selectByPrimaryKey(articleId);
         if (null == oldArticle) {
             LOGGER.info("没有找到id为{}的文章", articleId);
             return false;
         }
-
-        article.setArticleId(articleId);
-        article.setArticleStatus(CmsConst.REVIEW);
-        article.setArticleUpdateTime(new Date());
         try {
-            articleService.updateByPrimaryKeySelective(article);
+            List<String> fileNames;
+            List<WebFile> files = null;
+            if (!articleDTO.getFiles().equals("")) {
+                fileNames = Arrays.asList(articleDTO.getFiles().split(","));
+                WebFileExample webFileExample = new WebFileExample();
+                webFileExample.or().andFileNameIn(fileNames);
+                files = webFileService.selectByExample(webFileExample);
+            }
+            articleService.updateSelectWithTagAndFile(articleId, articleDTO.getArticle(), Arrays.asList(articleDTO.getTags().split(",")), files);
         } catch (Exception e) {
             LOGGER.error("更新id为{}的文章发生错误{}", articleId, e.getMessage());
             e.printStackTrace();
@@ -221,7 +217,7 @@ public class ContentWebService {
     public boolean deleteArticles(String articleIdList) {
         if (!StringUtil.isNullOrEmpty(articleIdList)) {
             String[] articleIds = articleIdList.split(",");
-            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagsAndFiles(Integer.parseInt(e)));
+            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagAndFile(Integer.parseInt(e)));
             return true;
         } else {
             return false;
@@ -326,7 +322,7 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
-
+        LOGGER.info("删除栏目{}成功", category);
         PermissionUtil.flush(user.getUserId());
         return true;
     }
@@ -373,10 +369,6 @@ public class ContentWebService {
         if (!(user.getUserIsAdmin() || PermissionUtil.permittedModule(user.getUserId(), category.getCategorySiteId(), module.getModuleId(), CmsConst.PERMISSION_WRITE))) {
             return false;
         }
-
-//         前端设置了
-//         category.setCategoryCreateTime(new Date());
-
         //默认为站点的皮肤
         Site site = siteService.selectByPrimaryKey(category.getCategorySiteId());
         if (category.getCategorySkin().isEmpty()) {
@@ -397,6 +389,7 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("添加栏目{}成功", category);
         try {
             if (!user.getUserIsAdmin()) {
                 UserExample userExample = new UserExample();

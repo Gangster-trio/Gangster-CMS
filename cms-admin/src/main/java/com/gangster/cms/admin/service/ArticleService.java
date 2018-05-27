@@ -18,17 +18,21 @@ public interface ArticleService extends BaseService<Article, ArticleExample> {
 
     List<Article> selectArticleByReleaseStatus(Boolean releaseStatus);
 
-    int insertWithTag(Article article, List<String> tagNameList, List<WebFile> fileList);
+    /**
+     * 插入文章,对应标签和文件表
+     */
+    void insertSelectiveWithTagAndFile(Article article, List<String> tagNameList, List<WebFile> files);
 
-    int insertSelectiveWithTagAndFile(Article article, List<String> tagNameList, List<WebFile> fileList);
+    /**
+     * 更新文章，包括标签和文件
+     */
+    void updateSelectWithTagAndFile(Integer articleId, Article article, List<String> tagNameList, List<WebFile> files);
 
     /**
      * 根据文章id删除文章。同时会删除中间表，以及tag表 如果只有tag表只关联该文章，就删除tag表，如果有多个，不删
      *
      * @param articleId 文章id
-     * @return
      */
-//    int deleteArticleWithTags(Integer articleId);
 
-    int deleteArticleWithTagsAndFiles(Integer articleId);
+    void deleteArticleWithTagAndFile(Integer articleId);
 }

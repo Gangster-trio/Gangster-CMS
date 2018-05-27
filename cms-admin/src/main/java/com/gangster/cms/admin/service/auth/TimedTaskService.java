@@ -178,7 +178,7 @@ public class TimedTaskService {
     public boolean deleteArticles(String articleIdList) {
         if (!StringUtil.isNullOrEmpty(articleIdList)) {
             String[] articleIds = articleIdList.split(",");
-            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagsAndFiles(Integer.parseInt(e)));
+            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagAndFile(Integer.parseInt(e)));
             return true;
         } else {
             return false;
