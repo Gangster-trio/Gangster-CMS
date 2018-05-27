@@ -6,12 +6,9 @@ import com.gangster.cms.admin.service.GroupService;
 import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.common.pojo.CategoryTree;
 import com.gangster.cms.admin.service.CategoryService;
-import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.CategoryMapper;
-import com.gangster.cms.dao.mapper.GroupPermissionMapper;
-import com.gangster.cms.dao.mapper.PermissionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +50,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
     }
 
     @Override
-    public int deleteCategoryInfo(Integer siteId, Integer categoryId) {
+    public void deleteCategoryInfo(Integer siteId, Integer categoryId) {
         int count = 0;
         // 权限无法级联删除
         List<Group> groups = groupService.selectByExample(new GroupExample());
@@ -64,14 +61,13 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
         // 数据库级联删除，以下代码可忽略
         articleService
                 .selectArticleByCategoryId(categoryId)
-                .forEach(a -> articleService.deleteArticleWithTagsAndFiles(a.getArticleId()));
+                .forEach(a -> articleService.deleteArticleWithTagAndFile(a.getArticleId()));
 
-        count += categoryMapper.deleteByPrimaryKey(categoryId);
-        return count;
+        categoryMapper.deleteByPrimaryKey(categoryId);
     }
 
     @Override
-    public int deleteBatchCategoryInfo(String categoryIdStr) {
+    public void deleteBatchCategoryInfo(String categoryIdStr) {
         String[] categoryIds = categoryIdStr.split(",");
         int count = 0;
 
@@ -84,12 +80,10 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
         Integer siteId = selectByPrimaryKey(categoryIdList.get(0)).getCategorySiteId();
         try {
             for (Integer categoryId : categoryIdList) {
-                count += deleteCategoryInfo(siteId, categoryId);
+                deleteCategoryInfo(siteId, categoryId);
             }
         } catch (Exception e) {
             LOGGER.info("批量删除栏目时发生错误");
-            return 0;
         }
-        return count;
     }
 }

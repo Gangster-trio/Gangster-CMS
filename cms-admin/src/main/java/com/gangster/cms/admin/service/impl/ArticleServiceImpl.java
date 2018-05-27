@@ -3,14 +3,18 @@ package com.gangster.cms.admin.service.impl;
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.TagService;
+import com.gangster.cms.admin.util.DeleteFileUtil;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.ArticleMapper;
+import com.gangster.cms.dao.mapper.SettingEntryMapper;
 import com.gangster.cms.dao.mapper.TagArticleMapper;
 import com.gangster.cms.dao.mapper.WebFileMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +31,8 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
     TagArticleMapper tagArticleMapper;
     @Autowired
     private WebFileMapper webFileMapper;
+    @Autowired
+    private SettingEntryMapper settingEntryMapper;
 
     private List<Integer> selectArticlesIdByTagName(String tag) {
         TagExample tagExample = new TagExample();
@@ -70,21 +76,33 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
 
     @Override
     @Transactional
-    public int insertWithTag(Article article, List<String> tagList, List<WebFile> fileList) {
-        int ret = insert(article);
-        insertTagArticle(article, tagList, fileList);
-        return ret;
+    public void insertSelectiveWithTagAndFile(Article article, List<String> tagList, List<WebFile> fileList) {
+        insertSelective(article);
+        insertTagAndFile(article, tagList, fileList);
     }
 
     @Override
-    @Transactional
-    public int insertSelectiveWithTagAndFile(Article article, List<String> tagList, List<WebFile> fileList) {
-        int ret = insertSelective(article);
-        insertTagArticle(article, tagList, fileList);
-        return ret;
+    public void updateSelectWithTagAndFile(Integer articleId, Article article, List<String> tagNameList, List<WebFile> files) {
+        // 先删掉中间表,然后再添加中间表
+        try {
+            TagArticleExample tagArticleExample = new TagArticleExample();
+            tagArticleExample.or().andArticleIdEqualTo(articleId);
+            tagArticleMapper.deleteByExample(tagArticleExample);
+
+            article.setArticleId(articleId);
+            article.setArticleStatus(CmsConst.REVIEW);
+            article.setArticleUpdateTime(new Date());
+            insertTagAndFile(article, tagNameList, files);
+            updateByPrimaryKeyWithBLOBs(article);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void insertTagArticle(Article article, List<String> tagList, List<WebFile> fileList) {
+    /**
+     * 对给定的文章，插入对应的标签和文章
+     */
+    private void insertTagAndFile(Article article, List<String> tagList, List<WebFile> fileList) {
         TagExample tagExample = new TagExample();
         for (String tag : tagList) {
             tagExample.or().andTagNameEqualTo(tag);
@@ -139,25 +157,9 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         return articleMapper.selectByExample(articleExample);
     }
 
-//    @Override
-//    public int deleteArticleWithTags(Integer articleId) {
-//        TagArticleExample tagArticleExample = new TagArticleExample();
-//        tagArticleExample.or().andArticleIdEqualTo(articleId);
-//        List<TagArticle> list = tagArticleMapper.selectByExample(tagArticleExample);   //得到要删除文章的所有标签
-//        tagArticleMapper.deleteByExample(tagArticleExample);   //删除中间表
-//        for (TagArticle tagArticle : list) {
-//            TagExample tagExample = new TagExample();
-//            tagExample.or().andTagIdEqualTo(tagArticle.getTagId());
-//            long count = tagService.countByExample(tagExample);
-//            if (count == 1) {
-//                tagService.deleteByPrimaryKey(tagArticle.getTagId());
-//            }
-//        }
-//        return articleMapper.deleteByPrimaryKey(articleId);
-//    }
 
     @Override
-    public int deleteArticleWithTagsAndFiles(Integer articleId) {
+    public void deleteArticleWithTagAndFile(Integer articleId) {
         TagArticleExample tagArticleExample = new TagArticleExample();
         tagArticleExample.or().andArticleIdEqualTo(articleId);
         List<TagArticle> list = tagArticleMapper.selectByExample(tagArticleExample);   //得到要删除文章的所有标签
@@ -173,10 +175,10 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         // 删除文章上传的文件
         WebFileExample webFileExample = new WebFileExample();
         webFileExample.or().andFileArticleIdEqualTo(articleId);
-        List<WebFile> files = webFileMapper.selectByExample(webFileExample);
-        if (files.size() != 0) {
-            webFileMapper.deleteByExample(webFileExample);
-        }
-        return articleMapper.deleteByPrimaryKey(articleId);
+        webFileMapper.selectByExample(webFileExample).stream().map(e ->
+                settingEntryMapper.selectByPrimaryKey(CmsConst.FILE_PATH).getSysValue() + e.getFileName().split("/")[2])
+                .forEach(realFilePath -> DeleteFileUtil.deleteDir(new File(realFilePath)));
+        webFileMapper.deleteByExample(webFileExample);
+        articleMapper.deleteByPrimaryKey(articleId);
     }
 }
