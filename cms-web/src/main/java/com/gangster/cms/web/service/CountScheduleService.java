@@ -1,5 +1,6 @@
 package com.gangster.cms.web.service;
 
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.CountEntry;
 import com.gangster.cms.dao.mapper.CountEntryMapper;
 import org.slf4j.Logger;
@@ -16,8 +17,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CountScheduleService {
     private final static Logger logger = LoggerFactory.getLogger(CountScheduleService.class);
 
-    private final static long ONE_MINUTE = 60 * 1000;
-    private final static long countInterval = ONE_MINUTE * 10;
+//    private final static long ONE_MINUTE = 60 * 1000;
+//    private final static long countInterval = ONE_MINUTE * 10;
+    private static final Integer countInterval = CmsConst.COUNT_INTERVAL;
 
     private static final ConcurrentHashMap<String, ConcurrentHashMap<String, AtomicInteger>> PVCount = new ConcurrentHashMap<>();
 
@@ -58,7 +60,7 @@ public class CountScheduleService {
         entry.setCountCid(id);
         entry.setCountTime(Calendar.getInstance().getTimeInMillis());
         entry.setCountPv(count.get());
-        entry.setCountInterval((int) countInterval);
+        entry.setCountInterval(countInterval);
         countEntryMapper.insert(entry);
         logger.debug("flush count entry:{}", entry);
     }

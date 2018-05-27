@@ -85,5 +85,7 @@ public class CmsConst {
     //存为 草稿
     public static final Integer MAIL_FLAG_DRAFT = 2;
 
+    public static final Integer COUNT_INTERVAL = 60 * 1000 * 10;
+
 
 }
