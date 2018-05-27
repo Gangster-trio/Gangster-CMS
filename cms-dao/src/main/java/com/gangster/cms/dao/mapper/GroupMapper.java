@@ -1,7 +1,5 @@
 package com.gangster.cms.dao.mapper;
 
-import com.gangster.cms.common.pojo.Group;
-import com.gangster.cms.common.pojo.GroupExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

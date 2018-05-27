@@ -1,15 +1,10 @@
 package com.gangster.cms.admin.service.auth;
 
-import com.gangster.cms.admin.exception.GroupNotFountException;
-import com.gangster.cms.admin.exception.UserNotFoundException;
-import com.gangster.cms.admin.service.GroupService;
 import com.gangster.cms.admin.service.UserService;
-import com.gangster.cms.common.pojo.Group;
 import com.gangster.cms.common.pojo.User;
 import com.gangster.cms.common.pojo.UserExample;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +22,7 @@ public class UserConcreteService {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private GroupService groupService;
 
-    public Boolean index() {
-        Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("id");
-        List<Group> group = groupService.selectByUserId(userId);
-        for (Group i : group) {
-            if (i.getGroupName().equals("admin")) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * 添加一名新用户
@@ -81,14 +64,8 @@ public class UserConcreteService {
      */
     public boolean deleteSingleUser(Integer userId) {
         if (userService.selectByPrimaryKey(userId) != null) {
-            try {
                 userService.deleteUser(userId);
                 return true;
-            } catch (UserNotFoundException e) {
-                logger.error("++++++++++++++++++++++++++++用户为找到+++++++++++++++++++++++++");
-            } catch (GroupNotFountException e) {
-                logger.error("++++++++++++++++++++++++++++++++++用户组为空++++++++++++++++++++++++++++++++++");
-            }
         }
         return false;
     }
