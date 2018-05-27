@@ -13,27 +13,24 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
 
     @Autowired
     private UserMapper userMapper;
-    @Autowired
 
     private static final String ADMIN = "admin";
-/*
+
+    /*
+        @Override
+        public void deleteUser(Integer userId) {
+            deleteByPrimaryKey(userId);
+        }
+
+     */
     @Override
-    public void deleteUser(Integer userId) throws UserNotFoundException {
-        //delete user's own group
-        Group group = groupService.findUserOwnGroup(userId);
-        groupService.deleteGroup(group.getGroupId());
-        //delete user-group map
-        UserGroupExample userGroupExample = new UserGroupExample();
-        userGroupExample.or().andUserIdEqualTo(userId);
-        userGroupMapper.deleteByExample(userGroupExample);
-
-        //delete user
-        deleteByPrimaryKey(userId);
-    }
-
- */   @Override
     public int insert(User user) {
         return createUser(user);
+    }
+
+    @Override
+    public void deleteUser(Integer userId) {
+
     }
 
     @Override
@@ -54,4 +51,5 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
         userGroupMapper.insert(userGroup);
         return ret;
     }*/
+
 }

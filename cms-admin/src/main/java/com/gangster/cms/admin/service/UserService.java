@@ -5,7 +5,11 @@ import com.gangster.cms.common.pojo.User;
 import com.gangster.cms.common.pojo.UserExample;
 
 public interface UserService extends BaseService<User, UserExample> {
+<<<<<<< HEAD
 //    void deleteUser(Integer userId) throws UserNotFoundException, GroupNotFountException;
+=======
+    void deleteUser(Integer userId) ;
+>>>>>>> b4033db... delete Group
 
     int createUser(User user);
 
