@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Service  与用户和组有关的所有操作
+ * Service  与用户有关的所有操作
  */
 @Service
 public class UserConcreteService {

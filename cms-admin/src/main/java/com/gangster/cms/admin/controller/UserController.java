@@ -102,6 +102,5 @@ public class UserController {
     public User fingUserById(@PathVariable("UserId") Integer userId) {
         return userConcreteService.findSingleUser(userId);
     }
-
-
 }
+

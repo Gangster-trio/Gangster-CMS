@@ -35,14 +35,6 @@ public class SiteServiceImpl extends BaseServiceImpl<SiteMapper, Site, SiteExamp
                 articleService.deleteByExample(articleExample);
             }
         }
-        PermissionExample permissionExample = new PermissionExample();
-        permissionExample.or().andPermissionNameLike("Site(" + sid + ")%");
-        List<Permission> permissionList = permissionService.selectByExample(permissionExample);
-        if (permissionList != null) {
-            for (Permission p : permissionList) {
-                permissionService.deletePermission(p.getPermissionId());
-            }
-        }
         categoryService.deleteByExample(categoryExample);
         return super.deleteByPrimaryKey(sid);
     }

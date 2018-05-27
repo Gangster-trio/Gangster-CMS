@@ -5,7 +5,8 @@ import com.gangster.cms.common.pojo.User;
 import com.gangster.cms.common.pojo.UserExample;
 
 public interface UserService extends BaseService<User, UserExample> {
-    void deleteUser(Integer userId) ;
+
+    void deleteUser(Integer userId);
 
     int createUser(User user);
 

@@ -46,27 +46,21 @@
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 outerChainId = data.outerchainId;
                 if (layEvent === 'del') { //删除
-                    if (judgeSitePrivilege(siteId)) {
-                        layer.confirm('真的删除行么', function (index) {
-                                deleteOuterChain(outerChainId);
-                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                layer.close(index);
-                                console.log("删除成功");
-                                showAtRight("/module/chain/listerOuterChain.html");
-                            }
-                        )
-                    }
+                    layer.confirm('真的删除行么', function (index) {
+                            deleteOuterChain(outerChainId);
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            console.log("删除成功");
+                            showAtRight("/module/chain/listerOuterChain.html");
+                        }
+                    )
                 }
                 //编辑栏目
                 else if (layEvent === 'edit') {
-                    if (judgeSitePrivilege(siteId)) {
-                        showAtRight("/module/chain/editerOuterChain.html");
-                    }
+                    showAtRight("/module/chain/editerOuterChain.html");
                 }
                 if (layEvent === 'add') {   //跳转到添加文章界面
-                    if (judgeSitePrivilege(siteId)) {
-                        showAtRight("/module/chain/addOuterChain.html");
-                    }
+                    showAtRight("/module/chain/addOuterChain.html");
                 }
             });
         }
@@ -88,9 +82,7 @@
 
     //添加栏目的按钮注册事件
     $("#outerchain").on('click', function () {
-        if (judgeSitePrivilege(siteId)) {
-            showAtRight("/module/chain/addOuterChain.html");
-        }
+        showAtRight("/module/chain/addOuterChain.html");
     });
 
     //删除栏目的功能实现

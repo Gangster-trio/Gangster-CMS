@@ -85,13 +85,6 @@
     $(function () {
         var form = layui.form;
         form.render();
-        /*    form.on('submit(updateCategory)', function () {
-                layui.layer.alert("enter form on func");
-                updateCategory();
-                layui.layer.alert("end");
-                return false;
-            });*/
-
         //更新操作这个必须在得到数据之前执行,否则会不显示内容
         $('#categoryType').editableSelect({effects: 'fade'});
 

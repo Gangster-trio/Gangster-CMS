@@ -2,7 +2,6 @@ package com.gangster.cms.admin.controller;
 
 import com.gangster.cms.admin.service.SettingService;
 import com.gangster.cms.admin.dto.MessageDto;
-import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.SettingEntry;
 import com.gangster.cms.common.pojo.SettingEntryExample;

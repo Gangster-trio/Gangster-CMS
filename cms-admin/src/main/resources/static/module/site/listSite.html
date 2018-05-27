@@ -63,42 +63,40 @@
             if (layEvent === 'detail') {
                 showAtRight("/module/category/listCategory.html");
             }
-            if (judgeSitePrivilege(siteId)) {
-                //删除栏目信息
-                if (layEvent === 'del') { //删除
-                    layer.confirm('真的删除行么', function (index) {
-                            deleteSite(siteId);
-                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                            layer.close(index);
-                            showAtRight("/module/site/listSite.html");
+            //删除栏目信息
+            if (layEvent === 'del') { //删除
+                layer.confirm('真的删除行么', function (index) {
+                        deleteSite(siteId);
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+                        showAtRight("/module/site/listSite.html");
+                    }
+                )
+            }
+
+            //编辑栏目
+            else if (layEvent === 'edit') {
+                showAtRight("/module/site/editSite.html");
+            }
+
+            //跳转到给该栏目添加文章的界面
+            else if (layEvent === 'add') {   //跳转到添加文章界面
+                showAtRight("/module/site/addSite.html");
+            } else if (layEvent === 'share') {
+                $.get('/module/showQr.html?url=' + data.siteUrl, {}, function (str) {
+                    layer.open({
+                        type: 1,
+                        title: '网站二维码',
+                        skin: 'layui-layer-rim',
+                        closeBtn: 1,
+                        anim: 5,
+                        // area: ['300px', '350px'],
+                        content: str,
+                        success: function (layero, index) {
+                            console.log(layero, index);
                         }
-                    )
-                }
-
-                //编辑栏目
-                else if (layEvent === 'edit') {
-                    showAtRight("/module/site/editSite.html");
-                }
-
-                //跳转到给该栏目添加文章的界面
-                else if (layEvent === 'add') {   //跳转到添加文章界面
-                    showAtRight("/module/site/addSite.html");
-                } else if (layEvent === 'share') {
-                    $.get('/module/showQr.html?url=' + data.siteUrl, {}, function (str) {
-                        layer.open({
-                            type: 1,
-                            title: '网站二维码',
-                            skin: 'layui-layer-rim',
-                            closeBtn: 1,
-                            anim: 5,
-                            // area: ['300px', '350px'],
-                            content: str,
-                            success: function (layero, index) {
-                                console.log(layero, index);
-                            }
-                        });
                     });
-                }
+                });
             }
         });
 

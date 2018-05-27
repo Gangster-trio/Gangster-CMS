@@ -2,7 +2,6 @@ package com.gangster.cms.admin.service.web;
 
 import com.gangster.cms.admin.dto.ArticleDTO;
 import com.gangster.cms.admin.service.*;
-import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
@@ -146,7 +145,7 @@ public class ContentWebService {
             return false;
         }
         try {
-            articleService.deleteArticleWithTagsAndFiles(articleId);
+            articleService.deleteArticleWithTagAndFile(articleId);
         } catch (Exception e) {
             LOGGER.error("删除id为{}的文章发生{}错误", articleId, e.getMessage());
             e.printStackTrace();
@@ -199,7 +198,7 @@ public class ContentWebService {
     public boolean deleteArticles(String articleIdList) {
         if (!StringUtil.isNullOrEmpty(articleIdList)) {
             String[] articleIds = articleIdList.split(",");
-            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagsAndFiles(Integer.parseInt(e)));
+            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagAndFile(Integer.parseInt(e)));
             return true;
         } else {
             return false;
@@ -300,7 +299,6 @@ public class ContentWebService {
             return false;
         }
 
-        PermissionUtil.flush(user.getUserId());
         return true;
     }
 
@@ -401,13 +399,8 @@ public class ContentWebService {
 
     //    ------------------------------------------------网站部分------------------------------------------------------------------
     public PageInfo<Site> listSite(User user, Integer page, Integer limit) {
-        SiteExample siteExample = new SiteExample();
-        List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(user.getUserId());
-        if (siteIdList.isEmpty()) {
-            return null;
-        }
-        siteExample.or().andSiteIdIn(siteIdList);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> siteService.selectByExample(siteExample));
+
+        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> siteService.selectByExample(new SiteExample()));
     }
 
 
@@ -425,7 +418,6 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
-        PermissionUtil.flush(user.getUserId());
         return true;
     }
 

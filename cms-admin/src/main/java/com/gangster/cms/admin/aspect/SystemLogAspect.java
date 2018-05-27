@@ -42,9 +42,11 @@ public class SystemLogAspect {
 
     @Autowired
     private LogService logService;
+/*
 
     @Autowired
     private UserService userService;
+*/
 
     /**
      * Controller层切点
