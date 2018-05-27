@@ -9,7 +9,8 @@ import java.util.Map;
 
 
 class DirectiveUtil {
-    private static final DefaultObjectWrapper wrapper = new DefaultObjectWrapper(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+    private static final DefaultObjectWrapper wrapper = new DefaultObjectWrapper(
+            Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
 
     static String getRetName(String retParam, Map params) {
         return getRetName(retParam, params, retParam);

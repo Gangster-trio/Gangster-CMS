@@ -63,7 +63,10 @@ public class SiteWebService {
 
         //Get 0 level categorise in this site (displayed above the homepage of the website)
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.or().andCategorySiteIdEqualTo(site.getSiteId()).andCategoryLevelEqualTo(0);
+        categoryExample.or()
+                .andCategorySiteIdEqualTo(site.getSiteId())
+                .andCategoryLevelEqualTo(0)
+                .andCategoryStatusEqualTo(CmsConst.ACCESS);
         List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
         //Each level 0 category into category tree
         List<CategoryTree> categoryTreeList = categoryList.stream().map(categoryWebService::toTree).collect(Collectors.toList());
@@ -77,12 +80,20 @@ public class SiteWebService {
 
         //Get the list of articles to place on the homepage
         ArticleExample articleExample = new ArticleExample();
-        articleExample.or().andArticleTypeEqualTo(CmsConst.INDEX_ARTICLE_TYPE).andArticleSiteIdEqualTo(site.getSiteId());
+        articleExample.or()
+                .andArticleTypeEqualTo(CmsConst.INDEX_ARTICLE_TYPE)
+                .andArticleSiteIdEqualTo(site.getSiteId())
+                .andArticleStatusEqualTo(CmsConst.ACCESS)
+                .andArticleReleaseStatusEqualTo(true);
         List<Article> articleList = articleMapper.selectByExample(articleExample);
 
         //Get the home carousel article
         articleExample.clear();
-        articleExample.or().andArticleTypeEqualTo(CmsConst.CAROUSEL_ARTICLE_TYPE).andArticleSiteIdEqualTo(site.getSiteId());
+        articleExample.or()
+                .andArticleTypeEqualTo(CmsConst.CAROUSEL_ARTICLE_TYPE)
+                .andArticleSiteIdEqualTo(site.getSiteId())
+                .andArticleStatusEqualTo(CmsConst.ACCESS)
+                .andArticleReleaseStatusEqualTo(true);
         List<Article> carouselList = articleMapper.selectByExample(articleExample);
 
         //The default template needs the data
@@ -107,7 +118,10 @@ public class SiteWebService {
                 >
         */
         categoryExample.clear();
-        categoryExample.or().andCategoryInHomepageEqualTo(true).andCategorySiteIdEqualTo(site.getSiteId());
+        categoryExample.or()
+                .andCategoryInHomepageEqualTo(true)
+                .andCategorySiteIdEqualTo(site.getSiteId())
+                .andCategoryStatusEqualTo(CmsConst.ACCESS);
         result.getMap().putAll(categoryMapper.selectByExample(categoryExample).stream()
                 .collect(Collectors.groupingBy(Category::getCategoryType)));
 
@@ -124,7 +138,9 @@ public class SiteWebService {
         articleExample.clear();
         articleExample.or()
                 .andArticleInHomepageEqualTo(true)
-                .andArticleSiteIdEqualTo(site.getSiteId());
+                .andArticleSiteIdEqualTo(site.getSiteId())
+                .andArticleReleaseStatusEqualTo(true)
+                .andArticleStatusEqualTo(CmsConst.ACCESS);
         result.getMap()
                 .putAll(articleMapper.selectByExample(articleExample).parallelStream()
                         .collect(Collectors.groupingBy(Article::getArticleType)));

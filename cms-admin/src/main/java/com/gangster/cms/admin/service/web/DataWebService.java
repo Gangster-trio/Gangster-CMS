@@ -5,6 +5,7 @@ import com.gangster.cms.admin.service.CategoryService;
 import com.gangster.cms.admin.service.CountService;
 import com.gangster.cms.admin.service.LogService;
 import com.gangster.cms.admin.util.StringUtil;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -50,22 +51,61 @@ public class DataWebService {
                 .doSelectPageInfo(() -> logService.selectByExampleWithBLOBs(entryExample));
     }
 
-    public PageInfo<CountEntry> getCount(String type, String cid, Long start, Long end, Integer interval, Integer limit, Integer page) {
+    // interval 需要是 CmsConst.COUNT_INTERVAL 的倍数
+    public PageInfo<CountEntry> getCount(String type, String cid
+            , Long start, Long end, Integer interval
+            , Integer limit, Integer page) {
+
+        if (interval < CmsConst.COUNT_INTERVAL) {
+            return new PageInfo<>(Collections.emptyList(), 0);
+        }
+
+        if (end == null || end.equals(0L)) {
+            end = System.currentTimeMillis();
+        }
+
         CountEntryExample entryExample = new CountEntryExample();
         CountEntryExample.Criteria criteria = entryExample.or()
                 .andCountTypeEqualTo(type)
-                .andCountIntervalEqualTo(interval);
+                .andCountIntervalEqualTo(CmsConst.COUNT_INTERVAL);
+
         if (!StringUtil.isNullOrEmpty(cid)) {
             criteria.andCountCidEqualTo(cid);
         }
-        if (end == null || end.equals(0L)) {
-            criteria.andCountTimeGreaterThan(start);
-        } else {
-            criteria.andCountTimeBetween(start, end);
-        }
-        return PageHelper
+        criteria.andCountTimeBetween(start, end);
+        PageInfo<CountEntry> countEntryList = PageHelper
                 .startPage(page, limit)
                 .doSelectPageInfo(() -> countService.selectByExample(entryExample));
+
+        if (interval.equals(CmsConst.COUNT_INTERVAL)) {
+            return countEntryList;
+        }
+
+        Map<Long, List<CountEntry>> map = countEntryList.getList()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        //取整分组
+                        e -> ((e.getCountTime() - start) / interval) * interval + start
+                        , Collectors.toList()));
+        List<CountEntry> retList = new ArrayList<>();
+        map.values().forEach(
+                list -> list.stream()
+                        .collect(Collectors.groupingBy(CountEntry::getCountCid))
+                        .values()
+                        .forEach(e -> e.stream()
+                                .reduce((a, b) -> {
+                                    CountEntry c = new CountEntry();
+                                    c.setCountType(a.getCountType());
+                                    c.setCountTime(a.getCountTime());
+                                    c.setCountPv(a.getCountPv() + b.getCountPv());
+                                    c.setCountInterval(a.getCountInterval() + b.getCountInterval());
+                                    c.setCountCid(a.getCountCid());
+                                    return c;
+                                })
+                                .ifPresent(retList::add))
+        );
+
+        return new PageInfo<>(retList);
     }
 
     private List<CountMapEntry> getMostView(String type, Long start, Long end, Integer interval, Integer limit, Integer page) {
@@ -73,7 +113,7 @@ public class DataWebService {
         CountEntryExample.Criteria criteria = entryExample.or();
         if (!StringUtil.isNullOrEmpty(type))
             criteria.andCountTypeEqualTo(type);
-        if (start == null || start.equals(0L))
+        if (start == null)
             start = 0L;
         if (end == null || end.equals(0L))
             criteria.andCountTimeGreaterThan(start);
@@ -84,6 +124,14 @@ public class DataWebService {
                 .doSelectPageInfo(() -> countService.selectByExample(entryExample));
         return info.getList().stream()
                 .map(e -> new CountMapEntry(e.getCountCid(), e.getCountPv()))
+                .collect(Collectors.groupingBy(CountMapEntry::getCid))
+                .values()
+                .stream()
+                .map(
+                        e -> e.stream().reduce((a, b) ->
+                                new CountMapEntry(a.cid, a.pv + b.pv))
+                                .orElseGet(() -> new CountMapEntry("", 0))
+                )
                 .sorted(Comparator.comparing(e -> e.pv))
                 .collect(Collectors.toList());
     }
@@ -91,7 +139,6 @@ public class DataWebService {
 
     public List getArticleMostView(Long start, Long end, Integer interval, Integer limit, Integer page) {
         List<CountMapEntry> list = getMostView("article", start, end, interval, limit, page);
-        List<Map.Entry<String, Integer>> newList = new ArrayList<>();
 
         List<Integer> idList = list.stream()
                 .map(e -> Integer.parseInt(e.cid))
@@ -135,25 +182,6 @@ public class DataWebService {
         list.forEach(e -> e.cid = map.get(Integer.parseInt(e.cid)));
         return list;
     }
-
-//    public void addrCount(Long start, Long end) {
-//        if (end.equals(0L)) {
-//            end = Calendar.getInstance().getTimeInMillis();
-//        }
-//        LogEntryExample entryExample = new LogEntryExample();
-//        entryExample.or().andLogTimeBetween(new Date(start), new Date(end));
-//        List<LogEntry> logEntries = logService.selectByExampleWithBLOBs(entryExample);
-//        logEntries.stream().map(e -> {
-//            try {
-//                Map map =new ObjectMapper().readValue(e.getLogInfo(), Map.class);
-//                return map.get("addr");
-//            } catch (IOException e1) {
-//                e1.printStackTrace();
-//                return null;
-//            }
-//        })
-//
-//    }
 
     class CountMapEntry {
         private String cid;

@@ -1,7 +1,13 @@
 package com.gangster.cms.web.directive;
 
+import com.gangster.cms.common.constant.CmsConst;
+import com.gangster.cms.common.pojo.Article;
+import com.gangster.cms.common.pojo.ArticleExample;
+import com.gangster.cms.dao.mapper.ArticleMapper;
 import freemarker.core.Environment;
 import freemarker.template.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +20,8 @@ public class ArticleDirective implements TemplateDirectiveModel {
     private static final String PARAM_BLOB = "blob";
     private static final String PARAM_RET = "ret";
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(ArticleDirective.class);
+
     private final ArticleMapper articleMapper;
 
     @Autowired
@@ -22,7 +30,9 @@ public class ArticleDirective implements TemplateDirectiveModel {
     }
 
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException {
+    public void execute(Environment env, Map params, TemplateModel[] loopVars
+            , TemplateDirectiveBody body) throws TemplateException {
+
         Integer id = DirectiveUtil.getInteger(PARAM_ID, params);
         Boolean blob = DirectiveUtil.getBoolean(PARAM_BLOB, params);
 
@@ -36,7 +46,11 @@ public class ArticleDirective implements TemplateDirectiveModel {
 
         Article article = null;
         ArticleExample example = new ArticleExample();
-        example.or().andArticleIdEqualTo(id);
+        example.or()
+                .andArticleIdEqualTo(id)
+                .andArticleReleaseStatusEqualTo(true)
+                .andArticleStatusEqualTo(CmsConst.ACCESS);
+
         if (blob) {
             List<Article> articleList = articleMapper.selectByExampleWithBLOBs(example);
             if (!articleList.isEmpty()) {
@@ -47,6 +61,10 @@ public class ArticleDirective implements TemplateDirectiveModel {
             if (!articles.isEmpty()) {
                 article = articles.get(0);
             }
+        }
+
+        if (article == null) {
+            LOGGER.error("id为 {} 的文章不存在！", id);
         }
 
         DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());

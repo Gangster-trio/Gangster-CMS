@@ -23,7 +23,9 @@ public class CategoryDirective implements TemplateDirectiveModel {
     }
 
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException {
+    public void execute(Environment env, Map params, TemplateModel[] loopVars
+            , TemplateDirectiveBody body) throws TemplateException {
+
         Integer id = DirectiveUtil.getInteger(PARAM_ID, params);
 
         if (id == null) {
@@ -31,6 +33,7 @@ public class CategoryDirective implements TemplateDirectiveModel {
         }
 
         DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());
-        env.setVariable(DirectiveUtil.getRetName(PARAM_RET, params, PARAM_RET), builder.build().wrap(categoryMapper.selectByPrimaryKey(id)));
+        env.setVariable(DirectiveUtil.getRetName(PARAM_RET, params, PARAM_RET)
+                , builder.build().wrap(categoryMapper.selectByPrimaryKey(id)));
     }
 }

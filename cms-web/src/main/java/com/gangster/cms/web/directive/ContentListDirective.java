@@ -1,5 +1,9 @@
 package com.gangster.cms.web.directive;
 
+import com.gangster.cms.common.constant.CmsConst;
+import com.gangster.cms.common.pojo.Article;
+import com.gangster.cms.common.pojo.ArticleExample;
+import com.gangster.cms.dao.mapper.ArticleMapper;
 import com.github.pagehelper.PageHelper;
 import freemarker.core.Environment;
 import freemarker.template.*;
@@ -38,7 +42,9 @@ public class ContentListDirective implements TemplateDirectiveModel {
     }
 
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
+    public void execute(Environment env
+            , Map params, TemplateModel[] loopVars
+            , TemplateDirectiveBody body) throws TemplateException, IOException {
         Integer categoryId = DirectiveUtil.getInteger(PARAM_CID, params);
         Integer size = DirectiveUtil.getInteger(PARAM_SIZE, params);
         Integer page = DirectiveUtil.getInteger(PARAM_PAGE, params);
@@ -62,8 +68,12 @@ public class ContentListDirective implements TemplateDirectiveModel {
 
         ArticleExample example = new ArticleExample();
         example.setOrderByClause(sort);
-        example.or().andArticleCategoryIdEqualTo(categoryId);
-        List<Article> articleList = PageHelper.startPage(page, size).doSelectPage(() -> articleMapper.selectByExample(example));
+        example.or()
+                .andArticleCategoryIdEqualTo(categoryId)
+                .andArticleStatusEqualTo(CmsConst.ACCESS)
+                .andArticleReleaseStatusEqualTo(true);
+        List<Article> articleList = PageHelper.startPage(page, size)
+                .doSelectPage(() -> articleMapper.selectByExample(example));
 
         DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());
         env.setVariable(DirectiveUtil.getRetName(PARAM_RET, params), builder.build().wrap(articleList));

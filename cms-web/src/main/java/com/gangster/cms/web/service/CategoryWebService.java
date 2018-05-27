@@ -1,5 +1,6 @@
 package com.gangster.cms.web.service;
 
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.*;
 import com.gangster.cms.web.cache.CmsCache;
@@ -49,7 +50,7 @@ public class CategoryWebService {
 
         Category category = categoryMapper.selectByPrimaryKey(id);
 
-        if (category == null) {
+        if (!category.getCategoryStaarticle.getArticleReleaseStatus() && article.getArticleStatus().equals(CmsConst.ACCESS)tus().equals(CmsConst.ACCESS)) {
             return null;
         }
 

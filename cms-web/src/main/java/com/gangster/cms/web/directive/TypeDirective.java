@@ -1,7 +1,10 @@
 package com.gangster.cms.web.directive;
 
+import com.gangster.cms.common.constant.CmsConst;
+import com.gangster.cms.common.pojo.ArticleExample;
 import com.gangster.cms.common.pojo.CategoryExample;
 import com.gangster.cms.common.pojo.Site;
+import com.gangster.cms.dao.mapper.ArticleMapper;
 import com.gangster.cms.dao.mapper.CategoryMapper;
 import com.github.pagehelper.PageHelper;
 import freemarker.core.Environment;
@@ -37,7 +40,8 @@ public class TypeDirective implements TemplateDirectiveModel {
     }
 
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
+    public void execute(Environment env, Map params, TemplateModel[] loopVars
+            , TemplateDirectiveBody body) throws TemplateException, IOException {
         String cateType = DirectiveUtil.getString(PARAM_CATEGORY_TYPE, params);
         String articleType = DirectiveUtil.getString(PARAM_ARTICLE_TYPE, params);
         String sort = DirectiveUtil.getString(PARAM_SORT, params);
@@ -68,14 +72,23 @@ public class TypeDirective implements TemplateDirectiveModel {
         List retList;
         if (cateType != null) {
             CategoryExample categoryExample = new CategoryExample();
-            categoryExample.or().andCategoryTypeEqualTo(cateType).andCategorySiteIdEqualTo(site.getSiteId());
+            categoryExample.or()
+                    .andCategoryTypeEqualTo(cateType)
+                    .andCategorySiteIdEqualTo(site.getSiteId())
+                    .andCategoryStatusEqualTo(CmsConst.ACCESS);
             categoryExample.setOrderByClause(sort);
-            retList = PageHelper.startPage(page, size).doSelectPage(() -> categoryMapper.selectByExample(categoryExample));
+            retList = PageHelper.startPage(page, size)
+                    .doSelectPage(() -> categoryMapper.selectByExample(categoryExample));
         } else {
             ArticleExample articleExample = new ArticleExample();
-            articleExample.or().andArticleTypeEqualTo(articleType).andArticleSiteIdEqualTo(site.getSiteId());
+            articleExample.or()
+                    .andArticleTypeEqualTo(articleType)
+                    .andArticleSiteIdEqualTo(site.getSiteId())
+                    .andArticleStatusEqualTo(CmsConst.ACCESS)
+                    .andArticleReleaseStatusEqualTo(true);
             articleExample.setOrderByClause(sort);
-            retList = PageHelper.startPage(page, size).doSelectPage(() -> articleMapper.selectByExample(articleExample));
+            retList = PageHelper.startPage(page, size)
+                    .doSelectPage(() -> articleMapper.selectByExample(articleExample));
         }
 
         DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());
