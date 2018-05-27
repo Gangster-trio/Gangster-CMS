@@ -1,0 +1,7 @@
+html-config:
+  templatePrefix: mould/
+  templateSuffix: html
+  storageLocation: staticHTML
+img-config:
+  saveLocation: D:/upload/
+  maxUploadSizePerFile: 100000000

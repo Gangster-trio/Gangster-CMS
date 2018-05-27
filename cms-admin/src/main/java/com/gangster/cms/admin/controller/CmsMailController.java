@@ -69,4 +69,5 @@ public class CmsMailController {
     public MessageDto detailsMail(@PathVariable("id") Integer id) {
         return MessageDto.success(mailWbeService.detailsMail(id));
     }
+
 }

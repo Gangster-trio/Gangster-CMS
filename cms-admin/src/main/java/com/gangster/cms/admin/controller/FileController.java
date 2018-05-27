@@ -13,8 +13,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,18 +41,13 @@ public class FileController {
 
     @SystemControllerLog(description = "添加文件")
     @PostMapping({"/upload/{id}", "/upload"})
-    public MessageDto uploadFile(@PathVariable(required = false) Integer id, @Param("file") MultipartFile file) {
-        String s = fileUploadService.uploadFile(id, file);
-        return MessageDto.success(s);
+    public MessageDto uploadFile(@PathVariable(required = false) Integer articleId, @Param("file") MultipartFile file) {
+        if (null == articleId) {
+            return MessageDto.success(fileUploadService.saveOtherFile(file));
+        } else {
+            return MessageDto.success(fileUploadService.saveArticleFile(articleId, file));
+        }
     }
-
-/*
-    @PostMapping("/upload")
-    public MessageDto upload(@Param("file") MultipartFile file) {
-        String s = fileUploadService.uploadFile(null, file);
-        return MessageDto.success(s);
-    }
-*/
 
     @SystemControllerLog(description = "下载文件")
     @PostMapping("/download/{id}")

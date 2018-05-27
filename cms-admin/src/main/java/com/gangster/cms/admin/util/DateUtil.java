@@ -3,6 +3,9 @@ package com.gangster.cms.admin.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 时间转化Cron Util
+ */
 public class DateUtil {
     public static String formatDateToString(Date date, String dtFormat) {
         if (date == null) {

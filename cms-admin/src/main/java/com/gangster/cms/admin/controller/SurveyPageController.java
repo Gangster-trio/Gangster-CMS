@@ -113,14 +113,7 @@ public class SurveyPageController {
             e.printStackTrace();
             return null;
         } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    LOGGER.error("关闭流出错");
-                    e.printStackTrace();
-                }
-            }
+            ArticleController.closeResource(br, LOGGER);
         }
         return wrapper;
     }

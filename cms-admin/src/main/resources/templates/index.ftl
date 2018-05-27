@@ -12,6 +12,7 @@
     <script src="/js/echarts.js"></script>
     <script src="../qrcode/jquery.qrcode.min.js"></script>
     <script src="/js/cookie.js"></script>
+    <script src="/js/content.js"></script>
     <link rel="stylesheet" href="/util/jquery-editable-select.css">
 </head>
 <body class="layui-layout-body">
@@ -34,7 +35,7 @@
                 </dl>
             </li>
             <button class="layui-btn">
-                <a class="layui-icon" href="/index?id=1">刷新权限</a>
+                <a class="layui-icon" href="/index?flush=yes">刷新权限</a>
             </button>
         </ul>
         <ul class="layui-nav layui-layout-right">
@@ -101,9 +102,6 @@
     var currentSite;
 
     function init(id, name) {
-        if (getCookie("siteId") != null) {
-            delCookie("siteId");
-        }
         siteId = id;
         setCookie("siteId", siteId);
         layer.msg("当前站点:" + name, {icon: 6});
@@ -121,5 +119,3 @@
 
     showAtRight("/module/count.html");
 </script>
-
-

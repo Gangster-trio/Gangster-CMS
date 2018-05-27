@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)http://www.bootcss.com/p/flat-ui/ -->
+<html lang="en" class="dk_fouc has-js gr__bootcss_com">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>Gangster CMS Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="/css/flat-ui.css" rel="stylesheet">
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+</head>
+
+<body data-gr-c-s-loaded="true">
+<div class="container">
+    <div class="login">
+        <div class="login-screen">
+            <div class="login-icon">
+                <img src="./Flat UI_files/icon.png" alt="Welcome to Gangster CMS">
+                <h4>Welcome to
+                    <small>Gangster CMS</small>
+                </h4>
+            </div>
+
+            <div id="login" class="login-form">
+                <div class="control-group">
+                    <input type="text" class="login-field" name="userName" placeholder="Enter your name"
+                           id="userName"
+                           data-keeper-lock-id="k-4b0gzhcz6ha">
+                    <label class="login-field-icon fui-man-16" for="userName"></label>
+                </div>
+
+                <div class="control-group">
+                    <input type="password" class="login-field" name="password" placeholder="Password"
+                           id="password"
+                           data-keeper-lock-id="k-tov40mn0ud">
+                    <label class="login-field-icon fui-lock-16" for="password"></label>
+                </div>
+
+                <a class="btn btn-primary btn-large btn-block" onclick="submit()">Login</a>
+                <a class="login-link" href="#">Lost your password?</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    function submit() {
+        $.ajax({
+            type: 'POST',
+            url: '/login',
+            // contentType: "application/json",
+            data: {
+                "userName": $("#userName").val(),
+                "password": $("#password").val()
+            },
+            success: function (data) {
+                if (data.code === 0) {
+                    window.location.href = "/index";
+                } else {
+                    alert(data.msg);
+                }
+            },
+            dataType: "json",
+            error: function (xhr, status, err) {
+                alert("can't get data.");
+            }
+        })
+    }
+</script>
+</html>

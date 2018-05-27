@@ -1,0 +1,172 @@
+<!--添加文章的按钮-->
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="batchDelete" data-type="batchDelete">
+    批量删除
+</button>
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="article">添加文章</button>
+</div>
+<div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
+    <p>文章管理</p>
+</div>
+<!--body part-->
+<table id="article_table" lay-filter="articleListFilter"></table>
+
+<script type="text/html" id="articleToolBar">
+    <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">
+            <i class="layui-icon">&#xe705;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="edit">
+            <i class="layui-icon">&#xe642;</i>
+        </button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>
+<script>
+
+    var operateCategoryId;
+    //文章表格渲染
+    var table = layui.table;
+    var first = true;
+    if (siteId) {
+        table.render({
+            elem: '#article_table'
+
+            //判断栏目是否选择，如果选择，则显示该栏目的文章，如果没选择，显示站的所有文章
+            ,
+            url: '/article/list?siteId=' + siteId
+            ,
+            page: true //开启分页
+            ,
+            cols: [[ //表头
+                {type: 'checkbox'}
+                , {field: 'articleId', title: 'ID', width: 60, sort: true}
+                , {field: 'articleTitle', width: 187, sort: true, title: '标题'}
+                , {field: 'articleType', width: 100, sort: true, title: '文章类型'}
+                , {field: 'articleAuthor', width: 100, sort: true, title: '文章作者'}
+                , {field: 'articleUrl', width: 150, title: '文章url'}
+                , {field: 'articleCreateTime', width: 110, title: '创建时间', sort: true}
+                , {field: 'articleUpdateTime', width: 110, title: '更新时间', sort: true}
+                , {field: 'articleThumb', width: 150, title: 'Thumb'}
+                , {field: 'articleStatus', width: 80, title: '状态'}
+                , {title: '操作', align: 'center', toolbar: '#articleToolBar'}
+            ]]//            数据渲染后回调
+            ,
+            limits: [10, 15, 20, 40, 80, 100]
+            ,
+            done: function (res, curr, count) {
+                if (first) {
+                    layer.msg("加载完成 共" + count + "条数据");
+                    first = false;
+                }
+            }
+        });
+
+        table.on('checkbox(articleListFilter)', function (obj) {
+            console.log(obj);
+        });
+        //给文章添加基本的事件
+        table.on('tool(articleListFilter)', function (obj) { //注：tool是工具条事件名，articleListFilter是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                console.log(data);
+                layEvent = obj.event; //获得 lay-event 对应的值
+                articleId = data.articleId;
+                categoryId = data.articleCategoryId;
+                operateCategoryId = data.articleCategoryId;
+                //显示文章的详细信息
+                if (layEvent === 'detail') {
+                }
+                //删除文章的权限判断及实现
+                if (layEvent === 'del') {
+                    if (judgePrivilege(siteId, categoryId)) {
+                        layer.confirm('真的删除行么', function (index) {
+                            $.ajax({
+                                url: "/article/delete/" + data.articleId,
+                                type: 'get',
+                                dataType: 'json',
+                                success: function (data) {
+                                    console.log(data);
+                                    if (data.code === 0) {
+                                        //删除这一行
+                                        obj.del();
+                                        //关闭弹框
+                                        layer.close(index);
+                                        layer.msg("删除成功", {icon: 6});
+                                    } else {
+                                        layer.msg("删除失败", {icon: 5});
+                                    }
+
+                                },
+                                end: function () {
+                                    showAtRight("/module/article/listArticle.html");
+                                }
+                            })
+                            ;
+                        });
+                    }
+
+                }
+                //更新文章的权限判断及实现
+                if (layEvent === 'edit') {
+                    if (judgePrivilege(siteId, categoryId)) {
+                        showAtRight("/module/article/editArticle.html");
+                    }
+                }
+            }
+        )
+        ;
+
+        // 添加复选框操作
+        var $ = layui.$, active = {
+            batchDelete: function () { // 获取选中的数据
+                var checkStatus = table.checkStatus('article_table')
+                    , data = checkStatus.data;
+                var articleIdData = "";
+                var boo = 0;
+                for (var i = 0, len = data.length; i < len; i++) {
+                    if (boo === 0) {
+                        articleIdData += data[i].articleId;
+                        boo = 1;
+                    } else {
+                        articleIdData += "," + data[i].articleId;
+                    }
+                }
+                if (judgePrivilege(siteId, categoryId)) {
+                    $.ajax({
+                        type: 'post',
+                        url: '/article/delete/batch',
+                        data: {
+                            "articleIdData": articleIdData
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            if (data.code === 0) {
+                                layer.msg("删除成功", {icon: 6});
+                                console.log("删除成功");
+                                showAtRight("/module/article/listArticle.html");
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+
+                    });
+                }
+            }
+        };
+        $('#batchDelete').on('click', function () { // 添加按钮点击事件
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    }
+
+
+    //添加文章功能
+    $("#article").on('click', function () {
+        if (judgeSitePrivilege(siteId)) {
+            showAtRight("/module/article/addArticle.html")
+        }
+    });
+</script>

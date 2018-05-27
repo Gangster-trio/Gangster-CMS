@@ -1,0 +1,140 @@
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>更新栏目</legend>
+</fieldset>
+
+<div class="site-text site-block" style="padding: 5px;">
+
+    <form id="updateCategoryForm" class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">栏目名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="categoryTitle" id="categoryTitle" required="" lay-verify="required"
+                       placeholder="请输入栏目名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">自定义顺序</label>
+            <div class="layui-input-inline">
+                <input type="text" id="categoryOrder" name="categoryOrder" required="" lay-verify="required|number"
+                       placeholder="自定义顺序" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">辅助文字</div>
+        </div>
+
+        <label class="layui-form-label">栏目类型</label>
+        <select id="categoryType" name="categoryType" lay-ignore style="margin-left:0px;width:166px;height:36px">
+            <option style="padding-left: 50px" value="主页目录">主页目录</option>
+            <option style="padding-left: 50px" value="普通目录">普通目录</option>
+        </select>
+
+        <!--TODO: skin choose-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择皮肤</label>
+            <div class="layui-input-block">
+                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
+                <!--单选框name 为控件名，value是提交到服务器的值-->
+                <input type="radio" name="categorySkin" value="default" title="默认" checked="checked">
+            </div>
+        </div>
+
+        <div id="show" class="layui-form-item">
+            <label class="layui-form-label">所属栏目</label>
+            <div class="layui-input-inline">
+                <input id="category_id" class="layui-hide" name="categoryParentId" required
+                       lay-verify="required|number">
+                <input type="text" id="belongCategory" required="required" lay-verify="required"
+                       placeholder="选择栏目"
+                       autocomplete="off"
+                       class="layui-input" readonly="readonly"/>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否放到首页</label>
+            <div class="layui-input-block">
+                <!--TODO: 更新目录时该字段的获取-->
+                <input type="radio" name="categoryInHomepage" value="true" title="是">
+                <input type="radio" name="categoryInHomepage" value="false" title="否" checked>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea id="categoryDesc" name="categoryDesc" required class="layui-textarea"
+                          placeholder="添加描述"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" onclick="update_category()" lay-submit class="layui-btn"
+                        lay-filter="updateCategory">立即提交
+                </button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+    $(function () {
+        var form = layui.form;
+        form.render();
+        /*    form.on('submit(updateCategory)', function () {
+                layui.layer.alert("enter form on func");
+                updateCategory();
+                layui.layer.alert("end");
+                return false;
+            });*/
+
+        //更新操作这个必须在得到数据之前执行,否则会不显示内容
+        $('#categoryType').editableSelect({effects: 'fade'});
+
+
+        $.ajax({
+            type: "get",
+            url: "/category/details/" + categoryId,
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $("#categoryTitle").val(data.categoryTitle);
+                $("#categoryOrder").val(data.categoryOrder);
+                $("#categoryType").val(data.categoryType);
+                $("#category_id").val(data.categoryParentId);
+                $("#categoryDesc").val(data.categoryDesc);
+                $("#belongCategory").val(data.parentName);
+                alert(data.categoryInHomepage);
+                if (data.categoryInHomepage === true) {
+                    // $("input:radio[value='true']").attr('checked', 'true');
+                    // $("input[type='radio'][name=categoryInHomepage][value='true']").attr("checked", "checked");
+                } else {
+                    // $("input:radio[value='false']").attr('checked', 'true');
+                    // $("input[type='radio'][name=categoryInHomepage][value='false']").attr("checked", "checked");
+                }
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $("#belongCategory").on('click', function () {
+        $.get('/module/category/selectCategory.html', {}, function (str) {
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-rim',
+                closeBtn: 1,
+                anim: 5,
+                area: ['300px', '350px'],
+                content: str,
+                success: function (layero, index) {
+                    console.log(layero, index);
+                }
+            });
+        });
+    });
+</script>

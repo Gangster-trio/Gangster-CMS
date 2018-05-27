@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,9 +49,8 @@ public class IndexController {
 
     @SystemControllerLog(description = "到了主界面")
     @GetMapping({"/index", "/"})
-    public ModelAndView index(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(required = false) Integer id) {
-        // TODO: 2018/4/15 待优化
-        if (id != null) {
+    public ModelAndView index(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(required = false) String flush) {
+        if (flush != null) {
             LOGGER.info("用户id为{},名字为{} 刷新权限", user.getUserId(), user.getUserName());
             PermissionUtil.flush(user.getUserId());
         }

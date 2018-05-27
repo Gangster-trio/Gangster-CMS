@@ -1,0 +1,79 @@
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>个人信息</legend>
+</fieldset>
+<div>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" disabled="disabled" name="userName" id="userName" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户电话</label>
+            <div class="layui-input-inline">
+                <input type="text" disabled="disabled" name="userPhone" id="userPhone" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" disabled="disabled" name="userEmail" id="userEmail" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户状态</label>
+            <div class="layui-input-inline">
+                <input type="text" disabled="disabled" name="userStatus" id="userStatus" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">创建时间</label>
+            <div class="layui-input-inline">
+                <input type="text" disabled="disabled" name="userCreateTime" id="userCreateTime" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属组织</label>
+            <div class="layui-input-inline">
+                <input type="text" disabled="disabled" name="userOrg" id="userOrg" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属用户组</label>
+            <div class="layui-input-inline" name="userGroup" id="userGroup">
+                <!--<input type="text" disabled="disabled" name="userGroup" />-->
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+        $(function () {
+        var form = layui.form;
+        $.ajax({
+            type: "get",
+            url: "/information/getUserId",
+            success: function (userId) {
+                $.ajax({
+                    type: "get",
+                    async: false,
+                    url: "/information/" + userId,
+                    success: function (data) {
+                        console.log(data);
+                        $("#userName").val(data.data.userName);
+                        $("#userPhone").val(data.data.userPhone);
+                        $("#userEmail").val(data.data.userEmail);
+                        $("#userStatus").val(data.data.userStatus);
+                        $("#userCreateTime").val(data.data.userCreateTime);
+                        $("#userOrg").val(data.data.userOrg);
+                        $("#userGroup").html(data.data.userGroup);
+                        form.render();
+                    }
+                })
+            }
+        });
+        })
+</script>
+<script>
+
+</script>
