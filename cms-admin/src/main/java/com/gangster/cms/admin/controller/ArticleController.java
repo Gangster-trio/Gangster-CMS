@@ -35,8 +35,8 @@ public class ArticleController {
 
     @SystemControllerLog(description = "列出所有的文章")
     @GetMapping("/list")
-    public AjaxData list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        PageInfo<Article> pageInfo = contentWebService.listArticle(page, limit);
+    public AjaxData list(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+        PageInfo<Article> pageInfo = contentWebService.listArticle(siteId, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
         }
@@ -69,11 +69,11 @@ public class ArticleController {
     @SystemControllerLog(description = "列出某个栏目的文章")
     @GetMapping("/list/category")
     public AjaxData listArticleByColumnId(
-            @RequestParam("id") Integer id,
+            @RequestParam("categoryId") Integer categoryId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit
     ) {
-        PageInfo<Article> pageInfo = contentWebService.listCategoryOfArticle(id, page, limit);
+        PageInfo<Article> pageInfo = contentWebService.listCategoryOfArticle(categoryId, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
         }

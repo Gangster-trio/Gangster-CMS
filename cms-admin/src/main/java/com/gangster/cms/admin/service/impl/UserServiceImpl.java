@@ -1,31 +1,22 @@
-/*package com.gangster.cms.admin.service.impl;
+package com.gangster.cms.admin.service.impl;
 
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
-import com.gangster.cms.admin.exception.UserNotFoundException;
-import com.gangster.cms.admin.service.GroupService;
 import com.gangster.cms.admin.service.UserService;
-import com.gangster.cms.common.pojo.*;
-import com.gangster.cms.dao.mapper.UserGroupMapper;
+import com.gangster.cms.common.pojo.User;
+import com.gangster.cms.common.pojo.UserExample;
 import com.gangster.cms.dao.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExample> implements UserService {
-    @Autowired
-    private
-    GroupService groupService;
 
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private
-    UserGroupMapper userGroupMapper;
 
     private static final String ADMIN = "admin";
-
+/*
     @Override
     public void deleteUser(Integer userId) throws UserNotFoundException {
         //delete user's own group
@@ -40,12 +31,17 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
         deleteByPrimaryKey(userId);
     }
 
-    @Override
+ */   @Override
     public int insert(User user) {
         return createUser(user);
     }
 
     @Override
+    public int createUser(User user) {
+        return 0;
+    }
+
+  /*  @Override
     public int createUser(User user) {
         user.setUserCreateTime(new Date());
         int ret = super.insert(user);
@@ -57,5 +53,5 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
         UserGroup userGroup = new UserGroup(user.getUserId(), group.getGroupId());
         userGroupMapper.insert(userGroup);
         return ret;
-    }
-}*/
+    }*/
+}

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gangster.cms.admin.annotation.SystemControllerLog;
 import com.gangster.cms.admin.service.LogService;
-import com.gangster.cms.admin.service.UserService;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.LogEntry;
 import com.gangster.cms.common.pojo.User;

@@ -4,8 +4,9 @@ import com.gangster.cms.admin.dto.ArticleDTO;
 import com.gangster.cms.admin.service.*;
 import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.constant.CmsConst;
+import com.gangster.cms.common.dto.CategoryTree;
+import com.gangster.cms.common.dto.CategoryWithParent;
 import com.gangster.cms.common.pojo.*;
-import com.gangster.cms.common.dto.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -57,8 +58,9 @@ public class ContentWebService {
         this.webFileService = webFileService;
     }
 
-    public PageInfo<Article> listArticle(Integer page, Integer limit) {
+    public PageInfo<Article> listArticle(Integer siteId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
+        articleExample.or().andArticleSiteIdEqualTo(siteId);
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
 
