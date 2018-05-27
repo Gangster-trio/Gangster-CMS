@@ -1,4 +1,4 @@
-package com.gangster.cms.admin.controller;
+/*package com.gangster.cms.admin.controller;
 
 
 import com.gangster.cms.admin.annotation.SystemControllerLog;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
+*//**
  * Controller   与用户有关的所有操作
- */
+ *//*
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -30,12 +30,12 @@ public class UserController {
     @Autowired
     private GroupConcreteService groupConcreteService;
 
-    /**
+    *//**
      * 添加用户
      *
      * @param user 用户对象(用户信息)
      * @return Message 添加用户是否成功
-     */
+     *//*
     @SystemControllerLog(description = "添加用户对象")
     @PostMapping("/add")
     @ResponseBody
@@ -46,13 +46,13 @@ public class UserController {
         return MessageDto.fail(1, "添加用户失败");
     }
 
-    /**
+    *//**
      * 修改用户信息
      *
      * @param userid 用户Id
      * @param user   原始用户信息
      * @return Message  修改用户是否成功
-     */
+     *//*
     @SystemControllerLog(description = "修改用户对象")
     @PostMapping(value = "/update/{userid}")
     @ResponseBody
@@ -63,12 +63,12 @@ public class UserController {
         return MessageDto.fail(1, "修改用户失败");
     }
 
-    /**
+    *//**
      * 删除用户
      *
      * @param userId 用户的Id
      * @return int   删除用户数量
-     */
+     *//*
     @SystemControllerLog(description = "删除用户对象")
     @GetMapping("/delete/{UserId}")
     @ResponseBody
@@ -79,13 +79,13 @@ public class UserController {
         return MessageDto.fail(1, "删除对象失败");
     }
 
-    /**
+    *//**
      * 查找所有的用户
      *
      * @param page  查找信息的页数
      * @param limit 每页所显示的条数
      * @return AjaxData 查找到的所有用户
-     */
+     *//*
     @SystemControllerLog(description = "查找用户")
     @GetMapping("/find")
     @ResponseBody
@@ -97,12 +97,12 @@ public class UserController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    /**
+    *//**
      * 通过用户Id查找用户
      *
      * @param userId 用户的Id
      * @return User 查找到的用户
-     */
+     *//*
     @SystemControllerLog(description = "查找单个用户")
     @GetMapping("/find/{UserId}")
     @ResponseBody
@@ -110,14 +110,14 @@ public class UserController {
         return userConcreteService.findSingleUser(userId);
     }
 
-    /**
+    *//**
      * 通过用户Id，查找所属于的的用户组
      *
      * @param userId 用户的Id
      * @param page   查找信息的页数
      * @param limit  每页信息的条数
      * @return AjaxData 通过用户Id，查找所属于的用户组
-     */
+     *//*
     @SystemControllerLog(description = "查找用户所属于的的用户组")
     @GetMapping("/findgroup/{UserId}")
     @ResponseBody
@@ -129,13 +129,13 @@ public class UserController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    /**
+    *//**
      * 通过用户Id和用户组Id，将用户从用户组中移出
      *
      * @param userId  用户的Id
      * @param groupId 用户组Id
      * @return int 移出用户的数量
-     */
+     *//*
     @SystemControllerLog(description = "将用户从用户组中移出")
     @ResponseBody
     @GetMapping("/deletegroup/{UserId}/{GroupId}")
@@ -146,11 +146,11 @@ public class UserController {
         return 0;
     }
 
-    /**
+    *//**
      * 查找所有的用户组
      *
      * @return AjaxData  查找到的信息
-     */
+     *//*
     @SystemControllerLog(description = "查找所有的用户组")
     @GetMapping("/findgroup")
     @ResponseBody
@@ -162,13 +162,13 @@ public class UserController {
         return new AjaxData(0, "success", groups.size(), groups);
     }
 
-    /**
+    *//**
      * 通过用户Id和用户组Id，来向用户组中添加用户
      *
      * @param groupId 用户组Id
      * @param userId  用户Id
      * @return Integer 为用户添加的角色组数量
-     */
+     *//*
     @SystemControllerLog(description = "向用户组中添加用户")
     @GetMapping("/addGroupToUse/{GroupId}/{UserId}")
     @ResponseBody
@@ -184,4 +184,4 @@ public class UserController {
             return 1;
         } else return 0;
     }
-}
+}*/

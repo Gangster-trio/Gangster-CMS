@@ -55,26 +55,20 @@
                 }
                 //删除栏目信息
                 if (layEvent === 'del') { //删除
-                    if (judgePrivilege(siteId, categoryId)) {
-                        layer.confirm('真的删除行么', function (index) {
-                                deleteCategory(categoryId);
-                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                layer.close(index);
-                                showAtRight("/module/category/listCategory.html");
-                            }
-                        )
-                    }
+                    layer.confirm('真的删除行么', function (index) {
+                            deleteCategory(categoryId);
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            showAtRight("/module/category/listCategory.html");
+                        }
+                    )
                 }
                 //编辑栏目
                 else if (layEvent === 'edit') {
-                    if (judgePrivilege(siteId, categoryId)) {
-                        showAtRight("/module/category/editCategory.html");
-                    }
+                    showAtRight("/module/category/editCategory.html");
                 }
                 if (layEvent === 'add') {   //跳转到添加文章界面
-                    if (judgeSitePrivilege(siteId)) {
-                        showAtRight("/module/category/addCategory.html");
-                    }
+                    showAtRight("/module/category/addCategory.html");
                 }
                 //跳转到给该栏目添加文章的界面
             });
@@ -145,9 +139,7 @@
 
     //添加栏目的按钮注册事件
     $("#column").on('click', function () {
-        if (judgeSitePrivilege(siteId)) {
-            showAtRight("/module/category/addCategory.html");
-        }
+        showAtRight("/module/category/addCategory.html");
     });
 
     //删除栏目的功能实现

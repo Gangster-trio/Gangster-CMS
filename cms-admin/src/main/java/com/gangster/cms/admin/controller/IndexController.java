@@ -6,7 +6,6 @@ import com.gangster.cms.admin.service.CmsMailService;
 import com.gangster.cms.admin.service.ModuleService;
 import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.admin.service.SiteService;
-import com.gangster.cms.admin.util.PermissionUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
 import org.slf4j.Logger;
@@ -14,11 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -52,7 +51,6 @@ public class IndexController {
     public ModelAndView index(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(required = false) String flush) {
         if (flush != null) {
             LOGGER.info("用户id为{},名字为{} 刷新权限", user.getUserId(), user.getUserName());
-            PermissionUtil.flush(user.getUserId());
         }
         ModelAndView modelAndView = new ModelAndView();
 
@@ -64,7 +62,7 @@ public class IndexController {
             moduleExample.or().andModuleParentIdEqualTo(ROOT_MODULE_PARENT_ID);
         }
 
-        List<Integer> siteIdList = PermissionUtil.getAllPermissionSite(user.getUserId());
+        List<Integer> siteIdList = siteService.selectByExample(new SiteExample()).stream().map(Site::getSiteId).collect(Collectors.toList());
         List<Site> siteList = siteIdList.stream().sorted(Comparator.comparingInt(val -> val)).map(i -> siteService.selectByPrimaryKey(i)).filter(Objects::nonNull).collect(Collectors.toList());
 
         // 列出当前的登陆用户未读的邮件

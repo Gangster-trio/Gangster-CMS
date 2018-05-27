@@ -1,4 +1,4 @@
-package com.gangster.cms.admin.service.impl;
+/*package com.gangster.cms.admin.service.impl;
 
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.exception.UserNotFoundException;
@@ -58,4 +58,4 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User, UserExamp
         userGroupMapper.insert(userGroup);
         return ret;
     }
-}
+}*/

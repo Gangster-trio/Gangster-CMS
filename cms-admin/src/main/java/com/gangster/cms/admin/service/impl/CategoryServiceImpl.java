@@ -2,12 +2,12 @@ package com.gangster.cms.admin.service.impl;
 
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.ArticleService;
-import com.gangster.cms.admin.service.GroupService;
-import com.gangster.cms.admin.service.PermissionService;
-import com.gangster.cms.common.pojo.CategoryTree;
 import com.gangster.cms.admin.service.CategoryService;
+import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.common.constant.CmsConst;
-import com.gangster.cms.common.pojo.*;
+import com.gangster.cms.common.dto.CategoryTree;
+import com.gangster.cms.common.pojo.Category;
+import com.gangster.cms.common.pojo.CategoryExample;
 import com.gangster.cms.dao.mapper.CategoryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
     private CategoryMapper categoryMapper;
     @Autowired
     private PermissionService permissionService;
-    @Autowired
-    private GroupService groupService;
+
     @Autowired
     private ArticleService articleService;
 
@@ -51,13 +50,6 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
 
     @Override
     public void deleteCategoryInfo(Integer siteId, Integer categoryId) {
-        int count = 0;
-        // 权限无法级联删除
-        List<Group> groups = groupService.selectByExample(new GroupExample());
-        groups.forEach(g -> {
-            permissionService.deleteGroupPermission(g.getGroupId(), siteId, categoryId, CmsConst.PERMISSION_READ);
-            permissionService.deleteGroupPermission(g.getGroupId(), siteId, categoryId, CmsConst.PERMISSION_WRITE);
-        });
         // 数据库级联删除，以下代码可忽略
         articleService
                 .selectArticleByCategoryId(categoryId)

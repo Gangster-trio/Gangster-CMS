@@ -40,6 +40,12 @@ public class WebFile implements Serializable {
         super();
     }
 
+    public WebFile(String virtualPath, Date date, int i, String suffix, String fileSize, Integer articleId, Integer articleSiteId, Integer articleCategoryId) {
+    }
+
+    public WebFile(String virtualPath, Date date, int i, String suffix, String fileSize) {
+    }
+
     public Integer getFileId() {
         return fileId;
     }

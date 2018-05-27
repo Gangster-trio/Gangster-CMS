@@ -80,39 +80,35 @@
                 }
                 //删除文章的权限判断及实现
                 if (layEvent === 'del') {
-                    if (judgePrivilege(siteId, categoryId)) {
-                        layer.confirm('真的删除行么', function (index) {
-                            $.ajax({
-                                url: "/article/delete/" + data.articleId,
-                                type: 'get',
-                                dataType: 'json',
-                                success: function (data) {
-                                    console.log(data);
-                                    if (data.code === 0) {
-                                        //删除这一行
-                                        obj.del();
-                                        //关闭弹框
-                                        layer.close(index);
-                                        layer.msg("删除成功", {icon: 6});
-                                    } else {
-                                        layer.msg("删除失败", {icon: 5});
-                                    }
-
-                                },
-                                end: function () {
-                                    showAtRight("/module/article/listArticle.html");
+                    layer.confirm('真的删除行么', function (index) {
+                        $.ajax({
+                            url: "/article/delete/" + data.articleId,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function (data) {
+                                console.log(data);
+                                if (data.code === 0) {
+                                    //删除这一行
+                                    obj.del();
+                                    //关闭弹框
+                                    layer.close(index);
+                                    layer.msg("删除成功", {icon: 6});
+                                } else {
+                                    layer.msg("删除失败", {icon: 5});
                                 }
-                            })
-                            ;
-                        });
-                    }
+
+                            },
+                            end: function () {
+                                showAtRight("/module/article/listArticle.html");
+                            }
+                        })
+                        ;
+                    });
 
                 }
                 //更新文章的权限判断及实现
                 if (layEvent === 'edit') {
-                    if (judgePrivilege(siteId, categoryId)) {
-                        showAtRight("/module/article/editArticle.html");
-                    }
+                    showAtRight("/module/article/editArticle.html");
                 }
             }
         )
@@ -133,27 +129,25 @@
                         articleIdData += "," + data[i].articleId;
                     }
                 }
-                if (judgePrivilege(siteId, categoryId)) {
-                    $.ajax({
-                        type: 'post',
-                        url: '/article/delete/batch',
-                        data: {
-                            "articleIdData": articleIdData
-                        },
-                        dataType: "json",
-                        success: function (data) {
-                            console.log(data);
-                            if (data.code === 0) {
-                                layer.msg("删除成功", {icon: 6});
-                                console.log("删除成功");
-                                showAtRight("/module/article/listArticle.html");
-                            } else {
-                                layer.msg("删除失败", {icon: 5});
-                            }
+                $.ajax({
+                    type: 'post',
+                    url: '/article/delete/batch',
+                    data: {
+                        "articleIdData": articleIdData
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        if (data.code === 0) {
+                            layer.msg("删除成功", {icon: 6});
+                            console.log("删除成功");
+                            showAtRight("/module/article/listArticle.html");
+                        } else {
+                            layer.msg("删除失败", {icon: 5});
                         }
+                    }
 
-                    });
-                }
+                });
             }
         };
         $('#batchDelete').on('click', function () { // 添加按钮点击事件
@@ -165,8 +159,6 @@
 
     //添加文章功能
     $("#article").on('click', function () {
-        if (judgeSitePrivilege(siteId)) {
-            showAtRight("/module/article/addArticle.html")
-        }
+        showAtRight("/module/article/addArticle.html")
     });
 </script>

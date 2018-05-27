@@ -46,13 +46,30 @@
                 categoryId = data.categoryId;   //得到当前点击的栏目id
                 //查看栏目的详细信息
                 if (layEvent === 'access') {
-                    if (judgeadmin()) {
-                        layer.confirm('真的要通过吗?', function (index) {
+                    layer.confirm('真的要通过吗?', function (index) {
+                        layer.close(index);
+                        $.ajax({
+                            type: 'get',
+                            url: '/category/check/' + data.categoryId,
+                            data: {'judge': 1},
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.code === 0) {
+                                    obj.del();
+                                    layer.msg(data.msg, {icon: 6});
+                                } else if (data.code === 1) {
+                                    layer.msg(data.msg, {icon: 5});
+                                }
+                            }
+                        });
+                    });
+                    if (layEvent === 'deny') {
+                        layer.confirm('确定不通过吗?', function (index) {
                             layer.close(index);
                             $.ajax({
                                 type: 'get',
                                 url: '/category/check/' + data.categoryId,
-                                data: {'judge': 1},
+                                data: {'judge': 2},
                                 dataType: "json",
                                 success: function (data) {
                                     if (data.code === 0) {
@@ -64,27 +81,6 @@
                                 }
                             });
                         });
-                        if (layEvent === 'deny') {
-                            layer.confirm('确定不通过吗?', function (index) {
-                                layer.close(index);
-                                $.ajax({
-                                    type: 'get',
-                                    url: '/category/check/' + data.categoryId,
-                                    data: {'judge': 2},
-                                    dataType: "json",
-                                    success: function (data) {
-                                        if (data.code === 0) {
-                                            obj.del();
-                                            layer.msg(data.msg, {icon: 6});
-                                        } else if (data.code === 1) {
-                                            layer.msg(data.msg, {icon: 5});
-                                        }
-                                    }
-                                });
-                            });
-                        }
-                    } else {
-                        layer.msg("you not admin");
                     }
                 }
             });
@@ -143,9 +139,7 @@
 
     //添加栏目的按钮注册事件
     $("#column").on('click', function () {
-        if (judgePrivilege(siteId, categoryId)) {
-            showAtRight("/module/category/addCategory.html");
-        }
+        showAtRight("/module/category/addCategory.html");
     });
 
     //删除栏目的功能实现

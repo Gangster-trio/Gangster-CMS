@@ -58,17 +58,6 @@
             <generatedKey column="category_id" sqlStatement="MySql" identity="true" type="post"/>
         </table>
 
-        <table tableName="cms_group"
-               schema="db_cms"
-               domainObjectName="Group"
-               enableCountByExample="true"
-               enableUpdateByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableSelectByPrimaryKey="true"
-               selectByExampleQueryId="true">
-            <generatedKey column="group_id" sqlStatement="MySql" identity="true" type="post"/>
-        </table>
 
         <table tableName="cms_module"
                schema="db_cms"

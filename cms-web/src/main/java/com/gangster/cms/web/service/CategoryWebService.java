@@ -1,10 +1,11 @@
 package com.gangster.cms.web.service;
 
-import com.gangster.cms.common.constant.CmsConst;
+import com.gangster.cms.common.dto.CategoryTree;
 import com.gangster.cms.common.pojo.*;
-import com.gangster.cms.dao.mapper.*;
+import com.gangster.cms.dao.mapper.ArticleMapper;
+import com.gangster.cms.dao.mapper.CategoryMapper;
+import com.gangster.cms.dao.mapper.SiteMapper;
 import com.gangster.cms.web.cache.CmsCache;
-import com.gangster.cms.web.cache.impl.HashMapCache;
 import com.gangster.cms.web.cache.impl.LRUCache;
 import com.gangster.cms.web.dto.ModelResult;
 import org.slf4j.Logger;
@@ -49,10 +50,6 @@ public class CategoryWebService {
         ModelResult result = new ModelResult();
 
         Category category = categoryMapper.selectByPrimaryKey(id);
-
-        if (!category.getCategoryStaarticle.getArticleReleaseStatus() && article.getArticleStatus().equals(CmsConst.ACCESS)tus().equals(CmsConst.ACCESS)) {
-            return null;
-        }
 
 
         //---------------------------------------default properties start----------------------------------------------//
