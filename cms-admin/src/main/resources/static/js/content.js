@@ -8,7 +8,8 @@ function generate_category_data() {
     alert(category_type);
     var category_skin = $("#categorySkin").val();
     var category_parent_id = $("#category_id").val();
-    var category_in_homepage = $("input[name=categoryInHomepage][checked]").val();
+    // var category_in_homepage = $("input[name=categoryInHomepage][checked]").val();
+    var category_in_homepage = $("#categoryInHomepage").val();
     var category_desc = $("#categoryDesc").val();
     var category = {
         "categoryId": "",

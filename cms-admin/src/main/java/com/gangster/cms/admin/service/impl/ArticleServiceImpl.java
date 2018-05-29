@@ -3,7 +3,7 @@ package com.gangster.cms.admin.service.impl;
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.TagService;
-import com.gangster.cms.admin.util.DeleteFileUtil;
+import com.gangster.cms.admin.util.FileUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.ArticleMapper;
@@ -76,7 +76,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
 
     @Override
     @Transactional
-    public void insertSelectiveWithTagAndFile(Article article, List<String> tagList, List<WebFile> fileList) {
+    public void insertWithTagAndFile(Article article, List<String> tagList, List<WebFile> fileList) {
         insertSelective(article);
         insertTagAndFile(article, tagList, fileList);
     }
@@ -177,7 +177,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         webFileExample.or().andFileArticleIdEqualTo(articleId);
         webFileMapper.selectByExample(webFileExample).stream().map(e ->
                 settingEntryMapper.selectByPrimaryKey(CmsConst.FILE_PATH).getSysValue() + e.getFileName().split("/")[2])
-                .forEach(realFilePath -> DeleteFileUtil.deleteDir(new File(realFilePath)));
+                .forEach(realFilePath -> FileUtil.deleteDir(new File(realFilePath)));
         webFileMapper.deleteByExample(webFileExample);
         articleMapper.deleteByPrimaryKey(articleId);
     }

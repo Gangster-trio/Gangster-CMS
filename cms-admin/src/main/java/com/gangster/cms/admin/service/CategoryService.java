@@ -9,12 +9,12 @@ public interface CategoryService extends BaseService<Category, CategoryExample> 
     CategoryTree toTree(Category category);
 
     /**
-     * 删除栏目表信息的同时，删除关联表的信息
+     * 删除该栏目和与栏目相关联的东西
      */
-    void deleteCategoryInfo(Integer siteId, Integer categoryId);
+    void deleteCategory(Integer categoryId);
 
     /**
      * 批量删除栏目信息，包括权限表的信息
      */
-    void deleteBatchCategoryInfo(String categoryIdStr);
+    void deleteBatchCategory(String categoryIdStr);
 }

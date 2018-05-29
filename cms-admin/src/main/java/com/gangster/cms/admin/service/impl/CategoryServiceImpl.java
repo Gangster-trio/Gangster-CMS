@@ -3,28 +3,23 @@ package com.gangster.cms.admin.service.impl;
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.CategoryService;
-import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.dto.CategoryTree;
 import com.gangster.cms.common.pojo.Category;
 import com.gangster.cms.common.pojo.CategoryExample;
 import com.gangster.cms.dao.mapper.CategoryMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Category, CategoryExample> implements CategoryService {
-    private final static Logger LOGGER = LoggerFactory.getLogger(CategoryServiceImpl.class);
     @Autowired
     private CategoryMapper categoryMapper;
-    @Autowired
-    private PermissionService permissionService;
+
 
     @Autowired
     private ArticleService articleService;
@@ -49,7 +44,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
     }
 
     @Override
-    public void deleteCategoryInfo(Integer siteId, Integer categoryId) {
+    public void deleteCategory(Integer categoryId) {
         // 数据库级联删除，以下代码可忽略
         articleService
                 .selectArticleByCategoryId(categoryId)
@@ -59,23 +54,8 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Categor
     }
 
     @Override
-    public void deleteBatchCategoryInfo(String categoryIdStr) {
+    public void deleteBatchCategory(String categoryIdStr) {
         String[] categoryIds = categoryIdStr.split(",");
-        int count = 0;
-
-        // 得到批处理栏目集合的id
-        List<Integer> categoryIdList = new ArrayList<Integer>();
-        for (String categoryId : categoryIds) {
-            categoryIdList.add(Integer.parseInt(categoryId));
-        }
-        // 得到操作的网站的id
-        Integer siteId = selectByPrimaryKey(categoryIdList.get(0)).getCategorySiteId();
-        try {
-            for (Integer categoryId : categoryIdList) {
-                deleteCategoryInfo(siteId, categoryId);
-            }
-        } catch (Exception e) {
-            LOGGER.info("批量删除栏目时发生错误");
-        }
+        Stream.of(categoryIds).forEach(e -> deleteCategory(Integer.parseInt(e)));
     }
 }

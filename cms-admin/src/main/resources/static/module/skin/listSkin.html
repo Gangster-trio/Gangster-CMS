@@ -45,29 +45,23 @@
             var skin_name = data.skinName;
             if (layEvent === 'del') { //删除
                 layer.confirm('真的删除行么', function (index) {
-                        deleteSkin(skin_name);
-                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                        layer.close(index);
-                        showAtRight("/module/skin/listSkin.html");
+                        $.ajax({
+                            type: "delete",
+                            url: "/skin/delete/" + skin_name,
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.code === 0) {
+                                    layer.msg("delete success.");
+                                } else if (data.code === 1) {
+                                    layer.msg("delete false");
+                                }
+                                showAtRight("/module/skin/listSkin.html");
+                            }
+                        });
                     }
                 )
             }
         });
-
-        function deleteSkin(skin_name) {
-            $.ajax({
-                url: "/skin/delete/" + skin_name,
-                dataType: "application/json",
-                type: "delete",
-                success: function (data) {
-                    if (data.code === 0) {
-                        layer.msg("delete success.");
-                    } else if (data.code === 1) {
-                        layer.msg("delete false");
-                    }
-                }
-            });
-        }
     });
 
     $("#skin").on('click', function () {

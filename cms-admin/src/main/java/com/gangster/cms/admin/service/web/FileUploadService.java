@@ -60,7 +60,7 @@ public class FileUploadService {
         return virtualPath;
     }
 
-    public String saveOtherFile(MultipartFile file) {
+    public String saveFile(MultipartFile file) {
         Map<String, Object> map = uploadFile(file);
         String virtualPath = (String) map.get("virtualPath");
         WebFile webFile = new WebFile(virtualPath, new Date(), 0, (String) map.get("suffix"), (String) map.get("fileSize"));
@@ -71,6 +71,21 @@ public class FileUploadService {
             e.printStackTrace();
         }
         return virtualPath;
+    }
+
+    public boolean saveSkinFile(MultipartFile file) {
+        Map<String, Object> map = uploadFile(file);
+        String virtualPath = (String) map.get("virtualPath");
+        WebFile webFile = new WebFile(virtualPath, new Date(), 0, (String) map.get("suffix"), (String) map.get("fileSize"));
+        try {
+            webFileService.insert(webFile);
+            decompressionZIP((String) map.get("uploadPath"));
+        } catch (Exception e) {
+            LOGGER.error("插入数据库时失败");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -133,6 +148,7 @@ public class FileUploadService {
         map.put("virtualPath", virtualPath);
         map.put("suffix", suffix);
         map.put("fileSize", fileSize);
+        map.put("uploadPath", uploadPath);
         return map;
     }
 }

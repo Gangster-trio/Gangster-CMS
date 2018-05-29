@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.gangster.cms.admin.service.web.ContentWebService.split;
+
 /**
  * 定时任务 Service
  */
@@ -127,7 +129,7 @@ public class TimedTaskService {
             WebFileExample webFileExample = new WebFileExample();
             webFileExample.or().andFileNameIn(fileNames);
             List<WebFile> files = webFileService.selectByExample(webFileExample);
-            articleService.insertSelectiveWithTagAndFile(article, Arrays.asList(taskArticle.getTags().split(",")), files);
+            articleService.insertWithTagAndFile(article, Arrays.asList(taskArticle.getTags().split(",")), files);
 
             for (WebFile webFile : files) {
                 webFile.setFileArticleId(article.getArticleId());
@@ -172,16 +174,11 @@ public class TimedTaskService {
 
     /**
      * 删除文章
+     *
      * @param articleIdList 文章Id字符串
      * @return 是否删除成功
      */
     public boolean deleteArticles(String articleIdList) {
-        if (!StringUtil.isNullOrEmpty(articleIdList)) {
-            String[] articleIds = articleIdList.split(",");
-            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagAndFile(Integer.parseInt(e)));
-            return true;
-        } else {
-            return false;
-        }
+        return split(articleIdList, articleService);
     }
 }

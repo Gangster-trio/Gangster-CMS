@@ -5,7 +5,6 @@ import com.gangster.cms.admin.service.*;
 import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.dto.CategoryTree;
-import com.gangster.cms.common.dto.CategoryWithParent;
 import com.gangster.cms.common.pojo.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -92,12 +91,13 @@ public class ContentWebService {
                 webFileExample.or().andFileNameIn(fileNames);
                 files = webFileService.selectByExample(webFileExample);
             }
-            articleService.insertSelectiveWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
+            articleService.insertWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
         } catch (Exception e) {
             LOGGER.error("添加文章{}失败,错误原因{}", articleDTO, e.getMessage());
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("添加文章{}成功", article);
         return true;
     }
 
@@ -110,9 +110,8 @@ public class ContentWebService {
 
 
     public Map<String, Object> uploadImg(@Param("file") MultipartFile file) {
-        // 得到文件最初的名字
         String originalFileName = file.getOriginalFilename();
-        LOGGER.info(originalFileName);
+        LOGGER.info("文件初始名字{}" + originalFileName);
         String uuid = UUID.randomUUID().toString();
         String newName = uuid + originalFileName.substring(Objects.requireNonNull(originalFileName).lastIndexOf("."));
         File dir = new File(settingService.get(CmsConst.PIC_PATH_SETTING));
@@ -127,7 +126,7 @@ public class ContentWebService {
                 e.printStackTrace();
             }
         }
-        LOGGER.info("文件上传" + newFile.toString());
+        LOGGER.info("文件上传{}" + newFile.toString());
         try {
             file.transferTo(newFile);
         } catch (IOException e) {
@@ -141,11 +140,6 @@ public class ContentWebService {
 
 
     public boolean deleteSingleArticle(Integer articleId) {
-        Article article = articleService.selectByPrimaryKey(articleId);
-        if (article == null) {
-            LOGGER.info("没有找到id为{}的文章", articleId);
-            return false;
-        }
         try {
             articleService.deleteArticleWithTagAndFile(articleId);
         } catch (Exception e) {
@@ -153,35 +147,22 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("删除id为{}的文章成功", articleId);
         return true;
     }
 
 
-    public ArticleDTO detailArticle(Integer articleId) {
+    public ArticleDTO detailsArticle(Integer articleId) {
         Article article = articleService.selectByPrimaryKey(articleId);
-
-        if (article == null) {
-            LOGGER.info("没有找到id为{}的文章信息", articleId);
-            return null;
-        }
-
         Category category = categoryService.selectByPrimaryKey(article.getArticleCategoryId());
-        List<Tag> list = tagService.selectByArticleId(articleId);
-        List<String> tagNameList
-                = list.stream().map(Tag::getTagName).collect(Collectors.toList());
-        String tags = String.join(",", tagNameList);
+        List<String> tagNames = tagService.selectByArticleId(articleId).stream().map(Tag::getTagName).collect(Collectors.toList());
+        String tags = String.join(",", tagNames);
         return new ArticleDTO(article, category.getCategoryTitle(), tags);
     }
 
 
     public boolean updateArticle(Integer articleId, ArticleDTO articleDTO) {
         Article article = articleDTO.getArticle();
-
-        Article oldArticle = articleService.selectByPrimaryKey(articleId);
-        if (null == oldArticle) {
-            LOGGER.info("没有找到id为{}的文章", articleId);
-            return false;
-        }
 
         article.setArticleId(articleId);
         article.setArticleStatus(CmsConst.REVIEW);
@@ -193,14 +174,25 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("更新id为{}的文章{}成功", articleId, article);
         return true;
     }
 
 
     public boolean deleteArticles(String articleIdList) {
+        return split(articleIdList, articleService);
+    }
+
+    public static boolean split(String articleIdList, ArticleService articleService) {
         if (!StringUtil.isNullOrEmpty(articleIdList)) {
             String[] articleIds = articleIdList.split(",");
-            Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagAndFile(Integer.parseInt(e)));
+            try {
+                Stream.of(articleIds).forEach(e -> articleService.deleteArticleWithTagAndFile(Integer.parseInt(e)));
+            } catch (Exception e) {
+                LOGGER.error("批量删除文章ids{}的文章发生错误", Arrays.toString(articleIds));
+                e.printStackTrace();
+                return false;
+            }
             return true;
         } else {
             return false;
@@ -211,10 +203,6 @@ public class ContentWebService {
     public boolean checkArticle(Integer articleId, Integer judge) {
 
         Article article = articleService.selectByPrimaryKey(articleId);
-        if (article == null) {
-            LOGGER.info("没有找到id为{}的文章", articleId);
-            return false;
-        }
         article.setArticleStatus(judge);
         try {
             articleService.updateByPrimaryKeySelective(article);
@@ -222,19 +210,28 @@ public class ContentWebService {
             LOGGER.error("审核文章出现错误:{}", e.getMessage());
             return false;
         }
+        LOGGER.info("审核文章{}成功", article);
         return true;
     }
 
 //    --------------------------------------------栏目部分--------------------------------------------------------------------
 
-    public PageInfo<Category> listCategory(User user, Integer siteId, Integer page, Integer limit) {
+    /**
+     * 累出某个站下所有的栏目
+     */
+    public PageInfo<Category> listCategory(Integer siteId, Integer page, Integer limit) {
         CategoryExample categoryExample = new CategoryExample();
+//        查询条件： 属于当前网站，且不是ROOT
         categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
     }
 
-    public PageInfo<Category> listCheckCategory(User user, Integer siteId, Integer page, Integer limit) {
+    /**
+     * 列出某个站下待审核的栏目
+     */
+    public PageInfo<Category> listCheckCategory(Integer siteId, Integer page, Integer limit) {
         CategoryExample categoryExample = new CategoryExample();
+//        查询条件: 属于当前站,状态是待审核状态
         categoryExample.or()
                 .andCategorySiteIdEqualTo(siteId)
                 .andCategoryStatusEqualTo(CmsConst.REVIEW);
@@ -257,8 +254,13 @@ public class ContentWebService {
             category.setCategorySiteId(siteId);
             category.setCategoryStatus(CmsConst.ACCESS);
             category.setCategoryDesc("root Category");
-
-            categoryService.insert(category);
+            try {
+                categoryService.insert(category);
+            } catch (Exception e) {
+                LOGGER.error("添加栏目{}失败", category);
+                e.printStackTrace();
+                return Collections.emptyList();
+            }
             LOGGER.info("在网站id为:{}下添加栏目:{}", siteId, category);
             CategoryTree tree = new CategoryTree();
             tree.setId(1);
@@ -282,35 +284,20 @@ public class ContentWebService {
     }
 
 
-    //TODO:该方法耗时过长(3986ms),需修改    @Yoke
-    public boolean deleteCategory(User user, Integer categoryId) {
-        Category category = categoryService.selectByPrimaryKey(categoryId);
-        if (null == category) {
-            LOGGER.info("没有找到id为{}的栏目", categoryId);
-            return false;
-        }
-
-        Integer siteId = category.getCategorySiteId();
-
+    public boolean deleteCategory(Integer categoryId) {
         try {
-            // 删除权限表信息
-            categoryService.deleteCategoryInfo(siteId, categoryId);
+            categoryService.deleteCategory(categoryId);
         } catch (Exception e) {
-            LOGGER.error("删除栏目为{}发生{}错误", categoryId, e.getMessage());
             e.printStackTrace();
+            LOGGER.error("删除栏目为{}发生{}错误", categoryId, e.getMessage());
             return false;
         }
-
+        LOGGER.info("删除栏目id为{}成功", categoryId);
         return true;
     }
 
 
     public boolean updateCategory(Integer categoryId, Category category) {
-        Category c = categoryService.selectByPrimaryKey(categoryId);
-        if (null == c) {
-            return false;
-        }
-
         category.setCategoryId(categoryId);
         category.setCategoryStatus(CmsConst.REVIEW);
         category.setCategoryUpdateTime(new Date());
@@ -321,6 +308,7 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("更新id为{}的栏目{}成功", categoryId, category);
         return true;
     }
 
@@ -328,21 +316,21 @@ public class ContentWebService {
     /**
      * 查看栏目的详细信息
      */
-    public CategoryWithParent detailsCategory(Integer categoryId) {
+    public Map<String, Object> detailsCategory(Integer categoryId) {
         Category category = categoryService.selectByPrimaryKey(categoryId);
         if (null == category) {
-            return null;
+            return Collections.emptyMap();
         }
         Category categoryParent = categoryService.selectByPrimaryKey(category.getCategoryParentId());
-        //TODO: rewrite
-        return new CategoryWithParent(categoryParent.getCategoryTitle(), category);
+        Map<String, Object> map = new HashMap<>();
+        map.put("category", category);
+        map.put("parentCategoryName", categoryParent.getCategoryTitle());
+
+        return map;
     }
 
 
-    //TODO: 添加文章权限在controller中判断， 添加目录又在service中判断权限，需修改 @Yoke
-    public boolean addCategory(User user, Category category) {
-        ModuleExample moduleExample = new ModuleExample();
-        moduleExample.or().andModuleNameEqualTo("栏目管理");
+    public boolean addCategory(Category category) {
 
         //默认为站点的皮肤
         Site site = siteService.selectByPrimaryKey(category.getCategorySiteId());
@@ -360,34 +348,32 @@ public class ContentWebService {
         try {
             categoryService.insert(category);
         } catch (Exception e) {
-            LOGGER.error("插入栏目出错:{}", e.getMessage());
+            LOGGER.error("添加栏目出错:{}", e.getMessage());
             e.printStackTrace();
             return false;
         }
 
+        LOGGER.info("添加栏目{}成功", category);
         return true;
     }
 
-    public boolean deleteCategories(String categoryIdList) {
-        if (StringUtil.isNullOrEmptyAfterTrim(categoryIdList)) {
+    public boolean deleteCategories(String categoryIds) {
+        if (StringUtil.isNullOrEmptyAfterTrim(categoryIds)) {
             return false;
         }
         try {
-            categoryService.deleteBatchCategoryInfo(categoryIdList);
+            categoryService.deleteBatchCategory(categoryIds);
         } catch (Exception e) {
             LOGGER.error("删除多个栏目时候出现错误{}", e.getMessage());
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("删除多个栏目ids{}出错", categoryIds);
         return true;
     }
 
     public boolean checkCategory(Integer categoryId, Integer judge) {
         Category category = categoryService.selectByPrimaryKey(categoryId);
-        if (category == null) {
-            LOGGER.info("没有找到id为{}的栏目", categoryId);
-            return false;
-        }
         category.setCategoryStatus(judge);
         try {
             categoryService.updateByPrimaryKeySelective(category);
@@ -396,11 +382,12 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("审核栏目{}成功", category);
         return true;
     }
 
     //    ------------------------------------------------网站部分------------------------------------------------------------------
-    public PageInfo<Site> listSite(User user, Integer page, Integer limit) {
+    public PageInfo<Site> listSite(Integer page, Integer limit) {
 
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> siteService.selectByExample(new SiteExample()));
     }
@@ -409,10 +396,18 @@ public class ContentWebService {
     public boolean addSite(Site site) {
         site.setSiteCreateTime(new Date());
         site.setSiteStatus(CmsConst.REVIEW);
+        try {
+            siteService.insert(site);
+        } catch (Exception e) {
+            LOGGER.error("添加站点发生错误{}", e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        LOGGER.info("添加站点{}成功", site);
         return true;
     }
 
-    public boolean deleteSite(User user, Integer siteId) {
+    public boolean deleteSite(Integer siteId) {
         try {
             siteService.deleteSite(siteId);
         } catch (Exception e) {
@@ -420,6 +415,22 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("删除站点id{}成功", siteId);
+        return true;
+    }
+
+    public boolean deleteSites(String siteIds) {
+        if (StringUtil.isNullOrEmptyAfterTrim(siteIds)) {
+            return false;
+        }
+        try {
+            siteService.deleteBatchSite(siteIds);
+        } catch (Exception e) {
+            LOGGER.error("批量删除站点{}发生错误{}", siteIds, e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        LOGGER.info("批量删除网站成功");
         return true;
     }
 
@@ -436,6 +447,7 @@ public class ContentWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("更新站点{}成功", site);
         return true;
     }
 }

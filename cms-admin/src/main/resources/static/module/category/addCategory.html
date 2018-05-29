@@ -46,14 +46,25 @@
                        class="layui-input" readonly="readonly"/>
             </div>
         </div>
-        <!--todo 是否放到主页上,没有效果-->
+        <!--    &lt;!&ndash;todo 是否放到主页上,没有效果&ndash;&gt;
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否放到首页</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="categoryInHomepage" value="true" title="是">
+                    <input type="radio" name="categoryInHomepage" value="false" title="否" checked>
+                </div>
+            </div>-->
+
         <div class="layui-form-item">
             <label class="layui-form-label">是否放到首页</label>
             <div class="layui-input-block">
-                <input type="radio" name="categoryInHomepage" value="true" title="是">
-                <input type="radio" name="categoryInHomepage" value="false" title="否" checked>
+                <select id="categoryInHomepage" name="categoryInHomepage" lay-verify="required">
+                    <option value="true">是</option>
+                    <option value="false">否</option>
+                </select>
             </div>
         </div>
+
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>

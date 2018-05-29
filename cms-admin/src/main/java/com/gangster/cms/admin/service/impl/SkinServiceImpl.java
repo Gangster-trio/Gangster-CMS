@@ -5,8 +5,10 @@ import com.gangster.cms.admin.service.SkinService;
 import com.gangster.cms.common.pojo.Skin;
 import com.gangster.cms.common.pojo.SkinExample;
 import com.gangster.cms.dao.mapper.SkinMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SkinServiceImpl extends BaseServiceImpl<SkinMapper,Skin,SkinExample> implements SkinService {
+public class SkinServiceImpl extends BaseServiceImpl<SkinMapper, Skin, SkinExample> implements SkinService {
+
 }

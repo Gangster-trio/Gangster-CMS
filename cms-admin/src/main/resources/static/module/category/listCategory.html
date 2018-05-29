@@ -56,10 +56,25 @@
                 //删除栏目信息
                 if (layEvent === 'del') { //删除
                     layer.confirm('真的删除行么', function (index) {
-                            deleteCategory(categoryId);
-                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                            layer.close(index);
-                            showAtRight("/module/category/listCategory.html");
+                            $.ajax({
+                                    url: "/category/delete/" + categoryId,
+                                    dataType: "json",
+                                    type: "delete",
+                                    timeout: "3000",
+                                    error: function () {
+                                        layer.msg("server no response : " + url);
+                                    },
+                                    success: function (data) {
+                                        if (data.code === 0) {
+                                            layer.msg("delete success.");
+                                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                        } else if (data.code === 1) {
+                                            layer.msg("delete false");
+                                        }
+                                        showAtRight("/module/category/listCategory.html");
+                                    }
+                                }
+                            );
                         }
                     )
                 }
@@ -109,6 +124,7 @@
                     });
                 }
             };
+            //todo 批量删除栏目
             $('#batchDelete').on('click', function () { // 添加按钮点击事件
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
@@ -144,23 +160,6 @@
 
     //删除栏目的功能实现
     function deleteCategory(id) {
-        $.ajax({
-                url: "/category/delete/" + id,
-                dataType: "json",
-                type: "get",
-                timeout: "3000",
-                error: function () {
-                    layer.msg("server no response : " + url);
-                },
-                success: function (data) {
-                    if (data.code === 0) {
-                        alert("成功");
-                        layer.msg("delete success.")
-                    } else if (data.code === 1) {
-                        layer.msg("delete false");
-                    }
-                }
-            }
-        );
+
     }
 </script>

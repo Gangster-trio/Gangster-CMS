@@ -30,26 +30,24 @@ public class ArticleController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleController.class);
 
+    private final ContentWebService contentWebService;
+
     @Autowired
-    private ContentWebService contentWebService;
+    public ArticleController(ContentWebService contentWebService) {
+        this.contentWebService = contentWebService;
+    }
 
     @SystemControllerLog(description = "列出所有的文章")
     @GetMapping("/list")
     public AjaxData list(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Article> pageInfo = contentWebService.listArticle(siteId, page, limit);
-        if (null == pageInfo) {
-            return new AjaxData(1, "failed", 0, null);
-        }
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
     @SystemControllerLog(description = "列出待审核的文章")
-    @GetMapping("/list/uncheck")
+    @GetMapping("/list/check")
     public AjaxData listCheck(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Article> pageInfo = contentWebService.listCheckArticle(siteId, page, limit);
-        if (null == pageInfo) {
-            return new AjaxData(1, "failed", 0, null);
-        }
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
@@ -57,9 +55,9 @@ public class ArticleController {
     @SystemControllerLog(description = "添加文章")
     @PostMapping("/add")
     public MessageDto add(HttpServletRequest request) {
+
         ArticleDTO articleDTO = transformPOJO(request);
         if (!contentWebService.addArticle(articleDTO)) {
-            LOGGER.error("添加文章失败");
             return MessageDto.fail(1, "添加文章失败");
         }
         return MessageDto.success(null);
@@ -74,9 +72,6 @@ public class ArticleController {
             @RequestParam(value = "limit", defaultValue = "10") Integer limit
     ) {
         PageInfo<Article> pageInfo = contentWebService.listCategoryOfArticle(categoryId, page, limit);
-        if (null == pageInfo) {
-            return new AjaxData(1, "failed", 0, null);
-        }
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
@@ -92,7 +87,6 @@ public class ArticleController {
     public MessageDto delete(@PathVariable("id") Integer id) {
 
         if (!contentWebService.deleteSingleArticle(id)) {
-            LOGGER.error("删除文章id为{}失败", id);
             return MessageDto.fail(1, "删除文章失败");
         } else {
             return MessageDto.success(null);
@@ -103,7 +97,7 @@ public class ArticleController {
     @SystemControllerLog(description = "查看单篇文章")
     @GetMapping("/details/{id}")
     public ArticleDTO details(@PathVariable("id") Integer articleId) {
-        return contentWebService.detailArticle(articleId);
+        return contentWebService.detailsArticle(articleId);
     }
 
     @SystemControllerLog(description = "更新单篇文章")
@@ -111,7 +105,6 @@ public class ArticleController {
     public MessageDto update(@PathVariable("id") Integer id, HttpServletRequest request) {
         ArticleDTO articleDTO = transformPOJO(request);
         if (!contentWebService.updateArticle(id, articleDTO)) {
-            LOGGER.error("更新单篇文章id为{}失败", id);
             return MessageDto.fail(1, "删除文章失败");
         }
         return MessageDto.success(null);
@@ -121,22 +114,24 @@ public class ArticleController {
     @PostMapping("/delete/batch")
     public MessageDto batchDelete(String articleIdData) {
         if (!contentWebService.deleteArticles(articleIdData)) {
-            LOGGER.error("批处理删除文章失败");
             return MessageDto.fail(1, "批处理失败");
         }
+        LOGGER.info("批量删除文章ids{}成功", articleIdData);
         return MessageDto.success(null);
     }
 
     @SystemControllerLog(description = "审核多篇文章")
-    @GetMapping("/check/{articleId}")
-    public MessageDto checkArticle(@PathVariable Integer articleId, @RequestParam Integer judge) {
-        if (!contentWebService.checkArticle(articleId, judge)) {
-            LOGGER.error("审核失败");
+    @GetMapping("/check/{id}")
+    public MessageDto checkArticle(@PathVariable Integer id, @RequestParam Integer judge) {
+        if (!contentWebService.checkArticle(id, judge)) {
             return MessageDto.fail(1, "审核失败");
         }
         return MessageDto.success(null);
     }
 
+    /**
+     * 读取前台发送过来的json数据，并做转换
+     */
     private static ArticleDTO transformPOJO(HttpServletRequest request) {
         BufferedReader br = null;
         ArticleDTO articleDTO;
