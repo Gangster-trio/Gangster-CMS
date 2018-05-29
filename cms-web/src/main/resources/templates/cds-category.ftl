@@ -17,7 +17,7 @@
 <#--<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
 
     <!-- Custom fonts for this template -->
-    <#--<link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
+<#--<link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
           type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
@@ -31,11 +31,10 @@
 <body>
 
     <#import "cds-header.ftl" as header/>
-    <@cms_type_list cate_type="topBar">
-        <@header.header site=result.site CategoryList=ret></@header.header>
-    </@cms_type_list>
+    <@header.header site=result.site></@header.header>
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('${result.category.categoryThumb!'/pic/43656d72-5def-4228-b1e5-28f328dd4480.jpg'}')">
+<header class="masthead"
+        style="background-image: url('${result.category.categoryThumb!'/pic/43656d72-5def-4228-b1e5-28f328dd4480.jpg'}')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">

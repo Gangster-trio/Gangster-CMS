@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
+/**
+ * 对{@link AccessCount}进行横切，统计数据
+ */
 @Component
 @Aspect
 public class CountAspect {

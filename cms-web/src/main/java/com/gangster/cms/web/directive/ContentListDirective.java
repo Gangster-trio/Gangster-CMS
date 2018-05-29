@@ -7,6 +7,8 @@ import com.gangster.cms.dao.mapper.ArticleMapper;
 import com.github.pagehelper.PageHelper;
 import freemarker.core.Environment;
 import freemarker.template.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +24,6 @@ import java.util.Map;
  * {@link ContentListDirective#PARAM_PAGE}:页数 默认为0<br>
  * {@link ContentListDirective#PARAM_SIZE}:返回的条目数<br>
  * {@link ContentListDirective#PARAM_SORT}:返回文章的排序方式 默认按创建时间排序({@link ContentListDirective#DEFAULT_SORT})，该参数为数据库字段名(支持asc升序,desc降序)<br>
- * {@link ContentListDirective#PARAM_RET}:返回的model名称，默认为{@link ContentListDirective#PARAM_RET}<br>
  */
 @Component
 public class ContentListDirective implements TemplateDirectiveModel {
@@ -30,9 +31,10 @@ public class ContentListDirective implements TemplateDirectiveModel {
     private static final String PARAM_SIZE = "size";
     private static final String PARAM_PAGE = "page";
     private static final String PARAM_SORT = "sort";
-    private static final String PARAM_RET = "ret";
 
     private static final String DEFAULT_SORT = "article_create_time";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContentListDirective.class);
 
     private final ArticleMapper articleMapper;
 
@@ -44,7 +46,7 @@ public class ContentListDirective implements TemplateDirectiveModel {
     @Override
     public void execute(Environment env
             , Map params, TemplateModel[] loopVars
-            , TemplateDirectiveBody body) throws TemplateException, IOException {
+            , TemplateDirectiveBody body) throws TemplateException {
         Integer categoryId = DirectiveUtil.getInteger(PARAM_CID, params);
         Integer size = DirectiveUtil.getInteger(PARAM_SIZE, params);
         Integer page = DirectiveUtil.getInteger(PARAM_PAGE, params);
@@ -74,9 +76,16 @@ public class ContentListDirective implements TemplateDirectiveModel {
                 .andArticleReleaseStatusEqualTo(true);
         List<Article> articleList = PageHelper.startPage(page, size)
                 .doSelectPage(() -> articleMapper.selectByExample(example));
+        DefaultObjectWrapper wrapper = new DefaultObjectWrapperBuilder(Configuration.getVersion()).build();
 
-        DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());
-        env.setVariable(DirectiveUtil.getRetName(PARAM_RET, params), builder.build().wrap(articleList));
-        body.render(env.getOut());
+        try {
+            for (Article article : articleList) {
+                loopVars[0] = wrapper.wrap(article);
+                body.render(env.getOut());
+
+            }
+        }catch (IOException e){
+            throw new TemplateException(e,env);
+        }
     }
 }

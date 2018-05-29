@@ -93,7 +93,7 @@ public class SurveyWebService {
     }
 
     @Scheduled(fixedDelay = 1000 * 60 * 5)
-    private void flushCache() {
+    public void flushCache() {
         cache.clear();
         logger.info("refresh survey cache");
     }

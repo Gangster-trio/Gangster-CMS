@@ -3,7 +3,8 @@ package com.gangster.cms.web.annotation;
 public enum CountType {
     ARTICLE("article"),
     CATEGORY("category"),
-    SITE("site");
+    SITE("site"),
+    SURVEY("survey");
 
     private final String val;
 

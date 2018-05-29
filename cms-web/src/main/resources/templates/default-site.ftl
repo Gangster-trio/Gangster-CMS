@@ -81,17 +81,13 @@
 
 
     <div class="row">
-    <@cms_index_category ret="cate_list">
-        <#list cate_list as category>
-            <@cms_content_list categoryId=category.categoryId size=3 ret="rst">
+    <@cms_index_category ret="cate_list";category>
+        <@cms_content_list categoryId=category.categoryId size=3;article>
                 <div class="col-sm-4" style="border-radius:.4rem; margin:20px 0px 20px 0px">
                     <h3><a href="/view/category/${category.categoryId}">${category.categoryTitle}</a></h3>
-                    <#list rst as article>
-                        <a href="/view/article/${article.articleId}">${article.articleTitle}</a><br>
-                    </#list>
+                    <a href="/view/article/${article.articleId}">${article.articleTitle}</a><br>
                 </div>
-            </@cms_content_list>
-        </#list>
+        </@cms_content_list>
     </@cms_index_category>
 
         <div class="mx-auto">
@@ -101,10 +97,10 @@
             <div>
                 <a href="/view/article/${article.articleId}">
                     <h5 class="">
-                    ${article.articleTitle!"No title"}
+                        ${article.articleTitle!"No title"}
                     </h5>
                     <p class="">
-                    ${article.articleDesc!"No description"}
+                        ${article.articleDesc!"No description"}
                     </p>
                 </a>
                 <p class="post-meta">Posted by ${article.articleAuthor!"anonymous"}
@@ -171,7 +167,6 @@
 <#--<!-- Bootstrap core JavaScript &ndash;&gt;-->
 <#--<script src="/vendor/jquery/jquery.min.js"></script>-->
 <#--<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
-
 
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->

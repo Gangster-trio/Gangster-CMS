@@ -94,16 +94,14 @@
                 <#list categoryList as cate>
                 <li class="dropdown">
                     <a href="/view/category/${cate.categoryId}"> <span>${cate.categoryTitle}</span></a>
-                    <@cms_content_list categoryId=cate.categoryId>
                     <ul class="dropdown-content">
                         <a href="/view/category/${cate.categoryId}"></a>
-                        <#list ret as article>
+                    <@cms_content_list categoryId=cate.categoryId;article>
                             <li>
                                 <a href="/view/article/${article.articleId}">${article.articleTitle}</a>
                             </li>
-                        </#list>
-                    </ul>
                     </@cms_content_list>
+                    </ul>
                 </li>
                 </#list>
             </#if>
@@ -136,8 +134,7 @@
 
         <div class="main2-right">
             <div class="main3-card main3-card1">
-                <@cms_type_list cate_type="news">
-                    <#list ret as category>
+                <@cms_type_list cate_type="news";category>
                     <div class="main3-card_title clearfix">
                         <h2>
                             <i class="icon iconfont"></i>
@@ -148,19 +145,16 @@
                             <i class="icon iconfont"></i>
                         </a>
                     </div>
-                        <@cms_content_list categoryId=category.categoryId>
-                            <#list ret as article>
-                                <#--<#if article??>-->
+                        <@cms_content_list categoryId=category.categoryId;article>
+                        <#--<#if article??>-->
                                    <a href="/view/article/${article.articleId}" class="main2-right-item clearfix">
                                       <span class="main2-right-item-title oneLineOverflowSolution">
                                           ${article.articleTitle}
                                       </span>
                                        <span class="main2-right-item-time">${article.articleCreateTime?date}</span>
                                    </a>
-                                <#--</#if>-->
-                            </#list>
+                        <#--</#if>-->
                         </@cms_content_list>
-                    </#list>
                 </@cms_type_list>
             </div>
         </div>
@@ -171,8 +165,7 @@
 
 <div class="main3">
     <div class="container clearfix">
-         <@cms_type_list cate_type="main3">
-             <#list ret as category>
+         <@cms_type_list cate_type="main3";category>
                  <div class="main3-card main3-card1">
                      <div class="main3-card_title clearfix">
                          <h2>
@@ -184,8 +177,7 @@
                          </a>
                      </div>
                      <ul class="main3-card_ul">
-                         <@cms_content_list categoryId=category.categoryId>
-                             <#list ret as article>
+                         <@cms_content_list categoryId=category.categoryId;article>
                                  <li>
                                      <a href="/view/article/${article.articleId}">
                                          <div class="rili shortTime">
@@ -200,11 +192,9 @@
                                          <div class="clearfloat"></div>
                                      </a>
                                  </li>
-                             </#list>
                          </@cms_content_list>
                      </ul>
                  </div>
-             </#list>
          </@cms_type_list>
     </div>
 </div>

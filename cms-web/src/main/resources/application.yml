@@ -5,6 +5,12 @@ spring:
       username: ${db.user}
       password: ${db.password}
       driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+
 #eureka:
 #  client:
 #    serviceUrl:

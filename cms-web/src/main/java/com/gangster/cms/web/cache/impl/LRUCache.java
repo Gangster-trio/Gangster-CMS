@@ -6,18 +6,24 @@ import java.util.LinkedHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class LRUCache<K, V> extends LinkedHashMap<K,V> implements CmsCache<K, V> {
+/**
+ * 基于LinkedHashMap实现的LRU缓存
+ *
+ * @param <K>
+ * @param <V>
+ */
+public class LRUCache<K, V> extends LinkedHashMap<K, V> implements CmsCache<K, V> {
     private Lock lock = new ReentrantLock();
     private int cacheSize;
-    private final int  defaultSize = 128;
+    private final int defaultSize = 128;
 
-    public LRUCache(int cacheSize){
+    public LRUCache(int cacheSize) {
         super();
         this.cacheSize = cacheSize;
 
     }
 
-    public LRUCache(){
+    public LRUCache() {
         super();
         this.cacheSize = defaultSize;
     }
@@ -27,7 +33,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K,V> implements CmsCache<K, V>
         try {
             lock.lock();
             return super.get(key);
-        }finally {
+        } finally {
             lock.unlock();
         }
     }
@@ -37,7 +43,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K,V> implements CmsCache<K, V>
         try {
             lock.lock();
             return super.put(key, value);
-        }finally {
+        } finally {
             lock.unlock();
         }
     }

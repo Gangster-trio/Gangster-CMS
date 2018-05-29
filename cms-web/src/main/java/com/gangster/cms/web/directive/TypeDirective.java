@@ -28,7 +28,6 @@ public class TypeDirective implements TemplateDirectiveModel {
     private static final String PARAM_SORT = "sort";
     private static final String DEFAULT_ARTICLE_SORT = "article_create_time";
     private static final String DEFAULT_CATE_SORT = "category_create_time";
-    private static final String PARAM_RET = "ret";
 
     private final ArticleMapper articleMapper;
     private final CategoryMapper categoryMapper;
@@ -41,13 +40,17 @@ public class TypeDirective implements TemplateDirectiveModel {
 
     @Override
     public void execute(Environment env, Map params, TemplateModel[] loopVars
-            , TemplateDirectiveBody body) throws TemplateException, IOException {
+            , TemplateDirectiveBody body) throws TemplateException {
         String cateType = DirectiveUtil.getString(PARAM_CATEGORY_TYPE, params);
         String articleType = DirectiveUtil.getString(PARAM_ARTICLE_TYPE, params);
         String sort = DirectiveUtil.getString(PARAM_SORT, params);
         Integer size = DirectiveUtil.getInteger(PARAM_SIZE, params);
         Integer page = DirectiveUtil.getInteger(PARAM_PAGE, params);
         Site site = DirectiveUtil.getSite(env);
+
+        if (loopVars.length == 0) {
+            throw new TemplateException("必须指定循环变量，详情参看文档", env);
+        }
 
         if (site == null) {
             throw new TemplateException("site can't found", env);
@@ -91,9 +94,15 @@ public class TypeDirective implements TemplateDirectiveModel {
                     .doSelectPage(() -> articleMapper.selectByExample(articleExample));
         }
 
-        DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.getVersion());
-        env.setVariable(DirectiveUtil.getRetName(PARAM_RET, params), builder.build().wrap(retList));
+        DefaultObjectWrapper wrapper = new DefaultObjectWrapperBuilder(Configuration.getVersion()).build();
 
-        body.render(env.getOut());
+        try {
+            for (Object a : retList) {
+                loopVars[0] = wrapper.wrap(a);
+                body.render(env.getOut());
+            }
+        } catch (IOException e) {
+            throw new TemplateException(e, env);
+        }
     }
 }

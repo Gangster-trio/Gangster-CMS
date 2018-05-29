@@ -22,6 +22,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 该类负责对{@link com.gangster.cms.web.annotation.AccessLogger}横切，记录访问日志
+ */
 @Component
 @Aspect
 public class AccessLogAspect {
@@ -48,11 +51,13 @@ public class AccessLogAspect {
     }
 
     @After("loggerService()")
-    public void doAfterAdvice() { //获取RequestAttributes
+    public void doAfterAdvice() {
         Long time = Calendar.getInstance().getTimeInMillis() - timeCount.get();
+        //获取RequestAttributes
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         //从获取RequestAttributes中获取HttpServletRequest的信息
-        HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+        HttpServletRequest request = (HttpServletRequest) requestAttributes
+                .resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String path = request.getRequestURI();
         String ip = getIpAddress(request);
 
@@ -80,6 +85,12 @@ public class AccessLogAspect {
     }
 
 
+    /**
+     * 获取真实IP地址
+     *
+     * @param request 请求对象
+     * @return 字符串形式的IP地址
+     */
     private static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

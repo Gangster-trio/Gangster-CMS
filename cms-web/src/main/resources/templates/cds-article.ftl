@@ -29,12 +29,11 @@
 <body>
 
     <#import "cds-header.ftl" as header/>
-    <@cms_type_list cate_type="topBar">
-        <@header.header site=result.site CategoryList=ret></@header.header>
-    </@cms_type_list>
+    <@header.header site=result.site></@header.header>
 
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('<#if result.article.articleThumb?length gt 1>${result.article.articleThumb}<#else>/pic/43656d72-5def-4228-b1e5-28f328dd4480.jpg</#if>')">
+<header class="masthead"
+        style="background-image: url('<#if result.article.articleThumb?length gt 1>${result.article.articleThumb}<#else>/pic/43656d72-5def-4228-b1e5-28f328dd4480.jpg</#if>')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
@@ -43,7 +42,7 @@
                     <h1>${result.article.articleTitle}</h1>
                     <h2 class="subheading">${result.article.articleDesc!"没有描述"}</h2>
                     <span class="meta">作者 ${result.article.articleAuthor!"anonymous"}</span>
-                <span>时间 ${(result.article.articleCreateTime?string("yyyy年MM月dd"))!}</span>
+                    <span>时间 ${(result.article.articleCreateTime?string("yyyy年MM月dd"))!}</span>
 
                     <span class="meta">点击量: ${result.article.articleHit!"0"}</span>
                 </div>
