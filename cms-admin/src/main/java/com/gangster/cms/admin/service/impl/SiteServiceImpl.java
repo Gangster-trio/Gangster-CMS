@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class SiteServiceImpl extends BaseServiceImpl<SiteMapper, Site, SiteExample> implements SiteService {
@@ -28,16 +29,21 @@ public class SiteServiceImpl extends BaseServiceImpl<SiteMapper, Site, SiteExamp
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(sid);
         List<Category> categoryList = categoryService.selectByExample(categoryExample);
-        if (categoryList != null) {
-            for (Category category : categoryList) {
-                ArticleExample articleExample = new ArticleExample();
-                articleExample.or().andArticleCategoryIdEqualTo(category.getCategoryId());
-                articleService.deleteByExample(articleExample);
-            }
+        for (Category category : categoryList) {
+            ArticleExample articleExample = new ArticleExample();
+            articleExample.or().andArticleCategoryIdEqualTo(category.getCategoryId());
+            articleService.deleteByExample(articleExample);
         }
         categoryService.deleteByExample(categoryExample);
         return super.deleteByPrimaryKey(sid);
     }
+
+    @Override
+    public void deleteBatchSite(String siteIdStr) {
+        String[] siteIds = siteIdStr.split(",");
+        Stream.of(siteIds).forEach(e -> deleteSite(Integer.parseInt(e)));
+    }
+
 
     @Override
     public int deleteByPrimaryKey(Integer id) {

@@ -21,7 +21,7 @@ public interface ArticleService extends BaseService<Article, ArticleExample> {
     /**
      * 插入文章,对应标签和文件表
      */
-    void insertSelectiveWithTagAndFile(Article article, List<String> tagNameList, List<WebFile> files);
+    void insertWithTagAndFile(Article article, List<String> tagNameList, List<WebFile> files);
 
     /**
      * 更新文章，包括标签和文件

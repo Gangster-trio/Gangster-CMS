@@ -17,7 +17,7 @@
 
         upload.render({
             elem: '#choose-skin'
-            , url: '/file/upload'
+            , url: '/skin/add'
             , auto: false
             , choose: function (obj) {
                 var files = obj.pushFile();
@@ -30,14 +30,13 @@
             , multiple: true
             , bindAction: '#upload-skin'
             , success: function (res) {
-                layer.closeAll();
                 layer.msg("上传成功", {icon: 6});
-                showAtRight("/module/skin/listSkin.html");
             }
             , error: function () {
                 layer.alert("上传发生错误");
+            }, done: function () {
+                showAtRight("/module/skin/listSkin.html");
             }
         });
-
     });
 </script>

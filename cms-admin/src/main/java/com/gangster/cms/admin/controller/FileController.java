@@ -43,7 +43,7 @@ public class FileController {
     @PostMapping({"/upload/{id}", "/upload"})
     public MessageDto uploadFile(@PathVariable(required = false) Integer articleId, @Param("file") MultipartFile file) {
         if (null == articleId) {
-            return MessageDto.success(fileUploadService.saveOtherFile(file));
+            return MessageDto.success(fileUploadService.saveFile(file));
         } else {
             return MessageDto.success(fileUploadService.saveArticleFile(articleId, file));
         }

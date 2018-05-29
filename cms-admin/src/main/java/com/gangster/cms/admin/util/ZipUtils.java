@@ -127,7 +127,7 @@ public class ZipUtils {
             fos.close();
             bis.close();
         }
-        DeleteFileUtil.deleteDir(new File(zipFilePath));
+        FileUtil.deleteDir(new File(zipFilePath));
         zipFile.close();
         return fileDir;
     }

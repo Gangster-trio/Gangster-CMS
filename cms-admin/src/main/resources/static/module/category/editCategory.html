@@ -54,9 +54,10 @@
         <div class="layui-form-item">
             <label class="layui-form-label">是否放到首页</label>
             <div class="layui-input-block">
-                <!--TODO: 更新目录时该字段的获取-->
-                <input type="radio" name="categoryInHomepage" value="true" title="是">
-                <input type="radio" name="categoryInHomepage" value="false" title="否" checked>
+                <select id="categoryInHomepage" name="categoryInHomepage" lay-verify="required">
+                    <option value="true">是</option>
+                    <option value="false">否</option>
+                </select>
             </div>
         </div>
 
@@ -78,6 +79,7 @@
         </div>
     </form>
 
+
 </div>
 
 <script>
@@ -95,19 +97,23 @@
             async: false,
             success: function (data) {
                 console.log(data);
-                $("#categoryTitle").val(data.categoryTitle);
-                $("#categoryOrder").val(data.categoryOrder);
-                $("#categoryType").val(data.categoryType);
-                $("#category_id").val(data.categoryParentId);
-                $("#categoryDesc").val(data.categoryDesc);
-                $("#belongCategory").val(data.parentName);
-                if (data.categoryInHomepage === true) {
-                    // $("input:radio[value='true']").attr('checked', 'true');
-                    // $("input[type='radio'][name=categoryInHomepage][value='true']").attr("checked", "checked");
-                } else {
-                    // $("input:radio[value='false']").attr('checked', 'true');
-                    // $("input[type='radio'][name=categoryInHomepage][value='false']").attr("checked", "checked");
-                }
+                var category_parent_name = data.data.parentCategoryName;
+                console.log(category_parent_name);
+                var category = data.data.category;
+                console.log(category);
+                $("#categoryTitle").val(category.categoryTitle);
+                $("#categoryOrder").val(category.categoryOrder);
+                $("#categoryType").val(category.categoryType);
+                $("#category_id").val(category.categoryParentId);
+                $("#categoryDesc").val(category.categoryDesc);
+                $("#belongCategory").val(category_parent_name);
+                if (category.categoryInHomepage) {
+                    $("#categoryInHomepage").val('true');
+                } else
+                    $("#categoryInHomepage").val('false');
+
+                // 单选框赋值无效，需要form.render()一下
+                form.render('select');
             }
         });
     });

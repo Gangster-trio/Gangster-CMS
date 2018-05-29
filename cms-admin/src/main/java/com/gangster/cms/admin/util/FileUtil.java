@@ -3,7 +3,7 @@ package com.gangster.cms.admin.util;
 import java.io.File;
 import java.util.Objects;
 
-public class DeleteFileUtil {
+public class FileUtil {
     public static void doDeleteEmptyDir(String dir) {
         boolean success = (new File(dir)).delete();
         if (success) {
