@@ -1,6 +1,7 @@
 package com.gangster.cms.web.directive;
 
 import com.gangster.cms.common.dto.SurveyWithTopicWrapper;
+import com.gangster.cms.web.directive.util.DirectiveUtil;
 import com.gangster.cms.web.service.SurveyWebService;
 import freemarker.core.Environment;
 import freemarker.template.*;

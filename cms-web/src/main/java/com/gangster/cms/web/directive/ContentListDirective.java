@@ -4,6 +4,7 @@ import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Article;
 import com.gangster.cms.common.pojo.ArticleExample;
 import com.gangster.cms.dao.mapper.ArticleMapper;
+import com.gangster.cms.web.directive.util.DirectiveUtil;
 import com.github.pagehelper.PageHelper;
 import freemarker.core.Environment;
 import freemarker.template.*;
@@ -16,22 +17,32 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 自定义模板方法 cms_content_list,
- * 返回指定目录的指定文章<br>
- * 参数:<br>
- * {@link ContentListDirective#PARAM_CID}:指定目录ID<br>
- * {@link ContentListDirective#PARAM_PAGE}:页数 默认为0<br>
- * {@link ContentListDirective#PARAM_SIZE}:返回的条目数<br>
- * {@link ContentListDirective#PARAM_SORT}:返回文章的排序方式 默认按创建时间排序({@link ContentListDirective#DEFAULT_SORT})，该参数为数据库字段名(支持asc升序,desc降序)<br>
- */
 @Component
 public class ContentListDirective implements TemplateDirectiveModel {
+
+    /**
+     * 指定的栏目ID
+     */
     private static final String PARAM_CID = "categoryId";
+
+    /**
+     * 每页的条目数，未指定默认为0
+     */
     private static final String PARAM_SIZE = "size";
+
+    /**
+     * 页码数， 未指定默认为0
+     */
     private static final String PARAM_PAGE = "page";
+
+    /**
+     * 排序方式，字符串形式，对应数据库中的字段，默认为{@link ContentListDirective#DEFAULT_SORT}
+     */
     private static final String PARAM_SORT = "sort";
 
+    /**
+     * 默认排序方式：按创建时间排序
+     */
     private static final String DEFAULT_SORT = "article_create_time";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentListDirective.class);
@@ -43,6 +54,9 @@ public class ContentListDirective implements TemplateDirectiveModel {
         this.articleMapper = articleMapper;
     }
 
+    /**
+     * 返回指定目录的文章<br>
+     */
     @Override
     public void execute(Environment env
             , Map params, TemplateModel[] loopVars
@@ -84,8 +98,8 @@ public class ContentListDirective implements TemplateDirectiveModel {
                 body.render(env.getOut());
 
             }
-        }catch (IOException e){
-            throw new TemplateException(e,env);
+        } catch (IOException e) {
+            throw new TemplateException(e, env);
         }
     }
 }

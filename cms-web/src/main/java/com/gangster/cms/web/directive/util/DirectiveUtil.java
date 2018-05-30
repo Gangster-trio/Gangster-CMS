@@ -1,4 +1,4 @@
-package com.gangster.cms.web.directive;
+package com.gangster.cms.web.directive.util;
 
 import com.gangster.cms.common.pojo.Site;
 import com.gangster.cms.web.dto.ModelResult;
@@ -8,22 +8,25 @@ import freemarker.template.*;
 import java.util.Map;
 
 
-class DirectiveUtil {
+/**
+ * 自定义指令工具类
+ */
+public class DirectiveUtil {
     private static final DefaultObjectWrapper wrapper = new DefaultObjectWrapper(
             Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
 
-    static String getRetName(String retParam, Map params) {
+    public static String getRetName(String retParam, Map params) {
         return getRetName(retParam, params, retParam);
     }
 
-    static String getRetName(String retParam, Map params, String defaultName) {
+    public static String getRetName(String retParam, Map params, String defaultName) {
         if (params.containsKey(retParam)) {
             return params.get(retParam).toString();
         }
         return defaultName;
     }
 
-    static String getString(String key, Map params) throws TemplateModelException {
+    public static String getString(String key, Map params) throws TemplateModelException {
         TemplateModel model = (TemplateModel) params.get(key);
         if (model == null) {
             return null;
@@ -37,7 +40,7 @@ class DirectiveUtil {
         throw new TemplateModelException(key + " must is String or Number");
     }
 
-    static Integer getInteger(String key, Map params) throws TemplateModelException {
+    public static Integer getInteger(String key, Map params) throws TemplateModelException {
         TemplateModel model = (TemplateModel) params.get(key);
         if (model == null) {
             return null;
@@ -59,7 +62,7 @@ class DirectiveUtil {
         throw new TemplateModelException(key + "must is Number");
     }
 
-    static Boolean getBoolean(String key, Map param) throws TemplateModelException {
+    public static Boolean getBoolean(String key, Map param) throws TemplateModelException {
         TemplateModel model = (TemplateModel) param.get(key);
         if (model == null) {
             return null;
@@ -82,7 +85,7 @@ class DirectiveUtil {
         return false;
     }
 
-    static Site getSite(Environment env) throws TemplateModelException {
+    public static Site getSite(Environment env) throws TemplateModelException {
         return (Site) ((ModelResult) wrapper.unwrap(env.getVariable("result"))).get("site");
     }
 }

@@ -32,7 +32,7 @@ public class SurveyController {
     }
 
     @PostMapping("submit/text")
-    public void submitText(@RequestBody Map<String ,String > textMap){
+    public void submitText(@RequestBody Map<Integer, String> textMap) {
         surveyWebService.submitText(textMap);
     }
 

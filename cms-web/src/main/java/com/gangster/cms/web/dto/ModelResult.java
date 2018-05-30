@@ -3,6 +3,9 @@ package com.gangster.cms.web.dto;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 返回到视图的对象
+ */
 public class ModelResult {
     private Map<String, Object> map = new HashMap<>();
 

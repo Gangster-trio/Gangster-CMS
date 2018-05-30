@@ -4,6 +4,7 @@ import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Article;
 import com.gangster.cms.common.pojo.ArticleExample;
 import com.gangster.cms.dao.mapper.ArticleMapper;
+import com.gangster.cms.web.directive.util.DirectiveUtil;
 import freemarker.core.Environment;
 import freemarker.template.*;
 import org.slf4j.Logger;
@@ -17,10 +18,18 @@ import java.util.Map;
 
 @Component
 public class ArticleDirective implements TemplateDirectiveModel {
+
+    /**
+     * 文章ID
+     */
     private static final String PARAM_ID = "id";
+
+    /**
+     * 查询结果是否包含文章内容等大字段，默认不包含
+     */
     private static final String PARAM_BLOB = "blob";
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ArticleDirective.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleDirective.class);
 
     private final ArticleMapper articleMapper;
 
@@ -29,13 +38,6 @@ public class ArticleDirective implements TemplateDirectiveModel {
         this.articleMapper = articleMapper;
     }
 
-    /**
-     * @param env
-     * @param params
-     * @param loopVars
-     * @param body
-     * @throws TemplateException
-     */
     @Override
     public void execute(Environment env, Map params, TemplateModel[] loopVars
             , TemplateDirectiveBody body) throws TemplateException {

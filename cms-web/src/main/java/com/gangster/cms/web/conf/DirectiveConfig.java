@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * 自定义指令关键字定义类<br>
+ * 所有的自定义指令都要在这里设置后生效<br>
+ */
 @Component
 public class DirectiveConfig {
     private final Configuration configuration;
@@ -50,6 +54,6 @@ public class DirectiveConfig {
         configuration.setSharedVariable("cms_article", articleDirective);
         configuration.setSharedVariable("cms_category", categoryDirective);
         configuration.setSharedVariable("cms_survey", surveyDirective);
-        configuration.setSharedVariable("cms_outerchain", outerChainDirective);
+        configuration.setSharedVariable("cms_outerchain_list", outerChainDirective);
     }
 }

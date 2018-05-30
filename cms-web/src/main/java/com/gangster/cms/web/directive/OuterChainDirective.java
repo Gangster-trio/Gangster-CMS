@@ -3,6 +3,7 @@ package com.gangster.cms.web.directive;
 import com.gangster.cms.common.pojo.OuterChain;
 import com.gangster.cms.common.pojo.OuterChainExample;
 import com.gangster.cms.dao.mapper.OuterChainMapper;
+import com.gangster.cms.web.directive.util.DirectiveUtil;
 import freemarker.core.Environment;
 import freemarker.template.*;
 import org.springframework.beans.factory.annotation.Autowired;

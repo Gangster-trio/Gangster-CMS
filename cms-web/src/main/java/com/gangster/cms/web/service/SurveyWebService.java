@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class SurveyWebService {
     private static final Logger logger = LoggerFactory.getLogger(SurveyWebService.class);
-    private final CmsCache<Integer,ModelResult> cache = new LRUCache<>(128);
+    private final CmsCache<Integer, ModelResult> cache = new LRUCache<>(128);
 
     private final SurveyPageMapper pageMapper;
     private final SurveyOptionMapper optionMapper;
@@ -35,18 +35,24 @@ public class SurveyWebService {
     }
 
     public ModelResult getQuestionModel(Integer pageId) {
-        if (cache.containsKey(pageId)){
+        if (cache.containsKey(pageId)) {
             return cache.get(pageId);
         }
 
         SurveyWithTopicWrapper surveyPage = getSurveyPage(pageId);
         ModelResult result = new ModelResult();
-        result.put("page",surveyPage);
+        result.put("page", surveyPage);
 
-        cache.put(pageId,result);
+        cache.put(pageId, result);
         return result;
     }
 
+    /**
+     * 通过指定的问卷ID获取包装过的问卷对象
+     *
+     * @param pageId 问卷ID
+     * @return 返回的问卷包含问卷中的题目列表，每个题目列表又包含题目的选项列表
+     */
     public SurveyWithTopicWrapper getSurveyPage(Integer pageId) {
         SurveyPage page = pageMapper.selectByPrimaryKey(pageId);
         //问卷调查页面和题目
@@ -74,20 +80,30 @@ public class SurveyWebService {
         return survey;
     }
 
-    public void submitCheck(List<Integer> idList){
-        idList.forEach(id->{
+    /**
+     * 提交单选或多选选项
+     *
+     * @param idList 　选项的ID列表
+     */
+    public void submitCheck(List<Integer> idList) {
+        idList.forEach(id -> {
             SurveyOption option = optionMapper.selectByPrimaryKey(id);
             int count = option.getOptionCount();
-            option.setOptionCount(count+  1);
+            option.setOptionCount(count + 1);
             optionMapper.updateByPrimaryKeySelective(option);
         });
     }
 
-    public void submitText(Map<String ,String > map){
-        map.forEach((topicId,content)->{
+    /**
+     * 提交文本
+     *
+     * @param map key表示题目的ID，val表示用户提交的答案
+     */
+    public void submitText(Map<Integer, String> map) {
+        map.forEach((topicId, content) -> {
             SurveyOption option = new SurveyOption();
             option.setOptionContent(content);
-            option.setTopicId(Integer.parseInt(topicId));
+            option.setTopicId(topicId);
             optionMapper.insertSelective(option);
         });
     }

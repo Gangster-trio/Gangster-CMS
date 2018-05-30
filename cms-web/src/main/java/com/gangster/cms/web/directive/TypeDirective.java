@@ -6,6 +6,7 @@ import com.gangster.cms.common.pojo.CategoryExample;
 import com.gangster.cms.common.pojo.Site;
 import com.gangster.cms.dao.mapper.ArticleMapper;
 import com.gangster.cms.dao.mapper.CategoryMapper;
+import com.gangster.cms.web.directive.util.DirectiveUtil;
 import com.github.pagehelper.PageHelper;
 import freemarker.core.Environment;
 import freemarker.template.*;
@@ -17,16 +18,44 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 获取指定类型的栏目或文章，参数用法同{@link ContentListDirective}
+ * 获取指定类型的栏目或文章,栏目类型和文章类型只能指定一个
  */
 @Component
 public class TypeDirective implements TemplateDirectiveModel {
+
+    /**
+     * 指定栏目类型
+     */
     private static final String PARAM_CATEGORY_TYPE = "cate_type";
+
+    /**
+     * 指定文章类型
+     */
     private static final String PARAM_ARTICLE_TYPE = "article_type";
-    private static final String PARAM_SIZE = "size";    //default 0, show all.
-    private static final String PARAM_PAGE = "page";    //default 0
+
+    /**
+     * 页面大小，默认为0，返回所有数据
+     */
+    private static final String PARAM_SIZE = "size";
+
+    /**
+     * 页码数，默认为0
+     */
+    private static final String PARAM_PAGE = "page";
+
+    /**
+     * 排序方式，字符串形式，对应数据库中的字段
+     */
     private static final String PARAM_SORT = "sort";
+
+    /**
+     * 未指定文章排序方式时的默认值
+     */
     private static final String DEFAULT_ARTICLE_SORT = "article_create_time";
+
+    /**
+     * 未指定栏目排序方式是的默认值
+     */
     private static final String DEFAULT_CATE_SORT = "category_create_time";
 
     private final ArticleMapper articleMapper;

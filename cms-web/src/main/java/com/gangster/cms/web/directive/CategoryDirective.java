@@ -1,6 +1,7 @@
 package com.gangster.cms.web.directive;
 
 import com.gangster.cms.dao.mapper.CategoryMapper;
+import com.gangster.cms.web.directive.util.DirectiveUtil;
 import freemarker.core.Environment;
 import freemarker.template.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import java.util.Map;
 @Component
 public class CategoryDirective implements TemplateDirectiveModel {
 
+    /**
+     * 栏目ID
+     */
     private static final String PARAM_ID = "id";
 
     private final

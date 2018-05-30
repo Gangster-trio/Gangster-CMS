@@ -160,6 +160,9 @@ public class SiteWebService {
         siteMapper.updateByPrimaryKey(site);
     }
 
+    /**
+     * 定时刷新缓存
+     */
     @Scheduled(fixedDelay = 1000 * 60 * 5)
     public void flushCache() {
         siteModelCache.clear();
