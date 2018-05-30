@@ -54,12 +54,19 @@ public class FileUploadService {
         try {
             webFileService.insert(webFile);
         } catch (Exception e) {
-            LOGGER.error("插入数据库时失败");
+            LOGGER.error("文件添加进数据库时失败: {}", e.getMessage());
             e.printStackTrace();
         }
+        LOGGER.info("文章的附件添加进数据库成功");
         return virtualPath;
     }
 
+    /**
+     * 保存其他方面的文件
+     *
+     * @param file 文件
+     * @return 文件的virtualPath
+     */
     public String saveFile(MultipartFile file) {
         Map<String, Object> map = uploadFile(file);
         String virtualPath = (String) map.get("virtualPath");
@@ -70,9 +77,16 @@ public class FileUploadService {
             LOGGER.error("插入数据库时失败");
             e.printStackTrace();
         }
+        LOGGER.info("文件信息添加成功");
         return virtualPath;
     }
 
+    /**
+     * 保存皮肤文件
+     *
+     * @param file 文件
+     * @return 是否上传成功
+     */
     public boolean saveSkinFile(MultipartFile file) {
         Map<String, Object> map = uploadFile(file);
         String virtualPath = (String) map.get("virtualPath");
@@ -85,6 +99,7 @@ public class FileUploadService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("文件信息添加成功");
         return true;
     }
 
