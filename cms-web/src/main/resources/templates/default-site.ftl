@@ -92,7 +92,7 @@
 
         <div class="mx-auto">
             <hr>
-        <#list result.articleList as article>
+        <#list result.indexArticleList as article>
 
             <div>
                 <a href="/view/article/${article.articleId}">

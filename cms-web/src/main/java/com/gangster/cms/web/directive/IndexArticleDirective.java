@@ -22,7 +22,7 @@ public class IndexArticleDirective implements TemplateDirectiveModel {
 
     @Override
     public void execute(Environment env, Map params, TemplateModel[] loopVars
-            , TemplateDirectiveBody body) throws TemplateException, IOException {
+            , TemplateDirectiveBody body) throws TemplateException {
         params.put(PARAM_ARTICLE_TYPE, new SimpleScalar(CmsConst.INDEX_ARTICLE_TYPE));
         typeDirective.execute(env,params,loopVars,body);
     }

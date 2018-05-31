@@ -101,7 +101,7 @@ public class SiteWebService {
         result.put("categoryTreeList", categoryTreeList)
                 .put("site", site)
                 .put("indexCategoryList", indexCategoryList)
-                .put("articleList", articleList)
+                .put("indexArticleList", articleList)
                 .put("carouselList", carouselList);
 
 
