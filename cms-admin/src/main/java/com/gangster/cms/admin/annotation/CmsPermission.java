@@ -7,11 +7,14 @@ import java.lang.annotation.Target;
 
 /**
  * 添加该注解进行类型选择
+ *
  * @author Yoke
  * Created on 2018/4/14
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CmsPermission {
-    CheckType checkType();
+    String moduleName();
+
+    String siteId();
 }
