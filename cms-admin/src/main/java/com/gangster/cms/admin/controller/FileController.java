@@ -40,7 +40,7 @@ public class FileController {
     private SettingService settingService;
 
     @SystemControllerLog(description = "添加文件")
-    @PostMapping({"/upload/{id}", "/upload"})
+    @PostMapping({"/upload/{articleId}", "/upload"})
     public MessageDto uploadFile(@PathVariable(required = false) Integer articleId, @Param("file") MultipartFile file) {
         if (null == articleId) {
             return MessageDto.success(fileUploadService.saveFile(file));

@@ -35,18 +35,14 @@ public class SurveyPageController {
         this.surveyPageWebService = surveyPageWebService;
     }
 
-    @SystemControllerLog(description = "列出当前网站的素有问卷")
+    @SystemControllerLog(description = "列出当前网站的所有问卷")
     @GetMapping("/list")
-    public AjaxData list(@RequestParam Integer siteId, @RequestParam Integer page, @RequestParam Integer limit) {
+    public AjaxData list(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<SurveyPage> pageInfo = surveyPageWebService.listSurveyPage(siteId, page, limit);
-        if (null == pageInfo) {
-            return new AjaxData(1, "failed", 0, null);
-        }
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
     @SystemControllerLog(description = "添加问卷")
-    @Transactional
     @PostMapping("/add")
     public MessageDto add(HttpServletRequest request) {
         SurveyWithTopicWrapper wrapper = transformToPOJO(request);
@@ -61,7 +57,6 @@ public class SurveyPageController {
 
 
     @SystemControllerLog(description = "删除某个问卷")
-    @Transactional
     @DeleteMapping("/delete/{id}")
     public MessageDto delete(@PathVariable("id") Integer id) {
         if (!surveyPageWebService.deleteSurveyPage(id)) {
@@ -97,6 +92,11 @@ public class SurveyPageController {
         return MessageDto.success(surveyPageWebService.countPage(id));
     }
 
+    /**
+     * 将前台的json数据转换成java对象
+     * @param request 请求
+     * @return pojo
+     */
     private SurveyWithTopicWrapper transformToPOJO(HttpServletRequest request) {
         BufferedReader br = null;
         SurveyWithTopicWrapper wrapper = null;

@@ -1,3 +1,4 @@
+<!--支持快速回复-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>单封邮件</legend>
 </fieldset>
@@ -32,24 +33,39 @@
         </div>
 
         <div id="message_text" class="layui-form-item layui-form-text">
-            <label class="layui-form-label">Content</label>
+            <label class="layui-form-label">内容</label>
             <div class="layui-input-block">
-                <textarea name="mailContent" id="mailContent" readonly="readonly" placeholder="请输入内容"
-                          class="layui-textarea"></textarea>
+                <textarea name="mailContent" readonly id="mailContent" class="layui-hide"
+                          lay-verify="content"></textarea>
             </div>
         </div>
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button type="button" onclick="reply()" class="layui-btn layui-btn-sm layui-btn-normal">快捷回复</button>
+                <button id="quicllyReply" type="button" onclick="reply()"
+                        class="layui-btn layui-btn-sm layui-btn-normal">
+                    快捷回复
+                </button>
             </div>
         </div>
     </form>
 </div>
 <script>
+
+    var layedit, editor_text;
+    layui.use('layedit', function () {
+        layedit = layui.layedit;
+        layedit.set({
+            uploadImage: {
+                url: '/article/img'
+            }
+        });
+        editor_text = layedit.build('mailContent');
+    });
+
     $.ajax({
         type: "get",
-        url: "/list",
+        url: "/mail/details/" + mailId,
         contentType: "application/json",
         dataType: "json",
         success: function (resp) {
@@ -57,10 +73,10 @@
             $("#mailInMail").val(mail.mailInMail);
             $("#mailToMail").val(mail.mailToMail);
             $("#mailSendDate").val(mail.mailSendDate);
-            $("#mailContent").val(mail.mailContent);
+            layedit.setContent(editor_text, mail.mailContent);
         },
         error: function () {
-            layui.layer.alert("failed " + resp);
+            layui.layer.alert("failed ");
         }
     });
 
@@ -69,14 +85,53 @@
         $("#message_text").after("<div class=\"layui-form-item layui-form-text\">\n" +
             "            <label class=\"layui-form-label\">Content</label>\n" +
             "            <div class=\"layui-input-block\">\n" +
-            "                <textarea name=\"desc\" placeholder=\"请输入内容\" class=\"layui-textarea\"></textarea>\n" +
+            "                <textarea id='replayMessage' name=\"replay\" placeholder=\"请输入内容\" class=\"layui-textarea\"></textarea>\n" +
             "            </div>\n" +
             "        </div>\n" +
             "       <div class=\"layui-form-item\">\n" +
             "            <div class=\"layui-input-block\">\n" +
-            "                <button type=\"button\"  class=\"layui-btn layui-btn-sm layui-btn-normal\">发送</button>\n" +
+            "                <button type=\"button\" onclick='replaySubmit()'  class=\"layui-btn layui-btn-sm layui-btn-normal\">发送</button>\n" +
             "            </div>\n" +
             "        </div>");
+        $("#quicllyReply").hide();
     }
 
+    function replaySubmit() {
+        var mailInMail = $("#mailToMail").val();
+        var mailToMail = $("#mailInMail").val();
+        var mailContent = $("#replayMessage").val();
+        var mail = {
+            "mailId": "",
+            "mailInMail": mailInMail,
+            "mailToMail": mailToMail,
+            "mailSendDate": new Date().getTime(),
+            "mailReceiveDate": new Date().getTime(),
+            "mailContent": mailContent,
+            "mailRead": 0,
+            "mailFlagStatus": 0
+        };
+        $.ajax({
+            type: "POST",
+            url: "/mail/add",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(mail),
+            error: function (resp) {
+                layui.layer.alert("failed " + resp);
+            },
+            success: function (resp) {
+                switch (resp.code) {
+                    case 0:
+                        layer.msg(resp.message, {icon: 6});
+                        break;
+                    case 1:
+                        layer.msg("更新失败", {icon: 5});
+                        break;
+                    default:
+                }
+                showAtRight("/module/mail/listSendedMail.html");
+            }
+
+        });
+    }
 </script>

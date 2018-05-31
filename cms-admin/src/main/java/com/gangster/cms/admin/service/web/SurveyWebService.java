@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,12 +27,16 @@ public class SurveyWebService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SurveyWebService.class);
 
+    private final SurveyPageMapper surveyPageMapper;
+    private final SurveyTopicMapper surveyTopicMapper;
+    private final SurveyOptionMapper surveyOptionMapper;
+
     @Autowired
-    private SurveyPageMapper surveyPageMapper;
-    @Autowired
-    private SurveyTopicMapper surveyTopicMapper;
-    @Autowired
-    private SurveyOptionMapper surveyOptionMapper;
+    public SurveyWebService(SurveyPageMapper surveyPageMapper, SurveyTopicMapper surveyTopicMapper, SurveyOptionMapper surveyOptionMapper) {
+        this.surveyPageMapper = surveyPageMapper;
+        this.surveyTopicMapper = surveyTopicMapper;
+        this.surveyOptionMapper = surveyOptionMapper;
+    }
 
     public PageInfo<SurveyPage> listSurveyPage(Integer siteId, Integer page, Integer limit) {
         SurveyPageExample surveyPageExample = new SurveyPageExample();
@@ -39,18 +44,21 @@ public class SurveyWebService {
         return PageHelper.startPage(page, limit).doSelectPageInfo(() -> surveyPageMapper.selectByExample(surveyPageExample));
     }
 
+    @Transactional
     public boolean addSurveyPage(SurveyWithTopicWrapper wrapper) {
-        return addSurveyPageWithTopicAndOptions(wrapper.getPage(), wrapper.getTopicList());
+        return addSurveyPageWithTopicAndOption(wrapper.getPage(), wrapper.getTopicList());
     }
 
+    @Transactional
     public boolean deleteSurveyPage(Integer surveyPageId) {
-        return deleteSurveyPageWithTopicAndOptions(surveyPageId);
+        return deleteSurveyPageWithTopicAndOption(surveyPageId);
     }
 
+    @Transactional
     public boolean updateSurveyPage(SurveyWithTopicWrapper wrapper) {
         SurveyPage surveyPage = wrapper.getPage();
 
-        // 已删除的题，会以A只有pageId的形式传过来
+        // 前端操作中删除的题(自己在前端动态添加后，又删除的题),会以只有pageId的形式传过来,先去掉那些问题
         List<TopicWithOptionWrapper> topicWithOptionWrappers = wrapper.getTopicList().stream().filter(param -> null != param.getTopic().getTopicQuestion()).collect(Collectors.toList());
         try {
             surveyPageMapper.updateByPrimaryKey(surveyPage);
@@ -63,6 +71,7 @@ public class SurveyWebService {
 //            topicWithOptionWrappers.forEach(e -> {
             for (TopicWithOptionWrapper e : topicWithOptionWrappers) {
                 SurveyTopic surveyTopic = e.getTopic();
+//                处理新加的选项
                 if (null == surveyTopic.getTopicId()) {
                     surveyTopic.setTopicPageId(surveyPage.getPageId());
                     surveyTopicMapper.insert(surveyTopic);
@@ -72,6 +81,7 @@ public class SurveyWebService {
                         surveyOptionMapper.insert(t);
                     });
                 } else {
+//                 处理之前存在，又进行修改的选项
                     surveyTopicMapper.updateByPrimaryKeySelective(surveyTopic);
                     SurveyOptionExample surveyOptionExample = new SurveyOptionExample();
                     surveyOptionExample.or().andTopicIdEqualTo(surveyTopic.getTopicId());
@@ -95,6 +105,7 @@ public class SurveyWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("更新问卷{}成功", wrapper);
         return true;
     }
 
@@ -109,7 +120,7 @@ public class SurveyWebService {
 
     // -----------------------------------------------SurveyPage方法------------------------------------------------------------------
 
-    private boolean addSurveyPageWithTopicAndOptions(SurveyPage surveyPage, List<TopicWithOptionWrapper> topicWithOptionWrappers) {
+    private boolean addSurveyPageWithTopicAndOption(SurveyPage surveyPage, List<TopicWithOptionWrapper> topicWithOptionWrappers) {
         try {
             surveyPageMapper.insert(surveyPage);
             topicWithOptionWrappers.forEach(e -> {
@@ -127,10 +138,11 @@ public class SurveyWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("添加问卷{}成功",surveyPage);
         return true;
     }
 
-    private boolean deleteSurveyPageWithTopicAndOptions(Integer surveyPageId) {
+    private boolean deleteSurveyPageWithTopicAndOption(Integer surveyPageId) {
         SurveyPage surveyPage = surveyPageMapper.selectByPrimaryKey(surveyPageId);
         try {
             if (surveyPage != null) {
@@ -140,7 +152,6 @@ public class SurveyWebService {
                 if (surveyTopicIds.size() != 0) {
                     SurveyOptionExample surveyOptionExample = new SurveyOptionExample();
                     surveyOptionExample.or().andTopicIdIn(surveyTopicIds);
-                    List<SurveyOption> options = surveyOptionMapper.selectByExample(surveyOptionExample);
                     surveyOptionMapper.deleteByExample(surveyOptionExample);
                     surveyTopicMapper.deleteByExample(surveyTopicExample);
                 }
@@ -151,6 +162,7 @@ public class SurveyWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("删除id为：{}的问卷成功", surveyPageId);
         return true;
     }
 
@@ -173,6 +185,7 @@ public class SurveyWebService {
 
     //---------------------------------------------SurveyTopic部分-----------------------------------------------------------------
 
+    @Transactional
     public boolean deleteSurveyTopic(Integer surveyTopicId) {
         try {
             SurveyOptionExample surveyOptionExample = new SurveyOptionExample();
@@ -184,6 +197,7 @@ public class SurveyWebService {
             e.printStackTrace();
             return false;
         }
+        LOGGER.info("删除id为:{}的问题成功",surveyTopicId);
         return true;
     }
 
@@ -211,6 +225,7 @@ public class SurveyWebService {
 
     //-------------------------------------------SurveyOption部分------------------------------------------------------------------------
 
+    @Transactional
     public boolean deleteSurveyOption(Integer surveyOptionId) {
         return surveyOptionMapper.deleteByPrimaryKey(surveyOptionId) == 1;
     }
