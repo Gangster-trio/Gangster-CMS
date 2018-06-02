@@ -1,14 +1,17 @@
-package com.gangster.cms.admin.controller;
+package com.gangster.cms.web.controller;
 
-import com.gangster.cms.admin.search.SearchClient;
 import com.gangster.cms.common.dto.SearchResult;
 import com.gangster.cms.common.pojo.Article;
+import com.gangster.cms.web.service.SearchClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 返回搜索结果
+ */
 @RestController
 public class SearchController {
 

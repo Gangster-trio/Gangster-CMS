@@ -21,6 +21,9 @@ ___
       * [自定义指令](#自定义指令)
          * [内嵌指令](#内嵌指令)
          * [指令编写](#指令编写)
+      * [内容搜索](#内容搜索)
+         * [查询提交](#返回结果)
+         * [返回结果](#返回结果)
 
 <!-- Added by: bigmeng, at: 2018-05-31T20:23+08:00 -->
 
@@ -227,3 +230,33 @@ ___
     如果要添加自定义指令获取更加丰富的功能，可以通过在`com.gangster.cms.web.directive`包中添加实现了`TemplateDirectiveModel`接口的类，并在`com.gangster.web.conf.DirectiveConfig`类中注册指令使之生效
     
     具体可参看JavaDoc
+
+## 内容搜索
+
+* ### 查询提交
+    
+    查询提交路径:
+    
+    `/search/article/{siteId}`:
+        
+        在指定站点中查询
+        
+    `/search/article`:
+    
+        在所有网站中查询
+    
+    参数|用法
+    ---|---
+    keyword|搜索关键字
+    page|页码数
+    limit|页面大小
+    
+* ### 返回结果
+
+    结果以JSON形式返回
+    
+    字段名|类型|作用|
+    ----|----|----
+    totalElement|int|查询总数
+    content|List(Article) |查询到的文章列表
+    
