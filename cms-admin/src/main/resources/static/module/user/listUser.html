@@ -19,7 +19,7 @@
         </button>
     </div>
 </script>
-<script src="../layui/layui.all.js"></script>
+<script src="../../layui/layui.all.js"></script>
 <script>
     var userId;
     layui.use('table', function () {
@@ -55,7 +55,7 @@
             userId = data.userId;
             layEvent = obj.event; //获得 lay-event 对应的值
             if (layEvent === 'detail') {
-                showAtRight("/module/allotGroup.html");
+                showAtRight("/module/group/allotGroup.html");
             } else if (layEvent === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     console.log(data);
@@ -81,13 +81,13 @@
                 });
             } else if (layEvent === 'edit') {
                 console.log(data);
-                showAtRight("/module/updateUser.html");
+                showAtRight("/module/user/updateUser.html");
             }
         });
     });
 </script>
 <script>
     $("#user").on('click', function () {
-        showAtRight("/module/addUser.html");
+        showAtRight("/module/user/addUser.html");
     });
 </script>

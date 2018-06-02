@@ -54,7 +54,7 @@
 
         $("#add").on('click', function () {
             if (judgePrivilege(siteId)) {
-                showAtRight('/module/addTimedTaskArticle.html')
+                showAtRight('/module/task/addTimedTaskArticle.html')
             }
         });
 
@@ -83,7 +83,7 @@
                         if (data.code === 0) {
                             layer.msg("删除成功", {icon: 6});
                             console.log("删除成功");
-                            showAtRight("module/listTimedTask.html");
+                            showAtRight("module/task/listTimedTask.html");
                         } else if (data.code === 1) {
                             layer.msg("删除失败", {icon: 5});
                         }
@@ -103,7 +103,7 @@
                 layEvent = obj.event; //获得 lay-event 对应的值
                 articleId = data.articleId;
                 if (layEvent === 'edit') {
-                    showAtRight('/module/editTimeTaskArticle.html')
+                    showAtRight('/module/task/editTimeTaskArticle.html')
                 } else if (layEvent === 'end') {
                     layer.confirm('确定终止发布任务吗?', function (index) {
                         layer.close(index);

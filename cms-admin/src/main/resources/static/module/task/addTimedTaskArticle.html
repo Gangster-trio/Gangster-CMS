@@ -231,7 +231,7 @@
 
 
         $("#belongCategory").on('click', function () {
-            $.get('/module/selectCategory.html', {}, function (str) {
+            $.get('/module/category/selectCategory.html', {}, function (str) {
                 layer.open({
                     type: 1,
                     title: '选择栏目',
@@ -276,7 +276,7 @@
                 },
                 success: function (resp) {
                     layui.layer.alert(resp.message);
-                    showAtRight("/module/listTimedTask.html");
+                    showAtRight("/module/task/listTimedTask.html");
                 }
             })
         }
