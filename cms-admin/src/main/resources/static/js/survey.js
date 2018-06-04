@@ -194,7 +194,7 @@ function addPage() {
     console.log(generateData());
     $.ajax({
         type: 'POST',
-        url: '/survey/page/add',
+        url: '/survey/page/add/'+siteId,
         data: generateData(),
         async: false,
         contentType: 'application/json',
@@ -222,7 +222,7 @@ function updatePage() {
     console.log(generateData());
     $.ajax({
         type: 'POST',
-        url: '/survey/page/update',
+        url: '/survey/page/update/'+siteId,
         data: generateData(),
         async: false,
         contentType: 'application/json',

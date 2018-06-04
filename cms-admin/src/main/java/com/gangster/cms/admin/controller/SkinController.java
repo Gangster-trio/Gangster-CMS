@@ -1,5 +1,6 @@
 package com.gangster.cms.admin.controller;
 
+import com.gangster.cms.admin.annotation.CmsPermission;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.service.web.FileUploadService;

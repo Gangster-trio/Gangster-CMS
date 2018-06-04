@@ -36,12 +36,12 @@
         </select>
 
         <!--TODO: skin choose-->
-        <div class="layui-form-item">
+        <div style="margin-top: 15px" class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
-            <div class="layui-input-block">
-                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-                <!--单选框name 为控件名，value是提交到服务器的值-->
-                <input type="radio" name="articleSkin" value="default" title="默认" checked="checked">
+            <div class="layui-input-inline">
+                <input type="text" name="articleSkin" id="articleSkin"
+                       placeholder="暂时先不填" autocomplete="off"
+                       class="layui-input">
             </div>
         </div>
 
@@ -60,7 +60,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">文章作者</label>
             <div class="layui-input-inline">
-                <input type="text" id="articleAuthor" name="articleAuthor" required lay-verify="required" placeholder="文章作者"
+                <input type="text" id="articleAuthor" name="articleAuthor" required lay-verify="required"
+                       placeholder="文章作者"
                        autocomplete="off"
                        class="layui-input">
             </div>
@@ -131,7 +132,7 @@
 
         layui.upload.render({
             elem: '#uploadImg',
-            url: '/article/img',
+            url: '/article/img/' + siteId,
             accept: 'images',
             size: 1000,
             before: function () {
@@ -176,7 +177,7 @@
         });
         layedit.set({
             uploadImage: {
-                url: '/article/img' //接口url
+                url: '/article/img/' + siteId //接口url
                 , type: 'post' //默认post
                 , size: 0
             }
@@ -230,7 +231,7 @@
     function add_article() {
         $.ajax({
             type: "POST",
-            url: "/article/add",
+            url: "/article/add/" + siteId,
             data: generate_article_data(),
             contentType: 'application/json',
             dataType: 'json',

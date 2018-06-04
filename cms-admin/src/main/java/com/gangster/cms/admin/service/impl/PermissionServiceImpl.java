@@ -58,7 +58,6 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     private Integer getModuleId(String moduleName) {
         Integer id = moduleCache.get(moduleName);
         if (id != null) {
-            LOGGER.error("未找到名称为{}的模块", moduleName);
             return id;
         }
         ModuleExample example = new ModuleExample();

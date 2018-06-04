@@ -82,7 +82,7 @@
                 if (layEvent === 'del') {
                     layer.confirm('真的删除行么', function (index) {
                         $.ajax({
-                            url: "/article/delete/" + articleId,
+                            url: "/article/delete/" + siteId + "/" + articleId,
                             type: 'get',
                             dataType: 'json',
                             success: function (data) {
@@ -131,7 +131,7 @@
                 }
                 $.ajax({
                     type: 'post',
-                    url: '/article/delete/batch',
+                    url: '/article/delete/batch/'+siteId,
                     data: {
                         "articleIdData": articleIdData
                     },

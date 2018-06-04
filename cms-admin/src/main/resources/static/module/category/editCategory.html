@@ -30,12 +30,13 @@
         </select>
 
         <!--TODO: skin choose-->
-        <div class="layui-form-item">
+
+        <div style="margin-top: 15px" class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
-            <div class="layui-input-block">
-                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-                <!--单选框name 为控件名，value是提交到服务器的值-->
-                <input type="radio" name="categorySkin" value="default" title="默认" checked="checked">
+            <div class="layui-input-inline">
+                <input type="text" name="categorySkin" id="categorySkin" required="required" lay-verify="required"
+                       placeholder="请输入皮肤名称" autocomplete="off"
+                       class="layui-input">
             </div>
         </div>
 
@@ -93,7 +94,7 @@
 
         $.ajax({
             type: "get",
-            url: "/category/details/" + categoryId,
+            url: "/category/details/" + siteId + "/" + categoryId,
             async: false,
             success: function (data) {
                 console.log(data);
@@ -106,6 +107,7 @@
                 $("#categoryType").val(category.categoryType);
                 $("#category_id").val(category.categoryParentId);
                 $("#categoryDesc").val(category.categoryDesc);
+                $("#categorySkin").val(category.categorySkin);
                 $("#belongCategory").val(category_parent_name);
                 if (category.categoryInHomepage) {
                     $("#categoryInHomepage").val('true');

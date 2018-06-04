@@ -77,7 +77,7 @@ public class ContentWebService {
         Site site = siteService.selectByPrimaryKey(siteId);
 
         // 如果文章没有设置皮肤,默认为站点的皮肤.
-        if (article.getArticleSkin() == null) {
+        if (article.getArticleSkin().isEmpty()) {
             article.setArticleSkin(site.getSiteSkin());
         }
 
@@ -85,12 +85,7 @@ public class ContentWebService {
             // 添加文章附件
             List<String> fileNames;
             List<WebFile> files = null;
-            if (!articleDTO.getFiles().equals("")) {
-                fileNames = Arrays.asList(articleDTO.getFiles().split(","));
-                WebFileExample webFileExample = new WebFileExample();
-                webFileExample.or().andFileNameIn(fileNames);
-                files = webFileService.selectByExample(webFileExample);
-            }
+            files = transformArticleDto(articleDTO, files);
             articleService.insertWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
         } catch (Exception e) {
             LOGGER.error("添加文章{}失败,错误原因{}", articleDTO, e.getMessage());
@@ -167,8 +162,13 @@ public class ContentWebService {
         article.setArticleId(articleId);
         article.setArticleStatus(CmsConst.REVIEW);
         article.setArticleUpdateTime(new Date());
+
         try {
-            articleService.updateByPrimaryKeySelective(article);
+            List<String> fileNames;
+            List<WebFile> files = null;
+            files = transformArticleDto(articleDTO, files);
+            articleService.updateSelectWithTagAndFile(articleId, article, Arrays.asList(articleDTO.getTags().split(",")), files);
+
         } catch (Exception e) {
             LOGGER.error("更新id为{}的文章发生错误{}", articleId, e.getMessage());
             e.printStackTrace();
@@ -176,6 +176,17 @@ public class ContentWebService {
         }
         LOGGER.info("更新id为{}的文章{}成功", articleId, article);
         return true;
+    }
+
+    private List<WebFile> transformArticleDto(ArticleDTO articleDTO, List<WebFile> files) {
+        List<String> fileNames;
+        if (!articleDTO.getFiles().isEmpty()) {
+            fileNames = Arrays.asList(articleDTO.getFiles().split(","));
+            WebFileExample webFileExample = new WebFileExample();
+            webFileExample.or().andFileNameIn(fileNames);
+            files = webFileService.selectByExample(webFileExample);
+        }
+        return files;
     }
 
 

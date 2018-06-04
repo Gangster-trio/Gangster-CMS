@@ -14,7 +14,7 @@ public class ArticleDTO {
         this.tags = tags;
         this.files = files;
     }
-
+    public ArticleDTO(){}
     public Article getArticle() {
         return article;
     }
@@ -50,7 +50,6 @@ public class ArticleDTO {
     public ArticleDTO(Article article) {
         this.article = article;
     }
-
     public ArticleDTO(Article article, String categoryName, String tags) {
         this.article = article;
         this.categoryName = categoryName;

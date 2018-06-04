@@ -34,7 +34,7 @@ function generate_category_data() {
 function add_category() {
     $.ajax({
         type: "POST",
-        url: "/category/add",
+        url: "/category/add/" + siteId,
         data: generate_category_data(),
         contentType: 'application/json',
         dataType: 'json',
@@ -59,7 +59,7 @@ function add_category() {
 function update_category() {
     $.ajax({
         type: "POST",
-        url: "/category/update/" + categoryId,
+        url: "/category/update/" + siteId + "/" + categoryId,
         data: generate_category_data(),
         contentType: 'application/json',
         dataType: 'json',
@@ -83,14 +83,14 @@ function update_category() {
 
 function generate_article_data() {
     var article = {
-        "article_id": $("#articleId").val(),
-        "article_title": $("#articleTitle").val(),
-        "article_Type": $("#articleType").val(),
-        "article_Author": $("#articleAuthor").val(),
-        "article_url": "",
-        "article_order": $("#articleOrder").val(),
-        "article_siteId": getCookie("siteId"),
-        "article_categoryId": $("#category_id").val(),
+        "articleId": $("#articleId").val(),
+        "articleTitle": $("#articleTitle").val(),
+        "articleType": $("#articleType").val(),
+        "articleAuthor": $("#articleAuthor").val(),
+        "articleUrl": "",
+        "articleOrder": $("#articleOrder").val(),
+        "articleSiteId": getCookie("siteId"),
+        "articleCategoryId": $("#category_id").val(),
         "articleCreateTime": new Date().getTime(),
         "articleUpdateTime": "",
         "articleThumb": $("#articleThumb").val(),
@@ -100,7 +100,7 @@ function generate_article_data() {
         "articleSkin": $("#articleSkin").val(),
         "articleInHomepage": "",
         "articleReleaseTime": new Date().getTime(),
-        "articleReleaseStatus": "",
+        "articleReleaseStatus": 0,
         "articleContent": layedit.getContent(editor_text)
     };
     return JSON.stringify({
@@ -114,7 +114,7 @@ function generate_article_data() {
 function update_article() {
     $.ajax({
         type: 'post',
-        url: '/article/update/' + articleId,
+        url: '/article/update/' + siteId + "/" + articleId,
         data: generate_article_data(),
         async: false,
         contentType: "application/json",
