@@ -123,6 +123,7 @@ public class SurveyWebService {
     private boolean addSurveyPageWithTopicAndOption(SurveyPage surveyPage, List<TopicWithOptionWrapper> topicWithOptionWrappers) {
         try {
             surveyPageMapper.insert(surveyPage);
+            if(topicWithOptionWrappers!=null){
             topicWithOptionWrappers.forEach(e -> {
                 SurveyTopic surveyTopic = e.getTopic();
                 surveyTopic.setTopicPageId(surveyPage.getPageId());
@@ -133,6 +134,7 @@ public class SurveyWebService {
                     surveyOptionMapper.insert(t);
                 });
             });
+            }
         } catch (Exception e) {
             LOGGER.error("添加问卷时插入失败,错误信息 {}", e.getMessage());
             e.printStackTrace();

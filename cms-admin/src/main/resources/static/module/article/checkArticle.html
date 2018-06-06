@@ -61,7 +61,7 @@
                         layer.close(index);
                         $.ajax({
                             type: 'get',
-                            url: '/article/check/' + data.articleId,
+                            url: '/article/check/' + siteId + "/" + articleId,
                             data: {'judge': 1},
                             dataType: "json",
                             success: function (data) {
@@ -79,7 +79,7 @@
                         layer.close(index);
                         $.ajax({
                             type: 'get',
-                            url: '/article/check/' + data.articleId,
+                            url: '/article/check/' + siteId + "/" + articleId,
                             data: {'judge': 2},
                             dataType: "json",
                             success: function (data) {

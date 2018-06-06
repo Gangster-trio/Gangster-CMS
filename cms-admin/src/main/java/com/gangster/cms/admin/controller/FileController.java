@@ -1,5 +1,7 @@
 package com.gangster.cms.admin.controller;
 
+import com.gangster.cms.admin.annotation.CmsPermission;
+import com.gangster.cms.admin.annotation.SiteId;
 import com.gangster.cms.admin.annotation.SystemControllerLog;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.MessageDto;
@@ -40,8 +42,9 @@ public class FileController {
     private SettingService settingService;
 
     @SystemControllerLog(description = "添加文件")
-    @PostMapping({"/upload/{articleId}", "/upload"})
-    public MessageDto uploadFile(@PathVariable(required = false) Integer articleId, @Param("file") MultipartFile file) {
+    @CmsPermission(moduleName = "文件管理")
+    @PostMapping({"/upload/{siteId}/{articleId}", "/upload/{siteId}"})
+    public MessageDto uploadFile(@SiteId @PathVariable Integer siteId, @PathVariable(required = false) Integer articleId, @Param("file") MultipartFile file) {
         if (null == articleId) {
             return MessageDto.success(fileUploadService.saveFile(file));
         } else {
@@ -50,13 +53,14 @@ public class FileController {
     }
 
     @SystemControllerLog(description = "下载文件")
-    @PostMapping("/download/{id}")
-    public void download(@PathVariable("id") Integer id, HttpServletRequest request, HttpServletResponse response) {
+    @CmsPermission(moduleName = "文件管理")
+    @PostMapping("/download/{siteId}/{fId}")
+    public void download(@SiteId @PathVariable Integer siteId, @PathVariable Integer fId, HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding(request.getCharacterEncoding());
         response.setContentType("application/ocet-stream");
         FileInputStream inputStream = null;
         try {
-            WebFile webFile = webFileService.selectByPrimaryKey(id);
+            WebFile webFile = webFileService.selectByPrimaryKey(fId);
             String webPath = webFile.getFileName();
             String downPath = settingService.get(CmsConst.FILE_PATH) + webPath.split("/")[2];
             File file = new File(downPath);
@@ -78,8 +82,9 @@ public class FileController {
     }
 
     @SystemControllerLog(description = "列出某个网站的文件")
+    @CmsPermission(moduleName = "文件管理")
     @GetMapping("/list")
-    public AjaxData list(@RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData list(@SiteId @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         WebFileExample webFileExample = new WebFileExample();
         webFileExample.or().andFileSiteIdEqualTo(siteId);
         PageInfo<WebFile> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> webFileService.selectByExample(webFileExample));
@@ -89,13 +94,16 @@ public class FileController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    @GetMapping("/delete/{id}")
-    public MessageDto delete(@PathVariable Integer id) {
-        WebFile file = webFileService.selectByPrimaryKey(id);
+    @GetMapping("/delete/{siteId}/{fId}")
+    @CmsPermission(moduleName = "文件管理")
+    public MessageDto delete(@SiteId @PathVariable Integer siteId, @PathVariable Integer fId) {
+        WebFile file = webFileService.selectByPrimaryKey(fId);
         if (file == null) {
             return MessageDto.fail(1, "要删除的文件不存在");
         }
-        webFileService.deleteByPrimaryKey(id);
+        if (!fileUploadService.deleteFile(fId)) {
+            return MessageDto.fail(1, "failed");
+        }
         return MessageDto.success(null);
     }
 }

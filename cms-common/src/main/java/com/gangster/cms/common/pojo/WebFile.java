@@ -23,9 +23,19 @@ public class WebFile implements Serializable {
     private Integer fileCategoryId;
 
     private static final long serialVersionUID = 1L;
-
     public WebFile(Integer fileId, String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId, Integer fileSiteId, Integer fileCategoryId) {
         this.fileId = fileId;
+        this.fileName = fileName;
+        this.fileCreated = fileCreated;
+        this.fileDownCount = fileDownCount;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
+        this.fileArticleId = fileArticleId;
+        this.fileSiteId = fileSiteId;
+        this.fileCategoryId = fileCategoryId;
+    }
+
+    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId, Integer fileSiteId, Integer fileCategoryId) {
         this.fileName = fileName;
         this.fileCreated = fileCreated;
         this.fileDownCount = fileDownCount;
@@ -40,10 +50,12 @@ public class WebFile implements Serializable {
         super();
     }
 
-    public WebFile(String virtualPath, Date date, int i, String suffix, String fileSize, Integer articleId, Integer articleSiteId, Integer articleCategoryId) {
-    }
-
-    public WebFile(String virtualPath, Date date, int i, String suffix, String fileSize) {
+    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize) {
+        this.fileName = fileName;
+        this.fileCreated = fileCreated;
+        this.fileDownCount = fileDownCount;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
     }
 
     public Integer getFileId() {
@@ -177,22 +189,6 @@ public class WebFile implements Serializable {
         return sb.toString();
     }
 
-    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId, Integer fileSiteId, Integer fileCategoryId) {
-        this.fileName = fileName;
-        this.fileCreated = fileCreated;
-        this.fileDownCount = fileDownCount;
-        this.fileType = fileType;
-        this.fileSize = fileSize;
-        this.fileArticleId = fileArticleId;
-        this.fileSiteId = fileSiteId;
-        this.fileCategoryId = fileCategoryId;
-    }
 
-    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize) {
-        this.fileName = fileName;
-        this.fileCreated = fileCreated;
-        this.fileDownCount = fileDownCount;
-        this.fileType = fileType;
-        this.fileSize = fileSize;
-    }
+
 }

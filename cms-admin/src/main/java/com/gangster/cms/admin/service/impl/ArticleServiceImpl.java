@@ -3,18 +3,16 @@ package com.gangster.cms.admin.service.impl;
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.TagService;
-import com.gangster.cms.admin.util.FileUtil;
+import com.gangster.cms.admin.service.WebFileService;
+import com.gangster.cms.admin.util.FileTool;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.ArticleMapper;
-import com.gangster.cms.dao.mapper.SettingEntryMapper;
 import com.gangster.cms.dao.mapper.TagArticleMapper;
-import com.gangster.cms.dao.mapper.WebFileMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -25,14 +23,18 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
 
     @Autowired
     private ArticleMapper articleMapper;
+
     @Autowired
     TagService tagService;
+
     @Autowired
     TagArticleMapper tagArticleMapper;
+
     @Autowired
-    private WebFileMapper webFileMapper;
+    private WebFileService webFileService;
+
     @Autowired
-    private SettingEntryMapper settingEntryMapper;
+    private FileTool fileTool;
 
     private List<Integer> selectArticlesIdByTagName(String tag) {
         TagExample tagExample = new TagExample();
@@ -130,7 +132,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
                 webFile.setFileArticleId(article.getArticleId());
                 webFile.setFileCategoryId(article.getArticleCategoryId());
                 webFile.setFileSiteId(article.getArticleSiteId());
-                webFileMapper.updateByPrimaryKey(webFile);
+                webFileService.updateByPrimaryKey(webFile);
             });
         }
     }
@@ -175,10 +177,11 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         // 删除文章上传的文件
         WebFileExample webFileExample = new WebFileExample();
         webFileExample.or().andFileArticleIdEqualTo(articleId);
-        webFileMapper.selectByExample(webFileExample).stream().map(e ->
-                settingEntryMapper.selectByPrimaryKey(CmsConst.FILE_PATH).getSysValue() + e.getFileName().split("/")[2])
-                .forEach(realFilePath -> FileUtil.deleteDir(new File(realFilePath)));
-        webFileMapper.deleteByExample(webFileExample);
+        List<WebFile> files = webFileService.selectByExample(webFileExample);
+        if (files.size() > 0) {
+            fileTool.deleteFiles(files);
+        }
+        // 删除文章
         articleMapper.deleteByPrimaryKey(articleId);
     }
 }

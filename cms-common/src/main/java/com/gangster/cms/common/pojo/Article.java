@@ -65,6 +65,27 @@ public class Article implements Serializable {
         this.articleReleaseStatus = articleReleaseStatus;
     }
 
+    public Article(String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, Boolean articleInHomepage, Date articleReleaseTime, Boolean articleReleaseStatus, String articleContent) {
+        this.articleTitle = articleTitle;
+        this.articleType = articleType;
+        this.articleAuthor = articleAuthor;
+        this.articleUrl = articleUrl;
+        this.articleOrder = articleOrder;
+        this.articleSiteId = articleSiteId;
+        this.articleCategoryId = articleCategoryId;
+        this.articleCreateTime = articleCreateTime;
+        this.articleUpdateTime = articleUpdateTime;
+        this.articleThumb = articleThumb;
+        this.articleHit = articleHit;
+        this.articleDesc = articleDesc;
+        this.articleStatus = articleStatus;
+        this.articleSkin = articleSkin;
+        this.articleInHomepage = articleInHomepage;
+        this.articleReleaseTime = articleReleaseTime;
+        this.articleReleaseStatus = articleReleaseStatus;
+        this.articleContent = articleContent;
+    }
+
     public Article(Integer articleId, String articleTitle, String articleType, String articleAuthor, String articleUrl, Integer articleOrder, Integer articleSiteId, Integer articleCategoryId, Date articleCreateTime, Date articleUpdateTime, String articleThumb, Integer articleHit, String articleDesc, Integer articleStatus, String articleSkin, Boolean articleInHomepage, Date articleReleaseTime, Boolean articleReleaseStatus, String articleContent) {
         this.articleId = articleId;
         this.articleTitle = articleTitle;

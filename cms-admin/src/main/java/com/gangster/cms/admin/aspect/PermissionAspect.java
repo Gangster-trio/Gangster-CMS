@@ -73,6 +73,7 @@ public class PermissionAspect {
         }
 
         if (permissionService.hasPermission(user.getUserId(), siteId, moduleName)) {
+            LOGGER.info("网站的: {}模块: {}通过了权限认证", siteId, moduleName);
             return point.proceed();
         } else {
             // TODO: 5/31/18 添加未授权页面

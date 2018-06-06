@@ -32,7 +32,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
             return true;
         }
         PermissionExample permissionExample = new PermissionExample();
-        permissionExample.or().andUserIdEqualTo(uid);
+        permissionExample.or().andUserIdEqualTo(uid).andSiteIdEqualTo(sid);
         List<Permission> permissionList = permissionMapper.selectByExample(permissionExample);
 
         for (Permission p : permissionList) {

@@ -25,16 +25,18 @@
             <option style="padding-left: 50px" value="主页目录">主页目录</option>
             <option style="padding-left: 50px" value="普通目录">普通目录</option>
         </select>
+
+        <br/>
         <!--TODO: skin choose-->
-        <div class="layui-form-item">
+        <div style="margin-top: 15px" class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
-            <div class="layui-input-block">
-                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-                <!--单选框name 为控件名，value是提交到服务器的值-->
-                <!--TODO: 此处完善皮肤选择功能.    @Yoke-->
-                <input type="radio" id="categorySkin" name="categorySkin" value="default" title="默认" checked="checked">
+            <div class="layui-input-inline">
+                <input type="text" name="categorySkin" id="categorySkin"
+                       placeholder="暂时先不填" autocomplete="off"
+                       class="layui-input">
             </div>
         </div>
+
         <div id="show" class="layui-form-item">
             <label class="layui-form-label">所属栏目</label>
             <div class="layui-input-inline">
