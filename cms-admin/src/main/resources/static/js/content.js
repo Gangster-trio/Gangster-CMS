@@ -5,7 +5,6 @@ function generate_category_data() {
     // no
     // var category_type = $("select[name=categoryType] option[selected]").text();
     var category_type = $("#categoryType").val();
-    alert(category_type);
     var category_skin = $("#categorySkin").val();
     var category_parent_id = $("#category_id").val();
     // var category_in_homepage = $("input[name=categoryInHomepage][checked]").val();

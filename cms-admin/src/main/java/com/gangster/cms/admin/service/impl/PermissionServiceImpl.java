@@ -8,8 +8,6 @@ import com.gangster.cms.common.pojo.Permission;
 import com.gangster.cms.common.pojo.PermissionExample;
 import com.gangster.cms.dao.mapper.ModuleMapper;
 import com.gangster.cms.dao.mapper.PermissionMapper;
-import org.aspectj.lang.annotation.Around;
-import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
             return true;
         }
         PermissionExample permissionExample = new PermissionExample();
-        permissionExample.or().andUserIdEqualTo(uid);
+        permissionExample.or().andUserIdEqualTo(uid).andSiteIdEqualTo(sid);
         List<Permission> permissionList = permissionMapper.selectByExample(permissionExample);
 
         for (Permission p : permissionList) {

@@ -1,10 +1,9 @@
 package com.gangster.cms.admin.controller;
 
-import com.gangster.cms.admin.annotation.CmsPermission;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.service.web.FileUploadService;
-import com.gangster.cms.admin.util.FileUtil;
+import com.gangster.cms.admin.util.FileTool;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Skin;
 import com.gangster.cms.common.pojo.SkinExample;
@@ -55,7 +54,7 @@ public class SkinController {
     public MessageDto delete(@PathVariable("skinName") String skinName) {
         try {
             skinMapper.deleteByPrimaryKey(skinName);
-            FileUtil.deleteDir(new File(settingEntryMapper.selectByPrimaryKey(CmsConst.RESOURCE_PATH).getSysValue() + skinName));
+            FileTool.deleteDir(new File(settingEntryMapper.selectByPrimaryKey(CmsConst.RESOURCE_PATH).getSysValue() + skinName));
             LOGGER.info("删除皮肤:{}", skinName);
         } catch (Exception e) {
             e.printStackTrace();
