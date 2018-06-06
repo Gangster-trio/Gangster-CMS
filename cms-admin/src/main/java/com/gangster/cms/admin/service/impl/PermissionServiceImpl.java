@@ -8,20 +8,15 @@ import com.gangster.cms.common.pojo.Permission;
 import com.gangster.cms.common.pojo.PermissionExample;
 import com.gangster.cms.dao.mapper.ModuleMapper;
 import com.gangster.cms.dao.mapper.PermissionMapper;
-import org.aspectj.lang.annotation.Around;
-import org.omg.PortableServer.LIFESPAN_POLICY_ID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Permission, PermissionExample> implements PermissionService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PermissionServiceImpl.class);
 
     @Autowired
     PermissionMapper permissionMapper;
@@ -54,11 +49,21 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
         return hasPermission(uid, sid, getModuleId(moduleName));
     }
 
+    @Override
+    public List<Module> getAllPermittedModule(Integer uid, Integer sid) {
+        PermissionExample example = new PermissionExample();
+        example.or().andSiteIdEqualTo(sid).andUserIdEqualTo(uid);
+        List<Permission> permissions = permissionMapper.selectByExample(example);
+        return permissions.stream()
+                .map(Permission::getModuleId)
+                .map(moduleMapper::selectByPrimaryKey)
+                .collect(Collectors.toList());
+    }
+
 
     private Integer getModuleId(String moduleName) {
         Integer id = moduleCache.get(moduleName);
         if (id != null) {
-            LOGGER.error("未找到名称为{}的模块", moduleName);
             return id;
         }
         ModuleExample example = new ModuleExample();
