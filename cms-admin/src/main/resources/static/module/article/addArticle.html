@@ -152,7 +152,7 @@
 
         upload.render({
             elem: '#choose-file'
-            , url: '/file/upload'
+            , url: '/file/upload/' + siteId
             , auto: false
             , choose: function (obj) {
                 var files = obj.pushFile();

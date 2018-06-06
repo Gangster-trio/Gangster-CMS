@@ -8,20 +8,15 @@ import com.gangster.cms.common.pojo.Permission;
 import com.gangster.cms.common.pojo.PermissionExample;
 import com.gangster.cms.dao.mapper.ModuleMapper;
 import com.gangster.cms.dao.mapper.PermissionMapper;
-import org.aspectj.lang.annotation.Around;
-import org.omg.PortableServer.LIFESPAN_POLICY_ID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Permission, PermissionExample> implements PermissionService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PermissionServiceImpl.class);
 
     @Autowired
     PermissionMapper permissionMapper;
@@ -37,7 +32,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
             return true;
         }
         PermissionExample permissionExample = new PermissionExample();
-        permissionExample.or().andUserIdEqualTo(uid);
+        permissionExample.or().andUserIdEqualTo(uid).andSiteIdEqualTo(sid);
         List<Permission> permissionList = permissionMapper.selectByExample(permissionExample);
 
         for (Permission p : permissionList) {
@@ -52,6 +47,17 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     @Override
     public boolean hasPermission(Integer uid, Integer sid, String moduleName) {
         return hasPermission(uid, sid, getModuleId(moduleName));
+    }
+
+    @Override
+    public List<Module> getAllPermittedModule(Integer uid, Integer sid) {
+        PermissionExample example = new PermissionExample();
+        example.or().andSiteIdEqualTo(sid).andUserIdEqualTo(uid);
+        List<Permission> permissions = permissionMapper.selectByExample(example);
+        return permissions.stream()
+                .map(Permission::getModuleId)
+                .map(moduleMapper::selectByPrimaryKey)
+                .collect(Collectors.toList());
     }
 
 

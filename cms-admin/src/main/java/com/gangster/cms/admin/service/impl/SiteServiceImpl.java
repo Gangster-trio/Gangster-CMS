@@ -5,8 +5,10 @@ import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.CategoryService;
 import com.gangster.cms.admin.service.PermissionService;
 import com.gangster.cms.admin.service.SiteService;
+import com.gangster.cms.admin.util.FileTool;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.SiteMapper;
+import com.gangster.cms.dao.mapper.WebFileMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,24 +18,27 @@ import java.util.stream.Stream;
 @Service
 public class SiteServiceImpl extends BaseServiceImpl<SiteMapper, Site, SiteExample> implements SiteService {
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
     @Autowired
-    ArticleService articleService;
+    private WebFileMapper webFileMapper;
 
     @Autowired
-    PermissionService permissionService;
+    private FileTool fileTool;
 
     @Override
     public int deleteSite(Integer sid) {
+
+        // 删除网站的文件
+        WebFileExample webFileExample = new WebFileExample();
+        webFileExample.or().andFileSiteIdEqualTo(sid);
+        List<WebFile> files = webFileMapper.selectByExample(webFileExample);
+        if (files.size() > 0) {
+            fileTool.deleteFiles(files);
+        }
+        // 文章没有删除标签
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(sid);
-        List<Category> categoryList = categoryService.selectByExample(categoryExample);
-        for (Category category : categoryList) {
-            ArticleExample articleExample = new ArticleExample();
-            articleExample.or().andArticleCategoryIdEqualTo(category.getCategoryId());
-            articleService.deleteByExample(articleExample);
-        }
         categoryService.deleteByExample(categoryExample);
         return super.deleteByPrimaryKey(sid);
     }

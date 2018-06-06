@@ -44,7 +44,7 @@ public class FileController {
     @SystemControllerLog(description = "添加文件")
     @CmsPermission(moduleName = "文件管理")
     @PostMapping({"/upload/{siteId}/{articleId}", "/upload/{siteId}"})
-    public MessageDto uploadFile(@SiteId  @PathVariable Integer siteId, @PathVariable(required = false) Integer articleId, @Param("file") MultipartFile file) {
+    public MessageDto uploadFile(@SiteId @PathVariable Integer siteId, @PathVariable(required = false) Integer articleId, @Param("file") MultipartFile file) {
         if (null == articleId) {
             return MessageDto.success(fileUploadService.saveFile(file));
         } else {
@@ -101,7 +101,9 @@ public class FileController {
         if (file == null) {
             return MessageDto.fail(1, "要删除的文件不存在");
         }
-        webFileService.deleteByPrimaryKey(fId);
+        if (!fileUploadService.deleteFile(fId)) {
+            return MessageDto.fail(1, "failed");
+        }
         return MessageDto.success(null);
     }
 }

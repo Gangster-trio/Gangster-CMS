@@ -4,7 +4,9 @@ import com.gangster.cms.admin.annotation.SystemControllerLog;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.MessageDto;
 import com.gangster.cms.admin.service.web.ContentWebService;
+import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Site;
+import com.gangster.cms.common.pojo.User;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +35,8 @@ public class SiteController {
 
     @SystemControllerLog(description = "添加站")
     @PostMapping("/add")
-    public MessageDto add(@RequestBody Site site) {
-        if (!contentWebService.addSite(site)) {
+    public MessageDto add(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody Site site) {
+        if (!contentWebService.addSite(user, site)) {
             return MessageDto.fail(1, "添加站失败");
         }
         return MessageDto.success(null);
