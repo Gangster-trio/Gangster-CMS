@@ -10,11 +10,8 @@
 
     <title>${result.site.siteName!'No title'}</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-<#--<!-- Bootstrap core CSS &ndash;&gt;-->
-<#--<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
 <#--<link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
@@ -24,17 +21,17 @@
           rel='stylesheet' type='text/css'>
 
     <!-- Custom styles for this template -->
-    <link href="/css/clean-blog.min.css" rel="stylesheet">
+    <link href="${request.contextPath}/${BaseSkinPath}/css/clean-blog.min.css" rel="stylesheet">
 
 </head>
 
 <body>
 
-<#import "default-header.ftl" as header/>
+<#import "header.ftl" as header/>
 <@header.header site=result.site TreeList=result.categoryTreeList></@header.header>
 
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('/img/home-bg.jpg')">
+<header class="masthead" style="background-image: url('${request.contextPath}/${BaseSkinPath}/img/home-bg.jpg')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">

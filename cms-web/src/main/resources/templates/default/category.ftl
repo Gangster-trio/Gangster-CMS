@@ -11,7 +11,7 @@
     <title>${result.category.categoryTitle!'No title'}</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${request.contextPath}/${BaseSkinPath}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 <#--<!-- Bootstrap core CSS &ndash;&gt;-->
 <#--<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
@@ -24,13 +24,13 @@
           rel='stylesheet' type='text/css'>
 
     <!-- Custom styles for this template -->
-    <link href="/css/clean-blog.min.css" rel="stylesheet">
+    <link href="${request.contextPath}/${BaseSkinPath}/css/clean-blog.min.css" rel="stylesheet">
 
 </head>
 
 <body>
 
-    <#import "default-header.ftl" as header/>
+    <#import "header.ftl" as header/>
     <@header.header site=result.site TreeList=result.categoryTreeList></@header.header>
 
 <!-- Page Header -->

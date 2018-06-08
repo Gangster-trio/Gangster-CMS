@@ -8,20 +8,13 @@
 
 
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="cds/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/${BaseSkinPath}/iconfont.css">
     <!--公共样式-->
-    <link rel="stylesheet" type="text/css" href="cds/common.css">
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/${BaseSkinPath}/common.css">
     <!--首页样式-->
-    <link rel="stylesheet" href="cds/index.css">
+    <link rel="stylesheet" href="${request.contextPath}/${BaseSkinPath}/index.css">
     <!--轮播图-->
-    <link rel="stylesheet" type="text/css" href="cds/slide.css">
-    <!--修复ie78-->
-    <!--[if IE 8]>
-    <link rel="stylesheet" type="text/css" href="http://cds.tyut.edu.cn/templets/1/cds/new/css/ie78.css"/>
-    <![endif]-->
-    <!--[if IE 7]>
-    <link rel="stylesheet" type="text/css" href="http://cds.tyut.edu.cn/templets/1/cds/new/css/ie78.css"/>
-    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/${BaseSkinPath}/slide.css">
 
 <body data-gr-c-s-loaded="true">
 <div class="pre-header">
@@ -67,10 +60,10 @@
 <div class="header clearfix">
     <div class="container">
         <a href="http://www2017.tyut.edu.cn/" class="header-logo header-logo-tyut">
-            <img src="cds/logo-tyut3.png">
+            <img src="${request.contextPath}/${BaseSkinPath}/logo-tyut3.png">
         </a>
-        <a href="http://cds.tyut.edu.cn/" class="header-logo header-logo-bigdata">
-            <img src="cds/logo-bigdata.png">
+        <a href="http://${request.contextPath}/${BaseSkinPath}.tyut.edu.cn/" class="header-logo header-logo-bigdata">
+            <img src="${request.contextPath}/${BaseSkinPath}/logo-bigdata.png">
         </a>
     </div>
 
@@ -123,7 +116,7 @@
 
     <#--TODO: 轮播图或者文章-->
         <div class="main2-left">
-            <img src="cds/1524103175491.png">
+            <img src="${request.contextPath}/${BaseSkinPath}/1524103175491.png">
             <a href="http://cds.tyut.edu.cn/html/1/159/191/210/519.html"
                class="main2-left-title twoLineOverflowSolution">
                 <p class="twoLineOverflowSolution">
@@ -202,32 +195,32 @@
 
 <!--main4 结束-->
 <a href="http://cds.tyut.edu.cn/html/1/159/193/index.html" class="main5">
-    <img src="cds/main5-teacher2.png" class="main5-teacher2">
-    <img src="cds/main5-teacher.png">
+    <img src="${request.contextPath}/${BaseSkinPath}/main5-teacher2.png" class="main5-teacher2">
+    <img src="${request.contextPath}/${BaseSkinPath}/main5-teacher.png">
 </a>
 <!--main5 结束-->
 <div class="main6">
     <div class="container clearfix">
         <a href="http://jwc.tyut.edu.cn/" class="main6-pic">
-            <img src="cds/main7-pic1.png">
+            <img src="${request.contextPath}/${BaseSkinPath}/main7-pic1.png">
         </a>
         <a href="http://202.207.247.60/" class="main6-pic">
-            <img src="cds/main7-pic2.png">
+            <img src="${request.contextPath}/${BaseSkinPath}/main7-pic2.png">
         </a>
         <a href="http://www.gs.tyut.edu.cn/" class="main6-pic">
-            <img src="cds/main7-pic3.png">
+            <img src="${request.contextPath}/${BaseSkinPath}/main7-pic3.png">
         </a>
         <a href="http://student.tyut.edu.cn/" class="main6-pic">
-            <img src="cds/main7-pic4.png">
+            <img src="${request.contextPath}/${BaseSkinPath}/main7-pic4.png">
         </a>
         <a href="http://gongqingtuan.tyut.edu.cn/" class="main6-pic">
-            <img src="cds/main7-pic5.png">
+            <img src="${request.contextPath}/${BaseSkinPath}/main7-pic5.png">
         </a>
         <a href="http://202.207.247.49/" class="main6-pic">
-            <img src="cds/main7-pic6.png">
+            <img src="${request.contextPath}/${BaseSkinPath}/main7-pic6.png">
         </a>
         <a href="http://cds.tyut.edu.cn/html/1/159/226/index.html" class="main6-pic">
-            <img src="cds/main7-pic7.png">
+            <img src="${request.contextPath}/${BaseSkinPath}/main7-pic7.png">
         </a>
     </div>
 </div>
@@ -256,7 +249,7 @@
             <a>
                 <i class="iconfont"></i>209号太原理工大学明向校区</a>
         </div>
-        <img src="cds/main7-logo-bigdata.png" class="main7-logo">
+        <img src="${request.contextPath}/${BaseSkinPath}/main7-logo-bigdata.png" class="main7-logo">
     </div>
 </div>
 <!--main7 结束-->
@@ -272,13 +265,13 @@
     </div>
 </div>
 <!--<script src="http://cds.tyut.edu.cn/templets/1/cds/js/jquery-1.9.1.min.js" type="text/javascript" charset="utf-8"></script>-->
-<script src="cds/jquery-1.7.1.min.js"></script>
+<script src="${request.contextPath}/${BaseSkinPath}/jquery-1.7.1.min.js"></script>
 <!--canvas粒子图-->
-<script type="text/javascript" src="cds/jquery.particleground.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/${BaseSkinPath}/jquery.particleground.min.js"></script>
 <!--轮播图-->
-<script type="text/javascript" src="cds/jquery.easing.js"></script>
-<script src="cds/iviewPosition.js" type="text/javascript" charset="utf-8"></script>
-<script src="cds/iview.js"></script>
+<script type="text/javascript" src="${request.contextPath}/${BaseSkinPath}/jquery.easing.js"></script>
+<script src="${request.contextPath}/${BaseSkinPath}/iviewPosition.js" type="text/javascript" charset="utf-8"></script>
+<script src="${request.contextPath}/${BaseSkinPath}/iview.js"></script>
 <script>
     tt_ivew();
     $(document).ready(function () {
@@ -298,7 +291,7 @@
     });
 </script>
 <!--轮播图结束-->
-<script src="cds/sideSlip__function.js" type="text/javascript" charset="utf-8"></script>
+<script src="${request.contextPath}/${BaseSkinPath}/sideSlip__function.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 
     window.onload = function () {
@@ -351,29 +344,6 @@
     tt_bind('menu');
 
 </script>
-
-
-<div id="translate-man-app" class="content-3WfBL_0" style="display: none;">
-    <div data-v-2b7a7e32="" class="outputBox-qe9A4_0">
-        <div data-v-2b7a7e32="" class="outputBox-3oESn_0">
-            <span data-v-2b7a7e32="" class="outputBox-13Ovx_0"></span>
-            <!---->
-        </div>
-        <div data-v-2b7a7e32="" class="outputBox-1GLb__0">
-            <!---->
-            <div data-v-2b7a7e32="" class="outputBox-onVZH_0">
-                <img src="chrome-extension://fapgabkkfcaejckbfmfcdgnfefbmlion/static/sound.svg" class="icon-tprjJ_0">
-            </div>
-        </div>
-        <div data-v-2b7a7e32="" class="outputBox-2sJgr_0"></div>
-        <div data-v-2b7a7e32="" class="outputBox-17RAm_0" style="display: none;">
-            <!---->
-            <!---->
-            <!---->
-            <div data-v-2b7a7e32=""></div>
-        </div>
-    </div>
-</div>
 </body>
 
 </html>
