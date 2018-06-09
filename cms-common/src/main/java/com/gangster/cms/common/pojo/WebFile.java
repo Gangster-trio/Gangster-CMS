@@ -36,14 +36,27 @@ public class WebFile implements Serializable {
         this.fileCategoryId = fileCategoryId;
     }
 
+    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId, Integer fileSiteId, Integer fileCategoryId) {
+        this.fileName = fileName;
+        this.fileCreated = fileCreated;
+        this.fileDownCount = fileDownCount;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
+        this.fileArticleId = fileArticleId;
+        this.fileSiteId = fileSiteId;
+        this.fileCategoryId = fileCategoryId;
+    }
+
     public WebFile() {
         super();
     }
 
-    public WebFile(String virtualPath, Date date, int i, String suffix, String fileSize, Integer articleId, Integer articleSiteId, Integer articleCategoryId) {
-    }
-
-    public WebFile(String virtualPath, Date date, int i, String suffix, String fileSize) {
+    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize) {
+        this.fileName = fileName;
+        this.fileCreated = fileCreated;
+        this.fileDownCount = fileDownCount;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
     }
 
     public Integer getFileId() {
@@ -175,24 +188,5 @@ public class WebFile implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
-    }
-
-    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId, Integer fileSiteId, Integer fileCategoryId) {
-        this.fileName = fileName;
-        this.fileCreated = fileCreated;
-        this.fileDownCount = fileDownCount;
-        this.fileType = fileType;
-        this.fileSize = fileSize;
-        this.fileArticleId = fileArticleId;
-        this.fileSiteId = fileSiteId;
-        this.fileCategoryId = fileCategoryId;
-    }
-
-    public WebFile(String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize) {
-        this.fileName = fileName;
-        this.fileCreated = fileCreated;
-        this.fileDownCount = fileDownCount;
-        this.fileType = fileType;
-        this.fileSize = fileSize;
     }
 }

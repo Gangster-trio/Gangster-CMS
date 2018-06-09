@@ -50,7 +50,7 @@
                         layer.close(index);
                         $.ajax({
                             type: 'get',
-                            url: '/category/check/' + data.categoryId,
+                            url: '/category/check/' + siteId + "/" + categoryId,
                             data: {'judge': 1},
                             dataType: "json",
                             success: function (data) {
@@ -68,7 +68,7 @@
                             layer.close(index);
                             $.ajax({
                                 type: 'get',
-                                url: '/category/check/' + data.categoryId,
+                                url: '/category/check/' + siteId + "/" + categoryId,
                                 data: {'judge': 2},
                                 dataType: "json",
                                 success: function (data) {
@@ -103,7 +103,7 @@
                     }
                     $.ajax({
                         type: 'post',
-                        url: '/category/delete/batch',
+                        url: '/category/delete/batch/' + siteId,
                         data: {
                             "categoryIdData": categoryIdData
                         },
@@ -113,7 +113,7 @@
                             if (data.code === 0) {
                                 layer.msg("删除成功", {icon: 6});
                                 console.log("删除成功");
-                                showAtRight("module/category.html");
+                                showAtRight("/module/category.html");
                             } else {
                                 layer.msg("删除失败", {icon: 5});
                             }
@@ -145,7 +145,7 @@
     //删除栏目的功能实现
     function deleteCategory(id) {
         $.ajax({
-                url: "/category/delete/" + id,
+                url: "/category/delete/" + siteId + "/" + id,
                 dataType: "json",
                 type: "get",
                 timeout: "3000",

@@ -72,7 +72,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/outerchain/detail/" + outerChainId,
+            url: "/outerchain/detail/" + siteId + "/" + outerChainId,
             async: false,
             success: function (resp) {
                 console.log(resp);
@@ -87,7 +87,7 @@
             formData = $("#updateOuterChain").serializeObject();
             $.ajax({
                 type: "POST",
-                url: "/outerchain/update/" + outerChainId,
+                url: "/outerchain/update/" + siteId + "/" + outerChainId,
                 data: JSON.stringify(formData),
                 async: false,
                 contentType: "application/json",

@@ -88,7 +88,7 @@
     //删除栏目的功能实现
     function deleteOuterChain(id) {
         $.ajax({
-                url: "/outerchain/delete/" + id,
+                url: "/outerchain/delete/" + siteId + "/" + id,
                 dataType: "json",
                 type: "get",
                 timeout: "3000",

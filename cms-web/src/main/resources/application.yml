@@ -45,5 +45,3 @@ eureka:
     fetch-registry: true
 eureka_server: localhost
 eureka_port: 8761
-server:
-  port: 8080

@@ -74,7 +74,7 @@
                 layer.confirm('真的删除行么', function (index) {
                     console.log(data);
                     $.ajax({
-                        url: "/article/delete/" + data.articleId,
+                        url: "/article/delete/" + siteId + "/" + categoryId,
                         type: 'get',
                         dataType: 'json',
                         success: function (data) {

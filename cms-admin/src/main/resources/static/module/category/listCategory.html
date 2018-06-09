@@ -57,7 +57,7 @@
                 if (layEvent === 'del') { //删除
                     layer.confirm('真的删除行么', function (index) {
                             $.ajax({
-                                    url: "/category/delete/" + categoryId,
+                                    url: "/category/delete/" + siteId + "/" + categoryId,
                                     dataType: "json",
                                     type: "delete",
                                     timeout: "3000",
@@ -106,7 +106,7 @@
                     }
                     $.ajax({
                         type: 'post',
-                        url: '/category/delete/batch',
+                        url: '/category/delete/batch/'+siteId,
                         data: {
                             "categoryIdData": categoryIdData
                         },
@@ -159,7 +159,4 @@
     });
 
     //删除栏目的功能实现
-    function deleteCategory(id) {
-
-    }
 </script>

@@ -414,6 +414,76 @@ public class SurveyPageExample {
             addCriterion("page_site_id not between", value1, value2, "pageSiteId");
             return (Criteria) this;
         }
+
+        public Criteria andPageSkinNameIsNull() {
+            addCriterion("page_skin_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameIsNotNull() {
+            addCriterion("page_skin_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameEqualTo(String value) {
+            addCriterion("page_skin_name =", value, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameNotEqualTo(String value) {
+            addCriterion("page_skin_name <>", value, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameGreaterThan(String value) {
+            addCriterion("page_skin_name >", value, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameGreaterThanOrEqualTo(String value) {
+            addCriterion("page_skin_name >=", value, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameLessThan(String value) {
+            addCriterion("page_skin_name <", value, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameLessThanOrEqualTo(String value) {
+            addCriterion("page_skin_name <=", value, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameLike(String value) {
+            addCriterion("page_skin_name like", value, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameNotLike(String value) {
+            addCriterion("page_skin_name not like", value, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameIn(List<String> values) {
+            addCriterion("page_skin_name in", values, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameNotIn(List<String> values) {
+            addCriterion("page_skin_name not in", values, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameBetween(String value1, String value2) {
+            addCriterion("page_skin_name between", value1, value2, "pageSkinName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageSkinNameNotBetween(String value1, String value2) {
+            addCriterion("page_skin_name not between", value1, value2, "pageSkinName");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

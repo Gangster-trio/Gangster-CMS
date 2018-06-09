@@ -70,7 +70,7 @@
 
     $.ajax({
         type: 'get',
-        url: '/survey/page/details/' + pageId,
+        url: '/survey/page/details/' + siteId + "/" + pageId,
         async: false,
         success: function (data) {
             var obj = data.data;

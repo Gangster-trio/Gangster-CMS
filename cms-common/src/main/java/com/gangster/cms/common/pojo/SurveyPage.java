@@ -14,14 +14,17 @@ public class SurveyPage implements Serializable {
 
     private Integer pageSiteId;
 
+    private String pageSkinName;
+
     private static final long serialVersionUID = 1L;
 
-    public SurveyPage(Integer pageId, String pageTitle, Date pageCreateTime, Date pageEndTime, Integer pageSiteId) {
+    public SurveyPage(Integer pageId, String pageTitle, Date pageCreateTime, Date pageEndTime, Integer pageSiteId, String pageSkinName) {
         this.pageId = pageId;
         this.pageTitle = pageTitle;
         this.pageCreateTime = pageCreateTime;
         this.pageEndTime = pageEndTime;
         this.pageSiteId = pageSiteId;
+        this.pageSkinName = pageSkinName;
     }
 
     public SurveyPage() {
@@ -68,6 +71,14 @@ public class SurveyPage implements Serializable {
         this.pageSiteId = pageSiteId;
     }
 
+    public String getPageSkinName() {
+        return pageSkinName;
+    }
+
+    public void setPageSkinName(String pageSkinName) {
+        this.pageSkinName = pageSkinName == null ? null : pageSkinName.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -84,7 +95,8 @@ public class SurveyPage implements Serializable {
             && (this.getPageTitle() == null ? other.getPageTitle() == null : this.getPageTitle().equals(other.getPageTitle()))
             && (this.getPageCreateTime() == null ? other.getPageCreateTime() == null : this.getPageCreateTime().equals(other.getPageCreateTime()))
             && (this.getPageEndTime() == null ? other.getPageEndTime() == null : this.getPageEndTime().equals(other.getPageEndTime()))
-            && (this.getPageSiteId() == null ? other.getPageSiteId() == null : this.getPageSiteId().equals(other.getPageSiteId()));
+            && (this.getPageSiteId() == null ? other.getPageSiteId() == null : this.getPageSiteId().equals(other.getPageSiteId()))
+            && (this.getPageSkinName() == null ? other.getPageSkinName() == null : this.getPageSkinName().equals(other.getPageSkinName()));
     }
 
     @Override
@@ -96,6 +108,7 @@ public class SurveyPage implements Serializable {
         result = prime * result + ((getPageCreateTime() == null) ? 0 : getPageCreateTime().hashCode());
         result = prime * result + ((getPageEndTime() == null) ? 0 : getPageEndTime().hashCode());
         result = prime * result + ((getPageSiteId() == null) ? 0 : getPageSiteId().hashCode());
+        result = prime * result + ((getPageSkinName() == null) ? 0 : getPageSkinName().hashCode());
         return result;
     }
 
@@ -110,6 +123,7 @@ public class SurveyPage implements Serializable {
         sb.append(", pageCreateTime=").append(pageCreateTime);
         sb.append(", pageEndTime=").append(pageEndTime);
         sb.append(", pageSiteId=").append(pageSiteId);
+        sb.append(", pageSkinName=").append(pageSkinName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

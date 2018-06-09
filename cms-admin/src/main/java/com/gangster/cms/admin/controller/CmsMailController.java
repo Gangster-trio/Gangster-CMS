@@ -20,13 +20,20 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/mail")
 public class CmsMailController {
+    private final MailWebService mailWbeService;
+    private final ContentWebService contentWebService;
+
     @Autowired
-    private MailWebService mailWbeService;
-    @Autowired
-    private ContentWebService contentWebService;
+    public CmsMailController(MailWebService mailWbeService, ContentWebService contentWebService) {
+        this.mailWbeService = mailWbeService;
+        this.contentWebService = contentWebService;
+    }
 
     @GetMapping("/list/readed")
-    public AjaxData listReaded(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData listReaded(@SessionAttribute(CmsConst.CURRENT_USER) User user
+            , @RequestParam(defaultValue = "1") Integer page
+            , @RequestParam(defaultValue = "10") Integer limit) {
+
         PageInfo<CmsMail> pageInfo = mailWbeService.listReaded(user, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
@@ -35,7 +42,10 @@ public class CmsMailController {
     }
 
     @GetMapping("/list/toread")
-    public AjaxData listToRead(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData listToRead(@SessionAttribute(CmsConst.CURRENT_USER) User user
+            , @RequestParam(defaultValue = "1") Integer page
+            , @RequestParam(defaultValue = "10") Integer limit) {
+
         PageInfo<CmsMail> pageInfo = mailWbeService.listToRead(user, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
@@ -44,7 +54,10 @@ public class CmsMailController {
     }
 
     @GetMapping("/list/draft")
-    public AjaxData listDraft(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData listDraft(@SessionAttribute(CmsConst.CURRENT_USER) User user
+            , @RequestParam(defaultValue = "1") Integer page
+            , @RequestParam(defaultValue = "10") Integer limit) {
+
         PageInfo<CmsMail> pageInfo = mailWbeService.listDraft(user, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
@@ -53,7 +66,10 @@ public class CmsMailController {
     }
 
     @GetMapping("/list/trashcan")
-    public AjaxData listTrashCan(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData listTrashCan(@SessionAttribute(CmsConst.CURRENT_USER) User user
+            , @RequestParam(defaultValue = "1") Integer page
+            , @RequestParam(defaultValue = "10") Integer limit) {
+
         PageInfo<CmsMail> pageInfo = mailWbeService.trashCan(user, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
@@ -62,7 +78,10 @@ public class CmsMailController {
     }
 
     @GetMapping("/list/sended")
-    public AjaxData listSended(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData listSended(@SessionAttribute(CmsConst.CURRENT_USER) User user
+            , @RequestParam(defaultValue = "1") Integer page
+            , @RequestParam(defaultValue = "10") Integer limit) {
+
         PageInfo<CmsMail> pageInfo = mailWbeService.listSended(user, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);

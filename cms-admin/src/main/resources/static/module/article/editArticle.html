@@ -34,12 +34,12 @@
         </select>
 
         <!--TODO: skin choose-->
-        <div class="layui-form-item">
+        <div style="margin-top: 15px" class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
-            <div class="layui-input-block">
-                <!--<input type="radio" name="sex" value="女" title="女" checked>-->
-                <!--单选框name 为控件名，value是提交到服务器的值-->
-                <input type="radio" id="articleSkin" name="articleSkin" value="default" title="默认" checked="checked">
+            <div class="layui-input-inline">
+                <input type="text" name="articleSkin" id="articleSkin"
+                       placeholder="暂时先不填" autocomplete="off"
+                       class="layui-input">
             </div>
         </div>
 
@@ -129,7 +129,7 @@
             form.render();
             layedit.set({
                 uploadImage: {
-                    url: '/article/img' //接口url
+                    url: '/article/img/' + siteId //接口url
                     , type: 'post' //默认post
                     , size: 0
                 }
@@ -159,7 +159,7 @@
 
             layui.upload.render({
                 elem: '#uploadImg',
-                url: '/article/img',
+                url: '/article/img/' + siteId,
                 accept: 'images',
                 size: 1000,
                 before: function () {
@@ -180,7 +180,7 @@
 
             layui.upload.render({
                 elem: '#choose-file'
-                , url: '/file/upload/' + articleId
+                , url: '/file/upload/' + siteId + "/" + articleId
                 , auto: false
                 , choose: function (obj) {
                     var files = obj.pushFile();
@@ -207,7 +207,7 @@
 
             $.ajax({
                 type: "get",
-                url: "/article/details/" + articleId,  //得到需要更新文章的id
+                url: "/article/details/" + siteId + "/" + articleId,  //得到需要更新文章的id
                 success: function (data) {
                     console.log(data);
                     var article = data.article;
@@ -219,6 +219,7 @@
                     $("#articleAuthor").val(article.articleAuthor);
                     $("#belongCategory").val(data.categoryName);
                     $("#tags").val(data.tags);
+                    $("#articleSkin").val(article.articleSkin);
                     $("#articleDesc").val(article.articleDesc);
                     $("#category_id").val(article.articleCategoryId);
                     layedit.setContent(editor_text, article.articleContent);    //配置layui 文本编辑器回显

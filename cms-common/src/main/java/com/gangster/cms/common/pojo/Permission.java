@@ -20,6 +20,12 @@ public class Permission implements Serializable {
         this.userId = userId;
     }
 
+    public Permission(Integer moduleId, Integer siteId, Integer userId) {
+        this.moduleId = moduleId;
+        this.siteId = siteId;
+        this.userId = userId;
+    }
+
     public Permission() {
         super();
     }

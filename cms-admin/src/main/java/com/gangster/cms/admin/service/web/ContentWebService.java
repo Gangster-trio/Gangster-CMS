@@ -2,6 +2,7 @@ package com.gangster.cms.admin.service.web;
 
 import com.gangster.cms.admin.dto.ArticleDTO;
 import com.gangster.cms.admin.service.*;
+import com.gangster.cms.admin.util.FileTool;
 import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.dto.CategoryTree;
@@ -28,34 +29,35 @@ import java.util.stream.Stream;
  */
 @Service
 public class ContentWebService {
-    private final CategoryService categoryService;
-    private final ArticleService articleService;
-
-    private final SettingService settingService;
-
-    private final TagService tagService;
-
-    private final SiteService siteService;
-
-    private final WebFileService webFileService;
-
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
 
     @Autowired
-    public ContentWebService(CategoryService categoryService
-            , ArticleService articleService
-            , SettingService settingService
-            , TagService tagService
-            , SiteService siteService
-            , WebFileService webFileService) {
-        this.categoryService = categoryService;
-        this.articleService = articleService;
-        this.settingService = settingService;
-        this.tagService = tagService;
-        this.siteService = siteService;
-        this.webFileService = webFileService;
-    }
+    private CategoryService categoryService;
+    @Autowired
+    private ArticleService articleService;
+
+    @Autowired
+    private SettingService settingService;
+
+    @Autowired
+    private TagService tagService;
+
+    @Autowired
+    private SiteService siteService;
+
+    @Autowired
+    private WebFileService webFileService;
+
+    @Autowired
+    private ModuleService moduleService;
+
+    @Autowired
+    private PermissionService permissionService;
+
+
+    @Autowired
+    private FileTool fileTool;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContentWebService.class);
+
 
     public PageInfo<Article> listArticle(Integer siteId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
@@ -77,20 +79,13 @@ public class ContentWebService {
         Site site = siteService.selectByPrimaryKey(siteId);
 
         // 如果文章没有设置皮肤,默认为站点的皮肤.
-        if (article.getArticleSkin() == null) {
+        if (article.getArticleSkin().isEmpty()) {
             article.setArticleSkin(site.getSiteSkin());
         }
 
         try {
             // 添加文章附件
-            List<String> fileNames;
-            List<WebFile> files = null;
-            if (!articleDTO.getFiles().equals("")) {
-                fileNames = Arrays.asList(articleDTO.getFiles().split(","));
-                WebFileExample webFileExample = new WebFileExample();
-                webFileExample.or().andFileNameIn(fileNames);
-                files = webFileService.selectByExample(webFileExample);
-            }
+            List<WebFile> files = transformArticleDto(articleDTO);
             articleService.insertWithTagAndFile(article, Arrays.asList(articleDTO.getTags().split(",")), files);
         } catch (Exception e) {
             LOGGER.error("添加文章{}失败,错误原因{}", articleDTO, e.getMessage());
@@ -167,8 +162,11 @@ public class ContentWebService {
         article.setArticleId(articleId);
         article.setArticleStatus(CmsConst.REVIEW);
         article.setArticleUpdateTime(new Date());
+
         try {
-            articleService.updateByPrimaryKeySelective(article);
+            List<WebFile> files = transformArticleDto(articleDTO);
+            articleService.updateSelectWithTagAndFile(articleId, article, Arrays.asList(articleDTO.getTags().split(",")), files);
+
         } catch (Exception e) {
             LOGGER.error("更新id为{}的文章发生错误{}", articleId, e.getMessage());
             e.printStackTrace();
@@ -176,6 +174,18 @@ public class ContentWebService {
         }
         LOGGER.info("更新id为{}的文章{}成功", articleId, article);
         return true;
+    }
+
+    private List<WebFile> transformArticleDto(ArticleDTO articleDTO) {
+        List<String> fileNames;
+        List<WebFile> files = Collections.emptyList();
+        if (!articleDTO.getFiles().isEmpty()) {
+            fileNames = Arrays.asList(articleDTO.getFiles().split(","));
+            WebFileExample webFileExample = new WebFileExample();
+            webFileExample.or().andFileNameIn(fileNames);
+            files = webFileService.selectByExample(webFileExample);
+        }
+        return files;
     }
 
 
@@ -286,6 +296,12 @@ public class ContentWebService {
 
     public boolean deleteCategory(Integer categoryId) {
         try {
+            WebFileExample webFileExample = new WebFileExample();
+            webFileExample.or().andFileCategoryIdEqualTo(categoryId);
+            List<WebFile> files = webFileService.selectByExample(webFileExample);
+            if (files.size() > 0) {
+                fileTool.deleteFiles(files);
+            }
             categoryService.deleteCategory(categoryId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -393,11 +409,22 @@ public class ContentWebService {
     }
 
 
-    public boolean addSite(Site site) {
+    public boolean addSite(User user, Site site) {
         site.setSiteCreateTime(new Date());
         site.setSiteStatus(CmsConst.REVIEW);
         try {
+            // 添加网站
             siteService.insert(site);
+            List<Integer> moduleIds = moduleService.selectByExample(new ModuleExample())
+                    .stream().map(Module::getModuleId).collect(Collectors.toList());
+            moduleIds.forEach(moduleId -> {
+                Permission permission = new Permission(moduleId, site.getSiteId(), user.getUserId());
+                permissionService.insert(permission);
+            });
+           /* for (Integer moduleId : moduleIds) {
+                permission = new Permission(moduleId, site.getSiteId(), user.getUserId());
+                permissionService.insert(permission);
+            }*/
         } catch (Exception e) {
             LOGGER.error("添加站点发生错误{}", e.getMessage());
             e.printStackTrace();

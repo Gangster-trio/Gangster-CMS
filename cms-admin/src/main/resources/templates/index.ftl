@@ -30,7 +30,7 @@
                 <dl class="layui-nav-child">
                 <#list siteList as site>
                     <dd id="choose_site_${site.siteId}"><a
-                            onclick="init(${site.siteId},'${site.siteName}')"> ${site.siteName}</a></dd>
+                            onclick="changeSite(${site.siteId})"> ${site.siteName}</a></dd>
                 </#list>
                 </dl>
             </li>
@@ -93,13 +93,14 @@
 </body>
 </html>
 <script>
-    var siteId;
-    <#if siteList?size!=0>
-    siteId = ${siteList[0].siteId};
-    init(${siteList[0].siteId}, '${siteList[0].siteName}');
-    </#if>
-    var category = -1;
+    var siteId = ${currentSite.siteId!'0'};
+    var siteName = "${currentSite.siteName!'null'}";
     var currentSite;
+    if (siteId === 0) {
+        alert("您当前没有任何好在哪点的管理权限,请联系管理员")
+    } else {
+        init(siteId, siteName)
+    }
 
     function init(id, name) {
         siteId = id;
@@ -115,6 +116,10 @@
             , 'async': false
             , 'dataType': 'json'
         })
+    }
+
+    function changeSite(id) {
+        window.location.href = "/index?siteId=" + id;
     }
 
     showAtRight("/module/count.html");

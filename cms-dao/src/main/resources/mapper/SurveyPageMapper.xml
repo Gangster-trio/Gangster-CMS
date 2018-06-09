@@ -8,6 +8,7 @@
       <arg column="page_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="page_end_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="page_site_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="page_skin_name" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    page_id, page_title, page_create_time, page_end_time, page_site_id
+    page_id, page_title, page_create_time, page_end_time, page_site_id, page_skin_name
   </sql>
   <select id="selectByExample" parameterType="com.gangster.cms.common.pojo.SurveyPageExample" resultMap="BaseResultMap">
     select
@@ -106,9 +107,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into cms_survey_page (page_title, page_create_time, page_end_time, 
-      page_site_id)
+      page_site_id, page_skin_name)
     values (#{pageTitle,jdbcType=VARCHAR}, #{pageCreateTime,jdbcType=TIMESTAMP}, #{pageEndTime,jdbcType=TIMESTAMP}, 
-      #{pageSiteId,jdbcType=INTEGER})
+      #{pageSiteId,jdbcType=INTEGER}, #{pageSkinName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.gangster.cms.common.pojo.SurveyPage">
     <selectKey keyProperty="pageId" order="AFTER" resultType="java.lang.Integer">
@@ -128,6 +129,9 @@
       <if test="pageSiteId != null">
         page_site_id,
       </if>
+      <if test="pageSkinName != null">
+        page_skin_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="pageTitle != null">
@@ -141,6 +145,9 @@
       </if>
       <if test="pageSiteId != null">
         #{pageSiteId,jdbcType=INTEGER},
+      </if>
+      <if test="pageSkinName != null">
+        #{pageSkinName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -168,6 +175,9 @@
       <if test="record.pageSiteId != null">
         page_site_id = #{record.pageSiteId,jdbcType=INTEGER},
       </if>
+      <if test="record.pageSkinName != null">
+        page_skin_name = #{record.pageSkinName,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -179,7 +189,8 @@
       page_title = #{record.pageTitle,jdbcType=VARCHAR},
       page_create_time = #{record.pageCreateTime,jdbcType=TIMESTAMP},
       page_end_time = #{record.pageEndTime,jdbcType=TIMESTAMP},
-      page_site_id = #{record.pageSiteId,jdbcType=INTEGER}
+      page_site_id = #{record.pageSiteId,jdbcType=INTEGER},
+      page_skin_name = #{record.pageSkinName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -199,6 +210,9 @@
       <if test="pageSiteId != null">
         page_site_id = #{pageSiteId,jdbcType=INTEGER},
       </if>
+      <if test="pageSkinName != null">
+        page_skin_name = #{pageSkinName,jdbcType=VARCHAR},
+      </if>
     </set>
     where page_id = #{pageId,jdbcType=INTEGER}
   </update>
@@ -207,7 +221,8 @@
     set page_title = #{pageTitle,jdbcType=VARCHAR},
       page_create_time = #{pageCreateTime,jdbcType=TIMESTAMP},
       page_end_time = #{pageEndTime,jdbcType=TIMESTAMP},
-      page_site_id = #{pageSiteId,jdbcType=INTEGER}
+      page_site_id = #{pageSiteId,jdbcType=INTEGER},
+      page_skin_name = #{pageSkinName,jdbcType=VARCHAR}
     where page_id = #{pageId,jdbcType=INTEGER}
   </update>
 </mapper>

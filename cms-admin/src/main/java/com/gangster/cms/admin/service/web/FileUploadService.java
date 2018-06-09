@@ -3,11 +3,13 @@ package com.gangster.cms.admin.service.web;
 import com.gangster.cms.admin.service.ArticleService;
 import com.gangster.cms.admin.service.SettingService;
 import com.gangster.cms.admin.service.WebFileService;
+import com.gangster.cms.admin.util.FileTool;
 import com.gangster.cms.admin.util.ZipUtils;
 import com.gangster.cms.common.constant.CmsConst;
 import com.gangster.cms.common.pojo.Article;
 import com.gangster.cms.common.pojo.Skin;
 import com.gangster.cms.common.pojo.WebFile;
+import com.gangster.cms.dao.mapper.SettingEntryMapper;
 import com.gangster.cms.dao.mapper.SkinMapper;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
@@ -42,6 +44,8 @@ public class FileUploadService {
     @Autowired
     private SkinMapper skinMapper;
 
+    @Autowired
+    private SettingEntryMapper settingEntryMapper;
 
     /**
      * 保存文章的文件
@@ -165,5 +169,26 @@ public class FileUploadService {
         map.put("fileSize", fileSize);
         map.put("uploadPath", uploadPath);
         return map;
+    }
+
+    /**
+     * 删除文件包含存储在电脑上的数据
+     *
+     * @param fileId 文件的id
+     * @return 成功或者失败
+     */
+    public Boolean deleteFile(Integer fileId) {
+        try {
+            WebFile webFile = webFileService.selectByPrimaryKey(fileId);
+            String realFileName = settingEntryMapper.selectByPrimaryKey(CmsConst.FILE_PATH).getSysValue() + webFile.getFileName().split("/")[2];
+            FileTool.deleteDir(new File(realFileName));
+            webFileService.deleteByPrimaryKey(fileId);
+        } catch (Exception e) {
+            LOGGER.error("删除id为： {}的文件失败,错误信息{}", fileId, e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        LOGGER.info("删除id为: {}的文件成功", fileId);
+        return true;
     }
 }

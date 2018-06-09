@@ -18,6 +18,7 @@ public class TopicWithOptionWrapper{
         this.optionList = optionList;
     }
 
+    public TopicWithOptionWrapper(){}
     public SurveyTopic getTopic() {
         return topic;
     }

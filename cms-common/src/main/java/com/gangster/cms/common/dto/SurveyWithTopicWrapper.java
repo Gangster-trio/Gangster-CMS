@@ -34,4 +34,7 @@ public class SurveyWithTopicWrapper {
         this.topicList = topicList;
         this.page = page;
     }
+
+    public SurveyWithTopicWrapper() {
+    }
 }

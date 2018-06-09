@@ -60,6 +60,8 @@ db:
   port: 3306
   user: root
   password: "$%^YGR^&UHGT^&U"
+pagehelper:
+  reasonable: true
 #feign:
 #  hystrix:
 #    enabled: true
