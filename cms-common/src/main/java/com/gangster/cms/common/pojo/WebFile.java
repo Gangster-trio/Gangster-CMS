@@ -23,6 +23,7 @@ public class WebFile implements Serializable {
     private Integer fileCategoryId;
 
     private static final long serialVersionUID = 1L;
+
     public WebFile(Integer fileId, String fileName, Date fileCreated, Integer fileDownCount, String fileType, String fileSize, Integer fileArticleId, Integer fileSiteId, Integer fileCategoryId) {
         this.fileId = fileId;
         this.fileName = fileName;
@@ -188,7 +189,4 @@ public class WebFile implements Serializable {
         sb.append("]");
         return sb.toString();
     }
-
-
-
 }

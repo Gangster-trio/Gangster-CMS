@@ -73,11 +73,12 @@ public class PermissionAspect {
         }
 
         if (permissionService.hasPermission(user.getUserId(), siteId, moduleName)) {
-            LOGGER.info("网站的: {}模块: {}通过了权限认证", siteId, moduleName);
+            LOGGER.info("权限验证通过! 站点ID: {}, 模块名称: {}, 用户名: {}", siteId, moduleName, user.getUserName());
             return point.proceed();
         } else {
             // TODO: 5/31/18 添加未授权页面
             response.sendRedirect("/401");
+            LOGGER.info("权限验证失败! 站点ID: {}, 模块名称: {}, 用户名: {}", siteId, moduleName, user.getUserName());
             return null;
         }
     }

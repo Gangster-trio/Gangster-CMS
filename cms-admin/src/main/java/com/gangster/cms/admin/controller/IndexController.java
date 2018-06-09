@@ -42,51 +42,79 @@ public class IndexController {
     @Autowired
     private CmsMailService cmsMailService;
 
-    private static final String PERMISSION_MANAGER = "权限管理";
-
     private static final Integer ROOT_MODULE_PARENT_ID = 0;
 
     @SystemControllerLog(description = "到了主界面")
     @GetMapping({"/index", "/"})
-    public ModelAndView index(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestParam(required = false) String flush) {
-        if (flush != null) {
-            LOGGER.info("用户id为{},名字为{} 刷新权限", user.getUserId(), user.getUserName());
+    public ModelAndView index(@SessionAttribute(CmsConst.CURRENT_USER) User user
+            , @RequestParam(required = false, value = "siteId") Integer siteId) {
+        Site currentSite = null;
+
+        if (siteId != null) {
+            currentSite = siteService.selectByPrimaryKey(siteId);
+            if (currentSite == null) {
+                LOGGER.info("站点{} 不存在", siteId);
+            }
         }
+
         ModelAndView modelAndView = new ModelAndView();
+
+        List<Integer> siteIdList = siteService.selectByExample(new SiteExample())
+                .stream()
+                .map(Site::getSiteId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        List<Site> siteList;
+        if (!siteIdList.isEmpty()) {
+            SiteExample siteExample = new SiteExample();
+            siteExample.or().andSiteIdIn(siteIdList);
+            siteList = siteService.selectByExample(siteExample)
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .sorted(Comparator.comparing(Site::getSiteId))
+                    .collect(Collectors.toList());
+        } else {
+            siteList = Collections.emptyList();
+        }
+
+        if (currentSite == null && !siteIdList.isEmpty()) {
+            currentSite = siteList.get(0);
+        }
 
         //查出所有的父模块
         ModuleExample moduleExample = new ModuleExample();
-        if (!user.getUserIsAdmin()) {
-            moduleExample.or().andModuleParentIdEqualTo(ROOT_MODULE_PARENT_ID).andModuleNameNotEqualTo(PERMISSION_MANAGER);
+        moduleExample.or().andModuleParentIdEqualTo(ROOT_MODULE_PARENT_ID);
+
+        if (currentSite != null) {
+
+            Site finalCurrentSite = currentSite;
+            List moduleTreeList = moduleService.selectByExample(moduleExample)
+                    .stream()
+                    .filter(module -> permissionService
+                            .hasPermission(user.getUserId(), finalCurrentSite.getSiteId(), module.getModuleId()))
+                    .map(module -> {
+                        moduleExample.clear();
+                        moduleExample.or().andModuleParentIdEqualTo(module.getModuleId());
+                        ModuleTree moduleTree = new ModuleTree();
+                        moduleTree.setModule(module);
+                        moduleTree.setList(moduleService.selectByExample(moduleExample));
+                        return moduleTree;
+                    }).collect(Collectors.toList());
+            modelAndView.addObject("moduleTreeList", moduleTreeList);
         } else {
-            moduleExample.or().andModuleParentIdEqualTo(ROOT_MODULE_PARENT_ID);
+            currentSite = new Site();
         }
-
-        List<Integer> siteIdList = siteService.selectByExample(new SiteExample()).stream().map(Site::getSiteId).collect(Collectors.toList());
-        List<Site> siteList = siteIdList.stream().sorted(Comparator.comparingInt(val -> val)).map(i -> siteService.selectByPrimaryKey(i)).filter(Objects::nonNull).collect(Collectors.toList());
-
+        modelAndView.addObject("currentSite", currentSite);
         // 列出当前的登陆用户未读的邮件
         CmsMailExample cmsMailExample = new CmsMailExample();
         cmsMailExample.or().andMailToMailEqualTo(user.getUserEmail()).andMailReadEqualTo(CmsConst.MAIIL_READ_TOREAD).andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED);
 
         List<CmsMail> mailList = cmsMailService.selectByExample(cmsMailExample);
-        // 将当前登录网站为list的第一个
-        modelAndView.addObject("moduleTreeList", listModule(moduleExample));
         modelAndView.addObject("mailTotalNum", mailList == null ? 0 : mailList.size());
+        // 将当前登录网站为list的第一个
         modelAndView.addObject("siteList", siteList);
         modelAndView.addObject("user", user);
         return modelAndView;
     }
-
-    private List<ModuleTree> listModule(ModuleExample moduleExample) {
-        return moduleService.selectByExample(moduleExample)
-                .stream().map(module -> {
-                    moduleExample.clear();
-                    moduleExample.or().andModuleParentIdEqualTo(module.getModuleId());
-                    ModuleTree moduleTree = new ModuleTree();
-                    moduleTree.setModule(module);
-                    moduleTree.setList(moduleService.selectByExample(moduleExample));
-                    return moduleTree;
-                }).collect(Collectors.toList());
-    }
 }
+

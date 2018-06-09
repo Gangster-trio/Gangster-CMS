@@ -2,12 +2,10 @@ package com.gangster.cms.admin.service.impl;
 
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
 import com.gangster.cms.admin.service.PermissionService;
-import com.gangster.cms.common.pojo.Module;
-import com.gangster.cms.common.pojo.ModuleExample;
-import com.gangster.cms.common.pojo.Permission;
-import com.gangster.cms.common.pojo.PermissionExample;
+import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.ModuleMapper;
 import com.gangster.cms.dao.mapper.PermissionMapper;
+import com.gangster.cms.dao.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +22,18 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     @Autowired
     ModuleMapper moduleMapper;
 
+    @Autowired
+    UserMapper userMapper;
+
     private ConcurrentHashMap<String, Integer> moduleCache = new ConcurrentHashMap<>();
 
     @Override
     public boolean hasPermission(Integer uid, Integer sid, Integer moduleId) {
+        User user = userMapper.selectByPrimaryKey(uid);
+        if (user.getUserIsAdmin()) {
+            return true;
+        }
+
         if (moduleId == -1) {
             return true;
         }
