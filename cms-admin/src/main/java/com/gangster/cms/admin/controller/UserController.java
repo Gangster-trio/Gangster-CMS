@@ -102,4 +102,19 @@ public class UserController {
     public User fingUserById(@PathVariable("UserId") Integer userId) {
         return userConcreteService.findSingleUser(userId);
     }
+
+    /**
+     * 批量删除用户
+     *
+     * @param userIdData 用户的Id字符串
+     * @return 删除信息
+     */
+    @SystemControllerLog(description = "批量删除用户")
+    @PostMapping("/batchDeleting")
+    @ResponseBody
+    public MessageDto batchDeleting(String userIdData) {
+        if (userConcreteService.batchDeleting(userIdData)) {
+            return MessageDto.success(null);
+        } else return MessageDto.fail(1, "批量删除失败");
+    }
 }

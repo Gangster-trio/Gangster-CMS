@@ -1,6 +1,7 @@
 package com.gangster.cms.admin.service.auth;
 
 import com.gangster.cms.admin.service.UserService;
+import com.gangster.cms.admin.util.StringUtil;
 import com.gangster.cms.common.pojo.User;
 import com.gangster.cms.common.pojo.UserExample;
 import com.github.pagehelper.PageHelper;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Service  与用户有关的所有操作
@@ -24,12 +26,6 @@ public class UserConcreteService {
     private UserService userService;
 
 
-    /**
-     * 添加一名新用户
-     *
-     * @param user 用户信息
-     * @return 是否添加成功
-     */
     public boolean addUser(User user) {
         user.setUserCreateTime(new Date());
         UserExample userExample = new UserExample();
@@ -42,13 +38,6 @@ public class UserConcreteService {
         }
     }
 
-    /**
-     * 更新用户信息
-     *
-     * @param userId 用户的Id
-     * @param user   用户的具体信息
-     * @return 是否更新成功
-     */
     public boolean updateUser(Integer userId, User user) {
         if (userService.selectByPrimaryKey(userId) != null) {
             userService.updateByPrimaryKeySelective(user);
@@ -56,12 +45,6 @@ public class UserConcreteService {
         } else return false;
     }
 
-    /**
-     * 删除单个用户
-     *
-     * @param userId 用户的Id
-     * @return 是否删除成功
-     */
     public boolean deleteSingleUser(Integer userId) {
         if (userService.selectByPrimaryKey(userId) != null) {
             userService.deleteUser(userId);
@@ -70,13 +53,6 @@ public class UserConcreteService {
         return false;
     }
 
-    /**
-     * 查找所有的用户
-     *
-     * @param page  查找信息的页数
-     * @param limit 每页所显示的条数
-     * @return PageInfo<User>
-     */
     public PageInfo<User> listAllUser(Integer page, Integer limit) {
         UserExample userExample = new UserExample();
         PageInfo<User> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> userService.selectByExample(userExample));
@@ -86,16 +62,28 @@ public class UserConcreteService {
         } else return pageInfo;
     }
 
-    /**
-     * 查找单个用户
-     *
-     * @param userId 用户的Id
-     * @return 查找用户的信息
-     */
     public User findSingleUser(Integer userId) {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserIdEqualTo(userId);
         List<User> userList = userService.selectByExample(userExample);
         return userList.get(0);
+    }
+
+    public boolean batchDeleting(String userIdData) {
+        return split(userIdData, userService);
+    }
+
+    private boolean split(String userIdData, UserService userService) {
+        if (!StringUtil.isNullOrEmpty(userIdData)) {
+            String[] userIds = userIdData.split(",");
+            try {
+                Stream.of(userIds).forEach(e -> userService.deleteUser(Integer.parseInt(e)));
+            } catch (Exception e) {
+                logger.error("删除用户时发生错误");
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        } else return false;
     }
 }

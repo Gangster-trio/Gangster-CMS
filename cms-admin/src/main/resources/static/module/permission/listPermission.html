@@ -1,0 +1,112 @@
+<script src="../../layui/layui.all.js"></script>
+<button style="float: right; margin: 5px" class="layui-btn layui-btn-normal" id="addPermission">添加权限</button>
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="batchDelete" data-type="batchDelete">
+    批量删除
+</button>
+<div class="layui-elem-quote" stytle="margin-bottom:0px" style="margin-bottom: 0px;">
+    <p>权限管理</p>
+</div>
+<table id="permission_table" lay-filter="permissionListFilter" class="layui-table"></table>
+<script type="text/html" id="permissionToolBar">
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del" value="删除权限">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>
+<script>
+    var table = layui.table;
+    var form = layui.form;
+    form.render();
+    var first = true;
+    table.render({
+        elem: '#permission_table'
+        , url: '/permission/findPermission/' + userId
+        , cols: [[ //表头
+            {type: 'checkbox'}
+            , {field: 'permissionId', title: 'ID', width: 60, sort: true}
+            , {field: 'permissionName', width: 300, title: '权限名'}
+            , {field: 'permissionDesc', width: 500, title: '权限简介'}
+            , {title: '操作', align: 'center', toolbar: '#permissionToolBar'}
+        ]]//            数据渲染后回调
+        , limits: [10, 15, 20, 40, 80, 100]
+        , done: function (res, curr, count) {
+            if (first) {
+                layer.msg("加载完成 共" + count + "条数据");
+                first = false;
+            }
+        }
+        , page: true
+    });
+    table.on('tool(permissionListFilter)', function (obj) {
+        var data = obj.data;
+        console.log(data);
+        layEvent = obj.event;
+        if (layEvent === 'del') {
+            layer.confirm('真的删除这条信息么', function (index) {
+                console.log(data);
+                $.ajax({
+                    url: '/permission/deletePermission/' + data.permissionId,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        if (data.code === 0) {
+                            obj.del();
+                            layer.msg("删除成功", {icon: 6});
+                            showAtRight("/module/user/listUser.html");
+                        } else {
+                            layer.msg("删除失败", {icon: 5});
+                            showAtRight("/module/user/listUser.html");
+                        }
+                    }
+                })
+            })
+        }
+    });
+    table.on('checkbox(permissionListFilter)', function (obj) {
+        console.log(obj);
+    });
+    $("#addPermission").on('click', function () {
+        showAtRight("/module/permission/newAllotPermission.html");
+    });
+</script>
+<script>
+    var $ = layui.$, active = {
+        batchDelete: function () { // 获取选中的数据
+            var checkStatus = table.checkStatus('permission_table')
+                , data = checkStatus.data;
+            var permissionIdData = "";
+            var boo = 0;
+            for (var i = 0, len = data.length; i < len; i++) {
+                if (boo === 0) {
+                    permissionIdData += data[i].permissionId;
+                    boo = 1;
+                } else {
+                    permissionIdData += "," + data[i].permissionId;
+                }
+            }
+            $.ajax({
+                type: 'post',
+                url: '/permission/batchDeleting',
+                data: {
+                    "permissionIdData": permissionIdData
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code === 0) {
+                        layer.msg("删除成功", {icon: 6});
+                        console.log("删除成功");
+                        showAtRight("module/permission/listPermission.html");
+                    } else if (data.code === 1) {
+                        layer.msg("删除失败", {icon: 5});
+                    }
+                }
+            });
+        }
+    };
+    $('#batchDelete').on('click', function () { // 添加按钮点击事件
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+</script>

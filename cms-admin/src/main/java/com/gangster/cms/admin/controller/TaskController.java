@@ -110,7 +110,7 @@ public class TaskController {
 
     @SystemControllerLog(description = "批量删除文章")
     @PostMapping("/batchDeleting")
-    public AjaxData BatchDeleteArticle(String articleIdData) {
+    public AjaxData batchDeleteArticle(String articleIdData) {
         if (timedTaskService.deleteArticles(articleIdData))
             return new AjaxData(0, "success", 0, null);
         else return new AjaxData(1, "fail", 0, null);

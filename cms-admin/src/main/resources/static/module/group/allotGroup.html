@@ -1,17 +1,17 @@
 <script src="/util/jquery-editable-select.js"></script>
 <link rel="stylesheet" href="/util/jquery-editable-select.css">
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-    <legend>分配权限</legend>
+    <legend>分配用户组</legend>
 </fieldset>
 
 <table id="permission_table" lay-filter="permissionListFilter"></table>
 <form class="layui-form">
     <div class="layui-inline">
-        <label class="layui-form-label">添加权限:</label>
+        <label class="layui-form-label">添加用户组:</label>
         <div class="layui-input-inline">
-            <select id="permissions" name="permissions" required lay-verify="required" lay-search
-                    lay-filter="permissions">
-                <option value="">请选择权限</option>
+            <select id="groups" name="groups" required lay-verify="required" lay-search
+                    lay-filter="groups">
+                <option value="">请选择用户组名</option>
             </select>
         </div>
     </div>
@@ -43,7 +43,6 @@
                 , {field: 'permissionDesc', width: 900, title: '权限简介'}
                 , {title: '操作', align: 'center', toolbar: '#permissionToolBar'}
             ]]//            数据渲染后回调
-//            , limit: 1
             , limits: [10, 15, 20, 40, 80, 100]
             , done: function (res, curr, count) {
                 if (first) {

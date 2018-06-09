@@ -1,0 +1,85 @@
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend id="permission">分配权限</legend>
+</fieldset>
+<div>
+    <form class="layui-form" id="allotPermission">
+        <div class="layui-form-item">
+            <label class="layui-form-label">站点选择:</label>
+            <div class="layui-input-inline">
+                <select name="selectSite" id="selectSite" lay-filter="selectSite">
+                    <option value="">请点击选择站点</option>
+                </select>
+            </div>
+            <label class="layui-form-label">模块选择:</label>
+            <div class="layui-input-inline">
+                <select name="selectModule" id="selectModule" lay-filter="selectModule">
+                    <option value="">请点击选择模块</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button lay-submit class="layui-btn" id="btn" name="btn" lay-filter="btn" onclick="addPermission()">
+                    提交信息
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    var form = layui.form;
+    form.render();
+    $(function () {
+        $.ajax({
+            url: "/permission/findSite",
+            type: 'get',
+            dataType: 'json',
+            success: function (ajaxdata) {
+                var optionstring_ = "";
+                for (var i = 0; i < ajaxdata.count; i++) {
+                    optionstring_ += "<option value=" + ajaxdata.data[i].siteId + ">" + ajaxdata.data[i].siteName + "</option>";
+                }
+                $("#selectSite").append(optionstring_);
+                form.render('select');
+            }
+        });
+        $.ajax({
+            url: "/permission/findModule",
+            type: 'get',
+            dataType: 'json',
+            success: function (ajaxdata) {
+                var optionstring = "";
+                for (var i = 0; i < ajaxdata.count; i++) {
+                    optionstring += "<option value=" + ajaxdata.data[i].moduleId + ">" + ajaxdata.data[i].moduleName + "</option>";
+                }
+                $("#selectModule").append(optionstring);
+                form.render('select');
+            }
+        });
+        form.render('select');
+    });
+
+    function addPermission() {
+        var siteId = document.getElementById("selectSite").value;
+        var moduleId = document.getElementById("selectModule").value;
+        console.log(siteId);
+        console.log(moduleId);
+        $.ajax({
+            url: "/permission/addPermission/" + siteId + "/" + moduleId + "/" + userId,
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                if (data.code === 0) {
+                    layer.msg("添加成功", {icon: 6});
+                    showAtRight("/module/user/listUser.html");
+                } else {
+                    layer.msg("添加失败", {icon: 5});
+                    showAtRight("/module/user/listUser.html");
+                }
+            }
+        })
+    }
+</script>
+
+
