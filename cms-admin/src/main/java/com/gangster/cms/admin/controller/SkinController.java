@@ -30,15 +30,20 @@ public class SkinController {
     private final SettingEntryMapper settingEntryMapper;
 
     @Autowired
-    public SkinController(SkinMapper skinMapper, FileUploadService fileUploadService, SettingEntryMapper settingEntryMapper) {
+    public SkinController(SkinMapper skinMapper,
+                          FileUploadService fileUploadService,
+                          SettingEntryMapper settingEntryMapper) {
         this.skinMapper = skinMapper;
         this.fileUploadService = fileUploadService;
         this.settingEntryMapper = settingEntryMapper;
     }
 
     @GetMapping("/list")
-    public AjaxData list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
-        PageInfo<Skin> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> skinMapper.selectByExample(new SkinExample()));
+    public AjaxData list(
+            @RequestParam(defaultValue = "1") Integer page
+            , @RequestParam(defaultValue = "10") Integer limit) {
+        PageInfo<Skin> pageInfo = PageHelper.startPage(page, limit)
+                .doSelectPageInfo(() -> skinMapper.selectByExample(new SkinExample()));
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
@@ -54,7 +59,9 @@ public class SkinController {
     public MessageDto delete(@PathVariable("skinName") String skinName) {
         try {
             skinMapper.deleteByPrimaryKey(skinName);
-            FileTool.deleteDir(new File(settingEntryMapper.selectByPrimaryKey(CmsConst.RESOURCE_PATH).getSysValue() + skinName));
+            FileTool.deleteDir(
+                    new File(settingEntryMapper.
+                            selectByPrimaryKey(CmsConst.RESOURCE_PATH).getSysValue() + skinName));
             LOGGER.info("删除皮肤:{}", skinName);
         } catch (Exception e) {
             e.printStackTrace();

@@ -30,7 +30,11 @@ public class DataWebService {
     CategoryService categoryService;
 
     @Autowired
-    public DataWebService(LogService logService, CountService countService, ArticleService articleService, CategoryService categoryService) {
+    public DataWebService(
+            LogService logService,
+            CountService countService,
+            ArticleService articleService,
+            CategoryService categoryService) {
         this.logService = logService;
         this.countService = countService;
         this.articleService = articleService;
@@ -108,7 +112,11 @@ public class DataWebService {
         return new PageInfo<>(retList);
     }
 
-    private List<CountMapEntry> getMostView(String type, Long start, Long end, Integer interval, Integer limit, Integer page) {
+    private List<CountMapEntry> getMostView(String type,
+                                            Long start,
+                                            Long end, Integer interval,
+                                            Integer limit,
+                                            Integer page) {
         CountEntryExample entryExample = new CountEntryExample();
         CountEntryExample.Criteria criteria = entryExample.or();
         if (!StringUtil.isNullOrEmpty(type))

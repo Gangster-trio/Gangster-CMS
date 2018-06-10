@@ -93,7 +93,9 @@ public class MailWebService {
                 .andMailToMailEqualTo(user.getUserEmail())
                 .andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED)
                 .andMailReadEqualTo(CmsConst.MAIL_READ_DELETED);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
     }
 
     public CmsMail detailsMail(Integer id) {

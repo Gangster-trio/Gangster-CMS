@@ -1,17 +1,19 @@
 package com.gangster.cms.admin.service.impl;
 
 import com.gangster.cms.admin.base.impl.BaseServiceImpl;
+import com.gangster.cms.admin.dto.ModuleTree;
 import com.gangster.cms.admin.service.PermissionService;
-import com.gangster.cms.common.pojo.Module;
-import com.gangster.cms.common.pojo.ModuleExample;
-import com.gangster.cms.common.pojo.Permission;
-import com.gangster.cms.common.pojo.PermissionExample;
+import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.ModuleMapper;
 import com.gangster.cms.dao.mapper.PermissionMapper;
+import com.gangster.cms.dao.mapper.SiteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -19,12 +21,15 @@ import java.util.stream.Collectors;
 public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Permission, PermissionExample> implements PermissionService {
 
     @Autowired
-    PermissionMapper permissionMapper;
+    private PermissionMapper permissionMapper;
 
     @Autowired
-    ModuleMapper moduleMapper;
+    private ModuleMapper moduleMapper;
 
+    @Autowired
+    private SiteMapper siteMapper;
     private ConcurrentHashMap<String, Integer> moduleCache = new ConcurrentHashMap<>();
+
 
     @Override
     public boolean hasPermission(Integer uid, Integer sid, Integer moduleId) {

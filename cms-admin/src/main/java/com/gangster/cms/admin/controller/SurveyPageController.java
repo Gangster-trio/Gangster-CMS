@@ -34,7 +34,10 @@ public class SurveyPageController {
     @SystemControllerLog(description = "列出当前网站的所有问卷")
     @CmsPermission(moduleName = "问卷管理")
     @GetMapping("/list")
-    public AjaxData list(@SiteId @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData list(
+            @SiteId @RequestParam Integer siteId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<SurveyPage> pageInfo = surveyPageWebService.listSurveyPage(siteId, page, limit);
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }

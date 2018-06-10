@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -62,9 +59,6 @@ public class IndexController {
             moduleExample.or().andModuleParentIdEqualTo(ROOT_MODULE_PARENT_ID);
         }
 
-        List<Integer> siteIdList = siteService.selectByExample(new SiteExample()).stream().map(Site::getSiteId).collect(Collectors.toList());
-        List<Site> siteList = siteIdList.stream().sorted(Comparator.comparingInt(val -> val)).map(i -> siteService.selectByPrimaryKey(i)).filter(Objects::nonNull).collect(Collectors.toList());
-
         // 列出当前的登陆用户未读的邮件
         CmsMailExample cmsMailExample = new CmsMailExample();
         cmsMailExample.or().andMailToMailEqualTo(user.getUserEmail()).andMailReadEqualTo(CmsConst.MAIIL_READ_TOREAD).andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED);
@@ -73,7 +67,7 @@ public class IndexController {
         // 将当前登录网站为list的第一个
         modelAndView.addObject("moduleTreeList", listModule(moduleExample));
         modelAndView.addObject("mailTotalNum", mailList == null ? 0 : mailList.size());
-        modelAndView.addObject("siteList", siteList);
+        modelAndView.addObject("siteList", siteService.selectByExample(new SiteExample()));
         modelAndView.addObject("user", user);
         return modelAndView;
     }

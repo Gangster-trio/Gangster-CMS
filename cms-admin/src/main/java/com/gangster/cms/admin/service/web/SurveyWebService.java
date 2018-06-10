@@ -32,7 +32,10 @@ public class SurveyWebService {
     private final SurveyOptionMapper surveyOptionMapper;
 
     @Autowired
-    public SurveyWebService(SurveyPageMapper surveyPageMapper, SurveyTopicMapper surveyTopicMapper, SurveyOptionMapper surveyOptionMapper) {
+    public SurveyWebService(
+            SurveyPageMapper surveyPageMapper,
+            SurveyTopicMapper surveyTopicMapper,
+            SurveyOptionMapper surveyOptionMapper) {
         this.surveyPageMapper = surveyPageMapper;
         this.surveyTopicMapper = surveyTopicMapper;
         this.surveyOptionMapper = surveyOptionMapper;
@@ -41,7 +44,9 @@ public class SurveyWebService {
     public PageInfo<SurveyPage> listSurveyPage(Integer siteId, Integer page, Integer limit) {
         SurveyPageExample surveyPageExample = new SurveyPageExample();
         surveyPageExample.or().andPageSiteIdEqualTo(siteId);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> surveyPageMapper.selectByExample(surveyPageExample));
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> surveyPageMapper.selectByExample(surveyPageExample));
     }
 
     @Transactional
@@ -59,13 +64,21 @@ public class SurveyWebService {
         SurveyPage surveyPage = wrapper.getPage();
 
         // 前端操作中删除的题(自己在前端动态添加后，又删除的题),会以只有pageId的形式传过来,先去掉那些问题
-        List<TopicWithOptionWrapper> topicWithOptionWrappers = wrapper.getTopicList().stream().filter(param -> null != param.getTopic().getTopicQuestion()).collect(Collectors.toList());
+        List<TopicWithOptionWrapper> topicWithOptionWrappers = wrapper.getTopicList()
+                .stream()
+                .filter(param -> null != param.getTopic().getTopicQuestion()).collect(Collectors.toList());
         try {
             surveyPageMapper.updateByPrimaryKey(surveyPage);
             SurveyTopicExample surveyTopicExample = new SurveyTopicExample();
             surveyTopicExample.or().andTopicPageIdEqualTo(surveyPage.getPageId());
-            List<Integer> updateIds = topicWithOptionWrappers.stream().map(e -> e.getTopic().getTopicId()).collect(Collectors.toList());
-            List<Integer> toDeleteIds = surveyTopicMapper.selectByExample(surveyTopicExample).stream().filter(param -> !updateIds.contains(param.getTopicId())).map(SurveyTopic::getTopicId).collect(Collectors.toList());
+            List<Integer> updateIds = topicWithOptionWrappers
+                    .stream()
+                    .map(e -> e.getTopic().getTopicId())
+                    .collect(Collectors.toList());
+            List<Integer> toDeleteIds = surveyTopicMapper.selectByExample(surveyTopicExample)
+                    .stream()
+                    .filter(param -> !updateIds.contains(param.getTopicId()))
+                    .map(SurveyTopic::getTopicId).collect(Collectors.toList());
             deleteSurveyTopicsAndOptions(toDeleteIds);
 
 //            topicWithOptionWrappers.forEach(e -> {
@@ -85,8 +98,15 @@ public class SurveyWebService {
                     surveyTopicMapper.updateByPrimaryKeySelective(surveyTopic);
                     SurveyOptionExample surveyOptionExample = new SurveyOptionExample();
                     surveyOptionExample.or().andTopicIdEqualTo(surveyTopic.getTopicId());
-                    List<Integer> updateOptionIds = e.getOptionList().stream().map(SurveyOption::getOptionId).collect(Collectors.toList());
-                    List<Integer> toDeleteOptionsIds = surveyOptionMapper.selectByExample(surveyOptionExample).stream().filter(param -> !updateOptionIds.contains(param.getOptionId())).map(SurveyOption::getOptionId).collect(Collectors.toList());
+                    List<Integer> updateOptionIds = e.getOptionList()
+                            .stream()
+                            .map(SurveyOption::getOptionId)
+                            .collect(Collectors.toList());
+                    List<Integer> toDeleteOptionsIds = surveyOptionMapper.selectByExample(surveyOptionExample)
+                            .stream()
+                            .filter(param -> !updateOptionIds.contains(param.getOptionId()))
+                            .map(SurveyOption::getOptionId)
+                            .collect(Collectors.toList());
                     deleteSurveyOptions(toDeleteOptionsIds);
 
                     e.getOptionList().forEach(t -> {
@@ -120,7 +140,9 @@ public class SurveyWebService {
 
     // -----------------------------------------------SurveyPage方法------------------------------------------------------------------
 
-    private boolean addSurveyPageWithTopicAndOption(SurveyPage surveyPage, List<TopicWithOptionWrapper> topicWithOptionWrappers) {
+    private boolean addSurveyPageWithTopicAndOption(
+            SurveyPage surveyPage,
+            List<TopicWithOptionWrapper> topicWithOptionWrappers) {
         try {
             surveyPageMapper.insert(surveyPage);
             if(topicWithOptionWrappers!=null){
@@ -150,7 +172,10 @@ public class SurveyWebService {
             if (surveyPage != null) {
                 SurveyTopicExample surveyTopicExample = new SurveyTopicExample();
                 surveyTopicExample.or().andTopicPageIdEqualTo(surveyPageId);
-                List<Integer> surveyTopicIds = surveyTopicMapper.selectByExample(surveyTopicExample).stream().map(SurveyTopic::getTopicId).collect(Collectors.toList());
+                List<Integer> surveyTopicIds = surveyTopicMapper.selectByExample(surveyTopicExample)
+                        .stream()
+                        .map(SurveyTopic::getTopicId)
+                        .collect(Collectors.toList());
                 if (surveyTopicIds.size() != 0) {
                     SurveyOptionExample surveyOptionExample = new SurveyOptionExample();
                     surveyOptionExample.or().andTopicIdIn(surveyTopicIds);
@@ -177,7 +202,8 @@ public class SurveyWebService {
             surveyTopicExample.or().andTopicPageIdEqualTo(surveyPageId).andTopicTypeNotEqualTo(CmsConst.topic_type_3);
         }
         SurveyOptionExample surveyOptionExample = new SurveyOptionExample();
-        List<TopicWithOptionWrapper> topicWithOptionWrappers = surveyTopicMapper.selectByExample(surveyTopicExample).stream().map(e -> {
+        List<TopicWithOptionWrapper> topicWithOptionWrappers = surveyTopicMapper.selectByExample(surveyTopicExample)
+                .stream().map(e -> {
             surveyOptionExample.clear();
             surveyOptionExample.or().andTopicIdEqualTo(e.getTopicId());
             return new TopicWithOptionWrapper(e, surveyOptionMapper.selectByExample(surveyOptionExample));

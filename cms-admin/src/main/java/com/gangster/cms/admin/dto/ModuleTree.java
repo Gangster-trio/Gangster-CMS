@@ -15,8 +15,11 @@ public class ModuleTree {
     public ModuleTree() {
     }
 
-    public ModuleTree(Module module, List<Module> childs) {
+    public ModuleTree(Module module, List<Module> list) {
+        this.module = module;
+        this.list = list;
     }
+
 
     @Override
     public String toString() {
