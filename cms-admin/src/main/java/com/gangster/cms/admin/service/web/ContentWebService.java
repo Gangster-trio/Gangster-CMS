@@ -62,14 +62,18 @@ public class ContentWebService {
     public PageInfo<Article> listArticle(Integer siteId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleSiteIdEqualTo(siteId);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
 
 
     public PageInfo<Article> listCheckArticle(Integer siteId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleSiteIdEqualTo(siteId).andArticleStatusEqualTo(CmsConst.REVIEW);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
 
 
@@ -100,7 +104,9 @@ public class ContentWebService {
     public PageInfo<Article> listCategoryOfArticle(Integer categoryId, Integer page, Integer limit) {
         ArticleExample articleExample = new ArticleExample();
         articleExample.or().andArticleCategoryIdEqualTo(categoryId);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> articleService.selectByExample(articleExample));
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> articleService.selectByExample(articleExample));
     }
 
 
@@ -108,7 +114,9 @@ public class ContentWebService {
         String originalFileName = file.getOriginalFilename();
         LOGGER.info("文件初始名字{}" + originalFileName);
         String uuid = UUID.randomUUID().toString();
-        String newName = uuid + originalFileName.substring(Objects.requireNonNull(originalFileName).lastIndexOf("."));
+        String newName = uuid + originalFileName
+                .substring(Objects.requireNonNull(originalFileName)
+                        .lastIndexOf("."));
         File dir = new File(settingService.get(CmsConst.PIC_PATH_SETTING));
         if (!dir.exists()) {
             dir.mkdirs();
@@ -150,7 +158,10 @@ public class ContentWebService {
     public ArticleDTO detailsArticle(Integer articleId) {
         Article article = articleService.selectByPrimaryKey(articleId);
         Category category = categoryService.selectByPrimaryKey(article.getArticleCategoryId());
-        List<String> tagNames = tagService.selectByArticleId(articleId).stream().map(Tag::getTagName).collect(Collectors.toList());
+        List<String> tagNames = tagService.selectByArticleId(articleId)
+                .stream()
+                .map(Tag::getTagName)
+                .collect(Collectors.toList());
         String tags = String.join(",", tagNames);
         return new ArticleDTO(article, category.getCategoryTitle(), tags);
     }
@@ -165,7 +176,8 @@ public class ContentWebService {
 
         try {
             List<WebFile> files = transformArticleDto(articleDTO);
-            articleService.updateSelectWithTagAndFile(articleId, article, Arrays.asList(articleDTO.getTags().split(",")), files);
+            articleService.updateSelectWithTagAndFile(articleId, article, Arrays.asList(articleDTO.getTags()
+                    .split(",")), files);
 
         } catch (Exception e) {
             LOGGER.error("更新id为{}的文章发生错误{}", articleId, e.getMessage());
@@ -233,7 +245,9 @@ public class ContentWebService {
         CategoryExample categoryExample = new CategoryExample();
 //        查询条件： 属于当前网站，且不是ROOT
         categoryExample.or().andCategorySiteIdEqualTo(siteId).andCategoryLevelNotEqualTo(CmsConst.CATEGORY_ROOT_LEVEL);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
     }
 
     /**
@@ -246,7 +260,9 @@ public class ContentWebService {
                 .andCategorySiteIdEqualTo(siteId)
                 .andCategoryStatusEqualTo(CmsConst.REVIEW);
 
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> categoryService.selectByExample(categoryExample));
     }
 
 
@@ -281,7 +297,9 @@ public class ContentWebService {
         } else {
             Category category = list.get(0);
             CategoryTree tree = categoryService.toTree(category);
-            categoryExample.or().andCategoryParentIdEqualTo(category.getCategoryId()).andCategoryStatusEqualTo(CmsConst.ACCESS);
+            categoryExample.or()
+                    .andCategoryParentIdEqualTo(category.getCategoryId())
+                    .andCategoryStatusEqualTo(CmsConst.ACCESS);
             List<Category> list2 = categoryService.selectByExample(categoryExample);
             if (list2.size() > 0) {
                 for (Category c : list) {
@@ -405,7 +423,9 @@ public class ContentWebService {
     //    ------------------------------------------------网站部分------------------------------------------------------------------
     public PageInfo<Site> listSite(Integer page, Integer limit) {
 
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> siteService.selectByExample(new SiteExample()));
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> siteService.selectByExample(new SiteExample()));
     }
 
 

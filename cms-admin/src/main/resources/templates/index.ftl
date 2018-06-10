@@ -107,6 +107,14 @@
         layer.msg("当前站点:" + name, {icon: 6});
         $("#choose_site_" + id).addClass("layui-this");
         $.ajax({
+            'url': '/index/' + id
+            , 'success': function (data) {
+            }
+            , 'async': false
+            , 'dataType': 'json'
+        });
+
+        $.ajax({
             'url': '/site/details/' + id
             , 'success': function (data) {
                 currentSite = data;

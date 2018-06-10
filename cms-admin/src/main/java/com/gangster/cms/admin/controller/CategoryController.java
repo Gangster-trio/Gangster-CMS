@@ -35,7 +35,10 @@ public class CategoryController {
     @SystemControllerLog(description = "列出所有的栏目")
     @CmsPermission(moduleName = "栏目管理")
     @GetMapping("/list")
-    public AjaxData list(@SiteId @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData list(
+            @SiteId @RequestParam Integer siteId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Category> pageInfo = contentWebService.listCategory(siteId, page, limit);
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
@@ -43,7 +46,10 @@ public class CategoryController {
     @SystemControllerLog(description = "列出待审核的栏目")
     @CmsPermission(moduleName = "栏目管理")
     @GetMapping("/list/check")
-    public AjaxData listCheck(@SiteId @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData listCheck(
+            @SiteId @RequestParam Integer siteId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
 
         PageInfo<Category> pageInfo = contentWebService.listCheckCategory(siteId, page, limit);
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
@@ -70,7 +76,10 @@ public class CategoryController {
     @SystemControllerLog(description = "更新单个栏目")
     @CmsPermission(moduleName = "栏目管理")
     @PostMapping("/update/{siteId}/{cId}")
-    public MessageDto update(@SiteId @PathVariable("siteId") Integer siteId, @PathVariable("cId") Integer cId, @RequestBody Category category) {
+    public MessageDto update(
+            @SiteId @PathVariable("siteId") Integer siteId,
+            @PathVariable("cId") Integer cId,
+            @RequestBody Category category) {
         if (!contentWebService.updateCategory(cId, category)) {
             return MessageDto.fail(1, "更新栏目失败");
         } else {
@@ -109,7 +118,10 @@ public class CategoryController {
     @SystemControllerLog(description = "审核栏目")
     @CmsPermission(moduleName = "栏目管理")
     @GetMapping("/check/{siteId}/{cId}")
-    public MessageDto checkCategory(@SiteId @PathVariable("siteId") Integer siteId, @PathVariable Integer cId, @RequestParam Integer judge) {
+    public MessageDto checkCategory(
+            @SiteId @PathVariable("siteId") Integer siteId,
+            @PathVariable Integer cId,
+            @RequestParam Integer judge) {
         if (!contentWebService.checkCategory(cId, judge)) {
             return MessageDto.fail(1, "审核栏目失败");
         }

@@ -23,7 +23,10 @@ public class OuterChainController {
 
     @GetMapping("/list/{siteId}")
     @CmsPermission(moduleName = "外链管理")
-    public AjaxData list(@SiteId @PathVariable("siteId") Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData list(
+            @SiteId @PathVariable("siteId") Integer siteId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<OuterChain> pageInfo = outerChainWebService.list(siteId, page, limit);
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
@@ -60,7 +63,10 @@ public class OuterChainController {
 
     @PostMapping("/update/{siteId}/{id}")
     @CmsPermission(moduleName = "外链管理")
-    public MessageDto update(@PathVariable Integer siteId, @PathVariable("id") Integer id, @RequestBody OuterChain outerChain) {
+    public MessageDto update(
+            @PathVariable Integer siteId,
+            @PathVariable("id") Integer id,
+            @RequestBody OuterChain outerChain) {
         if (outerChainWebService.update(id, outerChain)) {
             return MessageDto.success(null);
         }

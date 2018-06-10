@@ -54,7 +54,10 @@ public class FileUploadService {
         Map<String, Object> map = uploadFile(file);
         Article article = articleService.selectByPrimaryKey(articleId);
         String virtualPath = (String) map.get("virtualPath");
-        WebFile webFile = new WebFile(virtualPath, new Date(), 0, (String) map.get("suffix"), (String) map.get("fileSize"), articleId, article.getArticleSiteId(), article.getArticleCategoryId());
+        WebFile webFile =
+                new WebFile(virtualPath, new Date(), 0,
+                        (String) map.get("suffix"), (String) map.get("fileSize")
+                        , articleId, article.getArticleSiteId(), article.getArticleCategoryId());
         try {
             webFileService.insert(webFile);
         } catch (Exception e) {
@@ -74,7 +77,8 @@ public class FileUploadService {
     public String saveFile(MultipartFile file) {
         Map<String, Object> map = uploadFile(file);
         String virtualPath = (String) map.get("virtualPath");
-        WebFile webFile = new WebFile(virtualPath, new Date(), 0, (String) map.get("suffix"), (String) map.get("fileSize"));
+        WebFile webFile = new WebFile(virtualPath, new Date(),
+                0, (String) map.get("suffix"), (String) map.get("fileSize"));
         try {
             webFileService.insert(webFile);
         } catch (Exception e) {
@@ -94,10 +98,12 @@ public class FileUploadService {
     public boolean saveSkinFile(MultipartFile file) {
         Map<String, Object> map = uploadFile(file);
         String virtualPath = (String) map.get("virtualPath");
-        WebFile webFile = new WebFile(virtualPath, new Date(), 0, (String) map.get("suffix"), (String) map.get("fileSize"));
+        String skinName = (String) map.get("originName");
+        WebFile webFile = new WebFile(virtualPath, new Date(),
+                0, (String) map.get("suffix"), (String) map.get("fileSize"));
         try {
             webFileService.insert(webFile);
-            decompressionZIP((String) map.get("uploadPath"));
+            decompressionZIP((String) map.get("uploadPath"), skinName);
         } catch (Exception e) {
             LOGGER.error("插入数据库时失败");
             e.printStackTrace();
@@ -110,14 +116,22 @@ public class FileUploadService {
     /**
      * 解压zip包
      */
-    private void decompressionZIP(String zipPath) {
-        String resourcePath = settingService.get(CmsConst.RESOURCE_PATH);
+    private boolean decompressionZIP(String zipPath, String skinName) {
+//        String resourcePath = settingService.get(CmsConst.RESOURCE_PATH);
+        String templatePath = settingService.get("templates_path");
+        String staticPath = settingService.get("static_path");
         try {
-            String skinName = ZipUtils.unZip(zipPath, resourcePath);
-            skinMapper.insert(new Skin(skinName, new Date(), null));
-            LOGGER.info("添加皮肤:{}", skinName);
+            if (ZipUtils.unZip(zipPath, skinName, staticPath, templatePath)) {
+                skinMapper.insert(new Skin(skinName, new Date(), null));
+                LOGGER.info("添加皮肤:{}", skinName);
+                return true;
+            } else {
+                LOGGER.error("上传失败");
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -132,7 +146,7 @@ public class FileUploadService {
             dir.mkdirs();
         }
         String uuid = UUID.randomUUID().toString();
-        String uploadPath = dir + File.separator + uuid + originFileName;
+        String uploadPath = dir + File.separator + originFileName;
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
@@ -161,9 +175,13 @@ public class FileUploadService {
         }
         LOGGER.info("上传文件{}成功", uploadPath);
         String fileSize = String.valueOf(uploadFile.getSize());
+        String originName = originFileName.substring(0, originFileName.lastIndexOf("."));
         String suffix = originFileName.substring(originFileName.lastIndexOf(".") + 1);
         String virtualPath = "/webfile/" + uuid + originFileName;
         Map<String, Object> map = new HashMap<>();
+        if (suffix.equals("zip")) {
+            map.put("originName", originName);
+        }
         map.put("virtualPath", virtualPath);
         map.put("suffix", suffix);
         map.put("fileSize", fileSize);
@@ -180,7 +198,9 @@ public class FileUploadService {
     public Boolean deleteFile(Integer fileId) {
         try {
             WebFile webFile = webFileService.selectByPrimaryKey(fileId);
-            String realFileName = settingEntryMapper.selectByPrimaryKey(CmsConst.FILE_PATH).getSysValue() + webFile.getFileName().split("/")[2];
+            String realFileName = settingEntryMapper
+                    .selectByPrimaryKey(CmsConst.FILE_PATH)
+                    .getSysValue() + webFile.getFileName().split("/")[2];
             FileTool.deleteDir(new File(realFileName));
             webFileService.deleteByPrimaryKey(fileId);
         } catch (Exception e) {
