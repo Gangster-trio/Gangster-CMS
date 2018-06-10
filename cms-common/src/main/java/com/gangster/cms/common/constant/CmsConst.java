@@ -85,4 +85,6 @@ public class CmsConst {
     public static final Integer COUNT_INTERVAL = 60 * 1000 * 10;
 
 
+    public static final String TEMPLATES_PATH = "templates/";
+    public static final String STATIC_PATH = "static/";
 }

@@ -30,7 +30,9 @@ public class OuterChainWebService {
     public PageInfo<OuterChain> list(Integer siteId, Integer page, Integer limit) {
         OuterChainExample outerChainExample = new OuterChainExample();
         outerChainExample.or().andOuterchainSiteIdEqualTo(siteId);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> outerChainService.selectByExample(outerChainExample));
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> outerChainService.selectByExample(outerChainExample));
     }
 
     public OuterChain details(Integer id) {

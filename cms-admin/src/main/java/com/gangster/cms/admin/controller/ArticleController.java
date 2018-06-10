@@ -37,7 +37,10 @@ public class ArticleController {
 
     @GetMapping("/list")
     @CmsPermission(moduleName = "文章管理")
-    public AjaxData list(@SiteId @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData list(
+            @SiteId @RequestParam Integer siteId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Article> pageInfo = contentWebService.listArticle(siteId, page, limit);
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
@@ -45,7 +48,10 @@ public class ArticleController {
     @SystemControllerLog(description = "列出待审核的文章")
     @CmsPermission(moduleName = "文章管理")
     @GetMapping("/list/check")
-    public AjaxData listCheck(@SiteId @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData listCheck(
+            @SiteId @RequestParam Integer siteId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Article> pageInfo = contentWebService.listCheckArticle(siteId, page, limit);
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
@@ -54,7 +60,9 @@ public class ArticleController {
     @SystemControllerLog(description = "添加文章")
     @CmsPermission(moduleName = "文章管理")
     @PostMapping("/add/{siteId}")
-    public MessageDto add(@SiteId @PathVariable("siteId") Integer siteId, @RequestBody ArticleDTO articleDTO) {
+    public MessageDto add(
+            @SiteId @PathVariable("siteId") Integer siteId,
+            @RequestBody ArticleDTO articleDTO) {
         if (!contentWebService.addArticle(articleDTO)) {
             return MessageDto.fail(1, "添加文章失败");
         }
@@ -64,7 +72,9 @@ public class ArticleController {
     @SystemControllerLog(description = "上传图片")
     @CmsPermission(moduleName = "文章管理")
     @PostMapping("/img/{siteId}")
-    public MessageDto uploadImg(@SiteId @PathVariable("siteId") Integer siteId, @Param("file") MultipartFile file) {
+    public MessageDto uploadImg(
+            @SiteId @PathVariable("siteId") Integer siteId,
+            @Param("file") MultipartFile file) {
         return MessageDto.success(contentWebService.uploadImg(file));
     }
 
@@ -72,7 +82,9 @@ public class ArticleController {
     @SystemControllerLog(description = "删除单篇文章")
     @CmsPermission(moduleName = "文章管理")
     @GetMapping("/delete/{siteId}/{articleId}")
-    public MessageDto delete(@SiteId @PathVariable("siteId") Integer siteId, @PathVariable("articleId") Integer articleId) {
+    public MessageDto delete(
+            @SiteId @PathVariable("siteId") Integer siteId,
+            @PathVariable("articleId") Integer articleId) {
 
         if (!contentWebService.deleteSingleArticle(articleId)) {
             return MessageDto.fail(1, "删除文章失败");
@@ -85,13 +97,18 @@ public class ArticleController {
     @SystemControllerLog(description = "查看单篇文章")
     @CmsPermission(moduleName = "文章管理")
     @GetMapping("/details/{siteId}/{articleId}")
-    public ArticleDTO details(@SiteId @PathVariable("siteId") Integer siteId, @PathVariable("articleId") Integer articleId) {
+    public ArticleDTO details(
+            @SiteId @PathVariable("siteId") Integer siteId,
+            @PathVariable("articleId") Integer articleId) {
         return contentWebService.detailsArticle(articleId);
     }
 
     @SystemControllerLog(description = "更新单篇文章")
     @PostMapping("/update/{siteId}/{articleId}")
-    public MessageDto update(@SiteId @PathVariable("siteId") Integer siteId, @PathVariable("articleId") Integer articleId, @RequestBody ArticleDTO articleDTO) {
+    public MessageDto update(
+            @SiteId @PathVariable("siteId") Integer siteId,
+            @PathVariable("articleId") Integer articleId,
+            @RequestBody ArticleDTO articleDTO) {
         if (!contentWebService.updateArticle(articleId, articleDTO)) {
             return MessageDto.fail(1, "删除文章失败");
         }
@@ -112,7 +129,10 @@ public class ArticleController {
     @SystemControllerLog(description = "审核多篇文章")
     @CmsPermission(moduleName = "文章管理")
     @GetMapping("/check/{siteId}/{articleId}")
-    public MessageDto checkArticle(@SiteId @PathVariable("siteId") Integer siteId, @PathVariable Integer articleId, @RequestParam Integer judge) {
+    public MessageDto checkArticle(
+            @SiteId @PathVariable("siteId") Integer siteId,
+            @PathVariable Integer articleId,
+            @RequestParam Integer judge) {
         if (!contentWebService.checkArticle(articleId, judge)) {
             return MessageDto.fail(1, "审核失败");
         }

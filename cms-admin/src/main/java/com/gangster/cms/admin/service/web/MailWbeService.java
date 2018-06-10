@@ -25,8 +25,13 @@ public class MailWbeService {
     public PageInfo<CmsMail> listReaded(User user, Integer page, Integer limit) {
         CmsMailExample cmsMailExample = new CmsMailExample();
         // 列出已经发送的，收件是当前用户，未读取的邮件
-        cmsMailExample.or().andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED).andMailToMailEqualTo(user.getUserEmail()).andMailReadEqualTo(CmsConst.MAIIL_READ_READED);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
+        cmsMailExample.or()
+                .andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED)
+                .andMailToMailEqualTo(user.getUserEmail())
+                .andMailReadEqualTo(CmsConst.MAIIL_READ_READED);
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
     }
 
     /**
@@ -34,8 +39,13 @@ public class MailWbeService {
      */
     public PageInfo<CmsMail> listToRead(User user, Integer page, Integer limit) {
         CmsMailExample cmsMailExample = new CmsMailExample();
-        cmsMailExample.or().andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED).andMailToMailEqualTo(user.getUserEmail()).andMailReadEqualTo(CmsConst.MAIIL_READ_TOREAD);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
+        cmsMailExample.or()
+                .andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED)
+                .andMailToMailEqualTo(user.getUserEmail())
+                .andMailReadEqualTo(CmsConst.MAIIL_READ_TOREAD);
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
     }
 
     /**
@@ -44,8 +54,12 @@ public class MailWbeService {
     public PageInfo<CmsMail> listDraft(User user, Integer page, Integer limit) {
         CmsMailExample cmsMailExample = new CmsMailExample();
         // 列出是草稿，发送者是当前用户
-        cmsMailExample.or().andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_DRAFT).andMailInMailEqualTo(user.getUserEmail());
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
+        cmsMailExample.or()
+                .andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_DRAFT)
+                .andMailInMailEqualTo(user.getUserEmail());
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
     }
 
     /**
@@ -54,8 +68,12 @@ public class MailWbeService {
     public PageInfo<CmsMail> listSended(User user, Integer page, Integer limit) {
         CmsMailExample cmsMailExample = new CmsMailExample();
         // 列出邮件状态是已发送,发送方为user
-        cmsMailExample.or().andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED).andMailInMailEqualTo(user.getUserEmail());
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
+        cmsMailExample.or()
+                .andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED)
+                .andMailInMailEqualTo(user.getUserEmail());
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
     }
 
 
@@ -65,8 +83,13 @@ public class MailWbeService {
     public PageInfo<CmsMail> trashCan(User user, Integer page, Integer limit) {
         CmsMailExample cmsMailExample = new CmsMailExample();
         // 列出收件人是当前用户，邮件的状态是已经发送，且已经删除的状态
-        cmsMailExample.or().andMailToMailEqualTo(user.getUserEmail()).andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED).andMailReadEqualTo(CmsConst.MAIL_READ_DELETED);
-        return PageHelper.startPage(page, limit).doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
+        cmsMailExample.or()
+                .andMailToMailEqualTo(user.getUserEmail())
+                .andMailFlagStatusEqualTo(CmsConst.MAIL_FLAG_SENDED)
+                .andMailReadEqualTo(CmsConst.MAIL_READ_DELETED);
+        return PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> cmsMailMapper.selectByExample(cmsMailExample));
     }
 
     public CmsMail detailsMail(Integer id) {

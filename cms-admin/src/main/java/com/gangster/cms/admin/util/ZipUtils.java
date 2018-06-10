@@ -1,5 +1,6 @@
 package com.gangster.cms.admin.util;
 
+import com.gangster.cms.common.constant.CmsConst;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipFile;
 import org.apache.tools.zip.ZipOutputStream;
@@ -81,55 +82,100 @@ public class ZipUtils {
         }
     }
 
-    /**
-     * <p>
-     * 解压压缩包
-     * </p>
-     *
-     * @param zipFilePath 压缩文件路径
-     * @param destDir     压缩包释放目录
-     */
-    public static String unZip(String zipFilePath, String destDir) throws Exception {
-        ZipFile zipFile = new ZipFile(zipFilePath, CHINESE_CHARSET);
+
+    public static boolean unZip(String zipFilePath, String skinName, String staticPath, String templatesPath) {
+        ZipFile zipFile;
+        try {
+            zipFile = new ZipFile(zipFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         Enumeration<?> emu = zipFile.getEntries();
-        BufferedInputStream bis;
-        FileOutputStream fos;
-        BufferedOutputStream bos;
+        BufferedInputStream bis = null;
+        FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
         File file, parentFile;
         ZipEntry entry;
         byte[] cache = new byte[CACHE_SIZE];
-        String fileDir = null;
-        while (emu.hasMoreElements()) {
-            entry = (ZipEntry) emu.nextElement();
-            if (fileDir == null) {
-                String name = entry.getName();
-                fileDir = name.split("/")[0];
-            }
-            if (entry.isDirectory()) {
-                new File(destDir + entry.getName()).mkdirs();
-                continue;
-            }
 
-            bis = new BufferedInputStream(zipFile.getInputStream(entry));
-            file = new File(destDir + entry.getName());
-            parentFile = file.getParentFile();
-            if (parentFile != null && (!parentFile.exists())) {
-                parentFile.mkdirs();
+        String skinTempaltesPath = templatesPath + skinName;
+        String skinStaticPath = staticPath + skinName;
+        new File(skinTempaltesPath).mkdir();
+        new File(skinStaticPath).mkdir();
+
+
+        while (emu.hasMoreElements()) {
+            try {
+                entry = (ZipEntry) emu.nextElement();
+                // 如果文件夹是templates/或者static/就continue
+                if (entry.getName().equals(CmsConst.TEMPLATES_PATH) || (entry.getName().equals(CmsConst.STATIC_PATH))) {
+                    continue;
+                }
+
+                if (entry.isDirectory()) {
+                    // 0/1/2/3
+                    String newDir = entry.getName().split("/", 2)[1];
+                    if (entry.getName().startsWith(CmsConst.TEMPLATES_PATH)) {
+                        new File(skinTempaltesPath + File.separator + newDir).mkdirs();
+                    } else if (entry.getName().startsWith(CmsConst.STATIC_PATH)) {
+                        new File(skinStaticPath + File.separator + newDir).mkdir();
+                    }
+                } else {
+                    bis = new BufferedInputStream(zipFile.getInputStream(entry));
+                    if (entry.getName().startsWith(CmsConst.TEMPLATES_PATH)) {
+                        file = new File(skinTempaltesPath + File.separator + entry.getName().split("/", 2)[1]);
+                    } else {
+                        file = new File(skinStaticPath + File.separator + entry.getName().split("/", 2)[1]);
+                    }
+                    // 处理文件
+                    parentFile = file.getParentFile();
+                    if (parentFile != null && (!parentFile.exists())) {
+                        parentFile.mkdirs();
+                    }
+                    fos = new FileOutputStream(file);
+                    bos = new BufferedOutputStream(fos, CACHE_SIZE);
+                    int nRead = 0;
+                    while ((nRead = bis.read(cache, 0, CACHE_SIZE)) != -1) {
+                        fos.write(cache, 0, nRead);
+                    }
+                    bos.flush();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                if (bos != null) {
+                    try {
+                        bos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    if (fos != null) {
+                        fos.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (bis != null) {
+                        bis.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            fos = new FileOutputStream(file);
-            bos = new BufferedOutputStream(fos, CACHE_SIZE);
-            int nRead = 0;
-            while ((nRead = bis.read(cache, 0, CACHE_SIZE)) != -1) {
-                fos.write(cache, 0, nRead);
-            }
-            bos.flush();
-            bos.close();
-            fos.close();
-            bis.close();
         }
         FileTool.deleteDir(new File(zipFilePath));
-        zipFile.close();
-        return fileDir;
+        try {
+            zipFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 }

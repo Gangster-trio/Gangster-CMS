@@ -99,7 +99,7 @@ function generate_article_data() {
         "articleSkin": $("#articleSkin").val(),
         "articleInHomepage": "",
         "articleReleaseTime": new Date().getTime(),
-        "articleReleaseStatus": 0,
+        "articleReleaseStatus": 1,
         "articleContent": layedit.getContent(editor_text)
     };
     return JSON.stringify({

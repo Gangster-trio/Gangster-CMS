@@ -27,7 +27,9 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @PostMapping("/login")
-    public MessageDto<Object> login(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpServletRequest request) {
+    public MessageDto<Object> login(
+            @RequestParam("userName") String userName,
+            @RequestParam("password") String password, HttpServletRequest request) {
         logger.info("用户" + userName + "进行登录");
         UserExample userExample = new UserExample();
         userExample.or().andUserNameEqualTo(userName).andUserPasswordEqualTo(password);

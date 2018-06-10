@@ -44,7 +44,10 @@ public class FileController {
     @SystemControllerLog(description = "添加文件")
     @CmsPermission(moduleName = "文件管理")
     @PostMapping({"/upload/{siteId}/{articleId}", "/upload/{siteId}"})
-    public MessageDto uploadFile(@SiteId @PathVariable Integer siteId, @PathVariable(required = false) Integer articleId, @Param("file") MultipartFile file) {
+    public MessageDto uploadFile(
+            @SiteId @PathVariable Integer siteId,
+            @PathVariable(required = false) Integer articleId,
+            @Param("file") MultipartFile file) {
         if (null == articleId) {
             return MessageDto.success(fileUploadService.saveFile(file));
         } else {
@@ -55,7 +58,9 @@ public class FileController {
     @SystemControllerLog(description = "下载文件")
     @CmsPermission(moduleName = "文件管理")
     @PostMapping("/download/{siteId}/{fId}")
-    public void download(@SiteId @PathVariable Integer siteId, @PathVariable Integer fId, HttpServletRequest request, HttpServletResponse response) {
+    public void download(
+            @SiteId @PathVariable Integer siteId,
+            @PathVariable Integer fId, HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding(request.getCharacterEncoding());
         response.setContentType("application/ocet-stream");
         FileInputStream inputStream = null;
@@ -84,10 +89,15 @@ public class FileController {
     @SystemControllerLog(description = "列出某个网站的文件")
     @CmsPermission(moduleName = "文件管理")
     @GetMapping("/list")
-    public AjaxData list(@SiteId @RequestParam Integer siteId, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData list(
+            @SiteId @RequestParam Integer siteId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
         WebFileExample webFileExample = new WebFileExample();
         webFileExample.or().andFileSiteIdEqualTo(siteId);
-        PageInfo<WebFile> pageInfo = PageHelper.startPage(page, limit).doSelectPageInfo(() -> webFileService.selectByExample(webFileExample));
+        PageInfo<WebFile> pageInfo = PageHelper
+                .startPage(page, limit)
+                .doSelectPageInfo(() -> webFileService.selectByExample(webFileExample));
         if (null == pageInfo) {
             return new AjaxData(1, "failed", 0, null);
         }

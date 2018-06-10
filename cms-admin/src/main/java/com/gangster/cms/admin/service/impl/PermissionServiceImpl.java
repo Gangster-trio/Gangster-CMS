@@ -17,15 +17,16 @@ import java.util.stream.Collectors;
 public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Permission, PermissionExample> implements PermissionService {
 
     @Autowired
-    PermissionMapper permissionMapper;
+    private PermissionMapper permissionMapper;
 
     @Autowired
-    ModuleMapper moduleMapper;
+    private ModuleMapper moduleMapper;
 
     @Autowired
     UserMapper userMapper;
 
     private ConcurrentHashMap<String, Integer> moduleCache = new ConcurrentHashMap<>();
+
 
     @Override
     public boolean hasPermission(Integer uid, Integer sid, Integer moduleId) {

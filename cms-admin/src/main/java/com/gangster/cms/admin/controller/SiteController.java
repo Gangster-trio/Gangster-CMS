@@ -28,7 +28,9 @@ public class SiteController {
 
     @SystemControllerLog(description = "列出所有的站")
     @GetMapping("/list")
-    public AjaxData list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxData list(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Site> pageInfo = contentWebService.listSite(page, limit);
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
