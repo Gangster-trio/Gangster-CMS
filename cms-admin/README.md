@@ -25,31 +25,39 @@
 
 # 内容管理
 ## 文章管理
-   ######页面:
+   ###页面:
    ![](md/content/article.png)
   添加文章时需要注意:
    1. 皮肤只能自己选择，没有提示
    2. 文章标签分隔符为,
    3.上传文件需要点击开始上传按钮
 ## 栏目管理
-   ###### 页面:
+   ### 页面:
    ![](md/content/category.png)
    * 待审核文章,栏目
-     ###### 页面:
+     #### 页面:
      ![](md/content/unCheck.png)
       注意: 在添加更新文章栏目时，没有通过审核或者未审核的栏目，是不显示的
 ## 文件管理
-   ###### 页面:
+   ### 页面:
    ![](md/content/file.png)
 ##    外链管理
-   ###### 页面:
+   ### 页面:
    ![](md/content/outerChain.png)
 # 权限管理
 ## 用户管理
+   ### 页面:
+   ![](md/permission/user.png)
+   * 用户所含有的权限
+   #### 页面:
+   ![](md/permission/permission.png)
 ## 网站管理
-   ######页面:
+   ### 页面:
    ![](md/permission/site.png)
    注意: 添加网站时，可以上传自己的皮肤
+## 定时任务
+   ### 页面:
+   ![](md/permission/task.png)    
       
 # 系统设置
 ## 存储设置
