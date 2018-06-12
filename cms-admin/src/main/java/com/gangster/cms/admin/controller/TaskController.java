@@ -131,6 +131,9 @@ public class TaskController {
     }
 
     public void addTask(Article article, String jobGroupName, String cronExpression) throws SchedulerException {
+        if (cronExpression==null||cronExpression.isEmpty()){
+            return;
+        }
         scheduler.start();
         String jobName = article.getArticleId() + article.getArticleTitle();
         JobDetail jobDetail = JobBuilder.newJob(AddTaskArticle.class).withIdentity(jobName, jobGroupName).build();

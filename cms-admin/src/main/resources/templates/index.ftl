@@ -67,7 +67,7 @@
                     <a href="javascript:;">${tree.module.moduleName}</a>
                     <dl class="layui-nav-child">
                         <#list tree.list as module>
-                            <dd>
+                            <dd id="sidebar:/module${module.moduleUrl}">
                                 <a onclick="showAtRight('/module${module.moduleUrl}')">${module.moduleName}</a>
                             </dd>
                         </#list>
@@ -130,5 +130,18 @@
         window.location.href = "/index?siteId=" + id;
     }
 
-    showAtRight("/module/count.html");
+    oldSelectNode = $('[id="' + 'sidebar:module/count.html' + '"]');
+
+    //不要妄图修改这里
+    window.onpopstate = (ev => {
+        if (ev.state !== "") {
+            showAtRight(ev.state, false, false);
+            let rawId = 'sidebar:' + ev.state;
+            //id含有特殊字符不可使用ID选择器
+            oldSelectNode.removeClass("layui-this");
+            let highlightNode = $('[id="' + rawId + '"]');
+            highlightNode.addClass("layui-this");
+            oldSelectNode = highlightNode;
+        }
+    })
 </script>

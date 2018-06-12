@@ -50,7 +50,8 @@ function getCookie(name) {
 }
 
 //显示右边的信息
-function showAtRight(url) {
+//勿动
+function showAtRight(url, push = true, setOldSelector = true) {
     $.ajax({
         url: url,
         type: 'GET',
@@ -62,7 +63,12 @@ function showAtRight(url) {
         },
         success: function (data) {
             $("#content").html(data);
-            // window.location.href = url;
+            if (push) {
+                history.pushState(url, "", '#' + url);
+            }
+            if (setOldSelector) {
+                oldSelectNode = $("[id='" + 'sidebar:' + url + "']");
+            }
         }
     });
 }

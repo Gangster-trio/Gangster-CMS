@@ -35,6 +35,14 @@ ___
 
 高级用法参见[自定义指令](#自定义指令)
 
+### 全局对象
+
+|对象名|描述|示例|
+|------|-----|-----|
+|request|request请求体|`${request.contextPath}`获取站点上下文路径
+|BaseSkinPath|获取皮肤静态资源根目录|`${request.contextPath}/${BaseSkinPath}/index.css`获取该皮肤下的静态资源
+
+
 ### 站点主页
 
 * #### 内嵌对象
@@ -119,10 +127,10 @@ ___
         
             参数名称|作用|默认值|必选？|备注
             :-------|-----|:-----:|:-----:|:----:
-            categoryId|指定的栏目ID| |Yes|
-            size      |每页的条目数(0代表返回所有条目)|`0`|No|`0`代表返回所有条目
-            page      |页码数    |`0`|No|
-            sort      |排序方式|`article_create_time`|No|数据库中的字段名
+            categoryId|指定的栏目ID| |True|
+            size      |每页的条目数(0代表返回所有条目)|`0`|False|`0`代表返回所有条目
+            page      |页码数    |`0`|False|
+            sort      |排序方式|`article_create_time`|False|数据库中的字段名
             
        * 示例
        
@@ -144,11 +152,11 @@ ___
         
             参数名称|作用|默认值|必选？|备注
             -------|-----|:-----:|:-----:|:----:
-            cate_type|指定的栏目类型| |No|二者仅能指定一个
-            article_type|指定文章类型| |No
-            size      |每页的条目数(0代表返回所有条目)|`0`|No|
-            page      |页码数    |`0`|No|
-            sort      |排序方式(数据库中的字段名)|`article_create_time`|No
+            cate_type|指定的栏目类型| |False|二者仅能指定一个
+            article_type|指定文章类型| |False
+            size      |每页的条目数(0代表返回所有条目)|`0`|False|
+            page      |页码数    |`0`|False|
+            sort      |排序方式(数据库中的字段名)|`article_create_time`|False
             
         * 示例
         
@@ -178,8 +186,8 @@ ___
             
             参数名称|作用|默认值|必选？
             ----|----|:----:|:----:
-            id|指定文章ID| |Yes
-            blob|是否返回文章内容等大字段|false|No
+            id|指定文章ID| |True
+            blob|是否返回文章内容等大字段|false|False
         
         * 示例
             
@@ -213,7 +221,7 @@ ___
         
         每个题目包含该题目所有的选项列表
         
-        问卷调查结果提交参见[链接](#问卷调查)
+        问卷调查结果提交参见[问卷调查](#问卷调查)
          
     * `cms_outerchain`
         
