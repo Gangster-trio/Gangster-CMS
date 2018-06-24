@@ -11,7 +11,7 @@
     <title>${result.category.categoryTitle!'No title'}</title>
 
 
-<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
 
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
           type='text/css'>
@@ -19,7 +19,7 @@
           rel='stylesheet' type='text/css'>
 
     <!-- Custom styles for this template -->
-    <link href="${requst.contextPath}/${BaseSkinPath}/clean-blog.min.css" rel="stylesheet">
+    <link href="${request.contextPath}/${BaseSkinPath}/css/clean-blog.min.css" rel="stylesheet">
 
 </head>
 
