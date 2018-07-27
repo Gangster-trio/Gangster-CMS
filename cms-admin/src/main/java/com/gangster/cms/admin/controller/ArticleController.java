@@ -46,7 +46,7 @@ public class ArticleController {
 
     @SystemControllerLog(description = "列出待审核的文章")
     @CmsPermission(moduleName = "文章管理")
-    @GetMapping("/list/check/{siteId}")
+    @GetMapping("/check/{siteId}")
     public AjaxData listCheck(
             @SiteId @PathVariable("siteId") Integer siteId,
             @RequestParam(defaultValue = "1") Integer page,
@@ -90,7 +90,6 @@ public class ArticleController {
         } else {
             return MessageDto.success(null);
         }
-
     }
 
     @SystemControllerLog(description = "查看单篇文章")

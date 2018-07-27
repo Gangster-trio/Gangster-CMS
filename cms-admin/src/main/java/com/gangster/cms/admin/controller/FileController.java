@@ -43,7 +43,7 @@ public class FileController {
 
     @SystemControllerLog(description = "添加文件")
     @CmsPermission(moduleName = "文件管理")
-    @PostMapping({"/upload/{siteId}/{articleId}", "/upload/{siteId}"})
+    @PostMapping({"/{siteId}/{articleId}", "/{siteId}"})
     public MessageDto uploadFile(
             @SiteId @PathVariable Integer siteId,
             @PathVariable(required = false) Integer articleId,
@@ -57,7 +57,7 @@ public class FileController {
 
     @SystemControllerLog(description = "下载文件")
     @CmsPermission(moduleName = "文件管理")
-    @PostMapping("/download/{siteId}/{fId}")
+    @GetMapping("/{siteId}/{fId}")
     public void download(
             @SiteId @PathVariable Integer siteId,
             @PathVariable Integer fId, HttpServletRequest request, HttpServletResponse response) {
@@ -88,9 +88,9 @@ public class FileController {
 
     @SystemControllerLog(description = "列出某个网站的文件")
     @CmsPermission(moduleName = "文件管理")
-    @GetMapping("/list")
+    @GetMapping("/{siteId}")
     public AjaxData list(
-            @SiteId @RequestParam Integer siteId,
+            @SiteId @PathVariable Integer siteId,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer limit) {
         WebFileExample webFileExample = new WebFileExample();
@@ -104,7 +104,7 @@ public class FileController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    @GetMapping("/delete/{siteId}/{fId}")
+    @DeleteMapping("/{siteId}/{fId}")
     @CmsPermission(moduleName = "文件管理")
     public MessageDto delete(@SiteId @PathVariable Integer siteId, @PathVariable Integer fId) {
         WebFile file = webFileService.selectByPrimaryKey(fId);

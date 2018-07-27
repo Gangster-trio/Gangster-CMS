@@ -16,7 +16,7 @@ public class SurveyOptionController {
     @Autowired
     private SurveyWebService surveyWebService;
 
-    @DeleteMapping("/delete/{siteId}/{id}")
+    @DeleteMapping("/{siteId}/{id}")
     @CmsPermission(moduleName = "问卷管理")
     public MessageDto delete(@SiteId @PathVariable Integer siteId, @PathVariable("id") Integer id) {
         if (!surveyWebService.deleteSurveyOption(id)) {

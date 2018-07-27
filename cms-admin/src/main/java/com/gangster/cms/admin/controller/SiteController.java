@@ -27,7 +27,7 @@ public class SiteController {
     }
 
     @SystemControllerLog(description = "列出所有的站")
-    @GetMapping("/list")
+    @GetMapping("")
     public AjaxData list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer limit) {
@@ -36,7 +36,7 @@ public class SiteController {
     }
 
     @SystemControllerLog(description = "添加站")
-    @PostMapping("/add")
+    @PostMapping("")
     public MessageDto add(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody Site site) {
         if (!contentWebService.addSite(user, site)) {
             return MessageDto.fail(1, "添加站失败");
@@ -45,7 +45,7 @@ public class SiteController {
     }
 
     @SystemControllerLog(description = "删除站")
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public MessageDto delete(@PathVariable("id") Integer id) {
         if (!contentWebService.deleteSite(id)) {
             return MessageDto.fail(1, "删除站失败");
@@ -60,7 +60,7 @@ public class SiteController {
     }
 
     @SystemControllerLog(description = "更新单个站")
-    @PostMapping("/update/{id}")
+    @PutMapping("/{id}")
     public MessageDto update(@PathVariable("id") Integer id, @RequestBody Site site) {
         if (!contentWebService.updateSite(id, site)) {
             return MessageDto.fail(1, "更新单个站失败");

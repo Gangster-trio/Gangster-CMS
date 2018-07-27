@@ -14,7 +14,7 @@
         if (siteId) {
             table.render({
                 elem: '#column_table'
-                , url: '/category/list/check?siteId=' + siteId     //得到所选site的栏目
+                , url: '/category/list/check/' + siteId     //得到所选site的栏目
                 , page: true
                 , cols: [[ //表头
                     {type: 'checkbox'}
@@ -49,7 +49,7 @@
                     layer.confirm('真的要通过吗?', function (index) {
                         layer.close(index);
                         $.ajax({
-                            type: 'get',
+                            type: 'POST',
                             url: '/category/check/' + siteId + "/" + categoryId,
                             data: {'judge': 1},
                             dataType: "json",
@@ -67,7 +67,7 @@
                         layer.confirm('确定不通过吗?', function (index) {
                             layer.close(index);
                             $.ajax({
-                                type: 'get',
+                                type: 'POST',
                                 url: '/category/check/' + siteId + "/" + categoryId,
                                 data: {'judge': 2},
                                 dataType: "json",
@@ -102,7 +102,7 @@
                         }
                     }
                     $.ajax({
-                        type: 'post',
+                        type: 'DELETE',
                         url: '/category/delete/batch/' + siteId,
                         data: {
                             "categoryIdData": categoryIdData
@@ -145,9 +145,9 @@
     //删除栏目的功能实现
     function deleteCategory(id) {
         $.ajax({
-                url: "/category/delete/" + siteId + "/" + id,
+                url: "/category/" + siteId + "/" + id,
                 dataType: "json",
-                type: "get",
+                type: "DELETE",
                 timeout: "3000",
                 error: function () {
                     layer.msg("server no response : " + url);

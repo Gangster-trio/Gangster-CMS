@@ -16,7 +16,7 @@ public class SurveyTopicController {
     @Autowired
     private SurveyWebService surveyWebService;
 
-    @DeleteMapping("/delete/{siteId}/{id}")
+    @DeleteMapping("/{siteId}/{id}")
     public MessageDto delete(@SiteId @PathVariable Integer siteId, @PathVariable Integer id) {
         if (!surveyWebService.deleteSurveyTopic(id)) {
             return MessageDto.fail(1, "failed");

@@ -19,7 +19,7 @@
         if (siteId) {
             table.render({
                 elem: '#column_table'
-                , url: '/category/list?siteId=' + siteId     //得到所选site的栏目
+                , url: '/category/' + siteId     //得到所选site的栏目
                 , page: true
                 , cols: [[ //表头
                     {type: 'checkbox'}
@@ -57,9 +57,9 @@
                 if (layEvent === 'del') { //删除
                     layer.confirm('真的删除行么', function (index) {
                             $.ajax({
-                                    url: "/category/delete/" + siteId + "/" + categoryId,
+                                    url: "/category/" + siteId + "/" + categoryId,
                                     dataType: "json",
-                                    type: "delete",
+                                    type: "DELETE",
                                     timeout: "3000",
                                     error: function () {
                                         layer.msg("server no response : " + url);
@@ -105,7 +105,7 @@
                         }
                     }
                     $.ajax({
-                        type: 'post',
+                        type: 'DELETE',
                         url: '/category/delete/batch/'+siteId,
                         data: {
                             "categoryIdData": categoryIdData

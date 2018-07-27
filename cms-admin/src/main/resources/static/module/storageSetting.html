@@ -58,7 +58,7 @@
 
     $.ajax({
         type: 'get',
-        url: '/setting/list/' + siteId,
+        url: '/setting/' + siteId,
         async: false,
         success: function (data) {
             $("#picSetting").val(data[0]["sysValue"]);

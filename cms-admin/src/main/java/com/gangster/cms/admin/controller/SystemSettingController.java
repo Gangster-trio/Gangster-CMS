@@ -23,17 +23,16 @@ public class SystemSettingController {
     @Autowired
     private SettingService settingService;
 
-    @GetMapping("/list/{id}")
+    @GetMapping("/{id}")
     public List<SettingEntry> list(@SessionAttribute(CmsConst.CURRENT_USER) User user, @PathVariable Integer id) {
         return settingService.selectByExample(new SettingEntryExample());
     }
 
-    @PostMapping("/update")
+    @PutMapping("")
     public MessageDto<Object> update(@RequestBody Map<String, String> map) {
         if (map == null) {
             return MessageDto.fail(1, "更新配置失败");
         }
-        int count = 0;
         String newPicPath = map.get("picSetting");
         SettingEntry picSetting = new SettingEntry();
         picSetting.setSysKey(CmsConst.PIC_PATH_SETTING);

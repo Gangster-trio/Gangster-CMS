@@ -31,7 +31,7 @@
         //对site进行判断，只有选择了site才有显示
         table.render({
             elem: '#site_table'
-            , url: '/site/list'
+            , url: '/site'
             , page: true //开启分页
             , cols: [[ //表头
                 {field: 'siteId', title: 'ID', width: '80', sort: true, fixed: 'left'}
@@ -102,9 +102,9 @@
 
         function deleteSite(siteId) {
             $.ajax({
-                url: "/site/delete/" + siteId,
+                url: "/site/" + siteId,
                 dataType: "application/json",
-                type: "get",
+                type: "DELETE",
                 success: function (data) {
                     if (data.code === 0) {
                         layer.msg("delete success.");

@@ -81,8 +81,8 @@
             "mailFlagStatus": param
         };
         $.ajax({
-            type: 'POST',
-            url: '/mail/update',
+            type: 'PUT',
+            url: '/mail',
             contentType: 'application/json',
             dataType: 'json',
             async: false,

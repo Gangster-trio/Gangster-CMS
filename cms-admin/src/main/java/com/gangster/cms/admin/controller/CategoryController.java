@@ -34,9 +34,9 @@ public class CategoryController {
 
     @SystemControllerLog(description = "列出所有的栏目")
     @CmsPermission(moduleName = "栏目管理")
-    @GetMapping("/list")
+    @GetMapping("/{siteId}")
     public AjaxData list(
-            @SiteId @RequestParam Integer siteId,
+            @SiteId @PathVariable Integer siteId,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Category> pageInfo = contentWebService.listCategory(siteId, page, limit);
@@ -45,9 +45,9 @@ public class CategoryController {
 
     @SystemControllerLog(description = "列出待审核的栏目")
     @CmsPermission(moduleName = "栏目管理")
-    @GetMapping("/list/check")
+    @GetMapping("/list/check/{siteId}")
     public AjaxData listCheck(
-            @SiteId @RequestParam Integer siteId,
+            @SiteId @PathVariable Integer siteId,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer limit) {
 
@@ -75,7 +75,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "更新单个栏目")
     @CmsPermission(moduleName = "栏目管理")
-    @PostMapping("/update/{siteId}/{cId}")
+    @PutMapping("/update/{siteId}/{cId}")
     public MessageDto update(
             @SiteId @PathVariable("siteId") Integer siteId,
             @PathVariable("cId") Integer cId,
@@ -106,7 +106,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "批量删除")
     @CmsPermission(moduleName = "栏目管理")
-    @PostMapping("/delete/batch/{siteId}")
+    @DeleteMapping("/delete/batch/{siteId}")
     public MessageDto batchDelete(@SiteId @PathVariable("siteId") Integer siteId, String categoryIds) {
         if (!contentWebService.deleteCategories(categoryIds)) {
             return MessageDto.fail(1, "批量删除栏目失败");
@@ -117,7 +117,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "审核栏目")
     @CmsPermission(moduleName = "栏目管理")
-    @GetMapping("/check/{siteId}/{cId}")
+    @PostMapping("/check/{siteId}/{cId}")
     public MessageDto checkCategory(
             @SiteId @PathVariable("siteId") Integer siteId,
             @PathVariable Integer cId,

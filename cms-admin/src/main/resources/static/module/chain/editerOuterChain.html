@@ -86,8 +86,8 @@
         function updateOuterChain() {
             formData = $("#updateOuterChain").serializeObject();
             $.ajax({
-                type: "POST",
-                url: "/outerchain/update/" + siteId + "/" + outerChainId,
+                type: "PUT",
+                url: "/outerchain/" + siteId + "/" + outerChainId,
                 data: JSON.stringify(formData),
                 async: false,
                 contentType: "application/json",

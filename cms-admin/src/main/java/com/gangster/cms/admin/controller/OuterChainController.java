@@ -21,7 +21,7 @@ public class OuterChainController {
     @Autowired
     private OuterChainWebService outerChainWebService;
 
-    @GetMapping("/list/{siteId}")
+    @GetMapping("/{siteId}")
     @CmsPermission(moduleName = "外链管理")
     public AjaxData list(
             @SiteId @PathVariable("siteId") Integer siteId,
@@ -42,7 +42,7 @@ public class OuterChainController {
     }
 
 
-    @PostMapping("/add/{siteId}")
+    @PostMapping("/{siteId}")
     @CmsPermission(moduleName = "外链管理")
     public MessageDto add(@SiteId @PathVariable Integer siteId, @RequestBody OuterChain outerChain) {
 
@@ -52,7 +52,7 @@ public class OuterChainController {
         return MessageDto.fail(1, "添加失败，请重试");
     }
 
-    @DeleteMapping("/delete/{siteId}/{id}")
+    @DeleteMapping("/{siteId}/{id}")
     @CmsPermission(moduleName = "外链管理")
     public MessageDto delete(@PathVariable Integer siteId, @PathVariable("id") Integer id) {
         if (outerChainWebService.delete(id)) {
@@ -61,7 +61,7 @@ public class OuterChainController {
         return MessageDto.fail(1, "删除失败请重试");
     }
 
-    @PostMapping("/update/{siteId}/{id}")
+    @PutMapping("/update/{siteId}/{id}")
     @CmsPermission(moduleName = "外链管理")
     public MessageDto update(
             @PathVariable Integer siteId,

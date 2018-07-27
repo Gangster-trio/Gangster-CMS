@@ -12,7 +12,7 @@
         //对site进行判断，只有选择了site才有显示
         table.render({
             elem: '#readedMail_table'
-            , url: '/mail/list/readed'
+            , url: '/mail/readed'
             , page: true
             , cols: [[ //表头
                 {field: 'mailId', title: 'ID', width: '80', sort: true}
@@ -38,7 +38,7 @@
                 showAtRight("/module/mail/listSingleMail.html");
             } else if (layEvent === 'del') {
                 $.ajax({
-                        url: "/mail/delete/" + mailId,
+                        url: "/mail/" + mailId,
                         dataType: "json",
                         type: "DELETE",
                         timeout: "3000",

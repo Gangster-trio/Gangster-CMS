@@ -231,7 +231,7 @@
     function add_article() {
         $.ajax({
             type: "POST",
-            url: "/article/add/" + siteId,
+            url: "/article/" + siteId,
             data: generate_article_data(),
             contentType: 'application/json',
             dataType: 'json',

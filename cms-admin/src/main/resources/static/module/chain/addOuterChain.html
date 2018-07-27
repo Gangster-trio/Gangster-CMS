@@ -72,7 +72,7 @@
             formData = $("#addOuterChain").serializeObject();
             $.ajax({
                 type: "POST",
-                url: "/outerchain/add/" + siteId,
+                url: "/outerchain/" + siteId,
                 data: JSON.stringify(formData),
                 async: false,
                 contentType: "application/json",

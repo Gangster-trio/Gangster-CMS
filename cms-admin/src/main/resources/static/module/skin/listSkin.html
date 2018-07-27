@@ -20,7 +20,7 @@
 
         table.render({
             elem: '#skin_table'
-            , url: '/skin/list'
+            , url: '/skin'
             , page: true //开启分页
             , cols: [[ //表头
                 {field: 'skinName', title: '皮肤名称', width: '190', align: 'center'}
@@ -46,8 +46,8 @@
             if (layEvent === 'del') { //删除
                 layer.confirm('真的删除行么', function (index) {
                         $.ajax({
-                            type: "delete",
-                            url: "/skin/delete/" + skin_name,
+                            type: "DELETE",
+                            url: "/skin/" + skin_name,
                             dataType: "json",
                             success: function (data) {
                                 if (data.code === 0) {

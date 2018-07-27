@@ -116,8 +116,8 @@
         function updateSite() {
             formData = $("#updateSiteForm").serializeObject();
             $.ajax({
-                type: "POST",
-                url: "/site/update/" + siteId,
+                type: "PUT",
+                url: "/site/" + siteId,
                 data: JSON.stringify(formData),
                 async: false,
                 contentType: "application/json",

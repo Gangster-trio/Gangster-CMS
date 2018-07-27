@@ -33,7 +33,7 @@ function generate_category_data() {
 function add_category() {
     $.ajax({
         type: "POST",
-        url: "/category/add/" + siteId,
+        url: "/category/" + siteId,
         data: generate_category_data(),
         contentType: 'application/json',
         dataType: 'json',
@@ -57,8 +57,8 @@ function add_category() {
 
 function update_category() {
     $.ajax({
-        type: "POST",
-        url: "/category/update/" + siteId + "/" + categoryId,
+        type: "PUT",
+        url: "/category/" + siteId + "/" + categoryId,
         data: generate_category_data(),
         contentType: 'application/json',
         dataType: 'json',
@@ -112,8 +112,8 @@ function generate_article_data() {
 
 function update_article() {
     $.ajax({
-        type: 'post',
-        url: '/article/update/' + siteId + "/" + articleId,
+        type: 'PUT',
+        url: '/article/' + siteId + "/" + articleId,
         data: generate_article_data(),
         async: false,
         contentType: "application/json",

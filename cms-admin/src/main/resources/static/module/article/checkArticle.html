@@ -19,7 +19,7 @@
 
             //判断栏目是否选择，如果选择，则显示该栏目的文章，如果没选择，显示站的所有文章
             ,
-            url: '/article/list/check?siteId=' + siteId
+            url: '/article/check/' + siteId
             ,
             page: true //开启分页
             ,
@@ -60,7 +60,7 @@
                     layer.confirm('真的要通过吗?', function (index) {
                         layer.close(index);
                         $.ajax({
-                            type: 'get',
+                            type: 'POST',
                             url: '/article/check/' + siteId + "/" + articleId,
                             data: {'judge': 1},
                             dataType: "json",
@@ -78,7 +78,7 @@
                     layer.confirm('确定不通过吗?', function (index) {
                         layer.close(index);
                         $.ajax({
-                            type: 'get',
+                            type: 'POST',
                             url: '/article/check/' + siteId + "/" + articleId,
                             data: {'judge': 2},
                             dataType: "json",

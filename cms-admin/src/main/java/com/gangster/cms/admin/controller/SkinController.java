@@ -38,7 +38,7 @@ public class SkinController {
         this.settingEntryMapper = settingEntryMapper;
     }
 
-    @GetMapping("/list")
+    @GetMapping("")
     public AjaxData list(
             @RequestParam(defaultValue = "1") Integer page
             , @RequestParam(defaultValue = "10") Integer limit) {
@@ -47,7 +47,7 @@ public class SkinController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    @PostMapping("/add")
+    @PostMapping("")
     public MessageDto add(@Param("file") MultipartFile file) {
         if (!fileUploadService.saveSkinFile(file)) {
             return MessageDto.fail(1, "上传失败");
@@ -55,7 +55,7 @@ public class SkinController {
         return MessageDto.success(null);
     }
 
-    @DeleteMapping("/delete/{skinName}")
+    @DeleteMapping("/{skinName}")
     public MessageDto delete(@PathVariable("skinName") String skinName) {
         try {
             skinMapper.deleteByPrimaryKey(skinName);

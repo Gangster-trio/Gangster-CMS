@@ -207,7 +207,7 @@
 
             $.ajax({
                 type: "get",
-                url: "/article/details/" + siteId + "/" + articleId,  //得到需要更新文章的id
+                url: "/article/" + siteId + "/" + articleId,  //得到需要更新文章的id
                 success: function (data) {
                     console.log(data);
                     var article = data.article;

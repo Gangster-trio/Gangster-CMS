@@ -12,7 +12,7 @@
         //对site进行判断，只有选择了site才有显示
         table.render({
             elem: '#draftMail_table'
-            , url: '/mail/list/draft'
+            , url: '/mail/draft'
             , page: true
             , cols: [[ //表头
                 {type: 'checkbox'}
@@ -39,7 +39,7 @@
                 showAtRight("/module/mail/listSingleDraftMail.html");
             } else if (layEvent === 'del') {
                 $.ajax({
-                        url: "/mail/delete/" + mailId,
+                        url: "/mail/" + mailId,
                         dataType: "json",
                         type: "DELETE",
                         timeout: "3000",

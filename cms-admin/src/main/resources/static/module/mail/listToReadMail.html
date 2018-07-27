@@ -12,7 +12,7 @@
         //对site进行判断，只有选择了site才有显示
         table.render({
             elem: '#toReadMail_table'
-            , url: '/mail/list/toread'
+            , url: '/mail/toread'
             , page: true
             , cols: [[ //表头
                 {type: 'checkbox'}
@@ -64,7 +64,7 @@
                 })
             } else if (layEvent === 'del') {
                 $.ajax({
-                        url: "/mail/delete/" + mailId,
+                        url: "/mail/" + mailId,
                         dataType: "json",
                         type: "DELETE",
                         timeout: "3000",

@@ -17,7 +17,7 @@
         if (siteId) {
             table.render({
                 elem: '#file_table'
-                , url: '/file/list?siteId=' + siteId     //得到所选site的栏目
+                , url: '/file/' + siteId     //得到所选site的栏目
                 , page: true
                 , cols: [[ //表头
                     {type: 'checkbox'}
@@ -51,8 +51,8 @@
                 if (layEvent === 'del') { //删除
                     layer.confirm('真的删除行么', function (index) {
                             $.ajax({
-                                type: 'get',
-                                url: '/file/delete/' + siteId + "/" + fileId,
+                                type: 'DELETE',
+                                url: '/file/' + siteId + "/" + fileId,
                                 dataType: 'json',
                                 error: function () {
                                     layer.msg("系统发生错误", {icon: 5});
@@ -75,7 +75,7 @@
                     )
                 }
                 else if (layEvent === 'download') {
-                    downFile(fileId);
+                    $.get("/file/download/" + siteId + "/" + fileId);
                 }
             });
         }

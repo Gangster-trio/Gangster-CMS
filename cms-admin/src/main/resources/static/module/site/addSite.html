@@ -117,7 +117,7 @@
             formData = $("#addSiteForm").serializeObject();
             $.ajax({
                 type: "POST",
-                url: '/site/add',
+                url: '/site',
                 data: JSON.stringify(formData),
                 async: false,
                 contentType: 'application/json',
@@ -134,7 +134,7 @@
 
         upload.render({
             elem: '#choose-file'
-            , url: '/skin/add'
+            , url: '/skin'
             , auto: false
             , choose: function (obj) {
                 var files = obj.pushFile();

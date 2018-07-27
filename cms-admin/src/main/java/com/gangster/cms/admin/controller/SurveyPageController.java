@@ -33,7 +33,7 @@ public class SurveyPageController {
 
     @SystemControllerLog(description = "列出当前网站的所有问卷")
     @CmsPermission(moduleName = "问卷管理")
-    @GetMapping("/list")
+    @GetMapping("")
     public AjaxData list(
             @SiteId @RequestParam Integer siteId,
             @RequestParam(defaultValue = "1") Integer page,
@@ -44,7 +44,7 @@ public class SurveyPageController {
 
     @SystemControllerLog(description = "添加问卷")
     @CmsPermission(moduleName = "问卷管理")
-    @PostMapping("/add/{siteId}")
+    @PostMapping("/{siteId}")
     public MessageDto add(@SiteId @PathVariable Integer siteId, @RequestBody SurveyWithTopicWrapper wrapper) {
         if (wrapper != null) {
             if (!surveyPageWebService.addSurveyPage(wrapper)) {
@@ -58,7 +58,7 @@ public class SurveyPageController {
 
     @SystemControllerLog(description = "删除某个问卷")
     @CmsPermission(moduleName = "问卷管理")
-    @DeleteMapping("/delete/{siteId}/{id}")
+    @DeleteMapping("/{siteId}/{id}")
     public MessageDto delete(@SiteId @PathVariable Integer siteId, @PathVariable("id") Integer id) {
         if (!surveyPageWebService.deleteSurveyPage(id)) {
             return MessageDto.fail(1, "failed");
@@ -69,7 +69,7 @@ public class SurveyPageController {
     @SystemControllerLog(description = "更新某个问卷")
     @Transactional
     @CmsPermission(moduleName = "问卷管理")
-    @PostMapping("/update/{siteId}")
+    @PutMapping("/update/{siteId}")
     public MessageDto update(@SiteId @PathVariable Integer siteId, @RequestBody SurveyWithTopicWrapper wrapper) {
         if (wrapper != null) {
             if (!surveyPageWebService.updateSurveyPage(wrapper)) {

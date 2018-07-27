@@ -29,7 +29,7 @@ public class CmsMailController {
         this.contentWebService = contentWebService;
     }
 
-    @GetMapping("/list/readed")
+    @GetMapping("/readed")
     public AjaxData listReaded(@SessionAttribute(CmsConst.CURRENT_USER) User user
             , @RequestParam(defaultValue = "1") Integer page
             , @RequestParam(defaultValue = "10") Integer limit) {
@@ -41,7 +41,7 @@ public class CmsMailController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    @GetMapping("/list/toread")
+    @GetMapping("/toread")
     public AjaxData listToRead(@SessionAttribute(CmsConst.CURRENT_USER) User user
             , @RequestParam(defaultValue = "1") Integer page
             , @RequestParam(defaultValue = "10") Integer limit) {
@@ -53,7 +53,7 @@ public class CmsMailController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    @GetMapping("/list/draft")
+    @GetMapping("/draft")
     public AjaxData listDraft(@SessionAttribute(CmsConst.CURRENT_USER) User user
             , @RequestParam(defaultValue = "1") Integer page
             , @RequestParam(defaultValue = "10") Integer limit) {
@@ -65,7 +65,7 @@ public class CmsMailController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    @GetMapping("/list/trashcan")
+    @GetMapping("/trashcan")
     public AjaxData listTrashCan(@SessionAttribute(CmsConst.CURRENT_USER) User user
             , @RequestParam(defaultValue = "1") Integer page
             , @RequestParam(defaultValue = "10") Integer limit) {
@@ -77,7 +77,7 @@ public class CmsMailController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    @GetMapping("/list/sended")
+    @GetMapping("/sended")
     public AjaxData listSended(@SessionAttribute(CmsConst.CURRENT_USER) User user
             , @RequestParam(defaultValue = "1") Integer page
             , @RequestParam(defaultValue = "10") Integer limit) {
@@ -94,7 +94,7 @@ public class CmsMailController {
         return MessageDto.success(mailWbeService.detailsMail(id));
     }
 
-    @PostMapping("/add")
+    @PostMapping("")
     public MessageDto addMail(@SessionAttribute(CmsConst.CURRENT_USER) User user, @RequestBody CmsMail cmsMail) {
         if (!mailWbeService.addMail(user, cmsMail)) {
             return MessageDto.fail(1, "添加失败");
@@ -102,7 +102,7 @@ public class CmsMailController {
         return MessageDto.success(null);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public MessageDto delete(@PathVariable("id") Integer id) {
         if (!mailWbeService.deleteMail(id)) {
             return MessageDto.fail(1, "failed");
@@ -123,7 +123,7 @@ public class CmsMailController {
         return MessageDto.success(contentWebService.uploadImg(file));
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public MessageDto update(@RequestBody CmsMail cmsMail) {
         if (!mailWbeService.update(cmsMail)) {
             return MessageDto.fail(1, "failed");
