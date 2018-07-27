@@ -7,7 +7,8 @@ ENV EUREKA_SERVER=localhost \
     DB_SERVER=localhost \
 #数据库服务端口
     DB_PORT=3306 \
-#数据库服务器密码
+#数据库服务器用户及密码
+    DB_USER=root \
     DB_PASSWORD="$%^YGR^&UHGT^&U" \
 #图片等文件的存储路径
     FILE_PAHT=/data \
@@ -23,6 +24,7 @@ COPY target/cms-admin-${VERSION}.jar /app/cms-admin.jar
 ENTRYPOINT [ "java","-jar","/app/cms-admin.jar" \
             ,"--db.server=${DB_SERVER}" \
             ,"--db.port=${DB_PORT}" \
+            ,"--db.user=${DB_USER}" \
             ,"--db.password=${DB_PASSWORD}" \
             ,"--eureka_server=${EUREKA_SERVER}" \
             ,"--eureka_port=${EUREKA_PORT}" \

@@ -6,6 +6,7 @@ services:
       context: cms-web
     environment:
       DB_SERVER: db
+      DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
     depends_on:
       - db
@@ -17,6 +18,7 @@ services:
      context: cms-admin
     environment:
       DB_SERVER: db
+      DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       EUREKA_SERVER: eureka
     depends_on:
@@ -30,6 +32,7 @@ services:
       context: cms-search
     environment:
       DB_SERVER: db
+      DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       ES_SERVER: es
       EUREKA_SERVER: eureka
