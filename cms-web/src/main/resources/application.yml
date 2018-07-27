@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: cms-web
   datasource:
     druid:
       url: jdbc:mysql://${db.server}:${db.port}/db_cms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC

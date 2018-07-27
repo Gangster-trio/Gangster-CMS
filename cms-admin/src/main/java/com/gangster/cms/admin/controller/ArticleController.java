@@ -34,11 +34,10 @@ public class ArticleController {
     }
 
     @SystemControllerLog(description = "列出所有的文章")
-
-    @GetMapping("/list")
     @CmsPermission(moduleName = "文章管理")
+    @GetMapping("/{siteId}")
     public AjaxData list(
-            @SiteId @RequestParam Integer siteId,
+            @SiteId @PathVariable("siteId") Integer siteId,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Article> pageInfo = contentWebService.listArticle(siteId, page, limit);
@@ -47,9 +46,9 @@ public class ArticleController {
 
     @SystemControllerLog(description = "列出待审核的文章")
     @CmsPermission(moduleName = "文章管理")
-    @GetMapping("/list/check")
+    @GetMapping("/list/check/{siteId}")
     public AjaxData listCheck(
-            @SiteId @RequestParam Integer siteId,
+            @SiteId @PathVariable("siteId") Integer siteId,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<Article> pageInfo = contentWebService.listCheckArticle(siteId, page, limit);
@@ -59,7 +58,7 @@ public class ArticleController {
 
     @SystemControllerLog(description = "添加文章")
     @CmsPermission(moduleName = "文章管理")
-    @PostMapping("/add/{siteId}")
+    @PostMapping("/{siteId}")
     public MessageDto add(
             @SiteId @PathVariable("siteId") Integer siteId,
             @RequestBody ArticleDTO articleDTO) {
@@ -81,7 +80,7 @@ public class ArticleController {
 
     @SystemControllerLog(description = "删除单篇文章")
     @CmsPermission(moduleName = "文章管理")
-    @GetMapping("/delete/{siteId}/{articleId}")
+    @DeleteMapping("/{siteId}/{articleId}")
     public MessageDto delete(
             @SiteId @PathVariable("siteId") Integer siteId,
             @PathVariable("articleId") Integer articleId) {
@@ -96,7 +95,7 @@ public class ArticleController {
 
     @SystemControllerLog(description = "查看单篇文章")
     @CmsPermission(moduleName = "文章管理")
-    @GetMapping("/details/{siteId}/{articleId}")
+    @GetMapping("/{siteId}/{articleId}")
     public ArticleDTO details(
             @SiteId @PathVariable("siteId") Integer siteId,
             @PathVariable("articleId") Integer articleId) {
@@ -104,7 +103,7 @@ public class ArticleController {
     }
 
     @SystemControllerLog(description = "更新单篇文章")
-    @PostMapping("/update/{siteId}/{articleId}")
+    @PutMapping("/{siteId}/{articleId}")
     public MessageDto update(
             @SiteId @PathVariable("siteId") Integer siteId,
             @PathVariable("articleId") Integer articleId,
@@ -126,9 +125,9 @@ public class ArticleController {
         return MessageDto.success(null);
     }
 
-    @SystemControllerLog(description = "审核多篇文章")
+    @SystemControllerLog(description = "审核文章")
     @CmsPermission(moduleName = "文章管理")
-    @GetMapping("/check/{siteId}/{articleId}")
+    @PostMapping("/check/{siteId}/{articleId}")
     public MessageDto checkArticle(
             @SiteId @PathVariable("siteId") Integer siteId,
             @PathVariable Integer articleId,

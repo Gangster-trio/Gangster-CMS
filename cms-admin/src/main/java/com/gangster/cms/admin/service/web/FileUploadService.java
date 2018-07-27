@@ -177,11 +177,9 @@ public class FileUploadService {
         String fileSize = String.valueOf(uploadFile.getSize());
         String originName = originFileName.substring(0, originFileName.lastIndexOf("."));
         String suffix = originFileName.substring(originFileName.lastIndexOf(".") + 1);
-        String virtualPath = "/webfile/" + uuid + originFileName;
+        String virtualPath = "/webfile/" + uuid + "#" + originFileName;
         Map<String, Object> map = new HashMap<>();
-        if (suffix.equals("zip")) {
-            map.put("originName", originName);
-        }
+        map.put("originName", originName);
         map.put("virtualPath", virtualPath);
         map.put("suffix", suffix);
         map.put("fileSize", fileSize);

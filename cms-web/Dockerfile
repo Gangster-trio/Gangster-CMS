@@ -7,6 +7,8 @@ ENV DB_SERVER=localhost \
     DB_PASSWORD="$%^YGR^&UHGT^&U" \
 #图片等文件的存储路径
     FILE_PAHT=/data \
+    EUREKA_SERVER=localhost \
+    EUREKA_PORT=8761 \
 #服务器端口
     PORT=8090
 
@@ -18,5 +20,7 @@ ENTRYPOINT [ "java","-jar","/app/cms-web.jar" \
             ,"--db.server=${DB_SERVER}" \
             ,"--db.user=${DB_USER}" \
             ,"--db.password=${DB_PASSWORD}" \
+            ,"--eureka_server=${EUREKA_SERVER}" \
+            ,"--eureka_port=${EUREKA_PORT}" \
             ,"--server.port=${PORT}" ]
 EXPOSE ${PORT}

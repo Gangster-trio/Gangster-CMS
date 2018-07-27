@@ -8,8 +8,10 @@ services:
       DB_SERVER: db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      EUREKA_SERVER: eureka
     depends_on:
       - db
+      - eureka
     ports:
       - "8090:8090"
 
