@@ -108,7 +108,7 @@ public class ArticleController {
             @PathVariable("articleId") Integer articleId,
             @RequestBody ArticleDTO articleDTO) {
         if (!contentWebService.updateArticle(articleId, articleDTO)) {
-            return MessageDto.fail(1, "删除文章失败");
+            return MessageDto.fail(1, "更新文章失败");
         }
         return MessageDto.success(null);
     }

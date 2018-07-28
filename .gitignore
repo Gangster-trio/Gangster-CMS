@@ -72,3 +72,8 @@ hs_err_pid*
 *.classpath
 *.project
 *.prefs
+
+# qiniu config file
+qiniu.properties
+#cms-admin/src/main/resource/qiniu.properties
+

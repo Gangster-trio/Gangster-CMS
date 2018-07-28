@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/util/jquery-editable-select.css">
 <script src="/util/jquery.min.js"></script>
 <script src="/util/jquery-editable-select.js"></script>
+<script src="https://unpkg.com/qiniu-js@2.4.0/dist/qiniu.min.js"></script>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>添加文章</legend>
 </fieldset>
@@ -78,17 +79,11 @@
 
         <input id="articleThumb" class="layui-hide" name="articleThumb">
         <label class="layui-form-label">缩略图上传</label>
-        <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
-            <i class="layui-icon"></i>
-            <p>点击上传，或将文件拖拽到此处</p>
-        </div>
-        <br/>
+        <input type="file" id="uploadImg" accept="image/*">
         <input id="fileNames" class="layui-hide" name="fileNames"/>
         <label style="margin-left: 25px;margin-top: 40px">附件上传</label>
-        <div style="margin-left: 110px" class="layui-upload">
-            <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择文件</button>
-            <button type="button" class="layui-btn" id="upload-file">开始上传</button>
-        </div>
+        <input type="file" multiple id="choose-file">
+        <button type="button" class="layui-btn" id="upload-file" onclick="article_file_upload()">开始上传</button>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
@@ -117,11 +112,11 @@
 </div>
 
 <script type="text/javascript">
-    var editor_text, layedit;
-    var str = "";
-    layui.use(['form', 'upload', 'layedit'], function () {
-        var form = layui.form, upload = layui.upload;
-        layedit = layui.layedit;
+
+
+    layui.use(['form', 'layedit'], function () {
+        let form = layui.form;
+        let layedit = layui.layedit;
         form.render();
         form.on('submit(createArticle)', function () {
             // 设置按钮不可点击
@@ -130,61 +125,61 @@
         });
 
 
-        layui.upload.render({
-            elem: '#uploadImg',
-            url: '/article/img/' + siteId,
-            accept: 'images',
-            size: 1000,
-            before: function () {
-                layer.load();
-            },
-            //上传后的回调
-            done: function (res) {
-                console.log(res.data.src);
-                $("#articleThumb").val(res.data.src);
-                layer.closeAll();
-            },
-            error: function () {
-                layui.layer.alert("上传失败 ");
-                layer.closeAll();
-            }
-        });
+        // layui.upload.render({
+        //     elem: '#uploadImg',
+        //     url: '/article/img/' + siteId,
+        //     accept: 'images',
+        //     size: 1000,
+        //     before: function () {
+        //         layer.load();
+        //     },
+        //     //上传后的回调
+        //     done: function (res) {
+        //         console.log(res.data.src);
+        //         $("#articleThumb").val(res.data.src);
+        //         layer.closeAll();
+        //     },
+        //     error: function () {
+        //         layui.layer.alert("上传失败 ");
+        //         layer.closeAll();
+        //     }
+        // });
+        //
+        // upload.render({
+        //     elem: '#choose-file'
+        //     , url: '/file/upload/' + siteId
+        //     , auto: false
+        //     , choose: function (obj) {
+        //         var files = obj.pushFile();
+        //         obj.preview(function (index, file, result) {
+        //             console.log(index);
+        //         });
+        //     }
+        //     , accept: 'file'
+        //     , size: 0
+        //     , multiple: true
+        //     , bindAction: '#upload-file'
+        //     , done: function (res) {
+        //         console.log(res);
+        //         str = str + "," + res.data;
+        //         layer.closeAll();
+        //         $("#fileNames").val(str);
+        //         layer.msg("上传成功", {icon: 6});
+        //     }
+        //     , error: function () {
+        //         layer.alert("上传发生错误");
+        //     }
+        // });
+        // layedit.set({
+        //     uploadImage: {
+        //         url: '/article/img/' + siteId //接口url
+        //         , type: 'post' //默认post
+        //         , size: 0
+        //     }
+        // });
 
-        upload.render({
-            elem: '#choose-file'
-            , url: '/file/upload/' + siteId
-            , auto: false
-            , choose: function (obj) {
-                var files = obj.pushFile();
-                obj.preview(function (index, file, result) {
-                    console.log(index);
-                });
-            }
-            , accept: 'file'
-            , size: 0
-            , multiple: true
-            , bindAction: '#upload-file'
-            , done: function (res) {
-                console.log(res);
-                str = str + "," + res.data;
-                layer.closeAll();
-                $("#fileNames").val(str);
-                layer.msg("上传成功", {icon: 6});
-            }
-            , error: function () {
-                layer.alert("上传发生错误");
-            }
-        });
-        layedit.set({
-            uploadImage: {
-                url: '/article/img/' + siteId //接口url
-                , type: 'post' //默认post
-                , size: 0
-            }
-        });
 
-
-        editor_text = layedit.build('articleContent', {
+        let editor_text = layedit.build('articleContent', {
             tool: [
                 'strong' //加粗
                 , 'italic' //斜体
@@ -224,10 +219,6 @@
     });
 
 
-    function doUpload() {
-        $("#uploadFile").submit();
-    }
-
     function add_article() {
         $.ajax({
             type: "POST",
@@ -252,4 +243,6 @@
             }
         });
     }
+
+
 </script>

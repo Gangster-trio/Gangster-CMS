@@ -47,71 +47,71 @@ public class FileUploadService {
     @Autowired
     private SettingEntryMapper settingEntryMapper;
 
-    /**
-     * 保存文章的文件
-     */
-    public String saveArticleFile(Integer articleId, MultipartFile file) {
-        Map<String, Object> map = uploadFile(file);
-        Article article = articleService.selectByPrimaryKey(articleId);
-        String virtualPath = (String) map.get("virtualPath");
-        WebFile webFile =
-                new WebFile(virtualPath, new Date(), 0,
-                        (String) map.get("suffix"), (String) map.get("fileSize")
-                        , articleId, article.getArticleSiteId(), article.getArticleCategoryId());
-        try {
-            webFileService.insert(webFile);
-        } catch (Exception e) {
-            LOGGER.error("文件添加进数据库时失败: {}", e.getMessage());
-            e.printStackTrace();
-        }
-        LOGGER.info("文章的附件添加进数据库成功");
-        return virtualPath;
-    }
+//    /**
+//     * 保存文章的文件
+//     */
+//    public String saveArticleFile(Integer articleId, MultipartFile file) {
+//        Map<String, Object> map = uploadFile(file);
+//        Article article = articleService.selectByPrimaryKey(articleId);
+//        String virtualPath = (String) map.get("virtualPath");
+//        WebFile webFile =
+//                new WebFile(virtualPath, new Date(), 0,
+//                        (String) map.get("suffix"), (String) map.get("fileSize")
+//                        , articleId, article.getArticleSiteId(), article.getArticleCategoryId());
+//        try {
+//            webFileService.insert(webFile);
+//        } catch (Exception e) {
+//            LOGGER.error("文件添加进数据库时失败: {}", e.getMessage());
+//            e.printStackTrace();
+//        }
+//        LOGGER.info("文章的附件添加进数据库成功");
+//        return virtualPath;
+//    }
 
-    /**
-     * 保存其他方面的文件
-     *
-     * @param file 文件
-     * @return 文件的virtualPath
-     */
-    public String saveFile(MultipartFile file) {
-        Map<String, Object> map = uploadFile(file);
-        String virtualPath = (String) map.get("virtualPath");
-        WebFile webFile = new WebFile(virtualPath, new Date(),
-                0, (String) map.get("suffix"), (String) map.get("fileSize"));
-        try {
-            webFileService.insert(webFile);
-        } catch (Exception e) {
-            LOGGER.error("插入数据库时失败");
-            e.printStackTrace();
-        }
-        LOGGER.info("文件信息添加成功");
-        return virtualPath;
-    }
+//    /**
+//     * 保存其他方面的文件
+//     *
+//     * @param file 文件
+//     * @return 文件的virtualPath
+//     */
+//    public String saveFile(MultipartFile file) {
+//        Map<String, Object> map = uploadFile(file);
+//        String virtualPath = (String) map.get("virtualPath");
+//        WebFile webFile = new WebFile(virtualPath, new Date(),
+//                0, (String) map.get("suffix"), (String) map.get("fileSize"));
+//        try {
+//            webFileService.insert(webFile);
+//        } catch (Exception e) {
+//            LOGGER.error("插入数据库时失败");
+//            e.printStackTrace();
+//        }
+//        LOGGER.info("文件信息添加成功");
+//        return virtualPath;
+//    }
 
-    /**
-     * 保存皮肤文件
-     *
-     * @param file 文件
-     * @return 是否上传成功
-     */
-    public boolean saveSkinFile(MultipartFile file) {
-        Map<String, Object> map = uploadFile(file);
-        String virtualPath = (String) map.get("virtualPath");
-        String skinName = (String) map.get("originName");
-        WebFile webFile = new WebFile(virtualPath, new Date(),
-                0, (String) map.get("suffix"), (String) map.get("fileSize"));
-        try {
-            webFileService.insert(webFile);
-            decompressionZIP((String) map.get("uploadPath"), skinName);
-        } catch (Exception e) {
-            LOGGER.error("插入数据库时失败");
-            e.printStackTrace();
-            return false;
-        }
-        LOGGER.info("文件信息添加成功");
-        return true;
-    }
+//    /**
+//     * 保存皮肤文件
+//     *
+//     * @param file 文件
+//     * @return 是否上传成功
+//     */
+//    public boolean saveSkinFile(MultipartFile file) {
+//        Map<String, Object> map = uploadFile(file);
+//        String virtualPath = (String) map.get("virtualPath");
+//        String skinName = (String) map.get("originName");
+//        WebFile webFile = new WebFile(virtualPath, new Date(),
+//                0, (String) map.get("suffix"), (String) map.get("fileSize"));
+//        try {
+//            webFileService.insert(webFile);
+//            decompressionZIP((String) map.get("uploadPath"), skinName);
+//        } catch (Exception e) {
+//            LOGGER.error("插入数据库时失败");
+//            e.printStackTrace();
+//            return false;
+//        }
+//        LOGGER.info("文件信息添加成功");
+//        return true;
+//    }
 
     /**
      * 解压zip包
@@ -187,26 +187,26 @@ public class FileUploadService {
         return map;
     }
 
-    /**
-     * 删除文件包含存储在电脑上的数据
-     *
-     * @param fileId 文件的id
-     * @return 成功或者失败
-     */
-    public Boolean deleteFile(Integer fileId) {
-        try {
-            WebFile webFile = webFileService.selectByPrimaryKey(fileId);
-            String realFileName = settingEntryMapper
-                    .selectByPrimaryKey(CmsConst.FILE_PATH)
-                    .getSysValue() + webFile.getFileName().split("/")[2];
-            FileTool.deleteDir(new File(realFileName));
-            webFileService.deleteByPrimaryKey(fileId);
-        } catch (Exception e) {
-            LOGGER.error("删除id为： {}的文件失败,错误信息{}", fileId, e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-        LOGGER.info("删除id为: {}的文件成功", fileId);
-        return true;
-    }
+//    /**
+//     * 删除文件包含存储在电脑上的数据
+//     *
+//     * @param fileId 文件的id
+//     * @return 成功或者失败
+//     */
+//    public Boolean deleteFile(Integer fileId) {
+//        try {
+//            WebFile webFile = webFileService.selectByPrimaryKey(fileId);
+//            String realFileName = settingEntryMapper
+//                    .selectByPrimaryKey(CmsConst.FILE_PATH)
+//                    .getSysValue() + webFile.getFileName().split("/")[2];
+//            FileTool.deleteDir(new File(realFileName));
+//            webFileService.deleteByPrimaryKey(fileId);
+//        } catch (Exception e) {
+//            LOGGER.error("删除id为： {}的文件失败,错误信息{}", fileId, e.getMessage());
+//            e.printStackTrace();
+//            return false;
+//        }
+//        LOGGER.info("删除id为: {}的文件成功", fileId);
+//        return true;
+//    }
 }

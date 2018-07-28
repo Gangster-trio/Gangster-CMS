@@ -6,12 +6,10 @@
 
 </form>
 <script>
-    var categoryId;
-
     //栏目表格渲染
     layui.use('table', function () {
-        var first = true;
-        var table = layui.table;
+        let first = true;
+        let table = layui.table;
 
         //对site进行判断，只有选择了site才有显示
         if (siteId) {
@@ -21,12 +19,9 @@
                 , page: true
                 , cols: [[ //表头
                     {type: 'checkbox'}
-                    , {field: 'fileId', title: 'ID', width: '80', sort: true}
-                    , {field: 'fileName', title: '文件名', width: '300', align: 'center'}
-                    , {field: 'fileCreated', title: "创建时间", width: '250', align: 'center', sort: true}
-                    , {field: 'fileType', title: '类型', width: '100', align: 'center', sort: true}
-                    , {field: 'fileSize', title: '文件大小', width: '80', align: 'center', sort: true}
-                    , {field: 'fileArticleId', title: '文章id', width: '190', align: 'center'}
+                    , {field: 'fileKey', title: '文件名', width: '300', align: 'center'}
+                    , {field: 'fileSiteId', title: '文件大小', width: '80', align: 'center', sort: true}
+                    , {field: 'fileArticleId', title: '文章id', width: '190', align: 'center', sort: true}
                     , {filed: 'tool', title: '操作', align: 'center', toolbar: "#toolBar"}
                 ]]
                 , done: function (res, curr, count) {
@@ -43,19 +38,18 @@
 
             //监听的事件
             table.on('tool(filelist)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                var data = obj.data; //获得当前行数据
-                console.log(data);
-                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                var fileId = data.fileId;
+                let data = obj.data; //获得当前行数据
+                let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                let fileKey = data.fileKey;
 
                 if (layEvent === 'del') { //删除
                     layer.confirm('真的删除行么', function (index) {
                             $.ajax({
                                 type: 'DELETE',
-                                url: '/file/' + siteId + "/" + fileId,
+                                url: fileKey,
                                 dataType: 'json',
-                                error: function () {
-                                    layer.msg("系统发生错误", {icon: 5});
+                                error: function (xhr, text) {
+                                    layer.msg("系统发生错误: " + text, {icon: 5});
                                 },
                                 success: function (data) {
                                     switch (data.code) {
@@ -75,17 +69,14 @@
                     )
                 }
                 else if (layEvent === 'download') {
-                    $.get("/file/download/" + siteId + "/" + fileId);
+                    $.get("/cdnDomain", function (u) {
+                        open(u + "/" + fileKey)
+                    })
                 }
             });
         }
     });
 
-</script>
-<script>
-    function downFile(fileId) {
-        $("#downloadFile").attr("action", "/file/download/" + siteId + "/" + fileId).submit();
-    }
 </script>
 <script type="text/html" id="toolBar">
     <div class="layui-btn-group">

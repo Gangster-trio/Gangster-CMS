@@ -62,6 +62,7 @@ db:
   password: "$%^YGR^&UHGT^&U"
 pagehelper:
   reasonable: true
+
 #feign:
 #  hystrix:
 #    enabled: true

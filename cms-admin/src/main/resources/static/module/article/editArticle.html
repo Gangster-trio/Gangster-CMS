@@ -76,18 +76,11 @@
 
         <input id="articleThumb" class="layui-hide" name="articleThumb">
         <label class="layui-form-label">缩略图上传</label>
-        <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
-            <i class="layui-icon"></i>
-            <p>点击上传，或将文件拖拽到此处</p>
-        </div>
-
-        <!--上传文件-->
+        <input type="file" id="uploadImg" accept="image/*">
         <input id="fileNames" class="layui-hide" name="fileNames"/>
         <label style="margin-left: 25px;margin-top: 40px">附件上传</label>
-        <div style="margin-left: 110px" class="layui-upload">
-            <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择文件</button>
-            <button type="button" class="layui-btn" id="upload-file">开始上传</button>
-        </div>
+        <input type="file" multiple id="choose-file">
+        <button type="button" class="layui-btn" id="upload-file" onclick="article_file_upload()">开始上传</button>
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
@@ -119,13 +112,9 @@
 
 <script type="text/javascript">
 
-    var str = "";
-    var editor_text, layedit;
-
-
     $(function () {
             layedit = layui.layedit;
-            var form = layui.form;
+            let form = layui.form;
             form.render();
             layedit.set({
                 uploadImage: {
@@ -157,62 +146,12 @@
                 height: 400
             });
 
-            layui.upload.render({
-                elem: '#uploadImg',
-                url: '/article/img/' + siteId,
-                accept: 'images',
-                size: 1000,
-                before: function () {
-                    layer.load();
-                },
-                //上传后的回调
-                done: function (res) {
-                    console.log(res.data.src);
-                    $("#articleThumb").val(res.data.src);
-                    layer.closeAll();
-                },
-                error: function () {
-                    layui.layer.alert("上传失败 ");
-                    layer.closeAll();
-                }
-            });
-
-
-            layui.upload.render({
-                elem: '#choose-file'
-                , url: '/file/upload/' + siteId + "/" + articleId
-                , auto: false
-                , choose: function (obj) {
-                    var files = obj.pushFile();
-                    obj.preview(function (index, file, result) {
-                        console.log(index);
-                    });
-                }
-                , accept: 'file'
-                , size: 0
-                , multiple: true
-                , bindAction: '#upload-file'
-                , done: function (res) {
-                    console.log(res);
-                    str = str + "," + res.data;
-                    layer.closeAll();
-                    $("#fileNames").val(str);
-                    layer.msg("上传成功", {icon: 6});
-                }
-                , error: function () {
-                    layer.alert("上传发生错误");
-                }
-            });
-
-
             $.ajax({
                 type: "get",
                 url: "/article/" + siteId + "/" + articleId,  //得到需要更新文章的id
                 success: function (data) {
-                    console.log(data);
-                    var article = data.article;
-                    console.log(article);
-                    initCategoryId = article.articleCategoryId;
+                    let article = data.article;
+                    // let initCategoryId = article.articleCategoryId;
                     $("#articleTitle").val(article.articleTitle);
                     $("#articleType").val(article.articleType);
                     $("#articleOrder").val(article.articleOrder);

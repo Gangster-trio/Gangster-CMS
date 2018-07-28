@@ -35,11 +35,12 @@ public class ViewController {
         // TODO: 视频播放目前只支持mp3,mp4格式
         List<String> fileType = Arrays.asList("mp3", "mp4");
         WebFileExample webFileExample = new WebFileExample();
-        webFileExample.or().andFileArticleIdEqualTo(article.getArticleId()).andFileTypeIn(fileType);
+        //TODO: 文件放在云端,要改!
+//        webFileExample.or().andFileArticleIdEqualTo(article.getArticleId()).andFileTypeIn(fileType);
         List<WebFile> webFiles = webFileMapper.selectByExample(webFileExample);
         if (webFiles != null) {
             webFiles = webFiles.stream()
-                    .peek(webFile -> webFile.setFileName("http://localhost:8080" + webFile.getFileName()))
+//                    .peek(webFile -> webFile.setFileName("http://localhost:8080" + webFile.getFileName()))
                     .collect(Collectors.toList());
         }
         model.addAttribute("files", webFiles);

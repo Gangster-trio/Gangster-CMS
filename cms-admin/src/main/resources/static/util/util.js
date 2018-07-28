@@ -86,3 +86,61 @@ function chooseValue(name) {
     return selectValue;
 }
 
+function article_file_upload() {
+    let upload_btn = $("#upload-file");
+    upload_btn.text("上传中...");
+    layui.layer.msg("上传中...");
+    let avtName = "";
+    let fileNames = [];
+    $.ajax({
+        url: "/upToken",
+        type: "get",
+        async: false,
+        success: function (upToken) {
+            let avt = $("#uploadImg")[0].files;
+            if (avt.length !== 0) {
+                avtName = "pic/" + siteId + "/" + Date.now() + "-" + avt[0].name;
+                uploadFileToQiniu(avt[0], upToken, avtName);
+            }
+            let files = $('#choose-file')[0].files;
+            for (let i = 0; i < files.length; i++) {
+                let n = "file/" + siteId + "/" + Date.now() + "-" + files[i].name;
+                fileNames.push(n);
+                uploadFileToQiniu(files[i], upToken, n);
+            }
+        }
+    });
+    $("#articleThumb").attr("value", avtName);
+    console.log("avtName: " + avtName);
+    $("#fileNames").attr("value", fileNames.join(','));
+    console.log("fileNames: " + fileNames.join(','));
+    layui.layer.msg("上传完成");
+    upload_btn.text("重新上传");
+}
+
+function uploadFileToQiniu(file, upToken, key) {
+    let form = new FormData();
+    form.append('file', file);
+    form.append('token', upToken);
+    if (key !== null && key !== undefined) form.append('key', key);
+    $.ajax({
+        url: "http://up-z1.qiniu.com",
+        type: 'POST',
+        async: false,
+        contentType: false,
+        // crossDomain: true,
+        data: form,
+        processData: false,
+        dataType: "json",
+        success: function (data) {
+            console.log("Upload Success: " + data);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert("code: " + xhr.status + "resp: " + xhr.responseText);
+            console.log("upload", xhr);
+            console.log("status", textStatus);
+            console.log("error", errorThrown);
+        }
+    })
+}
+
