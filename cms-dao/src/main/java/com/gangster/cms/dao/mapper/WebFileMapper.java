@@ -10,21 +10,13 @@ public interface WebFileMapper {
 
     int deleteByExample(WebFileExample example);
 
-    int deleteByPrimaryKey(Integer fileId);
-
     int insert(WebFile record);
 
     int insertSelective(WebFile record);
 
     List<WebFile> selectByExample(WebFileExample example);
 
-    WebFile selectByPrimaryKey(Integer fileId);
-
     int updateByExampleSelective(@Param("record") WebFile record, @Param("example") WebFileExample example);
 
     int updateByExample(@Param("record") WebFile record, @Param("example") WebFileExample example);
-
-    int updateByPrimaryKeySelective(WebFile record);
-
-    int updateByPrimaryKey(WebFile record);
 }

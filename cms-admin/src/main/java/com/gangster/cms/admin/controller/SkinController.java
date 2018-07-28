@@ -26,15 +26,15 @@ public class SkinController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(SkinController.class);
     private final SkinMapper skinMapper;
-    private final FileUploadService fileUploadService;
+//    private final FileUploadService fileUploadService;
     private final SettingEntryMapper settingEntryMapper;
 
     @Autowired
     public SkinController(SkinMapper skinMapper,
-                          FileUploadService fileUploadService,
+//                          FileUploadService fileUploadService,
                           SettingEntryMapper settingEntryMapper) {
         this.skinMapper = skinMapper;
-        this.fileUploadService = fileUploadService;
+//        this.fileUploadService = fileUploadService;
         this.settingEntryMapper = settingEntryMapper;
     }
 
@@ -47,13 +47,14 @@ public class SkinController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    @PostMapping("")
-    public MessageDto add(@Param("file") MultipartFile file) {
-        if (!fileUploadService.saveSkinFile(file)) {
-            return MessageDto.fail(1, "上传失败");
-        }
-        return MessageDto.success(null);
-    }
+// TODO: 7/28/18 皮肤上传到七牛
+//    @PostMapping("")
+//    public MessageDto add(@Param("file") MultipartFile file) {
+//        if (!fileUploadService.saveSkinFile(file)) {
+//            return MessageDto.fail(1, "上传失败");
+//        }
+//        return MessageDto.success(null);
+//    }
 
     @DeleteMapping("/{skinName}")
     public MessageDto delete(@PathVariable("skinName") String skinName) {

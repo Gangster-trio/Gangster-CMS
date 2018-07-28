@@ -6,25 +6,26 @@
 
     <form id="updateCategoryForm" class="layui-form">
         <div class="layui-form-item">
-            <label class="layui-form-label">栏目名称</label>
+            <label class="layui-form-label">栏目名称*</label>
             <div class="layui-input-inline">
-                <input type="text" name="categoryTitle" id="categoryTitle" required="" lay-verify="required"
+                <input type="text" name="categoryTitle" id="categoryTitle" required="required"
                        placeholder="请输入栏目名称" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">自定义顺序</label>
+            <label class="layui-form-label">自定义顺序*</label>
             <div class="layui-input-inline">
-                <input type="text" id="categoryOrder" name="categoryOrder" required="" lay-verify="required|number"
+                <input type="text" id="categoryOrder" name="categoryOrder" required="required"
                        placeholder="自定义顺序" autocomplete="off" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">辅助文字</div>
         </div>
 
-        <label class="layui-form-label">栏目类型</label>
-        <select id="categoryType" name="categoryType" lay-ignore style="margin-left:0px;width:166px;height:36px">
+        <label class="layui-form-label">栏目类型*</label>
+        <select id="categoryType" name="categoryType" required="required" lay-ignore
+                style="margin-left:0px;width:166px;height:36px">
             <option style="padding-left: 50px" value="主页目录">主页目录</option>
             <option style="padding-left: 50px" value="普通目录">普通目录</option>
         </select>
@@ -34,18 +35,18 @@
         <div style="margin-top: 15px" class="layui-form-item">
             <label class="layui-form-label">选择皮肤</label>
             <div class="layui-input-inline">
-                <input type="text" name="categorySkin" id="categorySkin" required="required"
+                <input type="text" name="categorySkin" id="categorySkin"
                        placeholder="暂时先不填" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
 
         <div id="show" class="layui-form-item">
-            <label class="layui-form-label">所属栏目</label>
+            <label class="layui-form-label">所属栏目*</label>
             <div class="layui-input-inline">
-                <input id="category_id" class="layui-hide" name="categoryParentId" required
+                <input id="category_id" class="layui-hide" name="categoryParentId" required="required"
                        lay-verify="required|number">
-                <input type="text" id="belongCategory" required="required" lay-verify="required"
+                <input type="text" id="belongCategory"
                        placeholder="选择栏目"
                        autocomplete="off"
                        class="layui-input" readonly="readonly"/>
@@ -53,9 +54,9 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">是否放到首页</label>
+            <label class="layui-form-label">是否放到首页*</label>
             <div class="layui-input-block">
-                <select id="categoryInHomepage" name="categoryInHomepage" lay-verify="required">
+                <select id="categoryInHomepage" name="categoryInHomepage" required="required">
                     <option value="true">是</option>
                     <option value="false">否</option>
                 </select>

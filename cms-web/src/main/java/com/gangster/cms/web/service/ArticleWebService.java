@@ -5,9 +5,10 @@ import com.gangster.cms.common.dto.CategoryTree;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.*;
 import com.gangster.cms.web.cache.CmsCache;
-import com.gangster.cms.web.cache.impl.HashMapCache;
 import com.gangster.cms.web.cache.impl.LRUCache;
+import com.gangster.cms.web.conf.QiniuConfig;
 import com.gangster.cms.web.dto.ModelResult;
+import com.gangster.cms.common.util.Func;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,26 +31,33 @@ public class ArticleWebService {
     private final
     CategoryMapper categoryMapper;
 
+    private final
+    WebFileMapper webFileMapper;
+
     private final TagArticleMapper tagArticleMapper;
 
     private final TagMapper tagMapper;
 
     private final CategoryWebService categoryWebService;
 
+    private final QiniuConfig qiniuConfig;
+
     private CmsCache<Integer, ModelResult> articleModelCache = new LRUCache<>(128);
 
     public ArticleWebService(SiteMapper siteMapper
             , ArticleMapper articleMapper
             , CategoryMapper categoryMapper
-            , TagArticleMapper tagArticleMapper
+            , WebFileMapper webFileMapper, TagArticleMapper tagArticleMapper
             , TagMapper tagMapper
-            , CategoryWebService categoryWebService) {
+            , CategoryWebService categoryWebService, QiniuConfig qiniuConfig) {
         this.siteMapper = siteMapper;
         this.articleMapper = articleMapper;
         this.categoryMapper = categoryMapper;
+        this.webFileMapper = webFileMapper;
         this.tagArticleMapper = tagArticleMapper;
         this.tagMapper = tagMapper;
         this.categoryWebService = categoryWebService;
+        this.qiniuConfig = qiniuConfig;
     }
 
     public ModelResult getArticleModel(Integer id) {
@@ -102,11 +110,19 @@ public class ArticleWebService {
                 .map(categoryWebService::toTree)
                 .collect(Collectors.toList());
 
+        List<String> fileKeys = webFileMapper.selectByExample(Func.get(() -> {
+            WebFileExample example = new WebFileExample();
+            example.or().andFileArticleIdEqualTo(article.getArticleId());
+            return example;
+        })).stream().map(WebFile::getFileKey).collect(Collectors.toList());
+
         result.put("category", category)
                 .put("article", article)
+                .put("fileKeys", fileKeys)
                 .put("tagList", tagList)
                 .put("categoryTreeList", categoryTreeList)
-                .put("site", site);
+                .put("site", site)
+                .put("cdn", qiniuConfig.getCdnDomain());
 
         addArticleHit(article);
 

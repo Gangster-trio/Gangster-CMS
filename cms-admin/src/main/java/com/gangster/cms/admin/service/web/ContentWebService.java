@@ -190,13 +190,11 @@ public class ContentWebService {
     }
 
     private List<WebFile> transformArticleDto(ArticleDTO articleDTO) {
-        List<String> fileNames;
-        List<WebFile> files = Collections.emptyList();
-        if (!articleDTO.getFiles().isEmpty()) {
-            fileNames = Arrays.asList(articleDTO.getFiles().split(","));
-            WebFileExample webFileExample = new WebFileExample();
-            webFileExample.or().andFileNameIn(fileNames);
-            files = webFileService.selectByExample(webFileExample);
+        List<WebFile> files = new ArrayList<>();
+        for (String fileName : articleDTO.getFiles().split(",")) {
+            WebFile f = new WebFile();
+            f.setFileKey(fileName);
+            files.add(f);
         }
         return files;
     }
@@ -315,12 +313,6 @@ public class ContentWebService {
 
     public boolean deleteCategory(Integer categoryId) {
         try {
-            WebFileExample webFileExample = new WebFileExample();
-            webFileExample.or().andFileCategoryIdEqualTo(categoryId);
-            List<WebFile> files = webFileService.selectByExample(webFileExample);
-            if (files.size() > 0) {
-                fileTool.deleteFiles(files);
-            }
             categoryService.deleteCategory(categoryId);
         } catch (Exception e) {
             e.printStackTrace();

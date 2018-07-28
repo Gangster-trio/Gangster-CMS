@@ -127,7 +127,7 @@ public class TimedTaskService {
             }
 
             WebFileExample webFileExample = new WebFileExample();
-            webFileExample.or().andFileNameIn(fileNames);
+            webFileExample.or().andFileKeyIn(fileNames);
             List<WebFile> files = webFileService.selectByExample(webFileExample);
             articleService.insertWithTagAndFile(article, Arrays.asList(taskArticle.getTags().split(",")), files);
 

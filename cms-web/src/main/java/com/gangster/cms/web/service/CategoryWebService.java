@@ -7,6 +7,7 @@ import com.gangster.cms.dao.mapper.CategoryMapper;
 import com.gangster.cms.dao.mapper.SiteMapper;
 import com.gangster.cms.web.cache.CmsCache;
 import com.gangster.cms.web.cache.impl.LRUCache;
+import com.gangster.cms.web.conf.QiniuConfig;
 import com.gangster.cms.web.dto.ModelResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +30,15 @@ public class CategoryWebService {
     private final
     CategoryMapper categoryMapper;
 
+    private final QiniuConfig qiniuConfig;
+
     private CmsCache<Integer, ModelResult> categoryModelCache = new LRUCache<>(128);
 
-    public CategoryWebService(SiteMapper siteMapper, ArticleMapper articleMapper, CategoryMapper categoryMapper) {
+    public CategoryWebService(SiteMapper siteMapper, ArticleMapper articleMapper, CategoryMapper categoryMapper, QiniuConfig qiniuConfig) {
         this.siteMapper = siteMapper;
         this.articleMapper = articleMapper;
         this.categoryMapper = categoryMapper;
+        this.qiniuConfig = qiniuConfig;
     }
 
 
@@ -72,7 +76,8 @@ public class CategoryWebService {
         result.put("categoryTreeList", categoryTreeList)
                 .put("articleList", articleList)
                 .put("category", category)
-                .put("site", site);
+                .put("site", site)
+                .put("cdn", qiniuConfig.getCdnDomain());
 
         addCategoryHit(category);
 

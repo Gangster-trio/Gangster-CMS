@@ -30,7 +30,7 @@
 
 <!-- Page Header -->
 <header class="masthead"
-        style="background-image: url('<#if result.article.articleThumb?length gt 1>${result.article.articleThumb}<#else>/pic/43656d72-5def-4228-b1e5-28f328dd4480.jpg</#if>')">
+        style="background-image: url('<#if result.article.articleThumb?length gt 1>${result.cdn+"/"+result.article.articleThumb}<#else>/pic/43656d72-5def-4228-b1e5-28f328dd4480.jpg</#if>')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">

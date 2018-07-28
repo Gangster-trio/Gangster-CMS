@@ -146,27 +146,30 @@
             <artifactId>ant</artifactId>
             <version>1.9.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>[7.0.0, 7.2.99]</version>
+        </dependency>
     </dependencies>
 
     <build>
         <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
-                <excludes>
-                    <exclude>static/fonts/**</exclude>
-                    <exclude>static/layui/font/**</exclude>
-                </excludes>
-            </resource>
-
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>static/fonts/**</include>
-                    <include>static/layui/font/**</include>
-                </includes>
-            </resource>
+            <!--<resource>-->
+                <!--<directory>${project.basedir}/src/main/resources</directory>-->
+                <!--<filtering>true</filtering>-->
+                <!--<excludes>-->
+                    <!--<exclude>static/fonts/**</exclude>-->
+                    <!--<exclude>static/layui/font/**</exclude>-->
+                <!--</excludes>-->
+            <!--</resource>-->
         </resources>
         <plugins>
             <plugin>

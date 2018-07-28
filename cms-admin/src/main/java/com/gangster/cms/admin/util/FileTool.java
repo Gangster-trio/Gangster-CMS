@@ -38,14 +38,15 @@ public class FileTool {
         return dir.delete();
     }
 
-    /**
-     * 删除多个文件
-     */
-    public void deleteFiles(List<WebFile> files) {
-        files.stream().map(e ->
-                settingEntryMapper.selectByPrimaryKey(CmsConst.FILE_PATH).getSysValue() + e.getFileName().split("/")[2])
-                .forEach(realFilePath -> deleteDir(new File(realFilePath)));
-    }
+    // TODO: 7/28/18 文件上传到七牛,
+//    /**
+//     * 删除多个文件
+//     */
+//    public void deleteFiles(List<WebFile> files) {
+//        files.stream().map(e ->
+//                settingEntryMapper.selectByPrimaryKey(CmsConst.FILE_PATH).getSysValue() + e.getFileName().split("/")[2])
+//                .forEach(realFilePath -> deleteDir(new File(realFilePath)));
+//    }
 
 
 }

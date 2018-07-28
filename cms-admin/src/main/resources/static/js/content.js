@@ -170,33 +170,23 @@ function update_article() {
 function checkArticleIsNull() {
 
     // 直接得到所有的input标签有几个layui-upload-file的input，和最后有一个空的input,要进行过滤
-    let inputs = $("input[class!='layui-upload-file'][id!='articleThumb'][id!=fileNames]");
+    let tags = $("[required='required']");
     // let ignoreInput = ["articleThumb", "fileNames"];
-    for (let i = 0; i < inputs.length - 1; i++) {
-        if (inputs[i].value === "" || inputs[i].value === null) {
+    for (let i = 0; i < tags.length; i++) {
+        if (tags[i].value === "" || tags[i].value === null) {
             return false;
         }
     }
 
-    // 文章描述用的是textarea单独抽出
-    var articleDescValue = $("#articleDesc").val();
-    if (articleDescValue === "" || articleDescValue === null) {
-        return false;
-    }
-    // 由于layui获取编辑器内的内容特殊，需要单独处理
-    var articleContent = layedit.getContent(editor_text);
-    if (articleContent === "" || articleContent === null) {
-        return false;
-    }
     return true;
 }
 
 
 function checkCategoryIsNull() {
     // siteId 之后指定
-    let inputs = $("input[class!='layui-upload-file'][id!=siteId]");
-    for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].value === "" || inputs[i].value === null) {
+    let tags = $("[required='required']");
+    for (let i = 0; i < tags.length; i++) {
+        if (tags[i].value === "" || tags[i].value === null) {
             return false;
         }
     }

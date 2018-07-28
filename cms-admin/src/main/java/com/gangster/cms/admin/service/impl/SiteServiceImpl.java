@@ -30,12 +30,12 @@ public class SiteServiceImpl extends BaseServiceImpl<SiteMapper, Site, SiteExamp
     public int deleteSite(Integer sid) {
 
         // 删除网站的文件
-        WebFileExample webFileExample = new WebFileExample();
-        webFileExample.or().andFileSiteIdEqualTo(sid);
-        List<WebFile> files = webFileMapper.selectByExample(webFileExample);
-        if (files.size() > 0) {
-            fileTool.deleteFiles(files);
-        }
+//        WebFileExample webFileExample = new WebFileExample();
+//        webFileExample.or().andFileSiteIdEqualTo(sid);
+//        List<WebFile> files = webFileMapper.selectByExample(webFileExample);
+//        if (files.size() > 0) {
+//            fileTool.deleteFiles(files);
+//        }
         // 文章没有删除标签
         CategoryExample categoryExample = new CategoryExample();
         categoryExample.or().andCategorySiteIdEqualTo(sid);

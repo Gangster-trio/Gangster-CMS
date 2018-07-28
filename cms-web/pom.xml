@@ -101,6 +101,18 @@
             <version>20180303</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>[7.0.0, 7.2.99]</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.maxmind.geoip2/geoip2 -->
         <dependency>
             <groupId>com.maxmind.geoip2</groupId>

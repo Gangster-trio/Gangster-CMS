@@ -5,6 +5,7 @@ import com.gangster.cms.common.dto.CategoryTree;
 import com.gangster.cms.common.pojo.*;
 import com.gangster.cms.dao.mapper.*;
 import com.gangster.cms.web.cache.impl.HashMapCache;
+import com.gangster.cms.web.conf.QiniuConfig;
 import com.gangster.cms.web.dto.ModelResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +31,16 @@ public class SiteWebService {
     private final
     CategoryWebService categoryWebService;
 
+    private final QiniuConfig qiniuConfig;
+
     private final HashMapCache<String, ModelResult> siteModelCache = new HashMapCache<>();
 
-    public SiteWebService(SiteMapper siteMapper, ArticleMapper articleMapper, CategoryMapper categoryMapper, CategoryWebService categoryWebService) {
+    public SiteWebService(SiteMapper siteMapper, ArticleMapper articleMapper, CategoryMapper categoryMapper, CategoryWebService categoryWebService, QiniuConfig qiniuConfig) {
         this.siteMapper = siteMapper;
         this.articleMapper = articleMapper;
         this.categoryMapper = categoryMapper;
         this.categoryWebService = categoryWebService;
+        this.qiniuConfig = qiniuConfig;
     }
 
     public ModelResult getSiteModel(String siteUrl) {
@@ -102,7 +106,8 @@ public class SiteWebService {
                 .put("site", site)
                 .put("indexCategoryList", indexCategoryList)
                 .put("indexArticleList", articleList)
-                .put("carouselList", carouselList);
+                .put("carouselList", carouselList)
+                .put("cdn", qiniuConfig.getCdnDomain());
 
 
         //---------------------------------------custom properties start----------------------------------------------//

@@ -9,24 +9,25 @@
     <form class="layui-form">
         <input id="articleId" type="hidden">
         <div class="layui-form-item">
-            <label class="layui-form-label">文章标题</label>
+            <label class="layui-form-label">文章标题*</label>
             <div class="layui-input-inline">
-                <input type="text" name="articleTitle" id="articleTitle" required="" lay-verify="required"
+                <input type="text" name="articleTitle" id="articleTitle" required="required"
                        placeholder="请输入文章标题" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">自定义顺序</label>
+            <label class="layui-form-label">自定义顺序*</label>
             <div class="layui-input-inline">
-                <input type="text" id="articleOrder" name="articleOrder" required="" lay-verify="required|number"
+                <input type="text" id="articleOrder" name="articleOrder" required="required"
+                       lay-verify="required|number"
                        placeholder="自定义顺序" autocomplete="off" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">辅助文字</div>
         </div>
 
-        <label class="layui-form-label">文章类型</label>
+        <label class="layui-form-label">文章类型*</label>
         <select id="articleType" name="articleType" lay-ignore style="margin-left:0px;width:166px;height:36px">
             <option style="padding-left: 50px" value="轮播图">轮播图</option>
             <option style="padding-left: 50px" value="主页文章">主页文章</option>
@@ -44,11 +45,11 @@
         </div>
 
         <div id="show" class="layui-form-item">
-            <label class="layui-form-label">所属栏目</label>
+            <label class="layui-form-label">所属栏目*</label>
             <div class="layui-input-inline">
-                <input id="category_id" class="layui-hide" name="articleCategoryId" required
+                <input id="category_id" class="layui-hide" name="articleCategoryId" required="required"
                        lay-verify="required|number">
-                <input type="text" id="belongCategory" required="required" lay-verify="required"
+                <input type="text" id="belongCategory" lay-verify="required"
                        placeholder="选择栏目"
                        autocomplete="off"
                        class="layui-input" readonly="readonly"/>
@@ -56,9 +57,9 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">文章作者</label>
+            <label class="layui-form-label">文章作者*</label>
             <div class="layui-input-inline">
-                <input type="text" id="articleAuthor" name="articleAuthor" required lay-verify="required"
+                <input type="text" id="articleAuthor" name="articleAuthor" required="required"
                        placeholder="文章作者"
                        autocomplete="off"
                        class="layui-input">
@@ -76,18 +77,11 @@
 
         <input id="articleThumb" class="layui-hide" name="articleThumb">
         <label class="layui-form-label">缩略图上传</label>
-        <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
-            <i class="layui-icon"></i>
-            <p>点击上传，或将文件拖拽到此处</p>
-        </div>
-
-        <!--上传文件-->
+        <input type="file" id="uploadImg" accept="image/*">
         <input id="fileNames" class="layui-hide" name="fileNames"/>
         <label style="margin-left: 25px;margin-top: 40px">附件上传</label>
-        <div 主页文章style="margin-left: 110px" class="layui-upload">
-            <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择文件</button>
-            <button type="button" class="layui-btn" id="upload-file">开始上传</button>
-        </div>
+        <input type="file" multiple id="choose-file">
+        <button type="button" class="layui-btn" id="upload-file" onclick="article_file_upload()">开始上传</button>
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
@@ -119,13 +113,9 @@
 
 <script type="text/javascript">
 
-    var str = "";
-    var editor_text, layedit;
-
-
     $(function () {
             layedit = layui.layedit;
-            var form = layui.form;
+            let form = layui.form;
             form.render();
             layedit.set({
                 uploadImage: {
@@ -157,62 +147,12 @@
                 height: 400
             });
 
-            layui.upload.render({
-                elem: '#uploadImg',
-                url: '/article/img/' + siteId,
-                accept: 'images',
-                size: 1000,
-                before: function () {
-                    layer.load();
-                },
-                //上传后的回调
-                done: function (res) {
-                    console.log(res.data.src);
-                    $("#articleThumb").val(res.data.src);
-                    layer.closeAll();
-                },
-                error: function () {
-                    layui.layer.alert("上传失败 ");
-                    layer.closeAll();
-                }
-            });
-
-
-            layui.upload.render({
-                elem: '#choose-file'
-                , url: '/file/' + siteId + "/" + articleId
-                , auto: false
-                , choose: function (obj) {
-                    var files = obj.pushFile();
-                    obj.preview(function (index, file, result) {
-                        console.log(index);
-                    });
-                }
-                , accept: 'file'
-                , size: 0
-                , multiple: true
-                , bindAction: '#upload-file'
-                , done: function (res) {
-                    console.log(res);
-                    str = str + "," + res.data;
-                    layer.closeAll();
-                    $("#fileNames").val(str);
-                    layer.msg("上传成功", {icon: 6});
-                }
-                , error: function () {
-                    layer.alert("上传发生错误");
-                }
-            });
-
-
             $.ajax({
                 type: "get",
                 url: "/article/" + siteId + "/" + articleId,  //得到需要更新文章的id
                 success: function (data) {
-                    console.log(data);
-                    var article = data.article;
-                    console.log(article);
-                    initCategoryId = article.articleCategoryId;
+                    let article = data.article;
+                    // let initCategoryId = article.articleCategoryId;
                     $("#articleTitle").val(article.articleTitle);
                     $("#articleType").val(article.articleType);
                     $("#articleOrder").val(article.articleOrder);

@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/util/jquery-editable-select.css">
 <script src="/util/jquery.min.js"></script>
 <script src="/util/jquery-editable-select.js"></script>
+<script src="https://unpkg.com/qiniu-js@2.4.0/dist/qiniu.min.js"></script>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>添加文章</legend>
 </fieldset>
@@ -9,25 +10,26 @@
 
     <form name="article" id="addArticleForm" class="layui-form">
         <div class="layui-form-item">
-            <label class="layui-form-label">文章标题</label>
+            <label class="layui-form-label">文章标题*</label>
             <div class="layui-input-inline">
-                <input type="text" name="articleTitle" id="articleTitle" required="" lay-verify="required"
+                <input type="text" name="articleTitle" id="articleTitle" required="required"
                        placeholder="请输入文章标题" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">自定义顺序</label>
+            <label class="layui-form-label">自定义顺序*</label>
             <div class="layui-input-inline">
-                <input type="text" id="articleOrder" name="articleOrder" required="" lay-verify="required|number"
+                <input type="text" id="articleOrder" name="articleOrder" required="required"
                        placeholder="自定义顺序" autocomplete="off" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">辅助文字</div>
         </div>
 
-        <label class="layui-form-label">文章类型</label>
-        <select id="articleType" name="articleType" lay-ignore style="margin-left:0px;width:166px;height:36px">
+        <label class="layui-form-label">文章类型*</label>
+        <select id="articleType" name="articleType" required="required" lay-ignore
+                style="margin-left:0px;width:166px;height:36px">
             <option style="padding-left: 50px" value="轮播图">轮播图</option>
             <option style="padding-left: 50px" value="主页文章">主页文章</option>
             <option style="padding-left: 50px" value="普通文章">普通文章</option>
@@ -46,11 +48,12 @@
         </div>
 
         <div id="show" class="layui-form-item">
-            <label class="layui-form-label">所属栏目</label>
+            <label class="layui-form-label">所属栏目*</label>
             <div class="layui-input-inline">
-                <input id="category_id" class="layui-hide" name="articleCategoryId" required
+                <input id="category_id" class="layui-hide" name="articleCategoryId" required="required"
                        lay-verify="required|number">
-                <input type="text" id="belongCategory" required="required" lay-verify="required"
+
+                <input type="text" id="belongCategory"
                        placeholder="选择栏目"
                        autocomplete="off"
                        class="layui-input" readonly="readonly"/>
@@ -58,9 +61,9 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">文章作者</label>
+            <label class="layui-form-label">文章作者*</label>
             <div class="layui-input-inline">
-                <input type="text" id="articleAuthor" name="articleAuthor" required lay-verify="required"
+                <input type="text" id="articleAuthor" name="articleAuthor" required="required"
                        placeholder="文章作者"
                        autocomplete="off"
                        class="layui-input">
@@ -79,18 +82,12 @@
 
         <input id="articleThumb" class="layui-hide" name="articleThumb">
         <label class="layui-form-label">缩略图上传</label>
-        <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
-            <i class="layui-icon"></i>
-            <p>点击上传，或将文件拖拽到此处</p>
-        </div>
-        <div>
-        </div>
-        <input type="text" id="fileNames" class="layui-hide" name="fileNames"/>
+
+        <input type="file" id="uploadImg" accept="image/*">
+        <input id="fileNames" class="layui-hide" name="fileNames"/>
         <label style="margin-left: 25px;margin-top: 40px">附件上传</label>
-        <div style="margin-left: 110px" class="layui-upload">
-            <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择文件</button>
-            <button type="button" class="layui-btn" id="upload-file">开始上传</button>
-        </div>
+        <input type="file" multiple id="choose-file">
+        <button type="button" class="layui-btn" id="upload-file" onclick="article_file_upload()">开始上传</button>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
@@ -120,70 +117,16 @@
 
 
 <script type="text/javascript">
-    var editor_text, layedit;
-    var str = "";
-    layui.use(['form', 'upload', 'layedit'], function () {
-        var form = layui.form, upload = layui.upload;
+
+    var layedit, editor_text;
+    layui.use(['form', 'layedit'], function () {
+        let form = layui.form;
         layedit = layui.layedit;
         form.render();
         form.on('submit(createArticle)', function () {
             // 设置按钮不可点击
             $("#articleSubmit").attr('disabled', "disabled");
             return false;
-        });
-
-
-        layui.upload.render({
-            elem: '#uploadImg',
-            url: '/article/img/' + siteId,
-            accept: 'images',
-            size: 1000,
-            before: function () {
-                layer.load();
-            },
-            //上传后的回调
-            done: function (res) {
-                console.log(res.data.src);
-                $("#articleThumb").val(res.data.src);
-                layer.closeAll();
-            },
-            error: function () {
-                layui.layer.alert("上传失败 ");
-                layer.closeAll();
-            }
-        });
-
-        upload.render({
-            elem: '#choose-file'
-            , url: '/file/' + siteId
-            , auto: false
-            , choose: function (obj) {
-                var files = obj.pushFile();
-                obj.preview(function (index, file, result) {
-                    console.log(index);
-                });
-            }
-            , accept: 'file'
-            , size: 0
-            , multiple: true
-            , bindAction: '#upload-file'
-            , done: function (res) {
-                console.log(res);
-                str = str + "," + res.data;
-                layer.closeAll();
-                $("#fileNames").val(str);
-                layer.msg("上传成功", {icon: 6});
-            }
-            , error: function () {
-                layer.alert("上传发生错误");
-            }
-        });
-        layedit.set({
-            uploadImage: {
-                url: '/article/img/' + siteId //接口url
-                , type: 'post' //默认post
-                , size: 0
-            }
         });
 
 
@@ -227,9 +170,34 @@
     });
 
 
-    function doUpload() {
-        $("#uploadFile").submit();
+    function add_article() {
+        if (!checkArticleIsNull()) {
+            return  false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/article/" + siteId,
+            data: generate_article_data(),
+            contentType: 'application/json',
+            dataType: 'json',
+            error: function (resp) {
+                layui.layer.alert("failed " + resp);
+            },
+            success: function (resp) {
+                switch (resp.code) {
+                    case 0:
+                        layer.msg(resp.message, {icon: 6});
+                        break;
+                    case 1:
+                        layer.msg("添加失败", {icon: 5});
+                        break;
+                    default:
+                }
+                showAtRight("/module/article/listArticle.html");
+            }
+        });
     }
+
 
 </script>
 

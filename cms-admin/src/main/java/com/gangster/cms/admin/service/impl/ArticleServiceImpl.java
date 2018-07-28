@@ -130,9 +130,8 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
         if (fileList != null) {
             fileList.forEach(webFile -> {
                 webFile.setFileArticleId(article.getArticleId());
-                webFile.setFileCategoryId(article.getArticleCategoryId());
                 webFile.setFileSiteId(article.getArticleSiteId());
-                webFileService.updateByPrimaryKey(webFile);
+                webFileService.insert(webFile);
             });
         }
     }
@@ -175,12 +174,12 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
             }
         }
         // 删除文章上传的文件
-        WebFileExample webFileExample = new WebFileExample();
-        webFileExample.or().andFileArticleIdEqualTo(articleId);
-        List<WebFile> files = webFileService.selectByExample(webFileExample);
-        if (files.size() > 0) {
-            fileTool.deleteFiles(files);
-        }
+//        WebFileExample webFileExample = new WebFileExample();
+//        webFileExample.or().andFileArticleIdEqualTo(articleId);
+//        List<WebFile> files = webFileService.selectByExample(webFileExample);
+//        if (files.size() > 0) {
+//            fileTool.deleteFiles(files);
+//        }
         // 删除文章
         articleMapper.deleteByPrimaryKey(articleId);
     }
