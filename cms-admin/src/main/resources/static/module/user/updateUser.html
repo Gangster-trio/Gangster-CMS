@@ -4,59 +4,64 @@
     <legend>修改用户信息</legend>
 </fieldset>
 <div>
-    <form class="layui-form" id="updateUser">
+    <form id="updateUser" class="layui-form">
         <div class="layui-form-item">
-            <label class="layui-form-label">用户姓名:</label>
+            <label class="layui-form-label">用户名:</label>
             <div class="layui-input-inline">
-                <input type="text" id="userName" name="userName" required lay-verify="required" placeholder="用户姓名"
+                <input type="text" disabled="disabled" id="userName" name="userName" required lay-verify="name"
+                       placeholder="用户姓名"
                        autocomplete="off"
                        class="layui-input">
             </div>
+            <div class="layui-form-mid layui-word-aux" id="messUserName">无法更改</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">用户密码:</label>
+            <label class="layui-form-label">密码:</label>
             <div class="layui-input-inline">
-                <input type="text" id="userPassword" name="userPassword" required lay-verify="required"
+                <input type="text" id="userPassword" name="userPassword" required lay-verify="userPassword"
+                       placeholder="用户密码"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">6-16个字符</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认密码:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="rePassword" name="rePassword" required lay-verify="rePassword"
                        placeholder="用户密码"
                        autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">用户电话:</label>
+            <label class="layui-form-label">手机:</label>
             <div class="layui-input-inline">
-                <input type="text" id="userPhone" name="userPhone" required lay-verify="phone" placeholder="用户电话"
+                <input type="text" id="userPhone" name="userPhone" required lay-verify="phone" placeholder="用户手机"
                        autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">用户Email:</label>
+            <label class="layui-form-label">邮箱:</label>
             <div class="layui-input-inline">
-                <input type="text" id="userEmail" name="userEmail" required lay-verify="email" placeholder="用户Email"
+                <input type="text" id="userEmail" name="userEmail" required lay-verify="email" placeholder="用户邮箱"
                        autocomplete="off"
                        class="layui-input">
             </div>
+            <div class="layui-form-mid layui-word-aux">注意邮箱格式</div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">用户状态:</label>
+            <label class="layui-form-label">所属部门:</label>
             <div class="layui-input-inline">
-                <input type="text" id="userStatus" name="userStatus" required lay-verify="required" placeholder="用户状态"
-                       autocomplete="off"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">所属组织:</label>
-            <div class="layui-input-inline">
-                <input type="text" id="userOrg" name="userOrg" required lay-verify="required" placeholder="所属组织"
+                <input type="text" id="userOrg" name="userOrg" required lay-verify placeholder="所属组织"
                        autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button lay-submit class="layui-btn" lay-filter="btn">提交信息</button>
+                <button lay-submit class="layui-btn" lay-filter="btn">立即提交</button>
             </div>
         </div>
     </form>
@@ -65,30 +70,71 @@
     $(function () {
         var form = layui.form;
         form.render();
+        form.verify({
+            name: function (value) {
+                if (value.length < 5) {
+                    return '用户名至少为5个字符';
+                }
+            },
+            rePassword: function (value) {
+                if ($("#rePassword").val() !== $("#userPassword").val()) {
+                    return '两次密码不一致';
+                }
+            },
+            userPassword: [/(.+){6,12}$/, '密码必须6到12位']
+        });
         $.ajax({
             type: "get",
-            url: "/user/find/" + userId,
+            url: "/user/" + userId,
             success: function (data) {
                 console.log(data);
                 $("#userName").val(data.userName);
                 $("#userPhone").val(data.userPhone);
                 $("#userPassword").val(data.userPassword);
+                $("#rePassword").val(data.userPassword);
                 $("#userEmail").val(data.userEmail);
                 $("#userStatus").val(data.userStatus);
                 $("#userOrg").val(data.userOrg);
             }
         });
+        $(function () {
+            $("#userName").blur(function () {
+                var userName = document.getElementById("userName").value;
+                if (userName.length === 0) {
+                    $("#messUserName").text("用户名不可为空");
+                    $("#messUserName").attr("style", "background-color:#FFFF6F");
+                } else {
+                    $.ajax({
+                        url: "/user/judgeUserName/" + userName,
+                        type: 'GET',
+                        async: false,
+                        contentType: "application/json",
+                        success: function (result) {
+                            console.log(result.data);
+                            if (result.code === 0) {
+                                $("#messUserName").text(result.data);
+                                $("#messUserName").attr("style", "background-color:#00FF00");
+                            }
+                            else {
+                                $("#messUserName").text(result.message);
+                                $("#messUserName").attr("style", "background-color:#FFFF6F");
+                            }
+                        }
+                    })
+                }
+            })
+        });
+
         form.on('submit(btn)', function () {
             var userName = document.getElementById("userName").value;
             var userPhone = document.getElementById("userPhone").value;
             var userPassword = document.getElementById("userPassword").value;
             var userEmail = document.getElementById("userEmail").value;
             var userOrg = document.getElementById("userOrg").value;
-            var userStatus = document.getElementById("userStatus").value;
             console.log(userName);
             $.ajax({
-                url: "/user/update/" + userId,
-                type: 'post',
+                url: "/user/" + userId,
+                type: 'put',
                 dataType: 'json',
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -97,7 +143,6 @@
                     "userPhone": userPhone,
                     "userPassword": userPassword,
                     "userEmail": userEmail,
-                    "userStatus": userStatus,
                     "userOrg": userOrg
                 }),
                 success: function (data) {

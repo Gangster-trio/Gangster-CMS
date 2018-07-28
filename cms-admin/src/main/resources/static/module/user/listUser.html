@@ -26,7 +26,8 @@
         var first = true;
         table.render({
             elem: '#user_table'
-            , url: '/user/find'
+            , url: '/user'
+            , type: 'get'
             , page: true //开启分页
             , cols: [[ //表头
                 {type: 'checkbox'}
@@ -63,11 +64,11 @@
             if (layEvent === 'detail') {
                 showAtRight("/module/permission/listPermission.html");
             } else if (layEvent === 'del') {
-                layer.confirm('真的删除行么', function (index) {
+                layer.confirm('真的删除么', function (index) {
                     console.log(data);
                     $.ajax({
-                        url: "/user/delete/" + userId,
-                        type: 'get',
+                        url: "/user/" + userId,
+                        type: 'delete',
                         dataType: 'json',
                         success: function (data) {
                             console.log(data);

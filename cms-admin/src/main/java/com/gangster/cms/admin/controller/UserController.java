@@ -30,14 +30,30 @@ public class UserController {
      * @return Message 添加用户是否成功
      */
     @SystemControllerLog(description = "添加用户对象")
-    @PostMapping("/add")
+    @PostMapping
     @ResponseBody
     public MessageDto addUser(@RequestBody User user) {
-        if (userConcreteService.addUser(user)) {
+        if (userConcreteService.addUser(user))
             return MessageDto.success(null);
-        }
-        return MessageDto.fail(1, "添加用户失败");
+        else return MessageDto.fail(1, "添加用户失败");
     }
+
+    /**
+     * 判断用户名是否重复
+     *
+     * @param userName 即将注册的新用户名
+     * @return 重复信息
+     */
+    @SystemControllerLog(description = "判断用户名是否重复")
+    @ResponseBody
+    @GetMapping(value = "/judgeUserName/{userName}")
+    public MessageDto judgeUserName(@PathVariable("userName") String userName) {
+        if (!userConcreteService.judgeUserName(userName)) {
+            if (userName.length() == 0) return MessageDto.fail(2, "用户名为空");
+            return MessageDto.fail(1, "用户名已存在");
+        } else return MessageDto.success("可以使用");
+    }
+
 
     /**
      * 修改用户信息
@@ -47,7 +63,7 @@ public class UserController {
      * @return Message  修改用户是否成功
      */
     @SystemControllerLog(description = "修改用户对象")
-    @PostMapping(value = "/update/{userid}")
+    @PutMapping(value = "{userid}")
     @ResponseBody
     public MessageDto updateUser(@PathVariable("userid") Integer userid, @RequestBody User user) {
         if (userConcreteService.updateUser(userid, user)) {
@@ -63,7 +79,7 @@ public class UserController {
      * @return int   删除用户数量
      */
     @SystemControllerLog(description = "删除用户对象")
-    @GetMapping("/delete/{UserId}")
+    @DeleteMapping(value = "{UserId}")
     @ResponseBody
     public MessageDto deleteUser(@PathVariable("UserId") Integer userId) {
         if (userConcreteService.deleteSingleUser(userId)) {
@@ -80,7 +96,7 @@ public class UserController {
      * @return AjaxData 查找到的所有用户
      */
     @SystemControllerLog(description = "查找用户")
-    @GetMapping("/find")
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public AjaxData findUser(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "15") Integer limit) {
         PageInfo<User> pageInfo = userConcreteService.listAllUser(page, limit);
@@ -97,7 +113,7 @@ public class UserController {
      * @return User 查找到的用户
      */
     @SystemControllerLog(description = "查找单个用户")
-    @GetMapping("/find/{UserId}")
+    @GetMapping(value = "{UserId}")
     @ResponseBody
     public User fingUserById(@PathVariable("UserId") Integer userId) {
         return userConcreteService.findSingleUser(userId);
