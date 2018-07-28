@@ -84,7 +84,7 @@
         <!--上传文件-->
         <input id="fileNames" class="layui-hide" name="fileNames"/>
         <label style="margin-left: 25px;margin-top: 40px">附件上传</label>
-        <div style="margin-left: 110px" class="layui-upload">
+        <div 主页文章style="margin-left: 110px" class="layui-upload">
             <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择文件</button>
             <button type="button" class="layui-btn" id="upload-file">开始上传</button>
         </div>
@@ -130,7 +130,7 @@
             layedit.set({
                 uploadImage: {
                     url: '/article/img/' + siteId //接口url
-                    , type: 'post' //默认post
+                    , type: 'POST' //默认post
                     , size: 0
                 }
             });
@@ -180,7 +180,7 @@
 
             layui.upload.render({
                 elem: '#choose-file'
-                , url: '/file/upload/' + siteId + "/" + articleId
+                , url: '/file/' + siteId + "/" + articleId
                 , auto: false
                 , choose: function (obj) {
                     var files = obj.pushFile();

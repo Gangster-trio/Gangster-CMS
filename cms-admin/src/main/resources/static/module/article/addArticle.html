@@ -7,7 +7,7 @@
 
 <div class="site-text site-block">
 
-    <form id="addArticleForm" class="layui-form">
+    <form name="article" id="addArticleForm" class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">文章标题</label>
             <div class="layui-input-inline">
@@ -76,14 +76,16 @@
             </div>
         </div>
 
+
         <input id="articleThumb" class="layui-hide" name="articleThumb">
         <label class="layui-form-label">缩略图上传</label>
         <div class="layui-upload-drag" style="margin-left: 5px" id="uploadImg">
             <i class="layui-icon"></i>
             <p>点击上传，或将文件拖拽到此处</p>
         </div>
-        <br/>
-        <input id="fileNames" class="layui-hide" name="fileNames"/>
+        <div>
+        </div>
+        <input type="text" id="fileNames" class="layui-hide" name="fileNames"/>
         <label style="margin-left: 25px;margin-top: 40px">附件上传</label>
         <div style="margin-left: 110px" class="layui-upload">
             <button type="button" class="layui-btn layui-btn-normal" id="choose-file">选择文件</button>
@@ -106,7 +108,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button type="button" id="articleSubmit" onclick="add_article()" lay-submit class="layui-btn"
+                <button type="button" id="articleSubmit" onclick="add_article()" lay-submit class="layui-btn "
                         lay-filter="createArticle">立即提交
                 </button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -115,6 +117,7 @@
     </form>
 
 </div>
+
 
 <script type="text/javascript">
     var editor_text, layedit;
@@ -125,7 +128,7 @@
         form.render();
         form.on('submit(createArticle)', function () {
             // 设置按钮不可点击
-            $("#articleSubmit").attr('disabled', true);
+            $("#articleSubmit").attr('disabled', "disabled");
             return false;
         });
 
@@ -152,7 +155,7 @@
 
         upload.render({
             elem: '#choose-file'
-            , url: '/file/upload/' + siteId
+            , url: '/file/' + siteId
             , auto: false
             , choose: function (obj) {
                 var files = obj.pushFile();
@@ -228,28 +231,8 @@
         $("#uploadFile").submit();
     }
 
-    function add_article() {
-        $.ajax({
-            type: "POST",
-            url: "/article/" + siteId,
-            data: generate_article_data(),
-            contentType: 'application/json',
-            dataType: 'json',
-            error: function (resp) {
-                layui.layer.alert("failed " + resp);
-            },
-            success: function (resp) {
-                switch (resp.code) {
-                    case 0:
-                        layer.msg(resp.message, {icon: 6});
-                        break;
-                    case 1:
-                        layer.msg("添加失败", {icon: 5});
-                        break;
-                    default:
-                }
-                showAtRight("/module/article/listArticle.html");
-            }
-        });
-    }
 </script>
+
+
+
+

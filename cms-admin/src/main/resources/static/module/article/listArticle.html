@@ -130,8 +130,8 @@
                     }
                 }
                 $.ajax({
-                    type: 'post',
-                    url: '/article/delete/batch/'+siteId,
+                    type: 'DELETE',
+                    url: '/article/batch/'+siteId,
                     data: {
                         "articleIdData": articleIdData
                     },

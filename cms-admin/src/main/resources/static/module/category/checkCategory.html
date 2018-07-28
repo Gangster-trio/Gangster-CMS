@@ -14,7 +14,7 @@
         if (siteId) {
             table.render({
                 elem: '#column_table'
-                , url: '/category/list/check/' + siteId     //得到所选site的栏目
+                , url: '/category/check/' + siteId     //得到所选site的栏目
                 , page: true
                 , cols: [[ //表头
                     {type: 'checkbox'}
@@ -103,7 +103,7 @@
                     }
                     $.ajax({
                         type: 'DELETE',
-                        url: '/category/delete/batch/' + siteId,
+                        url: '/category/batch/' + siteId,
                         data: {
                             "categoryIdData": categoryIdData
                         },

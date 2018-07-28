@@ -33,9 +33,9 @@ public class SurveyPageController {
 
     @SystemControllerLog(description = "列出当前网站的所有问卷")
     @CmsPermission(moduleName = "问卷管理")
-    @GetMapping("")
+    @GetMapping("/{siteId}")
     public AjaxData list(
-            @SiteId @RequestParam Integer siteId,
+            @SiteId @PathVariable Integer siteId,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer limit) {
         PageInfo<SurveyPage> pageInfo = surveyPageWebService.listSurveyPage(siteId, page, limit);
@@ -69,7 +69,7 @@ public class SurveyPageController {
     @SystemControllerLog(description = "更新某个问卷")
     @Transactional
     @CmsPermission(moduleName = "问卷管理")
-    @PutMapping("/update/{siteId}")
+    @PutMapping("/{siteId}")
     public MessageDto update(@SiteId @PathVariable Integer siteId, @RequestBody SurveyWithTopicWrapper wrapper) {
         if (wrapper != null) {
             if (!surveyPageWebService.updateSurveyPage(wrapper)) {

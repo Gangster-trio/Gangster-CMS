@@ -68,6 +68,7 @@ public class SiteController {
         return MessageDto.success(null);
     }
 
+    // TODO: 7/28/18 批量删除没有添加 
     @SystemControllerLog(description = "批量删除")
     public MessageDto batchDelete(String siteIds) {
         if (!contentWebService.deleteSites(siteIds)) {

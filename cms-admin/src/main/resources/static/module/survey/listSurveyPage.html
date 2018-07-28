@@ -52,7 +52,7 @@
                 if (layEvent === 'del') { //删除
                     $.ajax({
                         type: "DELETE",
-                        url: "/survey/page/delete/" + siteId + "/" + pageId,
+                        url: "/survey/page/" + siteId + "/" + pageId,
                         contentType: "application/json",
                         dataType: 'json',
                         error: function () {

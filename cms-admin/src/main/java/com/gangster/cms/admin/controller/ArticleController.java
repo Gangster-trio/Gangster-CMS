@@ -115,7 +115,7 @@ public class ArticleController {
 
     @SystemControllerLog(description = "批处理删除")
     @CmsPermission(moduleName = "文章管理")
-    @PostMapping("/delete/batch/{siteId}")
+    @DeleteMapping("/batch/{siteId}")
     public MessageDto batchDelete(@SiteId @PathVariable("siteId") Integer siteId, String articleIdData) {
         if (!contentWebService.deleteArticles(articleIdData)) {
             return MessageDto.fail(1, "批处理失败");

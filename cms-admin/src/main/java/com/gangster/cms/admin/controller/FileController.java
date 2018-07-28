@@ -104,8 +104,8 @@ public class FileController {
         return new AjaxData(0, "success", pageInfo.getTotal(), pageInfo.getList());
     }
 
-    @DeleteMapping("/{siteId}/{fId}")
     @CmsPermission(moduleName = "文件管理")
+    @DeleteMapping("/{siteId}/{fId}")
     public MessageDto delete(@SiteId @PathVariable Integer siteId, @PathVariable Integer fId) {
         WebFile file = webFileService.selectByPrimaryKey(fId);
         if (file == null) {

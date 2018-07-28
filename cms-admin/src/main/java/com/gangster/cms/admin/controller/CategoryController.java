@@ -45,7 +45,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "列出待审核的栏目")
     @CmsPermission(moduleName = "栏目管理")
-    @GetMapping("/list/check/{siteId}")
+    @GetMapping("/check/{siteId}")
     public AjaxData listCheck(
             @SiteId @PathVariable Integer siteId,
             @RequestParam(defaultValue = "1") Integer page,
@@ -64,7 +64,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "删除栏目")
     @CmsPermission(moduleName = "栏目管理")
-    @DeleteMapping("/delete/{siteId}/{cId}")
+    @DeleteMapping("/{siteId}/{cId}")
     public MessageDto delete(@SiteId @PathVariable("siteId") Integer siteId, @PathVariable Integer cId) {
         if (!contentWebService.deleteCategory(cId)) {
             return MessageDto.fail(1, "删除栏目失败");
@@ -75,7 +75,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "更新单个栏目")
     @CmsPermission(moduleName = "栏目管理")
-    @PutMapping("/update/{siteId}/{cId}")
+    @PutMapping("/{siteId}/{cId}")
     public MessageDto update(
             @SiteId @PathVariable("siteId") Integer siteId,
             @PathVariable("cId") Integer cId,
@@ -96,7 +96,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "添加栏目")
     @CmsPermission(moduleName = "栏目管理")
-    @PostMapping("/add/{siteId}")
+    @PostMapping("/{siteId}")
     public MessageDto add(@SiteId @PathVariable("siteId") Integer siteId, @RequestBody Category category) {
         if (!contentWebService.addCategory(category)) {
             return MessageDto.fail(1, "添加栏目失败");
@@ -106,7 +106,7 @@ public class CategoryController {
 
     @SystemControllerLog(description = "批量删除")
     @CmsPermission(moduleName = "栏目管理")
-    @DeleteMapping("/delete/batch/{siteId}")
+    @DeleteMapping("/batch/{siteId}")
     public MessageDto batchDelete(@SiteId @PathVariable("siteId") Integer siteId, String categoryIds) {
         if (!contentWebService.deleteCategories(categoryIds)) {
             return MessageDto.fail(1, "批量删除栏目失败");

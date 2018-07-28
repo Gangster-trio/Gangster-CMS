@@ -31,6 +31,9 @@ function generate_category_data() {
 }
 
 function add_category() {
+    if (!checkCategoryIsNull()) {
+        return false;
+    }
     $.ajax({
         type: "POST",
         url: "/category/" + siteId,
@@ -56,6 +59,9 @@ function add_category() {
 }
 
 function update_category() {
+    if (!checkCategoryIsNull()) {
+        return false;
+    }
     $.ajax({
         type: "PUT",
         url: "/category/" + siteId + "/" + categoryId,
@@ -110,7 +116,39 @@ function generate_article_data() {
     });
 }
 
+function add_article() {
+    if (!checkArticleIsNull()) {
+        return false;
+    }
+    alert("jaja");
+    $.ajax({
+        type: "POST",
+        url: "/article/" + siteId,
+        data: generate_article_data(),
+        contentType: 'application/json',
+        dataType: 'json',
+        error: function (resp) {
+            layui.layer.alert("failed " + resp);
+        },
+        success: function (resp) {
+            switch (resp.code) {
+                case 0:
+                    layer.msg(resp.message, {icon: 6});
+                    break;
+                case 1:
+                    layer.msg("添加失败", {icon: 5});
+                    break;
+                default:
+            }
+            showAtRight("/module/article/listArticle.html");
+        }
+    });
+}
+
 function update_article() {
+    if (!checkArticleIsNull()) {
+        return false;
+    }
     $.ajax({
         type: 'PUT',
         url: '/article/' + siteId + "/" + articleId,
@@ -126,4 +164,41 @@ function update_article() {
             showAtRight("/module/article/listArticle.html");
         }
     });
+}
+
+// 检查文章输入是否有空
+function checkArticleIsNull() {
+
+    // 直接得到所有的input标签有几个layui-upload-file的input，和最后有一个空的input,要进行过滤
+    let inputs = $("input[class!='layui-upload-file'][id!='articleThumb'][id!=fileNames]");
+    // let ignoreInput = ["articleThumb", "fileNames"];
+    for (let i = 0; i < inputs.length - 1; i++) {
+        if (inputs[i].value === "" || inputs[i].value === null) {
+            return false;
+        }
+    }
+
+    // 文章描述用的是textarea单独抽出
+    var articleDescValue = $("#articleDesc").val();
+    if (articleDescValue === "" || articleDescValue === null) {
+        return false;
+    }
+    // 由于layui获取编辑器内的内容特殊，需要单独处理
+    var articleContent = layedit.getContent(editor_text);
+    if (articleContent === "" || articleContent === null) {
+        return false;
+    }
+    return true;
+}
+
+
+function checkCategoryIsNull() {
+    // siteId 之后指定
+    let inputs = $("input[class!='layui-upload-file'][id!=siteId]");
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value === "" || inputs[i].value === null) {
+            return false;
+        }
+    }
+    return true;
 }

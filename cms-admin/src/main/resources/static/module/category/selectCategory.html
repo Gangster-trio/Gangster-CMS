@@ -9,7 +9,7 @@
     var arId = 0;
     var siteId = getCookie("siteId");
     $.ajax({
-        type: "get",
+        type: "GET",
         url: "/category/select/" + siteId,
         async: false,
         dataType: 'json',

@@ -61,7 +61,7 @@ public class OuterChainController {
         return MessageDto.fail(1, "删除失败请重试");
     }
 
-    @PutMapping("/update/{siteId}/{id}")
+    @PutMapping("/{siteId}/{id}")
     @CmsPermission(moduleName = "外链管理")
     public MessageDto update(
             @PathVariable Integer siteId,
