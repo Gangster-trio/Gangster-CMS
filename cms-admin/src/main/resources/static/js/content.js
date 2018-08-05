@@ -106,7 +106,7 @@ function generate_article_data() {
         "articleInHomepage": "",
         "articleReleaseTime": new Date().getTime(),
         "articleReleaseStatus": 1,
-        "articleContent": layedit.getContent(editor_text)
+        "articleContent": editor.getData()
     };
     return JSON.stringify({
         "article": article,
@@ -120,7 +120,6 @@ function add_article() {
     if (!checkArticleIsNull()) {
         return false;
     }
-    alert("jaja");
     $.ajax({
         type: "POST",
         url: "/article/" + siteId,
@@ -192,3 +191,5 @@ function checkCategoryIsNull() {
     }
     return true;
 }
+
+

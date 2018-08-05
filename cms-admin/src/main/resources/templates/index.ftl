@@ -13,6 +13,7 @@
     <script src="../qrcode/jquery.qrcode.min.js"></script>
     <script src="/js/cookie.js"></script>
     <script src="/js/content.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
     <link rel="stylesheet" href="/util/jquery-editable-select.css">
 </head>
 <body class="layui-layout-body">

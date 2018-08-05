@@ -118,10 +118,32 @@
 
 <script type="text/javascript">
 
-    var layedit, editor_text;
-    layui.use(['form', 'layedit'], function () {
+    // var layedit, editor_text;
+    var editor;
+
+    ClassicEditor
+        .create(document.querySelector('#articleContent'), {
+            image: {
+                toolbar: [],
+                styles: ['imageStyleFull']
+            }
+        })
+        .then(e => {
+            console.log('Editor was initialized');
+            editor = e;
+            e.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                return new UploadAdapter(loader);
+            };
+        })
+        .catch(error => {
+            console.log(error)
+        });
+
+
+
+    layui.use(['form'], function () {
         let form = layui.form;
-        layedit = layui.layedit;
+        // layedit = layui.layedit;
         form.render();
         form.on('submit(createArticle)', function () {
             // 设置按钮不可点击
@@ -130,24 +152,24 @@
         });
 
 
-        editor_text = layedit.build('articleContent', {
-            tool: [
-                'strong' //加粗
-                , 'italic' //斜体
-                , 'underline' //下划线
-                , 'del' //删除线
-                , '|' //分割线
-                , 'left' //左对齐
-                , 'center' //居中对齐
-                , 'right' //右对齐
-                , '|' //分割线
-                , 'link' //超链接
-                , 'unlink' //清除链接
-                , 'image' //插入图片
-            ],
-            height: 400
-        });
-        $('#articleType').editableSelect({effects: 'fade'});
+        // editor_text = layedit.build('articleContent', {
+        //     tool: [
+        //         'strong' //加粗
+        //         , 'italic' //斜体
+        //         , 'underline' //下划线
+        //         , 'del' //删除线
+        //         , '|' //分割线
+        //         , 'left' //左对齐
+        //         , 'center' //居中对齐
+        //         , 'right' //右对齐
+        //         , '|' //分割线
+        //         , 'link' //超链接
+        //         , 'unlink' //清除链接
+        //         , 'image' //插入图片
+        //     ],
+        //     height: 400
+        // });
+        // $('#articleType').editableSelect({effects: 'fade'});
 
 
         $("#belongCategory").on('click', function () {
@@ -168,36 +190,6 @@
         });
 
     });
-
-
-    function add_article() {
-        if (!checkArticleIsNull()) {
-            return  false;
-        }
-        $.ajax({
-            type: "POST",
-            url: "/article/" + siteId,
-            data: generate_article_data(),
-            contentType: 'application/json',
-            dataType: 'json',
-            error: function (resp) {
-                layui.layer.alert("failed " + resp);
-            },
-            success: function (resp) {
-                switch (resp.code) {
-                    case 0:
-                        layer.msg(resp.message, {icon: 6});
-                        break;
-                    case 1:
-                        layer.msg("添加失败", {icon: 5});
-                        break;
-                    default:
-                }
-                showAtRight("/module/article/listArticle.html");
-            }
-        });
-    }
-
 
 </script>
 

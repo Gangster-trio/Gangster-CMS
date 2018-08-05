@@ -192,6 +192,9 @@ public class ContentWebService {
     private List<WebFile> transformArticleDto(ArticleDTO articleDTO) {
         List<WebFile> files = new ArrayList<>();
         for (String fileName : articleDTO.getFiles().split(",")) {
+            if (fileName.isEmpty()) {
+                continue;
+            }
             WebFile f = new WebFile();
             f.setFileKey(fileName);
             files.add(f);
