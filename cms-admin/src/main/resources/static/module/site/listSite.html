@@ -1,3 +1,6 @@
+<button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="batchDelete" data-type="batchDelete">
+    批量删除
+</button>
 <button style="float: right;margin: 5px" class="layui-btn layui-btn-normal" id="site">添加站点</button>
 <div class="layui-elem-quote" style="margin-bottom: 0;">
     <p>站点管理</p>
@@ -34,7 +37,8 @@
             , url: '/site'
             , page: true //开启分页
             , cols: [[ //表头
-                {field: 'siteId', title: 'ID', width: '80', sort: true, fixed: 'left'}
+                {type: 'checkbox'}
+                , {field: 'siteId', title: 'ID', width: '80', sort: true}
                 , {field: 'siteName', title: '站点名', width: '190', align: 'center'}
                 , {field: 'siteUrl', title: "站点网址", width: '200', align: 'center'}
                 , {field: 'siteDesc', title: "站点描述", width: '200', align: 'center'}
@@ -98,6 +102,48 @@
                     });
                 });
             }
+        });
+
+
+        // 添加复选框操作
+        var $ = layui.$, active = {
+            batchDelete: function () { // 获取选中的数据
+                var checkStatus = table.checkStatus('site_table')
+                    , data = checkStatus.data;
+                var siteIdData = "";
+                var boo = 0;
+                for (var i = 0, len = data.length; i < len; i++) {
+                    if (boo === 0) {
+                        siteIdData += data[i].siteId;
+                        boo = 1;
+                    } else {
+                        siteIdData += "," + data[i].siteId;
+                    }
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/site/batch/',
+                    data: {
+                        "ids": siteIdData
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        if (data.code === 0) {
+                            layer.msg("删除成功", {icon: 6});
+                            console.log("删除成功");
+                            showAtRight("/module/site/listSite.html");
+                        } else {
+                            layer.msg("删除失败", {icon: 5});
+                        }
+                    }
+
+                });
+            }
+        };
+        $('#batchDelete').on('click', function () { // 添加按钮点击事件
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
         });
 
         function deleteSite(siteId) {
