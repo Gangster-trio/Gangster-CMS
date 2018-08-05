@@ -115,12 +115,12 @@ public class ArticleController {
 
     @SystemControllerLog(description = "批处理删除")
     @CmsPermission(moduleName = "文章管理")
-    @DeleteMapping("/batch/{siteId}")
-    public MessageDto batchDelete(@SiteId @PathVariable("siteId") Integer siteId, String articleIdData) {
-        if (!contentWebService.deleteArticles(articleIdData)) {
+    @PostMapping("/batch/{siteId}")
+    public MessageDto batchDelete(@SiteId @PathVariable("siteId") Integer siteId, String ids) {
+        if (!contentWebService.deleteArticles(ids)) {
             return MessageDto.fail(1, "批处理失败");
         }
-        LOGGER.info("批量删除文章ids{}成功", articleIdData);
+        LOGGER.info("批量删除文章ids{}成功", ids);
         return MessageDto.success(null);
     }
 

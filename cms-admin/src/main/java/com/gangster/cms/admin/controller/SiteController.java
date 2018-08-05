@@ -1,5 +1,6 @@
 package com.gangster.cms.admin.controller;
 
+import com.gangster.cms.admin.annotation.CmsPermission;
 import com.gangster.cms.admin.annotation.SystemControllerLog;
 import com.gangster.cms.admin.dto.AjaxData;
 import com.gangster.cms.admin.dto.MessageDto;
@@ -70,8 +71,10 @@ public class SiteController {
 
     // TODO: 7/28/18 批量删除没有添加 
     @SystemControllerLog(description = "批量删除")
-    public MessageDto batchDelete(String siteIds) {
-        if (!contentWebService.deleteSites(siteIds)) {
+    @CmsPermission(moduleName = "网站管理")
+    @PostMapping("/batch")
+    public MessageDto batchDelete(String ids) {
+        if (!contentWebService.deleteSites(ids)) {
             return MessageDto.fail(1, "批量删除站点发生错误");
         }
         return MessageDto.success(null);

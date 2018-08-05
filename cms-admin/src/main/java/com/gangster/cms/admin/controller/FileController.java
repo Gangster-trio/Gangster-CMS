@@ -48,20 +48,22 @@ public class FileController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
 
-//    //FIXME 要不要删掉?
-//    @SystemControllerLog(description = "添加文件")
-//    @CmsPermission(moduleName = "文件管理")
-//    @PostMapping({"/{siteId}/{articleId}", "/{siteId}"})
-//    public MessageDto uploadFile(
-//            @SiteId @PathVariable Integer siteId,
-//            @PathVariable(required = false) Integer articleId,
-//            @Param("file") MultipartFile file) {
+    //FIXME 要不要删掉?
+    @SystemControllerLog(description = "添加文件")
+    @CmsPermission(moduleName = "文件管理")
+    @PostMapping({"/{siteId}/{articleId}", "/{siteId}"})
+    public MessageDto uploadFile(
+            @SiteId @PathVariable Integer siteId,
+            @PathVariable(required = false) Integer articleId,
+            @Param("file") MultipartFile file) {
+        System.out.println(file);
 //        if (null == articleId) {
 //            return MessageDto.success(fileUploadService.saveFile(file));
 //        } else {
 //            return MessageDto.success(fileUploadService.saveArticleFile(articleId, file));
 //        }
-//    }
+        return null;
+    }
 
     // 直接跳转到cdn网址
 //    @SystemControllerLog(description = "下载文件")

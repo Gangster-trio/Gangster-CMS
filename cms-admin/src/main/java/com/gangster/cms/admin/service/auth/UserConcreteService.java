@@ -26,16 +26,11 @@ public class UserConcreteService {
     private UserService userService;
 
 
-    public boolean addUser(User user) {
+    public Boolean addUser(User user) {
         user.setUserCreateTime(new Date());
-        UserExample userExample = new UserExample();
-        userExample.or().andUserNameEqualTo(user.getUserName());
-        List<User> userList = userService.selectByExample(userExample);
-        if (userList != null && !userList.isEmpty()) return false;
-        else {
-            userService.createUser(user);
-            return true;
-        }
+        user.setUserName(user.getUserName().trim());
+        Integer status = userService.createUser(user);
+        return status == 1;
     }
 
     public boolean updateUser(Integer userId, User user) {
@@ -85,5 +80,13 @@ public class UserConcreteService {
             }
             return true;
         } else return false;
+    }
+
+    public boolean judgeUserName(String userName) {
+        userName = userName.trim();
+        UserExample userExample = new UserExample();
+        userExample.or().andUserNameEqualTo(userName);
+        List<User> userList = userService.selectByExample(userExample);
+        return userList.size() == 0;
     }
 }

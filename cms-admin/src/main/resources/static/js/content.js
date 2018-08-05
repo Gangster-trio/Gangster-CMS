@@ -168,7 +168,6 @@ function update_article() {
 // 检查文章输入是否有空
 function checkArticleIsNull() {
 
-    // 直接得到所有的input标签有几个layui-upload-file的input，和最后有一个空的input,要进行过滤
     let tags = $("[required='required']");
     // let ignoreInput = ["articleThumb", "fileNames"];
     for (let i = 0; i < tags.length; i++) {
@@ -176,7 +175,6 @@ function checkArticleIsNull() {
             return false;
         }
     }
-
     return true;
 }
 
