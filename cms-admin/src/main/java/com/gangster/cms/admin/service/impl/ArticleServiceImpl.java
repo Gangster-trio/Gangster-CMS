@@ -128,7 +128,7 @@ public class ArticleServiceImpl extends BaseServiceImpl<ArticleMapper, Article, 
             tagExample.clear();
         }
         if (fileList != null) {
-            fileList.forEach(webFile -> {
+            fileList.stream().filter(e -> !e.getFileKey().isEmpty()).forEach(webFile -> {
                 webFile.setFileArticleId(article.getArticleId());
                 webFile.setFileSiteId(article.getArticleSiteId());
                 webFileService.insert(webFile);

@@ -130,10 +130,10 @@
                     }
                 }
                 $.ajax({
-                    type: 'DELETE',
-                    url: '/article/batch/'+siteId,
+                    type: 'POST',
+                    url: '/article/batch/' + siteId,
                     data: {
-                        "articleIdData": articleIdData
+                        "ids": articleIdData
                     },
                     dataType: "json",
                     success: function (data) {
@@ -156,6 +156,75 @@
         });
     }
 
+    class UploadAdapter {
+        constructor(loader) {
+            this.loader = loader;
+        }
+
+        upload() {
+            return new Promise((resolve, reject) => {
+                var upAddr, upToken, cdnDomain;
+                $.ajax({
+                    url: "/upHttpAddr",
+                    async: false,
+                    success: function (addr) {
+                        upAddr = addr
+                    },
+                    error: function (xhr, text) {
+                        layui.layer.alert("获取上传地址失败:", text);
+                        console.log(xhr);
+                        reject(text);
+                    }
+                });
+                $.ajax({
+                    url: "/upToken",
+                    async: false,
+                    success: function (data) {
+                        upToken = data;
+                    },
+                    error: function (xhr, text) {
+                        layui.layer.alert("获取Token失败: ", text);
+                        console.log(xhr);
+                        reject(text);
+                    }
+                });
+                $.ajax({
+                    url: "/cdnDomain",
+                    async: false,
+                    success: function (data) {
+                        cdnDomain = data;
+                    },
+                    error: function (xhr, text) {
+                        layui.layer.alert("获取CDN域名失败: ", text);
+                        console.log(xhr);
+                        reject(text);
+                    }
+                });
+                const data = new FormData();
+                data.append('file', this.loader.file);
+                data.append('token', upToken);
+                $.ajax({
+                    url: upAddr,
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log("上传成功:", data);
+                        resolve({
+                            default: cdnDomain + "/" + data.key
+                        });
+                    }
+                });
+
+            });
+        }
+
+        abort() {
+            console.log("upload abort!")
+        }
+    }
 
     //添加文章功能
     $("#article").on('click', function () {

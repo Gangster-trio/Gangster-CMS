@@ -106,12 +106,12 @@ public class CategoryController {
 
     @SystemControllerLog(description = "批量删除")
     @CmsPermission(moduleName = "栏目管理")
-    @DeleteMapping("/batch/{siteId}")
-    public MessageDto batchDelete(@SiteId @PathVariable("siteId") Integer siteId, String categoryIds) {
-        if (!contentWebService.deleteCategories(categoryIds)) {
+    @PostMapping("/batch/{siteId}")
+    public MessageDto batchDelete(@SiteId @PathVariable("siteId") Integer siteId, String ids) {
+        if (!contentWebService.deleteCategories(ids)) {
             return MessageDto.fail(1, "批量删除栏目失败");
         }
-        LOGGER.info("批量删除id组：{}成功", categoryIds);
+        LOGGER.info("批量删除id组：{}成功", ids);
         return MessageDto.success(null);
     }
 

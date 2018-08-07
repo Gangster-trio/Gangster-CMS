@@ -105,10 +105,10 @@
                         }
                     }
                     $.ajax({
-                        type: 'DELETE',
-                        url: '/category/batch/'+siteId,
+                        type: 'POST',
+                        url: '/category/batch/' + siteId,
                         data: {
-                            "categoryIdData": categoryIdData
+                            "ids": categoryIdData
                         },
                         dataType: "json",
                         success: function (data) {
