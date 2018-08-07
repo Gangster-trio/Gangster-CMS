@@ -31,6 +31,11 @@ spring:
     multipart:
       max-file-size: 30Mb
       max-request-size: 30Mb
+  mail:
+    host: smtp.qq.com
+    username:   用户名
+    password: aowprvlhrlqbjabd   生成的密码
+    default-encoding: UTF-8
 #  http:
 #    multipart:
 #      max-file-size: 3MB
